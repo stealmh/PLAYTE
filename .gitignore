@@ -1,0 +1,7 @@
+xcuserdata/
+Pods/
+.DS_Store
+Podfile.lock
+Recipe.xcodeproj/xcuserdata/
+Recipe.xcworkspace/
+Recipe.xcodeproj/xcuserdata/kindsoft.xcuserdatad/xcschemes/xcschememanagement.plist
