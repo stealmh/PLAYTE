@@ -18,6 +18,9 @@
 		5A0244A92A529AA400AA418E /* RecipeTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244A82A529AA400AA418E /* RecipeTests.swift */; };
 		5A0244B32A529AA400AA418E /* RecipeUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244B22A529AA400AA418E /* RecipeUITests.swift */; };
 		5A0244B52A529AA400AA418E /* RecipeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244B42A529AA400AA418E /* RecipeUITestsLaunchTests.swift */; };
+		5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244C92A52A35800AA418E /* UIViewController+util.swift */; };
+		5A0244CC2A52A36C00AA418E /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CB2A52A36C00AA418E /* Protocols.swift */; };
+		5A0244CE2A52A37500AA418E /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CD2A52A37500AA418E /* Services.swift */; };
 		C14E5ECF67729C2D8562F1C7 /* Pods_Recipe_RecipeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43250A0DA83D570142864CA1 /* Pods_Recipe_RecipeUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -56,6 +59,9 @@
 		5A0244AE2A529AA400AA418E /* RecipeUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = RecipeUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		5A0244B22A529AA400AA418E /* RecipeUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeUITests.swift; sourceTree = "<group>"; };
 		5A0244B42A529AA400AA418E /* RecipeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		5A0244C92A52A35800AA418E /* UIViewController+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+util.swift"; sourceTree = "<group>"; };
+		5A0244CB2A52A36C00AA418E /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
+		5A0244CD2A52A37500AA418E /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
 		A8CE900025B9359CF850D014 /* Pods-Recipe-RecipeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe-RecipeUITests.release.xcconfig"; path = "Target Support Files/Pods-Recipe-RecipeUITests/Pods-Recipe-RecipeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B4563E7FE258A2DCD5F58EC8 /* Pods-Recipe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe.debug.xcconfig"; path = "Target Support Files/Pods-Recipe/Pods-Recipe.debug.xcconfig"; sourceTree = "<group>"; };
 		DF24270AD89DC117D4A60AF1 /* Pods-RecipeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeTests.release.xcconfig"; path = "Target Support Files/Pods-RecipeTests/Pods-RecipeTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -116,13 +122,14 @@
 		5A02448D2A529AA300AA418E /* Recipe */ = {
 			isa = PBXGroup;
 			children = (
-				5A02448E2A529AA300AA418E /* AppDelegate.swift */,
-				5A0244902A529AA300AA418E /* SceneDelegate.swift */,
-				5A0244922A529AA300AA418E /* ViewController.swift */,
-				5A02449A2A529AA400AA418E /* Assets.xcassets */,
-				5A02449C2A529AA400AA418E /* LaunchScreen.storyboard */,
-				5A02449F2A529AA400AA418E /* Info.plist */,
-				5A0244972A529AA300AA418E /* Recipe.xcdatamodeld */,
+				5A0244C12A52A2A100AA418E /* Application */,
+				5A0244C22A52A2B900AA418E /* Extensions */,
+				5A0244C32A52A2CA00AA418E /* Models */,
+				5A0244C42A52A2D300AA418E /* Protocols */,
+				5A0244C52A52A2E100AA418E /* Resources */,
+				5A0244C72A52A32700AA418E /* Scenes */,
+				5A0244C82A52A33600AA418E /* Services */,
+				5A0244C62A52A30B00AA418E /* Supporting Files */,
 			);
 			path = Recipe;
 			sourceTree = "<group>";
@@ -142,6 +149,72 @@
 				5A0244B42A529AA400AA418E /* RecipeUITestsLaunchTests.swift */,
 			);
 			path = RecipeUITests;
+			sourceTree = "<group>";
+		};
+		5A0244C12A52A2A100AA418E /* Application */ = {
+			isa = PBXGroup;
+			children = (
+				5A02448E2A529AA300AA418E /* AppDelegate.swift */,
+				5A0244902A529AA300AA418E /* SceneDelegate.swift */,
+			);
+			path = Application;
+			sourceTree = "<group>";
+		};
+		5A0244C22A52A2B900AA418E /* Extensions */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244C92A52A35800AA418E /* UIViewController+util.swift */,
+			);
+			path = Extensions;
+			sourceTree = "<group>";
+		};
+		5A0244C32A52A2CA00AA418E /* Models */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244972A529AA300AA418E /* Recipe.xcdatamodeld */,
+			);
+			path = Models;
+			sourceTree = "<group>";
+		};
+		5A0244C42A52A2D300AA418E /* Protocols */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244CB2A52A36C00AA418E /* Protocols.swift */,
+			);
+			path = Protocols;
+			sourceTree = "<group>";
+		};
+		5A0244C52A52A2E100AA418E /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				5A02449A2A529AA400AA418E /* Assets.xcassets */,
+				5A02449C2A529AA400AA418E /* LaunchScreen.storyboard */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		5A0244C62A52A30B00AA418E /* Supporting Files */ = {
+			isa = PBXGroup;
+			children = (
+				5A02449F2A529AA400AA418E /* Info.plist */,
+			);
+			path = "Supporting Files";
+			sourceTree = "<group>";
+		};
+		5A0244C72A52A32700AA418E /* Scenes */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244922A529AA300AA418E /* ViewController.swift */,
+			);
+			path = Scenes;
+			sourceTree = "<group>";
+		};
+		5A0244C82A52A33600AA418E /* Services */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244CD2A52A37500AA418E /* Services.swift */,
+			);
+			path = Services;
 			sourceTree = "<group>";
 		};
 		7464DA38ED5D7F31477A783A /* Pods */ = {
@@ -408,6 +481,9 @@
 				5A0244932A529AA300AA418E /* ViewController.swift in Sources */,
 				5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */,
 				5A0244912A529AA300AA418E /* SceneDelegate.swift in Sources */,
+				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
+				5A0244CC2A52A36C00AA418E /* Protocols.swift in Sources */,
+				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
 				5A0244992A529AA300AA418E /* Recipe.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
