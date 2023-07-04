@@ -57,10 +57,6 @@ private extension HomeViewController {
     }
     
     func configureLayout() {
-//        collectionView.topAnchor.constraint(equalTo: view.topAnchor).isActive = true
-//        collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor).isActive = true
-//        collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor).isActive = true
-//        collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor).isActive = true
         collectionView.snp.makeConstraints {
             $0.top.left.right.bottom.equalToSuperview()
         }
