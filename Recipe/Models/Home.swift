@@ -26,3 +26,10 @@ struct PriceTrend: Hashable {
     let count: Int
     let price: Int
 }
+
+struct IngredientsHandle: Hashable {
+    let id = UUID()
+    let image: UIImage
+    let title: String
+    let contents: String
+}
