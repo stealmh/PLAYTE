@@ -39,6 +39,10 @@ class HomeViewController: BaseViewController {
     IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥에서 음식이길다면", cookTime: "조리 시간 10분"),
     IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),]
     
+    var ingredientsHandleMock: [IngredientsHandle] = [
+    IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."),
+    IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."),]
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
@@ -81,6 +85,8 @@ private extension HomeViewController {
         
         collectionView.register(IngredientRecipeCell.self, forCellWithReuseIdentifier: IngredientRecipeCell.reuseIdentifier)
         collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
+        
+        collectionView.register(IngredientsHandleCell.self, forCellWithReuseIdentifier: IngredientsHandleCell.reuseIdentifier)
     }
 }
 
@@ -92,6 +98,7 @@ extension HomeViewController {
     typealias HomeSecondSectionItem = PriceTrendCell
     typealias HomeThirdSectionHeader = DefaultHeader
     typealias HomeThirdSectionItem = IngredientRecipeCell
+    
     typealias HomeDatasource = UICollectionViewDiffableDataSource<HomeSection, HomeItem>
     typealias HomeSnapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>
     
@@ -99,12 +106,14 @@ extension HomeViewController {
         case header
         case priceTrend
         case ingredientRecipe
+        case ingredientsHandle
     }
     
     enum HomeItem: Hashable {
         case header(Refrigerator)
         case priceTrend(PriceTrend)
         case ingredientRecipe(IngredientRecipe)
+        case ingredientsHandle(IngredientsHandle)
     }
     
     func createLayout() -> UICollectionViewLayout {
@@ -122,6 +131,8 @@ extension HomeViewController {
             return createPriceTrendSection()
         case .ingredientRecipe:
             return createIngredientRecipeSection()
+        case .ingredientsHandle:
+            return createIngredientsHandle()
         }
     }
     
@@ -209,6 +220,36 @@ extension HomeViewController {
         return section
     }
     
+    func createIngredientsHandle() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(0.1)),
+            subitem: item,
+            count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(40.0))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .topLeading)
+        section.boundarySupplementaryItems = [header]
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        
+        // Return
+        return section
+    }
+    
     private func configureDataSource() {
         dataSource = HomeDatasource(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
             return self.cell(collectionView: collectionView, indexPath: indexPath, item: item)}
@@ -233,6 +274,10 @@ extension HomeViewController {
             return cell
         case .ingredientRecipe(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientRecipeCell.reuseIdentifier, for: indexPath) as! IngredientRecipeCell
+            cell.configure(data)
+            return cell
+        case .ingredientsHandle(let data):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientsHandleCell.reuseIdentifier, for: indexPath) as! IngredientsHandleCell
             cell.configure(data)
             return cell
             
@@ -276,17 +321,22 @@ extension HomeViewController {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
             headerView.configureTitle(text: "My 재료 활용 레시피")
             return headerView
+            
+        case .ingredientsHandle:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
+            headerView.configureTitle(text: "My 재료 관리법 추천")
+            return headerView
         }
     }
     
     private func createSnapshot() -> HomeSnapshot{
         var snapshot = HomeSnapshot()
-        snapshot.appendSections([.header, .priceTrend, .ingredientRecipe])
+        snapshot.appendSections([.header, .priceTrend, .ingredientRecipe, .ingredientsHandle])
         
         snapshot.appendItems(refrigeratorMock.map { HomeItem.header($0) }, toSection: .header)
         snapshot.appendItems(priceTrendMock.map { HomeItem.priceTrend($0) }, toSection: .priceTrend)
         snapshot.appendItems(chucheonRecipeMockData.map { HomeItem.ingredientRecipe($0) }, toSection: .ingredientRecipe)
-        
+        snapshot.appendItems(ingredientsHandleMock.map { HomeItem.ingredientsHandle($0) }, toSection: .ingredientsHandle)
         return snapshot
     }
 }
