@@ -21,6 +21,22 @@
 		5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244C92A52A35800AA418E /* UIViewController+util.swift */; };
 		5A0244CC2A52A36C00AA418E /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CB2A52A36C00AA418E /* Protocols.swift */; };
 		5A0244CE2A52A37500AA418E /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CD2A52A37500AA418E /* Services.swift */; };
+		5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CF2A52A58500AA418E /* AppCoordinator.swift */; };
+		5A0244D22A52A59000AA418E /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244D12A52A59000AA418E /* Coordinator.swift */; };
+		5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244D42A52A6DC00AA418E /* SplashViewController.swift */; };
+		5A0244D72A52A6F500AA418E /* BaseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244D62A52A6F500AA418E /* BaseViewController.swift */; };
+		5A0244DB2A52A74D00AA418E /* SplashCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244DA2A52A74D00AA418E /* SplashCoordinator.swift */; };
+		5A0244DE2A52A7B600AA418E /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244DD2A52A7B600AA418E /* LoginViewController.swift */; };
+		5A0244E02A52A7C900AA418E /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244DF2A52A7C900AA418E /* LoginCoordinator.swift */; };
+		5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */; };
+		5A0244E42A52A7F400AA418E /* RegisterFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */; };
+		5A0244E62A52A80000AA418E /* RegisterSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */; };
+		5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E92A52A84800AA418E /* TabCoordinator.swift */; };
+		5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EB2A52A85500AA418E /* TabBarStyle.swift */; };
+		5A0244F02A52A8A200AA418E /* GoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EF2A52A8A200AA418E /* GoCoordinator.swift */; };
+		5A0244F22A52A8AA00AA418E /* GoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244F12A52A8AA00AA418E /* GoViewController.swift */; };
+		5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */; };
+		5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */; };
 		C14E5ECF67729C2D8562F1C7 /* Pods_Recipe_RecipeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43250A0DA83D570142864CA1 /* Pods_Recipe_RecipeUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -62,6 +78,22 @@
 		5A0244C92A52A35800AA418E /* UIViewController+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+util.swift"; sourceTree = "<group>"; };
 		5A0244CB2A52A36C00AA418E /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
 		5A0244CD2A52A37500AA418E /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
+		5A0244CF2A52A58500AA418E /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
+		5A0244D12A52A59000AA418E /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
+		5A0244D42A52A6DC00AA418E /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		5A0244D62A52A6F500AA418E /* BaseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseViewController.swift; sourceTree = "<group>"; };
+		5A0244DA2A52A74D00AA418E /* SplashCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashCoordinator.swift; sourceTree = "<group>"; };
+		5A0244DD2A52A7B600AA418E /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		5A0244DF2A52A7C900AA418E /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
+		5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCoordinator.swift; sourceTree = "<group>"; };
+		5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFirstViewController.swift; sourceTree = "<group>"; };
+		5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSecondViewController.swift; sourceTree = "<group>"; };
+		5A0244E92A52A84800AA418E /* TabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCoordinator.swift; sourceTree = "<group>"; };
+		5A0244EB2A52A85500AA418E /* TabBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarStyle.swift; sourceTree = "<group>"; };
+		5A0244EF2A52A8A200AA418E /* GoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoCoordinator.swift; sourceTree = "<group>"; };
+		5A0244F12A52A8AA00AA418E /* GoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoViewController.swift; sourceTree = "<group>"; };
+		5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		A8CE900025B9359CF850D014 /* Pods-Recipe-RecipeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe-RecipeUITests.release.xcconfig"; path = "Target Support Files/Pods-Recipe-RecipeUITests/Pods-Recipe-RecipeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B4563E7FE258A2DCD5F58EC8 /* Pods-Recipe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe.debug.xcconfig"; path = "Target Support Files/Pods-Recipe/Pods-Recipe.debug.xcconfig"; sourceTree = "<group>"; };
 		DF24270AD89DC117D4A60AF1 /* Pods-RecipeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeTests.release.xcconfig"; path = "Target Support Files/Pods-RecipeTests/Pods-RecipeTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -124,6 +156,7 @@
 			children = (
 				5A0244C12A52A2A100AA418E /* Application */,
 				5A0244C22A52A2B900AA418E /* Extensions */,
+				5A0244D82A52A6FF00AA418E /* Common */,
 				5A0244C32A52A2CA00AA418E /* Models */,
 				5A0244C42A52A2D300AA418E /* Protocols */,
 				5A0244C52A52A2E100AA418E /* Resources */,
@@ -156,6 +189,7 @@
 			children = (
 				5A02448E2A529AA300AA418E /* AppDelegate.swift */,
 				5A0244902A529AA300AA418E /* SceneDelegate.swift */,
+				5A0244CF2A52A58500AA418E /* AppCoordinator.swift */,
 			);
 			path = Application;
 			sourceTree = "<group>";
@@ -180,6 +214,7 @@
 			isa = PBXGroup;
 			children = (
 				5A0244CB2A52A36C00AA418E /* Protocols.swift */,
+				5A0244D12A52A59000AA418E /* Coordinator.swift */,
 			);
 			path = Protocols;
 			sourceTree = "<group>";
@@ -204,6 +239,10 @@
 		5A0244C72A52A32700AA418E /* Scenes */ = {
 			isa = PBXGroup;
 			children = (
+				5A0244D32A52A6C200AA418E /* Splash */,
+				5A0244D92A52A73D00AA418E /* Login */,
+				5A0244DC2A52A7A800AA418E /* Register */,
+				5A0244E72A52A83600AA418E /* Main */,
 				5A0244922A529AA300AA418E /* ViewController.swift */,
 			);
 			path = Scenes;
@@ -215,6 +254,79 @@
 				5A0244CD2A52A37500AA418E /* Services.swift */,
 			);
 			path = Services;
+			sourceTree = "<group>";
+		};
+		5A0244D32A52A6C200AA418E /* Splash */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244D42A52A6DC00AA418E /* SplashViewController.swift */,
+				5A0244DA2A52A74D00AA418E /* SplashCoordinator.swift */,
+			);
+			path = Splash;
+			sourceTree = "<group>";
+		};
+		5A0244D82A52A6FF00AA418E /* Common */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244D62A52A6F500AA418E /* BaseViewController.swift */,
+			);
+			path = Common;
+			sourceTree = "<group>";
+		};
+		5A0244D92A52A73D00AA418E /* Login */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244DD2A52A7B600AA418E /* LoginViewController.swift */,
+				5A0244DF2A52A7C900AA418E /* LoginCoordinator.swift */,
+			);
+			path = Login;
+			sourceTree = "<group>";
+		};
+		5A0244DC2A52A7A800AA418E /* Register */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */,
+				5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */,
+				5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */,
+			);
+			path = Register;
+			sourceTree = "<group>";
+		};
+		5A0244E72A52A83600AA418E /* Main */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244E82A52A83E00AA418E /* Tab */,
+				5A43FF6C2A52ABCF0048E213 /* Home */,
+				5A0244ED2A52A87B00AA418E /* Go */,
+			);
+			path = Main;
+			sourceTree = "<group>";
+		};
+		5A0244E82A52A83E00AA418E /* Tab */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244E92A52A84800AA418E /* TabCoordinator.swift */,
+				5A0244EB2A52A85500AA418E /* TabBarStyle.swift */,
+			);
+			path = Tab;
+			sourceTree = "<group>";
+		};
+		5A0244ED2A52A87B00AA418E /* Go */ = {
+			isa = PBXGroup;
+			children = (
+				5A0244EF2A52A8A200AA418E /* GoCoordinator.swift */,
+				5A0244F12A52A8AA00AA418E /* GoViewController.swift */,
+			);
+			path = Go;
+			sourceTree = "<group>";
+		};
+		5A43FF6C2A52ABCF0048E213 /* Home */ = {
+			isa = PBXGroup;
+			children = (
+				5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */,
+				5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */,
+			);
+			path = Home;
 			sourceTree = "<group>";
 		};
 		7464DA38ED5D7F31477A783A /* Pods */ = {
@@ -478,13 +590,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				5A0244E62A52A80000AA418E /* RegisterSecondViewController.swift in Sources */,
 				5A0244932A529AA300AA418E /* ViewController.swift in Sources */,
 				5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */,
+				5A0244E02A52A7C900AA418E /* LoginCoordinator.swift in Sources */,
+				5A0244D72A52A6F500AA418E /* BaseViewController.swift in Sources */,
 				5A0244912A529AA300AA418E /* SceneDelegate.swift in Sources */,
+				5A0244F22A52A8AA00AA418E /* GoViewController.swift in Sources */,
+				5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */,
 				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
+				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
 				5A0244CC2A52A36C00AA418E /* Protocols.swift in Sources */,
+				5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */,
+				5A0244E42A52A7F400AA418E /* RegisterFirstViewController.swift in Sources */,
+				5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */,
+				5A0244F02A52A8A200AA418E /* GoCoordinator.swift in Sources */,
 				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
+				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
 				5A0244992A529AA300AA418E /* Recipe.xcdatamodeld in Sources */,
+				5A0244DB2A52A74D00AA418E /* SplashCoordinator.swift in Sources */,
+				5A0244D22A52A59000AA418E /* Coordinator.swift in Sources */,
+				5A0244DE2A52A7B600AA418E /* LoginViewController.swift in Sources */,
+				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
+				5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -656,7 +784,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VM723259SL;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Recipe/Info.plist;
+				INFOPLIST_FILE = "Recipe/Supporting Files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -685,7 +813,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = VM723259SL;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_FILE = Recipe/Info.plist;
+				INFOPLIST_FILE = "Recipe/Supporting Files/Info.plist";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
