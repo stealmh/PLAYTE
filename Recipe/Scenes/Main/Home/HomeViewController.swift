@@ -25,14 +25,19 @@ class HomeViewController: BaseViewController {
     }()
     
     //Mock Data
-    var mockdata: [Refrigerator] = [
+    var refrigeratorMock: [Refrigerator] = [
         Refrigerator(view: ColdRefrigeratorView()),
         Refrigerator(view: NormalRefrigeratorView()),]
     
-    var ingredientMockData: [PriceTrend] = [
+    var priceTrendMock: [PriceTrend] = [
         PriceTrend(title: "계란", transition: "+8%", count: 3, price: 231),
         PriceTrend(title: "계란", transition: "+8%", count: 3, price: 231),
         PriceTrend(title: "계란", transition: "+8%", count: 3, price: 231),]
+    
+    var chucheonRecipeMockData: [IngredientRecipe] = [
+    IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),
+    IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥에서 음식이길다면", cookTime: "조리 시간 10분"),
+    IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),]
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -73,6 +78,9 @@ private extension HomeViewController {
         
         collectionView.register(HomeSecondSectionItem.self, forCellWithReuseIdentifier: HomeSecondSectionItem.reuseIdentifier)
         collectionView.register(HomeSecondSectionHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: HomeSecondSectionHeader.identifier)
+        
+        collectionView.register(IngredientRecipeCell.self, forCellWithReuseIdentifier: IngredientRecipeCell.reuseIdentifier)
+        collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
     }
 }
 
@@ -82,17 +90,21 @@ extension HomeViewController {
     typealias HomeHeader = RefrigeratorCell
     typealias HomeSecondSectionHeader = PriceTrendHeader
     typealias HomeSecondSectionItem = PriceTrendCell
+    typealias HomeThirdSectionHeader = DefaultHeader
+    typealias HomeThirdSectionItem = IngredientRecipeCell
     typealias HomeDatasource = UICollectionViewDiffableDataSource<HomeSection, HomeItem>
     typealias HomeSnapshot = NSDiffableDataSourceSnapshot<HomeSection, HomeItem>
     
     enum HomeSection: Hashable {
         case header
-        case ingredientsTransition
+        case priceTrend
+        case ingredientRecipe
     }
     
     enum HomeItem: Hashable {
         case header(Refrigerator)
-        case IngredientsTransition(PriceTrend)
+        case priceTrend(PriceTrend)
+        case ingredientRecipe(IngredientRecipe)
     }
     
     func createLayout() -> UICollectionViewLayout {
@@ -106,8 +118,10 @@ extension HomeViewController {
         switch section {
         case .header:
             return createHeaderSection(index)
-        case .ingredientsTransition:
-            return createIngredientSection()
+        case .priceTrend:
+            return createPriceTrendSection()
+        case .ingredientRecipe:
+            return createIngredientRecipeSection()
         }
     }
     
@@ -135,7 +149,7 @@ extension HomeViewController {
         return section
     }
     
-    func createIngredientSection() -> NSCollectionLayoutSection {
+    func createPriceTrendSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
@@ -153,6 +167,36 @@ extension HomeViewController {
         
         let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                       heightDimension: .absolute(50.0))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .topLeading)
+        section.boundarySupplementaryItems = [header]
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        
+        // Return
+        return section
+    }
+    
+    func createIngredientRecipeSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 3)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.7),
+                heightDimension: .fractionalHeight(0.3)),
+            subitem: item,
+            count: 2)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(40.0))
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: footerHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
@@ -183,9 +227,13 @@ extension HomeViewController {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeHeader.reuseIdentifier, for: indexPath) as! HomeHeader
             cell.configure(data: data)
             return cell
-        case .IngredientsTransition(let data):
+        case .priceTrend(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: HomeSecondSectionItem.reuseIdentifier, for: indexPath) as! HomeSecondSectionItem
             cell.configure(ingredients: data)
+            return cell
+        case .ingredientRecipe(let data):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientRecipeCell.reuseIdentifier, for: indexPath) as! IngredientRecipeCell
+            cell.configure(data)
             return cell
             
         }
@@ -193,7 +241,6 @@ extension HomeViewController {
     
     /// Cell의 헤더에 필요함!
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath, section: HomeSection) -> UICollectionReusableView {
-        print(indexPath.row)
         switch section {
         case .header:
             if kind == UICollectionView.elementKindSectionHeader {
@@ -221,18 +268,24 @@ extension HomeViewController {
                 pagingFooter.pageControl.addTarget(self, action: #selector(pageChanged(_:)), for: .valueChanged)
                 return pagingFooter
             }
-        case .ingredientsTransition:
+        case .priceTrend:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeSecondSectionHeader.identifier, for: indexPath) as! HomeSecondSectionHeader
+            return headerView
+            
+        case .ingredientRecipe:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
+            headerView.configureTitle(text: "My 재료 활용 레시피")
             return headerView
         }
     }
     
     private func createSnapshot() -> HomeSnapshot{
         var snapshot = HomeSnapshot()
-        snapshot.appendSections([.header, .ingredientsTransition])
+        snapshot.appendSections([.header, .priceTrend, .ingredientRecipe])
         
-        snapshot.appendItems(mockdata.map { HomeItem.header($0) }, toSection: .header)
-        snapshot.appendItems(ingredientMockData.map { HomeItem.IngredientsTransition($0) }, toSection: .ingredientsTransition)
+        snapshot.appendItems(refrigeratorMock.map { HomeItem.header($0) }, toSection: .header)
+        snapshot.appendItems(priceTrendMock.map { HomeItem.priceTrend($0) }, toSection: .priceTrend)
+        snapshot.appendItems(chucheonRecipeMockData.map { HomeItem.ingredientRecipe($0) }, toSection: .ingredientRecipe)
         
         return snapshot
     }

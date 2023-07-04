@@ -48,6 +48,8 @@
 		5A914AE02A5407410020BA71 /* NormalRefrigeratorView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ADF2A5407410020BA71 /* NormalRefrigeratorView.swift */; };
 		5A914AE32A5410E30020BA71 /* PriceTrendHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AE22A5410E30020BA71 /* PriceTrendHeader.swift */; };
 		5A914AE52A5411080020BA71 /* PriceTrendCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AE42A5411080020BA71 /* PriceTrendCell.swift */; };
+		5A914AEA2A54157E0020BA71 /* DefaultHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AE92A54157E0020BA71 /* DefaultHeader.swift */; };
+		5A914AEC2A54159B0020BA71 /* IngredientRecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */; };
 		C14E5ECF67729C2D8562F1C7 /* Pods_Recipe_RecipeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43250A0DA83D570142864CA1 /* Pods_Recipe_RecipeUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -116,6 +118,8 @@
 		5A914ADF2A5407410020BA71 /* NormalRefrigeratorView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NormalRefrigeratorView.swift; sourceTree = "<group>"; };
 		5A914AE22A5410E30020BA71 /* PriceTrendHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendHeader.swift; sourceTree = "<group>"; };
 		5A914AE42A5411080020BA71 /* PriceTrendCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendCell.swift; sourceTree = "<group>"; };
+		5A914AE92A54157E0020BA71 /* DefaultHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeader.swift; sourceTree = "<group>"; };
+		5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientRecipeCell.swift; sourceTree = "<group>"; };
 		A8CE900025B9359CF850D014 /* Pods-Recipe-RecipeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe-RecipeUITests.release.xcconfig"; path = "Target Support Files/Pods-Recipe-RecipeUITests/Pods-Recipe-RecipeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B4563E7FE258A2DCD5F58EC8 /* Pods-Recipe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe.debug.xcconfig"; path = "Target Support Files/Pods-Recipe/Pods-Recipe.debug.xcconfig"; sourceTree = "<group>"; };
 		DF24270AD89DC117D4A60AF1 /* Pods-RecipeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeTests.release.xcconfig"; path = "Target Support Files/Pods-RecipeTests/Pods-RecipeTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -349,8 +353,9 @@
 		5A43FF6C2A52ABCF0048E213 /* Home */ = {
 			isa = PBXGroup;
 			children = (
-				5A914AE12A5410B70020BA71 /* PriceTrend */,
 				5A914AD42A5402FC0020BA71 /* Refrigerator */,
+				5A914AE12A5410B70020BA71 /* PriceTrend */,
+				5A914AE82A5415610020BA71 /* IngredientRecipe */,
 				5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */,
 				5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */,
 				5A914ACE2A53FD430020BA71 /* TitleView.swift */,
@@ -376,6 +381,15 @@
 				5A914AE42A5411080020BA71 /* PriceTrendCell.swift */,
 			);
 			path = PriceTrend;
+			sourceTree = "<group>";
+		};
+		5A914AE82A5415610020BA71 /* IngredientRecipe */ = {
+			isa = PBXGroup;
+			children = (
+				5A914AE92A54157E0020BA71 /* DefaultHeader.swift */,
+				5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */,
+			);
+			path = IngredientRecipe;
 			sourceTree = "<group>";
 		};
 		7464DA38ED5D7F31477A783A /* Pods */ = {
@@ -666,10 +680,12 @@
 				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
 				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
 				5A0244992A529AA300AA418E /* Recipe.xcdatamodeld in Sources */,
+				5A914AEC2A54159B0020BA71 /* IngredientRecipeCell.swift in Sources */,
 				5A0244DB2A52A74D00AA418E /* SplashCoordinator.swift in Sources */,
 				5A914AD32A54024A0020BA71 /* Home.swift in Sources */,
 				5A0244D22A52A59000AA418E /* Coordinator.swift in Sources */,
 				5A0244DE2A52A7B600AA418E /* LoginViewController.swift in Sources */,
+				5A914AEA2A54157E0020BA71 /* DefaultHeader.swift in Sources */,
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
 				5A914ADE2A5407230020BA71 /* ColdRefrigeratorView.swift in Sources */,
 				5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */,
