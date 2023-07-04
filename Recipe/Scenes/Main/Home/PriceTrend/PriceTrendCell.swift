@@ -10,14 +10,6 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-struct PriceTrend: Hashable {
-    let id = UUID()
-    let title: String
-    let transition: String
-    let count: Int
-    let price: Int
-}
-
 class PriceTrendCell: UICollectionViewCell {
     
     let ingredientsTitle: UILabel = {

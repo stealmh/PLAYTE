@@ -11,3 +11,18 @@ struct Refrigerator: Hashable {
     let id = UUID()
     let view: UIView
 }
+
+struct IngredientRecipe: Hashable {
+    let id = UUID()
+    let image: UIImage
+    let title: String
+    let cookTime: String
+}
+
+struct PriceTrend: Hashable {
+    let id = UUID()
+    let title: String
+    let transition: String
+    let count: Int
+    let price: Int
+}
