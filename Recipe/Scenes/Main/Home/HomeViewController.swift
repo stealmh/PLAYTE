@@ -200,7 +200,7 @@ extension HomeViewController {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(0.7),
-                heightDimension: .fractionalHeight(0.3)),
+                heightDimension: .absolute(200)),
             subitem: item,
             count: 2)
         
@@ -225,7 +225,7 @@ extension HomeViewController {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .fractionalHeight(1)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 10)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
@@ -338,5 +338,12 @@ extension HomeViewController {
         snapshot.appendItems(chucheonRecipeMockData.map { HomeItem.ingredientRecipe($0) }, toSection: .ingredientRecipe)
         snapshot.appendItems(ingredientsHandleMock.map { HomeItem.ingredientsHandle($0) }, toSection: .ingredientsHandle)
         return snapshot
+    }
+}
+
+import SwiftUI
+struct ViewController_preview: PreviewProvider {
+    static var previews: some View {
+        HomeViewController().toPreview()
     }
 }

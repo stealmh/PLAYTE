@@ -47,7 +47,7 @@ class IngredientRecipeCell: UICollectionViewCell {
     func setUI() {
         recipeImageView.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
-            $0.height.equalTo(150)
+            $0.height.equalTo(130)
             $0.width.equalToSuperview()
         }
         
