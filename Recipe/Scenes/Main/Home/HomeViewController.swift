@@ -62,6 +62,25 @@ private extension HomeViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem.menuButton(imageName: "popcat", size: CGSize(width: 40, height: 40))
         navigationController?.navigationBar.barTintColor = .white
         navigationItem.titleView = titleView
+        
+        ///Test VC
+        let vc = IngredientRegistrationViewController()
+        
+        navigationItem.rightBarButtonItem?.rx.tap
+            .subscribe(onNext: { _ in
+                if #available(iOS 16.0, *) {
+                    guard let sheet = vc.sheetPresentationController else { return }
+                    sheet.detents = [.custom { _ in return 270 } ]
+                    sheet.preferredCornerRadius = 30
+                } else if #available(iOS 15.0, *) {
+                    guard let sheet = vc.sheetPresentationController else { return }
+                    sheet.detents = [.medium()]
+                } else {
+                    vc.modalPresentationStyle = .custom
+                    vc.transitioningDelegate = self
+                }
+                self.present(vc, animated: true)
+            }).disposed(by: disposeBag)
     }
     
     @objc func pageChanged(_ sender: UIPageControl) {
@@ -338,6 +357,13 @@ extension HomeViewController {
         snapshot.appendItems(chucheonRecipeMockData.map { HomeItem.ingredientRecipe($0) }, toSection: .ingredientRecipe)
         snapshot.appendItems(ingredientsHandleMock.map { HomeItem.ingredientsHandle($0) }, toSection: .ingredientsHandle)
         return snapshot
+    }
+}
+//MARK: - Modal Delegate
+extension HomeViewController: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        PresentationController(presentedViewController: presented, presenting: presenting)
     }
 }
 
