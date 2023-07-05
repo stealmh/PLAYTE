@@ -35,13 +35,13 @@ class HomeViewController: BaseViewController {
         PriceTrend(title: "계란", transition: "+8%", count: 3, price: 231),]
     
     var chucheonRecipeMockData: [IngredientRecipe] = [
-    IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),
-    IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥에서 음식이길다면", cookTime: "조리 시간 10분"),
-    IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),]
+        IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),
+        IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥에서 음식이길다면", cookTime: "조리 시간 10분"),
+        IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),]
     
     var ingredientsHandleMock: [IngredientsHandle] = [
-    IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."),
-    IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."),]
+        IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."),
+        IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."),]
     
     override func viewDidLoad() {
         super.viewDidLoad()
