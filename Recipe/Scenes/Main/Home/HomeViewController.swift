@@ -55,7 +55,7 @@ class HomeViewController: BaseViewController {
     
 }
 
-/// Method - Normal
+//MARK: - Method(Normal)
 private extension HomeViewController {
     func configureNavigationTabBar() {
         navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .add)
@@ -109,7 +109,7 @@ private extension HomeViewController {
     }
 }
 
-/// Method - Compositional + Diffable
+//MARK: - Typealias + enum case
 extension HomeViewController {
     
     typealias HomeHeader = RefrigeratorCell
@@ -134,7 +134,9 @@ extension HomeViewController {
         case ingredientRecipe(IngredientRecipe)
         case ingredientsHandle(IngredientsHandle)
     }
-    
+}
+//MARK: - Method(Compositional + Diffable)
+extension HomeViewController {
     func createLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { [unowned self] index, env in
             return self.sectionFor(index: index, environment: env)
@@ -168,7 +170,7 @@ extension HomeViewController {
         let pagingFooterElement = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
         section.boundarySupplementaryItems += [pagingFooterElement]
         
-        // MARK: Page control setup
+        /// Page control setup
         section.visibleItemsInvalidationHandler = { [weak self] (items, offset, env) -> Void in
             guard let self = self else { return }
             
@@ -367,6 +369,7 @@ extension HomeViewController: UIViewControllerTransitioningDelegate {
     }
 }
 
+//MARK: - VC Preview
 import SwiftUI
 struct ViewController_preview: PreviewProvider {
     static var previews: some View {
