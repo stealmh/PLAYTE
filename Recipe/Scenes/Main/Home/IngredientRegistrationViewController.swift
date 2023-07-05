@@ -92,6 +92,11 @@ class IngredientRegistrationViewController: BaseViewController {
     
     private lazy var table = UITableView()
     private let disposeBag = DisposeBag()
+    
+    typealias Tag = TagCell
+    private let collectionView = UICollectionView(frame: .zero,
+                                                  collectionViewLayout: IngredientRegistrationViewController.createLayout())
+    var tagList: [String] = ["가지","가지","가지"]
     //Property
     var data = [String]()
     var filteredData = [String]()
@@ -108,7 +113,8 @@ class IngredientRegistrationViewController: BaseViewController {
                          registerButton,
                          searchImageButton,
                          table,
-                         checkArea)
+                         checkArea,
+        collectionView)
         configureLayout()
         configureTableView()
         setupData()
@@ -135,6 +141,7 @@ class IngredientRegistrationViewController: BaseViewController {
                     self.clearTextFieldSetting()
                 }
             }).disposed(by: disposeBag)
+        collectionUI()
     }
 }
 
@@ -277,6 +284,67 @@ extension IngredientRegistrationViewController: UITableViewDelegate, UITableView
         clearTextFieldSetting()
     }
 }
+
+//MARK: - CollectionView 관련
+extension IngredientRegistrationViewController: UICollectionViewDataSource {
+    func collectionUI() {
+        view.addSubview(collectionView)
+        collectionView.register(Tag.self, forCellWithReuseIdentifier: "TagCell")
+        collectionView.dataSource = self
+        collectionView.snp.makeConstraints {
+            $0.left.equalToSuperview().inset(15)
+            $0.right.equalToSuperview().inset(15)
+            $0.top.equalTo(normalRefrigeratorButton.snp.bottom).offset(5)
+            $0.bottom.equalTo(registerButton.snp.top).offset(5)
+        }
+        collectionView.isScrollEnabled = false
+    }
+    
+    static func createLayout() -> UICollectionViewCompositionalLayout {
+        return UICollectionViewCompositionalLayout { (sectionNumber, env) -> NSCollectionLayoutSection? in
+            
+            let estimatedHeight: CGFloat = 32
+            let estimatedWeight: CGFloat = 70
+            let itemSize = NSCollectionLayoutSize(
+                widthDimension: .estimated(estimatedWeight),
+                heightDimension: .estimated(estimatedHeight))
+            
+            let item = NSCollectionLayoutItem(
+                layoutSize: itemSize)
+            let groupSize = NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(100))
+            
+            let group = NSCollectionLayoutGroup.horizontal(
+                layoutSize: groupSize,
+                subitems: [item])
+            group.interItemSpacing = .fixed(8)
+            
+            let section = NSCollectionLayoutSection(group: group)
+            section.orthogonalScrollingBehavior = .groupPaging
+            return section
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return tagList.count
+    }
+    
+    func numberOfSections(in collectionView: UICollectionView) -> Int {
+        return 1
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! Tag
+            cell.configure(with: tagList[indexPath.row])
+            print(cell.frame.width)
+            print(cell.frame.height)
+            cell.sizeToFit()
+            return cell
+        
+    }
+}
+
 //MARK: - Constants
 extension IngredientRegistrationViewController {
     enum Constants {
