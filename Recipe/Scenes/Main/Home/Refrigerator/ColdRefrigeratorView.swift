@@ -10,11 +10,16 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
+protocol TestViewDelegate{
+    func onClickButton(_ senderTitle: String)
+}
+
 class ColdRefrigeratorView: UIView {
     
     let disposeBag = DisposeBag()
+    var delegate: TestViewDelegate?
     
-    private let sinseonButton: UIButton = {
+    let sinseonButton: UIButton = {
         let v = UIButton()
         v.setTitle("신선 식품", for: .normal)
         v.setTitleColor(.white, for: .normal)
@@ -72,6 +77,7 @@ class ColdRefrigeratorView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
+        print("ColdRefrigeratorView:", self)
         backgroundColor = .gray
         
         addSubViews(
@@ -84,6 +90,14 @@ class ColdRefrigeratorView: UIView {
             etcButton)
         setUI()
         bindButtonTap()
+        
+        [sinseonButton,
+        joriButton,
+        breadButton,
+        drinkButton,
+        mealkitButton,
+        banchanButton,
+         etcButton].forEach { $0.addTarget(self, action: #selector(check(sender:)), for: .touchUpInside) }
     }
     
     required init?(coder: NSCoder) {
@@ -173,6 +187,12 @@ extension ColdRefrigeratorView {
     }
 }
 
+private extension ColdRefrigeratorView {
+    @objc func check(sender: UIButton) {
+        print(#function)
+        delegate?.onClickButton(sender.currentTitle!)
+    }
+}
 
 #if DEBUG
 import SwiftUI

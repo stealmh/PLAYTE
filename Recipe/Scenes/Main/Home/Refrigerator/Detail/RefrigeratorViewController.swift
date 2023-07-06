@@ -1,5 +1,5 @@
 //
-//  PriceTrendDetailViewController.swift
+//  RefrigeratorViewController.swift
 //  Recipe
 //
 //  Created by KindSoft on 2023/07/06.
@@ -10,12 +10,12 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class PriceTrendDetailViewController: BaseViewController {
+class RefrigeratorViewController: BaseViewController {
     
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()
         v.backgroundColor = .gray.withAlphaComponent(0.2)
-        v.placeholder = "재료 이름을 검색해주세요."
+        v.placeholder = "식재료를 검색해보세요."
         v.layer.cornerRadius = 10
         v.clipsToBounds = true
         return v
@@ -66,7 +66,7 @@ class PriceTrendDetailViewController: BaseViewController {
 }
 
 //MARK: - Method(normal)
-extension PriceTrendDetailViewController {
+extension RefrigeratorViewController {
     func navigationBarSetting() {
         navigationController?.navigationBar.barTintColor = .white
         
@@ -100,14 +100,14 @@ extension PriceTrendDetailViewController {
 }
 
 //MARK: - TableView 관련
-extension PriceTrendDetailViewController: UITableViewDelegate, UITableViewDataSource {
+extension RefrigeratorViewController: UITableViewDelegate, UITableViewDataSource {
     
     private func configureTableView() {
         table.delegate = self
         table.dataSource = self
         table.layer.cornerRadius = 10
         table.clipsToBounds = true
-        table.register(PriceTrendDetailCell.self, forCellReuseIdentifier: "PriceTrendDetailCell")
+        table.register(RefrigeratorDetailCell.self, forCellReuseIdentifier: "RefrigeratorDetailCell")
     }
     
     private func setMockData() {
@@ -160,11 +160,11 @@ extension PriceTrendDetailViewController: UITableViewDelegate, UITableViewDataSo
     
     // 셀 디자인
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PriceTrendDetailCell", for: indexPath) as! PriceTrendDetailCell
+        let cell = tableView.dequeueReusableCell(withIdentifier: "RefrigeratorDetailCell", for: indexPath) as! RefrigeratorDetailCell
         if !filteredData.isEmpty {
-            cell.detailTitle.text = filteredData[indexPath.row].title
+            cell.ingredientTitle.text = filteredData[indexPath.row].title
         } else {
-            cell.detailTitle.text = mockData[indexPath.row].title
+            cell.ingredientTitle.text = mockData[indexPath.row].title
         }
         
         return cell
@@ -175,8 +175,8 @@ extension PriceTrendDetailViewController: UITableViewDelegate, UITableViewDataSo
 }
 //MARK: - VC Preview
 import SwiftUI
-struct PriceTrendViewController_preview: PreviewProvider {
+struct RefrigeratorViewController_preview: PreviewProvider {
     static var previews: some View {
-        PriceTrendDetailViewController().toPreview()
+        RefrigeratorViewController().toPreview()
     }
 }

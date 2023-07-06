@@ -10,9 +10,11 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
+
 class NormalRefrigeratorView: UIView {
     
     let disposeBag = DisposeBag()
+    var delegate: TestViewDelegate?
     
     private let sinseonButton: UIButton = {
         let v = UIButton()
@@ -84,6 +86,14 @@ class NormalRefrigeratorView: UIView {
             etcButton)
         setUI()
         bindButtonTap()
+        
+        [sinseonButton,
+        joriButton,
+        breadButton,
+        drinkButton,
+        mealkitButton,
+        banchanButton,
+         etcButton].forEach { $0.addTarget(self, action: #selector(check(sender:)), for: .touchUpInside) }
     }
     
     required init?(coder: NSCoder) {
@@ -173,6 +183,12 @@ extension NormalRefrigeratorView {
     }
 }
 
+private extension NormalRefrigeratorView {
+    @objc func check(sender: UIButton) {
+        print(#function)
+        delegate?.onClickButton(sender.currentTitle!)
+    }
+}
 
 #if DEBUG
 import SwiftUI

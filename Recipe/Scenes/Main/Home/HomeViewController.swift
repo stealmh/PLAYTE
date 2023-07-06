@@ -10,12 +10,9 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class HomeViewController: BaseViewController {
+class HomeViewController: BaseViewController, TestViewDelegate {
     
-    private var dataSource: HomeDatasource!
-    private var disposeBag = DisposeBag()
-    private let pagingInfoSubject = PublishSubject<PagingInfo>()
-    
+    //UI
     private let titleView = TitleView()
     lazy var collectionView: UICollectionView = {
         let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
@@ -24,35 +21,58 @@ class HomeViewController: BaseViewController {
         return v
     }()
     
+    //Property
+    private var dataSource: HomeDatasource!
+    private var disposeBag = DisposeBag()
+    private let pagingInfoSubject = PublishSubject<PagingInfo>()
+    let cold = ColdRefrigeratorView()
+    let normal = NormalRefrigeratorView()
+    
     //Mock Data
-    var refrigeratorMock: [Refrigerator] = [
-        Refrigerator(view: ColdRefrigeratorView()),
-        Refrigerator(view: NormalRefrigeratorView()),]
-    
-    var priceTrendMock: [PriceTrend] = [
-        PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231),
-        PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231),
-        PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231),]
-    
-    var chucheonRecipeMockData: [IngredientRecipe] = [
-        IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),
-        IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥에서 음식이길다면", cookTime: "조리 시간 10분"),
-        IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),]
-    
-    var ingredientsHandleMock: [IngredientsHandle] = [
-        IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."),
-        IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."),]
+    var refrigeratorMock = [Refrigerator]()
+    var priceTrendMock = [PriceTrend]()
+    var chucheonRecipeMockData = [IngredientRecipe]()
+    var ingredientsHandleMock = [IngredientsHandle]()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
-        
+        cold.delegate = self
+        normal.delegate = self
+
+        addMockData()
         configureNavigationTabBar()
         configureLayout()
         registerCell()
         configureDataSource()
     }
     
+    func onClickButton(_ senderTitle: String) {
+        let refrigeratorVC = RefrigeratorViewController()
+        self.navigationController?.pushViewController(refrigeratorVC, animated: true)
+        print(senderTitle)
+    }
+
+    
+}
+
+//MARK: - MockData
+extension HomeViewController {
+    func addMockData() {
+        refrigeratorMock.append(Refrigerator(view: cold))
+        refrigeratorMock.append(Refrigerator(view: normal))
+        
+        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
+        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
+        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
+        
+        chucheonRecipeMockData.append(IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"))
+        chucheonRecipeMockData.append(IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥에서 음식이길다면", cookTime: "조리 시간 10분"))
+        chucheonRecipeMockData.append(IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"))
+        
+        ingredientsHandleMock.append(IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."))
+        ingredientsHandleMock.append(IngredientsHandle(image: UIImage(named: "popcat")!, title: "식빵은 2~3일이 지나면 냉동보관!", contents: "먹고 싶을 땐 미리 꺼내서 실온 해동해주세요."))
+    }
 }
 
 //MARK: - Method(Normal)
