@@ -56,6 +56,8 @@
 		5AB4A5E02A552E900095CD2B /* PaddingUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */; };
 		5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5E12A553E7F0095CD2B /* MyCell.swift */; };
 		5AB4A5E42A554BDF0095CD2B /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5E32A554BDF0095CD2B /* TagCell.swift */; };
+		5AF00F642A56725A00587BF9 /* PriceTrendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F632A56725A00587BF9 /* PriceTrendDetailViewController.swift */; };
+		5AF00F672A56762A00587BF9 /* PriceTrendDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F662A56762A00587BF9 /* PriceTrendDetailCell.swift */; };
 		C14E5ECF67729C2D8562F1C7 /* Pods_Recipe_RecipeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43250A0DA83D570142864CA1 /* Pods_Recipe_RecipeUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -132,6 +134,8 @@
 		5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingUITextField.swift; sourceTree = "<group>"; };
 		5AB4A5E12A553E7F0095CD2B /* MyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCell.swift; sourceTree = "<group>"; };
 		5AB4A5E32A554BDF0095CD2B /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
+		5AF00F632A56725A00587BF9 /* PriceTrendDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendDetailViewController.swift; sourceTree = "<group>"; };
+		5AF00F662A56762A00587BF9 /* PriceTrendDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendDetailCell.swift; sourceTree = "<group>"; };
 		A8CE900025B9359CF850D014 /* Pods-Recipe-RecipeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe-RecipeUITests.release.xcconfig"; path = "Target Support Files/Pods-Recipe-RecipeUITests/Pods-Recipe-RecipeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B4563E7FE258A2DCD5F58EC8 /* Pods-Recipe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe.debug.xcconfig"; path = "Target Support Files/Pods-Recipe/Pods-Recipe.debug.xcconfig"; sourceTree = "<group>"; };
 		DF24270AD89DC117D4A60AF1 /* Pods-RecipeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeTests.release.xcconfig"; path = "Target Support Files/Pods-RecipeTests/Pods-RecipeTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -395,6 +399,7 @@
 		5A914AE12A5410B70020BA71 /* PriceTrend */ = {
 			isa = PBXGroup;
 			children = (
+				5AF00F652A56760B00587BF9 /* Detail */,
 				5A914AE22A5410E30020BA71 /* PriceTrendHeader.swift */,
 				5A914AE42A5411080020BA71 /* PriceTrendCell.swift */,
 			);
@@ -416,6 +421,15 @@
 				5A914AEE2A5419C70020BA71 /* IngredientsHandleCell.swift */,
 			);
 			path = IngredientHandle;
+			sourceTree = "<group>";
+		};
+		5AF00F652A56760B00587BF9 /* Detail */ = {
+			isa = PBXGroup;
+			children = (
+				5AF00F632A56725A00587BF9 /* PriceTrendDetailViewController.swift */,
+				5AF00F662A56762A00587BF9 /* PriceTrendDetailCell.swift */,
+			);
+			path = Detail;
 			sourceTree = "<group>";
 		};
 		7464DA38ED5D7F31477A783A /* Pods */ = {
@@ -693,7 +707,9 @@
 				5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */,
 				5A914AE32A5410E30020BA71 /* PriceTrendHeader.swift in Sources */,
 				5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */,
+				5AF00F642A56725A00587BF9 /* PriceTrendDetailViewController.swift in Sources */,
 				5AB4A5E42A554BDF0095CD2B /* TagCell.swift in Sources */,
+				5AF00F672A56762A00587BF9 /* PriceTrendDetailCell.swift in Sources */,
 				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
 				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
 				5A914AE52A5411080020BA71 /* PriceTrendCell.swift in Sources */,

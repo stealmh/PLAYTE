@@ -30,9 +30,9 @@ class HomeViewController: BaseViewController {
         Refrigerator(view: NormalRefrigeratorView()),]
     
     var priceTrendMock: [PriceTrend] = [
-        PriceTrend(title: "계란", transition: "+8%", count: 3, price: 231),
-        PriceTrend(title: "계란", transition: "+8%", count: 3, price: 231),
-        PriceTrend(title: "계란", transition: "+8%", count: 3, price: 231),]
+        PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231),
+        PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231),
+        PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231),]
     
     var chucheonRecipeMockData: [IngredientRecipe] = [
         IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),
@@ -336,6 +336,14 @@ extension HomeViewController {
             }
         case .priceTrend:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeSecondSectionHeader.identifier, for: indexPath) as! HomeSecondSectionHeader
+            
+            headerView.button.rx.tap
+                .subscribe(onNext: { _ in
+                    self.navigationItem.backBarButtonItem = UIBarButtonItem(
+                        title: "", style: .plain, target: nil, action: nil)
+                    self.navigationController?.pushViewController(PriceTrendDetailViewController(), animated: true)
+                }).disposed(by: disposeBag)
+            
             return headerView
             
         case .ingredientRecipe:
