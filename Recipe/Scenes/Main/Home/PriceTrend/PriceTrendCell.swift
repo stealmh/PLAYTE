@@ -55,6 +55,8 @@ class PriceTrendCell: UICollectionViewCell {
         
         self.setUI()
         configure(ingredients: PriceTrend(title: "계란",
+                                          tagName: "유제품",
+                                          date: "",
                                            transition: "+8원(0.4%)",
                                            count: 1,
                                            price: 214))

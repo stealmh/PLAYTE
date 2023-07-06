@@ -22,6 +22,8 @@ struct IngredientRecipe: Hashable {
 struct PriceTrend: Hashable {
     let id = UUID()
     let title: String
+    let tagName: String
+    let date: String
     let transition: String
     let count: Int
     let price: Int
