@@ -6,16 +6,29 @@
 //
 
 import UIKit
+import SnapKit
 
 class SplashViewController: BaseViewController {
 
     var didSendEventClosure: ((SplashViewController.Event) -> Void)?
+    private let testLabel: UILabel = {
+        let v = UILabel()
+        v.text = "Splash View"
+        v.font = .boldSystemFont(ofSize: 50)
+        v.textColor = .red
+        return v
+    }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = UIColor.red.withAlphaComponent(0.2)
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        view.backgroundColor = .white
+        view.addSubview(testLabel)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.didSendEventClosure?(.endSplash)
+        }
+        
+        testLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
         }
 
     }
