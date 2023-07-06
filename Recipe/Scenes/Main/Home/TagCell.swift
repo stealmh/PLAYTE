@@ -6,13 +6,19 @@
 //
 
 import UIKit
+import SnapKit
+import RxSwift
+import RxCocoa
 
 class TagCell: UICollectionViewCell {
     static let identifier = "TagCell"
     
+    let disposeBag = DisposeBag()
     let tagBackground: UIView = {
         let v = UIView()
-        v.backgroundColor = .cyan
+        v.backgroundColor = .white
+        v.layer.borderColor = UIColor.gray.cgColor
+        v.layer.borderWidth = 1
         return v
     }()
     
@@ -20,7 +26,15 @@ class TagCell: UICollectionViewCell {
         let v = UILabel()
         v.textAlignment = .left
         v.font = .systemFont(ofSize: 14)
-        v.textColor = .black
+        v.textColor = .gray
+        return v
+    }()
+    
+    let deleteButton: UIButton = {
+        let v = UIButton()
+        v.setImage(UIImage(systemName: "multiply.circle.fill"), for: .normal)
+        v.contentMode = .scaleAspectFit
+        v.tintColor = .gray
         return v
     }()
     
@@ -28,11 +42,11 @@ class TagCell: UICollectionViewCell {
         super.init(frame: frame)
         contentView.addSubview(tagBackground)
         contentView.addSubview(tagLabel)
-//        contentView.layer.masksToBounds = true
-//        contentView.layer.cornerRadius = 30
+        contentView.addSubview(deleteButton)
         tagBackground.layer.masksToBounds = true
         tagBackground.layer.cornerRadius = 15
         setConstant()
+        configure(with: "hello")
     }
     
     required init?(coder: NSCoder) {
@@ -40,12 +54,21 @@ class TagCell: UICollectionViewCell {
     }
     
     func setConstant() {
-        tagLabel.translatesAutoresizingMaskIntoConstraints = false
-        tagLabel.centerXAnchor.constraint(equalTo: contentView.centerXAnchor).isActive = true
-        tagLabel.centerYAnchor.constraint(equalTo: contentView.centerYAnchor).isActive = true
+        tagLabel.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
         
-        tagBackground.translatesAutoresizingMaskIntoConstraints = false
-        tagBackground.frame = contentView.frame
+//        tagBackground.translatesAutoresizingMaskIntoConstraints = false
+//        tagBackground.frame = contentView.frame
+//
+        tagBackground.snp.makeConstraints {
+            $0.top.left.right.bottom.equalToSuperview()
+        }
+        
+        deleteButton.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(-9)
+            $0.right.equalToSuperview().offset(8.6)
+        }
     }
     
     func configure(with title: String) {

@@ -84,12 +84,6 @@ class IngredientRegistrationViewController: BaseViewController {
         return v
     }()
     
-    private let checkArea: UIView = {
-        let v = UIView()
-        v.backgroundColor = .red
-        return v
-    }()
-    
     private lazy var table = UITableView()
     private let disposeBag = DisposeBag()
     
@@ -112,9 +106,8 @@ class IngredientRegistrationViewController: BaseViewController {
                          normalRefrigeratorButton,
                          registerButton,
                          searchImageButton,
-                         table,
-                         checkArea,
-        collectionView)
+                         collectionView,
+                         table)
         configureLayout()
         configureTableView()
         setupData()
@@ -160,7 +153,7 @@ extension IngredientRegistrationViewController {
         
         sheetSubTitle.snp.makeConstraints {
             $0.left.equalToSuperview().inset(10)
-            $0.top.equalTo(sheetTitle.snp.bottom).offset(20)
+            $0.top.equalTo(sheetTitle.snp.bottom).offset(15)
         }
         
         searchTextField.snp.makeConstraints {
@@ -178,36 +171,37 @@ extension IngredientRegistrationViewController {
         
         coldRefrigeratorButton.snp.makeConstraints {
             $0.left.equalToSuperview().inset(15)
-            $0.top.equalTo(searchTextField.snp.bottom).offset(20)
+            $0.top.equalTo(searchTextField.snp.bottom).offset(25)
             $0.right.equalTo(view.snp.centerX).inset(10)
             $0.height.equalTo(searchTextField)
         }
         
         normalRefrigeratorButton.snp.makeConstraints {
             $0.right.equalToSuperview().inset(15)
-            $0.top.equalTo(searchTextField.snp.bottom).offset(20)
+            $0.top.equalTo(searchTextField.snp.bottom).offset(25)
             $0.left.equalTo(view.snp.centerX).offset(10)
             $0.height.equalTo(searchTextField)
         }
         
+        collectionView.snp.makeConstraints {
+            $0.left.equalToSuperview().inset(15)
+            $0.right.equalToSuperview().inset(15)
+            $0.top.equalTo(normalRefrigeratorButton.snp.bottom).offset(5)
+            $0.height.equalTo(50)
+        }
+        
         registerButton.snp.makeConstraints {
-            $0.top.equalTo(normalRefrigeratorButton.snp.bottom).offset(40)
+            $0.top.equalTo(collectionView.snp.bottom).offset(10)
             $0.left.right.equalToSuperview().inset(15)
             $0.height.equalTo(searchTextField)
         }
         
         table.snp.makeConstraints {
-            $0.top.equalTo(searchTextField.snp.bottom).offset(10)
+            $0.top.equalTo(searchTextField.snp.bottom).offset(5)
             $0.left.right.equalToSuperview().inset(10)
             $0.height.equalTo(70)
         }
         
-        checkArea.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(15)
-            $0.right.equalToSuperview().inset(15)
-            $0.top.equalTo(normalRefrigeratorButton.snp.bottom).offset(5)
-            $0.bottom.equalTo(registerButton.snp.top).offset(5)
-        }
     }
 }
 
@@ -282,21 +276,18 @@ extension IngredientRegistrationViewController: UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         ///Todo: 태그 컬렉션에 추가기능 연동하기
         clearTextFieldSetting()
+        let data = filteredData[indexPath.row]
+        tagList.append(data)
+        collectionView.reloadData()
     }
 }
 
 //MARK: - CollectionView 관련
-extension IngredientRegistrationViewController: UICollectionViewDataSource {
+extension IngredientRegistrationViewController: UICollectionViewDataSource,UICollectionViewDelegate {
     func collectionUI() {
-        view.addSubview(collectionView)
         collectionView.register(Tag.self, forCellWithReuseIdentifier: "TagCell")
         collectionView.dataSource = self
-        collectionView.snp.makeConstraints {
-            $0.left.equalToSuperview().inset(15)
-            $0.right.equalToSuperview().inset(15)
-            $0.top.equalTo(normalRefrigeratorButton.snp.bottom).offset(5)
-            $0.bottom.equalTo(registerButton.snp.top).offset(5)
-        }
+        collectionView.delegate = self
         collectionView.isScrollEnabled = false
     }
     
@@ -305,19 +296,23 @@ extension IngredientRegistrationViewController: UICollectionViewDataSource {
             
             let estimatedHeight: CGFloat = 32
             let estimatedWeight: CGFloat = 70
+            
             let itemSize = NSCollectionLayoutSize(
-                widthDimension: .estimated(estimatedWeight),
-                heightDimension: .estimated(estimatedHeight))
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1))
             
             let item = NSCollectionLayoutItem(
                 layoutSize: itemSize)
+            item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 7)
+            
             let groupSize = NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(100))
+                widthDimension: .fractionalWidth(0.2),
+                heightDimension: .fractionalHeight(1))
             
             let group = NSCollectionLayoutGroup.horizontal(
                 layoutSize: groupSize,
                 subitems: [item])
+            
             group.interItemSpacing = .fixed(8)
             
             let section = NSCollectionLayoutSection(group: group)
@@ -335,16 +330,24 @@ extension IngredientRegistrationViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! Tag
-            cell.configure(with: tagList[indexPath.row])
-            print(cell.frame.width)
-            print(cell.frame.height)
-            cell.sizeToFit()
-            return cell
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! Tag
+        cell.configure(with: tagList[indexPath.row])
+        cell.sizeToFit()
         
+        cell.deleteButton.tag = indexPath.row
+        cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped(sender:)), for: .touchUpInside)
+        return cell
     }
 }
-
+private extension IngredientRegistrationViewController {
+    @objc func deleteButtonTapped(sender: UIButton) {
+        print(sender.tag)
+        tagList.remove(at: sender.tag)
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
+    }
+}
 //MARK: - Constants
 extension IngredientRegistrationViewController {
     enum Constants {

@@ -70,7 +70,7 @@ private extension HomeViewController {
             .subscribe(onNext: { _ in
                 if #available(iOS 16.0, *) {
                     guard let sheet = vc.sheetPresentationController else { return }
-                    sheet.detents = [.custom { _ in return 270 } ]
+                    sheet.detents = [.custom { _ in return 320 } ]
                     sheet.preferredCornerRadius = 30
                 } else if #available(iOS 15.0, *) {
                     guard let sheet = vc.sheetPresentationController else { return }
