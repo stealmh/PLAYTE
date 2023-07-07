@@ -12,29 +12,29 @@ import SnapKit
 
 final class PriceTrendCell: UICollectionViewCell {
     
-    let ingredientsTitle: UILabel = {
+    private let ingredientsTitle: UILabel = {
         let v = UILabel()
         return v
     }()
     
-    let ingredientsTransitionLabel: UILabel = {
+    private let ingredientsTransitionLabel: UILabel = {
         let v = UILabel()
         return v
     }()
     
-    let ingredientsCountLabel: UILabel = {
+    private let ingredientsCountLabel: UILabel = {
         let v = UILabel()
         v.textAlignment = .left
         return v
     }()
     
-    let ingredientsPriceLabel: UILabel = {
+    private let ingredientsPriceLabel: UILabel = {
         let v = UILabel()
         v.textAlignment = .right
         return v
     }()
     
-    let divideLine: UIView = {
+    private let divideLine: UIView = {
         let v = UIView()
         v.backgroundColor = .gray
         return v
