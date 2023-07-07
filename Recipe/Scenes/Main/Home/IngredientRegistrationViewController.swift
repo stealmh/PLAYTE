@@ -263,9 +263,11 @@ extension IngredientRegistrationViewController: UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as! MyCell
         if !filteredData.isEmpty {
-            cell.myLabel.text = filteredData[indexPath.row]
+            let filterData = filteredData[indexPath.row]
+            cell.setData(text: filterData)
         } else {
-            cell.myLabel.text = data[indexPath.row]
+            let data = data[indexPath.row]
+            cell.setData(text: data)
         }
         
         return cell
