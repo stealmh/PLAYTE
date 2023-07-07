@@ -136,6 +136,16 @@ class PriceTrendDetailCell: UITableViewCell {
         detailTransitionLabel.text = "+8원 (0.4%)"
         detailPriceLabel.text = "10000000원"
     }
+    
+    func setData(data: PriceTrend) {
+        detailImageView.image = data.image
+        detailTagLabel.text = data.tagName
+        detailDateLabel.text = data.date
+        detailTitle.text = data.title
+        detailContLabel.text = "\(data.count)개"
+        detailTransitionLabel.text = data.transition
+        detailPriceLabel.text = "\(data.price)원"
+    }
 
 }
 

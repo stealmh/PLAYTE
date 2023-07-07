@@ -162,9 +162,11 @@ extension PriceTrendDetailViewController: UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PriceTrendDetailCell", for: indexPath) as! PriceTrendDetailCell
         if !filteredData.isEmpty {
-            cell.detailTitle.text = filteredData[indexPath.row].title
+            let filterData = filteredData[indexPath.row]
+            cell.setData(data: filterData)
         } else {
-            cell.detailTitle.text = mockData[indexPath.row].title
+            let mockData = mockData[indexPath.row]
+            cell.setData(data: mockData)
         }
         
         return cell

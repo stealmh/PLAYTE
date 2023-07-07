@@ -81,6 +81,12 @@ class RefrigeratorDetailCell: UITableViewCell {
         expirationDateLabel.text = "2023/02/12"
 //        detailPriceLabel.text = "10000000원"
     }
+    
+    func setData(data: PriceTrend) {
+        detailImageView.image = UIImage(named: "popcat")!
+        ingredientTitle.text = "계란"
+        expirationDateLabel.text = "2023/02/12"
+    }
 
 }
 

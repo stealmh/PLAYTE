@@ -47,6 +47,10 @@ class MyCell: UITableViewCell {
             $0.left.equalTo(self.snp.centerX)
         }
     }
+    
+    func setData(text: String) {
+        myLabel.text = text
+    }
 
 }
 

@@ -161,10 +161,13 @@ extension RefrigeratorViewController: UITableViewDelegate, UITableViewDataSource
     // 셀 디자인
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "RefrigeratorDetailCell", for: indexPath) as! RefrigeratorDetailCell
+
         if !filteredData.isEmpty {
-            cell.ingredientTitle.text = filteredData[indexPath.row].title
+            let filterData = filteredData[indexPath.row]
+            cell.setData(data: filterData)
         } else {
-            cell.ingredientTitle.text = mockData[indexPath.row].title
+            let mockData = mockData[indexPath.row]
+            cell.setData(data: mockData)
         }
         
         return cell
