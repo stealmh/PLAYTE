@@ -10,9 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-protocol TagCellDelegate {
-    func deleteButtonTapped(sender: Int)
-}
 final class TagCell: UICollectionViewCell {
     static let identifier = "TagCell"
     

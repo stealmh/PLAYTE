@@ -13,7 +13,7 @@ import SnapKit
 final class NormalRefrigeratorView: UIView {
     
     let disposeBag = DisposeBag()
-    var delegate: TestViewDelegate?
+    var delegate: RefrigeratorDetailDelegate?
     
     private let sinseonButton: UIButton = {
         let v = UIButton()

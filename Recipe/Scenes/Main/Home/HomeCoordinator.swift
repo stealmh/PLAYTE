@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol HomeCoordinatorProtocol: Coordinator {
-    func startReadyFlow()
-}
-
 final class HomeCoordinator: HomeCoordinatorProtocol, CoordinatorFinishDelegate {
     
     weak var finishDelegate: CoordinatorFinishDelegate?

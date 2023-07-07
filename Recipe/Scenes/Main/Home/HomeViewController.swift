@@ -10,10 +10,12 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-final class HomeViewController: BaseViewController, TestViewDelegate {
+final class HomeViewController: BaseViewController {
     
-    //UI
+    ///UI Properties
     private let titleView = TitleView()
+    private let cold = ColdRefrigeratorView()
+    private let normal = NormalRefrigeratorView()
     lazy var collectionView: UICollectionView = {
         let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         v.showsVerticalScrollIndicator = false
@@ -21,14 +23,12 @@ final class HomeViewController: BaseViewController, TestViewDelegate {
         return v
     }()
     
-    //Property
+    /// Properties
     private var dataSource: HomeDatasource!
     private var disposeBag = DisposeBag()
     private let pagingInfoSubject = PublishSubject<PagingInfo>()
-    let cold = ColdRefrigeratorView()
-    let normal = NormalRefrigeratorView()
     
-    //Mock Data
+    ///Mock Data
     var refrigeratorMock = [Refrigerator]()
     var priceTrendMock = [PriceTrend]()
     var chucheonRecipeMockData = [IngredientRecipe]()
@@ -46,14 +46,7 @@ final class HomeViewController: BaseViewController, TestViewDelegate {
         registerCell()
         configureDataSource()
     }
-    
-    func onClickButton(_ senderTitle: String) {
-        let refrigeratorVC = RefrigeratorViewController()
-        self.navigationController?.pushViewController(refrigeratorVC, animated: true)
-        print(senderTitle)
-    }
 
-    
 }
 
 //MARK: - MockData
@@ -396,6 +389,15 @@ extension HomeViewController: PriceTrendHeaderDelegate {
         navigationItem.backBarButtonItem = UIBarButtonItem(
             title: "", style: .plain, target: nil, action: nil)
         navigationController?.pushViewController(PriceTrendDetailViewController(), animated: true)
+    }
+}
+
+//MARK: - 냉장고 세부 버튼 클릭 Delegate
+extension HomeViewController: RefrigeratorDetailDelegate {
+    func onClickButton(_ senderTitle: String) {
+        let refrigeratorVC = RefrigeratorViewController()
+        self.navigationController?.pushViewController(refrigeratorVC, animated: true)
+        print(senderTitle)
     }
 }
 

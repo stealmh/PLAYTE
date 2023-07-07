@@ -36,3 +36,8 @@ struct IngredientsHandle: Hashable {
     let title: String
     let contents: String
 }
+
+struct PagingInfo: Equatable, Hashable {
+    let sectionIndex: Int
+    let currentPage: Int
+}

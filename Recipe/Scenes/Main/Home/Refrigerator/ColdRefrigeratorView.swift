@@ -10,14 +10,10 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-protocol TestViewDelegate{
-    func onClickButton(_ senderTitle: String)
-}
-
 final class ColdRefrigeratorView: UIView {
     
     let disposeBag = DisposeBag()
-    var delegate: TestViewDelegate?
+    var delegate: RefrigeratorDetailDelegate?
     
     private let sinseonButton: UIButton = {
         let v = UIButton()

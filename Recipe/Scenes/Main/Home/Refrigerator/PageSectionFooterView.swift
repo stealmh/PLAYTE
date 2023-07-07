@@ -9,11 +9,6 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-struct PagingInfo: Equatable, Hashable {
-    let sectionIndex: Int
-    let currentPage: Int
-}
-
 final class PagingSectionFooterView: UICollectionReusableView {
     
     let disposeBag = DisposeBag()

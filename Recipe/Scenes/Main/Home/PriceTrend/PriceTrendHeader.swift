@@ -10,10 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-protocol PriceTrendHeaderDelegate {
-    func showAllData()
-}
-
 final class PriceTrendHeader: UICollectionReusableView {
     static let identifier = "MulgaHeader"
     let disposeBag = DisposeBag()

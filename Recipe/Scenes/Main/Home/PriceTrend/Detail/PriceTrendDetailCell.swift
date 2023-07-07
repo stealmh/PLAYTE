@@ -10,7 +10,6 @@ import SnapKit
 
 final class PriceTrendDetailCell: UITableViewCell {
 
-    
     // UI
     private let detailImageView: UIImageView = {
         let v = UIImageView()
