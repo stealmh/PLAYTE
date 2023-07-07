@@ -10,6 +10,10 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol PriceTrendHeaderDelegate {
+    func showAllData()
+}
+
 class PriceTrendHeader: UICollectionReusableView {
     static let identifier = "MulgaHeader"
     let disposeBag = DisposeBag()
@@ -28,6 +32,8 @@ class PriceTrendHeader: UICollectionReusableView {
         return v
     }()
     private let stackView = UIStackView()
+    
+    var delegate: PriceTrendHeaderDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)

@@ -356,14 +356,7 @@ extension HomeViewController {
             }
         case .priceTrend:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeSecondSectionHeader.identifier, for: indexPath) as! HomeSecondSectionHeader
-            
-            headerView.button.rx.tap
-                .subscribe(onNext: { _ in
-                    self.navigationItem.backBarButtonItem = UIBarButtonItem(
-                        title: "", style: .plain, target: nil, action: nil)
-                    self.navigationController?.pushViewController(PriceTrendDetailViewController(), animated: true)
-                }).disposed(by: disposeBag)
-            
+            headerView.delegate = self
             return headerView
             
         case .ingredientRecipe:
@@ -394,6 +387,15 @@ extension HomeViewController: UIViewControllerTransitioningDelegate {
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         PresentationController(presentedViewController: presented, presenting: presenting)
+    }
+}
+
+//MARK: - 물가 추이 뷰 전체보기 Delegate
+extension HomeViewController: PriceTrendHeaderDelegate {
+    func showAllData() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(
+            title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(PriceTrendDetailViewController(), animated: true)
     }
 }
 

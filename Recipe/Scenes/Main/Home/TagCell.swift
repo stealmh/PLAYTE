@@ -10,11 +10,15 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol TagCellDelegate {
+    func deleteButtonTapped(sender: Int)
+}
 class TagCell: UICollectionViewCell {
     static let identifier = "TagCell"
     
     let disposeBag = DisposeBag()
     let tagBackground: UIView = {
+    var delegate: TagCellDelegate?
         let v = UIView()
         v.backgroundColor = .white
         v.layer.borderColor = UIColor.gray.cgColor

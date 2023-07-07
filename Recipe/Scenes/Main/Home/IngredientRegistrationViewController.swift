@@ -331,7 +331,8 @@ extension IngredientRegistrationViewController: UICollectionViewDataSource,UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! Tag
-        cell.configure(with: tagList[indexPath.row])
+        cell.delegate = self
+        cell.configure(with: tagList[indexPath.row], tag: indexPath.row)
         cell.sizeToFit()
         
         cell.deleteButton.tag = indexPath.row
@@ -339,10 +340,9 @@ extension IngredientRegistrationViewController: UICollectionViewDataSource,UICol
         return cell
     }
 }
-private extension IngredientRegistrationViewController {
-    @objc func deleteButtonTapped(sender: UIButton) {
-        print(sender.tag)
-        tagList.remove(at: sender.tag)
+extension IngredientRegistrationViewController: TagCellDelegate {
+    func deleteButtonTapped(sender: Int) {
+        tagList.remove(at: sender)
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }
