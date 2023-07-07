@@ -33,8 +33,8 @@
 		5A0244E62A52A80000AA418E /* RegisterSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */; };
 		5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E92A52A84800AA418E /* TabCoordinator.swift */; };
 		5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EB2A52A85500AA418E /* TabBarStyle.swift */; };
-		5A0244F02A52A8A200AA418E /* GoCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EF2A52A8A200AA418E /* GoCoordinator.swift */; };
-		5A0244F22A52A8AA00AA418E /* GoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244F12A52A8AA00AA418E /* GoViewController.swift */; };
+		5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */; };
+		5A0244F22A52A8AA00AA418E /* MypageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244F12A52A8AA00AA418E /* MypageViewController.swift */; };
 		5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */; };
 		5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */; };
 		5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */; };
@@ -56,6 +56,10 @@
 		5AB4A5E02A552E900095CD2B /* PaddingUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */; };
 		5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5E12A553E7F0095CD2B /* MyCell.swift */; };
 		5AB4A5E42A554BDF0095CD2B /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5E32A554BDF0095CD2B /* TagCell.swift */; };
+		5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BBC2A57DADD00571259 /* CommunityViewController.swift */; };
+		5ACD7BBF2A57DAEA00571259 /* CommunityCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BBE2A57DAEA00571259 /* CommunityCoordinator.swift */; };
+		5ACD7BC12A57DC4200571259 /* RecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BC02A57DC4200571259 /* RecipeViewController.swift */; };
+		5ACD7BC32A57DC4C00571259 /* RecipeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BC22A57DC4C00571259 /* RecipeCoordinator.swift */; };
 		5AF00F642A56725A00587BF9 /* PriceTrendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F632A56725A00587BF9 /* PriceTrendDetailViewController.swift */; };
 		5AF00F672A56762A00587BF9 /* PriceTrendDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F662A56762A00587BF9 /* PriceTrendDetailCell.swift */; };
 		5AF00F6A2A568FAD00587BF9 /* RefrigeratorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F692A568FAD00587BF9 /* RefrigeratorViewController.swift */; };
@@ -113,8 +117,8 @@
 		5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSecondViewController.swift; sourceTree = "<group>"; };
 		5A0244E92A52A84800AA418E /* TabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCoordinator.swift; sourceTree = "<group>"; };
 		5A0244EB2A52A85500AA418E /* TabBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarStyle.swift; sourceTree = "<group>"; };
-		5A0244EF2A52A8A200AA418E /* GoCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoCoordinator.swift; sourceTree = "<group>"; };
-		5A0244F12A52A8AA00AA418E /* GoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoViewController.swift; sourceTree = "<group>"; };
+		5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageCoordinator.swift; sourceTree = "<group>"; };
+		5A0244F12A52A8AA00AA418E /* MypageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageViewController.swift; sourceTree = "<group>"; };
 		5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+util.swift"; sourceTree = "<group>"; };
@@ -136,6 +140,10 @@
 		5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingUITextField.swift; sourceTree = "<group>"; };
 		5AB4A5E12A553E7F0095CD2B /* MyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCell.swift; sourceTree = "<group>"; };
 		5AB4A5E32A554BDF0095CD2B /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
+		5ACD7BBC2A57DADD00571259 /* CommunityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewController.swift; sourceTree = "<group>"; };
+		5ACD7BBE2A57DAEA00571259 /* CommunityCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityCoordinator.swift; sourceTree = "<group>"; };
+		5ACD7BC02A57DC4200571259 /* RecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewController.swift; sourceTree = "<group>"; };
+		5ACD7BC22A57DC4C00571259 /* RecipeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCoordinator.swift; sourceTree = "<group>"; };
 		5AF00F632A56725A00587BF9 /* PriceTrendDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendDetailViewController.swift; sourceTree = "<group>"; };
 		5AF00F662A56762A00587BF9 /* PriceTrendDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendDetailCell.swift; sourceTree = "<group>"; };
 		5AF00F692A568FAD00587BF9 /* RefrigeratorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefrigeratorViewController.swift; sourceTree = "<group>"; };
@@ -349,7 +357,9 @@
 			children = (
 				5A0244E82A52A83E00AA418E /* Tab */,
 				5A43FF6C2A52ABCF0048E213 /* Home */,
-				5A0244ED2A52A87B00AA418E /* Go */,
+				5ACD7BBA2A57DAA100571259 /* Recipe */,
+				5ACD7BBB2A57DAA800571259 /* Community */,
+				5A0244ED2A52A87B00AA418E /* MyPage */,
 			);
 			path = Main;
 			sourceTree = "<group>";
@@ -363,13 +373,13 @@
 			path = Tab;
 			sourceTree = "<group>";
 		};
-		5A0244ED2A52A87B00AA418E /* Go */ = {
+		5A0244ED2A52A87B00AA418E /* MyPage */ = {
 			isa = PBXGroup;
 			children = (
-				5A0244EF2A52A8A200AA418E /* GoCoordinator.swift */,
-				5A0244F12A52A8AA00AA418E /* GoViewController.swift */,
+				5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */,
+				5A0244F12A52A8AA00AA418E /* MypageViewController.swift */,
 			);
-			path = Go;
+			path = MyPage;
 			sourceTree = "<group>";
 		};
 		5A43FF6C2A52ABCF0048E213 /* Home */ = {
@@ -426,6 +436,24 @@
 				5A914AEE2A5419C70020BA71 /* IngredientsHandleCell.swift */,
 			);
 			path = IngredientHandle;
+			sourceTree = "<group>";
+		};
+		5ACD7BBA2A57DAA100571259 /* Recipe */ = {
+			isa = PBXGroup;
+			children = (
+				5ACD7BC02A57DC4200571259 /* RecipeViewController.swift */,
+				5ACD7BC22A57DC4C00571259 /* RecipeCoordinator.swift */,
+			);
+			path = Recipe;
+			sourceTree = "<group>";
+		};
+		5ACD7BBB2A57DAA800571259 /* Community */ = {
+			isa = PBXGroup;
+			children = (
+				5ACD7BBC2A57DADD00571259 /* CommunityViewController.swift */,
+				5ACD7BBE2A57DAEA00571259 /* CommunityCoordinator.swift */,
+			);
+			path = Community;
 			sourceTree = "<group>";
 		};
 		5AF00F652A56760B00587BF9 /* Detail */ = {
@@ -709,6 +737,7 @@
 			files = (
 				5A0244E62A52A80000AA418E /* RegisterSecondViewController.swift in Sources */,
 				5AB4A5E02A552E900095CD2B /* PaddingUITextField.swift in Sources */,
+				5ACD7BC12A57DC4200571259 /* RecipeViewController.swift in Sources */,
 				5A0244932A529AA300AA418E /* ViewController.swift in Sources */,
 				5AF00F6A2A568FAD00587BF9 /* RefrigeratorViewController.swift in Sources */,
 				5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */,
@@ -718,13 +747,15 @@
 				5A0244D72A52A6F500AA418E /* BaseViewController.swift in Sources */,
 				5A0244912A529AA300AA418E /* SceneDelegate.swift in Sources */,
 				5A914AD62A5404940020BA71 /* PageSectionFooterView.swift in Sources */,
-				5A0244F22A52A8AA00AA418E /* GoViewController.swift in Sources */,
+				5A0244F22A52A8AA00AA418E /* MypageViewController.swift in Sources */,
 				5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */,
 				5A914AE32A5410E30020BA71 /* PriceTrendHeader.swift in Sources */,
+				5ACD7BBF2A57DAEA00571259 /* CommunityCoordinator.swift in Sources */,
 				5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */,
 				5AF00F642A56725A00587BF9 /* PriceTrendDetailViewController.swift in Sources */,
 				5AB4A5E42A554BDF0095CD2B /* TagCell.swift in Sources */,
 				5AF00F672A56762A00587BF9 /* PriceTrendDetailCell.swift in Sources */,
+				5ACD7BC32A57DC4C00571259 /* RecipeCoordinator.swift in Sources */,
 				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
 				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
 				5A914AE52A5411080020BA71 /* PriceTrendCell.swift in Sources */,
@@ -738,7 +769,7 @@
 				5AB4A5DC2A5502DF0095CD2B /* PresentationController.swift in Sources */,
 				5A914AE02A5407410020BA71 /* NormalRefrigeratorView.swift in Sources */,
 				5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */,
-				5A0244F02A52A8A200AA418E /* GoCoordinator.swift in Sources */,
+				5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */,
 				5AF00F6C2A5694A600587BF9 /* RefrigeratorDetailCell.swift in Sources */,
 				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
 				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
@@ -751,6 +782,7 @@
 				5A914AEA2A54157E0020BA71 /* DefaultHeader.swift in Sources */,
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
 				5A914ADE2A5407230020BA71 /* ColdRefrigeratorView.swift in Sources */,
+				5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */,
 				5AB4A5DE2A55099C0095CD2B /* IngredientRegistrationViewController.swift in Sources */,
 				5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */,
 			);

@@ -10,9 +10,9 @@ import RxSwift
 import RxCocoa
 import SnapKit
 
-final class GoViewController: BaseViewController {
+final class MypageViewController: BaseViewController {
     
-    var didSendEventClosure: ((GoViewController.Event) -> Void)?
+    var didSendEventClosure: ((MypageViewController.Event) -> Void)?
     var disposeBag = DisposeBag()
     
     private let button: UIButton = {
