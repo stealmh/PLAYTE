@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class PriceTrendDetailViewController: BaseViewController {
+final class PriceTrendDetailViewController: BaseViewController {
     
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()

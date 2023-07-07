@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class RefrigeratorDetailCell: UITableViewCell {
+final class RefrigeratorDetailCell: UITableViewCell {
 
     
     // UI

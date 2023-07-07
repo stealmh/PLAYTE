@@ -13,7 +13,7 @@ import RxCocoa
 protocol TagCellDelegate {
     func deleteButtonTapped(sender: Int)
 }
-class TagCell: UICollectionViewCell {
+final class TagCell: UICollectionViewCell {
     static let identifier = "TagCell"
     
     let disposeBag = DisposeBag()

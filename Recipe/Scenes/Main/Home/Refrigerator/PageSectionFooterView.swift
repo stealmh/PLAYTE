@@ -14,7 +14,7 @@ struct PagingInfo: Equatable, Hashable {
     let currentPage: Int
 }
 
-class PagingSectionFooterView: UICollectionReusableView {
+final class PagingSectionFooterView: UICollectionReusableView {
     
     let disposeBag = DisposeBag()
     

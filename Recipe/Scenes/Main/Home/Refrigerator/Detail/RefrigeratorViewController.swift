@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class RefrigeratorViewController: BaseViewController {
+final class RefrigeratorViewController: BaseViewController {
     
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()

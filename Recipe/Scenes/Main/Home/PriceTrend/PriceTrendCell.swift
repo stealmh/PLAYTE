@@ -10,7 +10,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-class PriceTrendCell: UICollectionViewCell {
+final class PriceTrendCell: UICollectionViewCell {
     
     let ingredientsTitle: UILabel = {
         let v = UILabel()

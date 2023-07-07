@@ -14,7 +14,7 @@ protocol TestViewDelegate{
     func onClickButton(_ senderTitle: String)
 }
 
-class ColdRefrigeratorView: UIView {
+final class ColdRefrigeratorView: UIView {
     
     let disposeBag = DisposeBag()
     var delegate: TestViewDelegate?

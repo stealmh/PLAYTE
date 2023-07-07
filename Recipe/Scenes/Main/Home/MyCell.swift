@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class MyCell: UITableViewCell {
+final class MyCell: UITableViewCell {
 
     private let myLabel: UILabel = {
         let v = UILabel()

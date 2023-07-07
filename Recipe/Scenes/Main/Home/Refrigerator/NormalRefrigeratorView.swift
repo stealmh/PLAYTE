@@ -10,8 +10,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-
-class NormalRefrigeratorView: UIView {
+final class NormalRefrigeratorView: UIView {
     
     let disposeBag = DisposeBag()
     var delegate: TestViewDelegate?

@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class PriceTrendDetailCell: UITableViewCell {
+final class PriceTrendDetailCell: UITableViewCell {
 
     
     // UI

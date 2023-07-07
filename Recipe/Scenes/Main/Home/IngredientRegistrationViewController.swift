@@ -10,7 +10,7 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
-class IngredientRegistrationViewController: BaseViewController {
+final class IngredientRegistrationViewController: BaseViewController {
     
     
     // UI

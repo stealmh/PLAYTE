@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class TitleView: UIView {
+final class TitleView: UIView {
     
     private let disposeBag = DisposeBag()
     

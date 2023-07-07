@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class HomeViewController: BaseViewController, TestViewDelegate {
+final class HomeViewController: BaseViewController, TestViewDelegate {
     
     //UI
     private let titleView = TitleView()

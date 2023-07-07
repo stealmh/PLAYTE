@@ -14,7 +14,7 @@ protocol PriceTrendHeaderDelegate {
     func showAllData()
 }
 
-class PriceTrendHeader: UICollectionReusableView {
+final class PriceTrendHeader: UICollectionReusableView {
     static let identifier = "MulgaHeader"
     let disposeBag = DisposeBag()
     private let label = UILabel()
