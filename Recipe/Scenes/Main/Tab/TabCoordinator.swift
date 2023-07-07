@@ -36,7 +36,7 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
 
     func start() {
         // Let's define which pages do we want to add into tab bar
-        let pages: [TabBarPage] = [.myPage, .home]
+        let pages: [TabBarPage] = [.myPage, .home, .community, .recipe]
             .sorted(by: { $0.pageOrderNumber() < $1.pageOrderNumber() })
         
         // Initialization of ViewControllers or these pages
@@ -85,9 +85,21 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
             readyCoordinator.finishDelegate = self
             childCoordinators.append(readyCoordinator)
             readyCoordinator.start()
+            
+        case .recipe:
+            let readyCoordinator = RecipeCoordinator(navController)
+            readyCoordinator.finishDelegate = self
+            childCoordinators.append(readyCoordinator)
+            readyCoordinator.start()
+            
+        case .community:
+            let readyCoordinator = CommunityCoordinator(navController)
+            readyCoordinator.finishDelegate = self
+            childCoordinators.append(readyCoordinator)
+            readyCoordinator.start()
 
         case .myPage:
-            let readyCoordinator = GoCoordinator(navController)
+            let readyCoordinator = MypageCoordinator(navController)
             readyCoordinator.finishDelegate = self
             childCoordinators.append(readyCoordinator)
             readyCoordinator.start()
