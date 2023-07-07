@@ -12,21 +12,21 @@ class RefrigeratorDetailCell: UITableViewCell {
 
     
     // UI
-    let detailImageView: UIImageView = {
+    private let detailImageView: UIImageView = {
         let v = UIImageView()
         v.layer.cornerRadius = 5
         v.clipsToBounds = true
         return v
     }()
     
-    let ingredientTitle: UILabel = {
+    private let ingredientTitle: UILabel = {
         let v = UILabel()
         v.font = .boldSystemFont(ofSize: 20)
         return v
     }()
     
-    let expirationDateLabel = UILabel()
-    let deleteButton: UIButton = {
+    private let expirationDateLabel = UILabel()
+    private let deleteButton: UIButton = {
         let v = UIButton()
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
         let image = UIImage(systemName: "trash", withConfiguration: imageConfig)

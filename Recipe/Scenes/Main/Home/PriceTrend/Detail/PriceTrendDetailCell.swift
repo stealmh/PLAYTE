@@ -12,14 +12,14 @@ class PriceTrendDetailCell: UITableViewCell {
 
     
     // UI
-    let detailImageView: UIImageView = {
+    private let detailImageView: UIImageView = {
         let v = UIImageView()
         v.layer.cornerRadius = 5
         v.clipsToBounds = true
         return v
     }()
     
-    let detailTagBackground: UIView = {
+    private let detailTagBackground: UIView = {
         let v = UIView()
         v.layer.cornerRadius = 15
         v.clipsToBounds = true
@@ -28,35 +28,35 @@ class PriceTrendDetailCell: UITableViewCell {
         return v
     }()
     
-    let detailTagLabel = UILabel()
-    let detailDateLabel: UILabel = {
+    private let detailTagLabel = UILabel()
+    private let detailDateLabel: UILabel = {
         let v = UILabel()
         v.textAlignment = .right
         return v
     }()
     
-    let detailTitle: UILabel = {
+    private let detailTitle: UILabel = {
         let v = UILabel()
         v.font = .boldSystemFont(ofSize: 20)
         return v
     }()
     
-    let detailTransitionLabel = UILabel()
+    private let detailTransitionLabel = UILabel()
     
-    let detailContLabel: UILabel = {
+    private let detailContLabel: UILabel = {
         let v = UILabel()
         v.textAlignment = .right
         return v
     }()
     
-    let detailPriceLabel: UILabel = {
+    private let detailPriceLabel: UILabel = {
         let v = UILabel()
         v.textAlignment = .right
         v.font = .boldSystemFont(ofSize: 18)
         return v
     }()
     
-    let divideLine: UIView = {
+    private let divideLine: UIView = {
         let v = UIView()
         v.backgroundColor = .gray
         return v

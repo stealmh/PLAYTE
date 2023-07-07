@@ -18,7 +18,7 @@ class PriceTrendHeader: UICollectionReusableView {
     static let identifier = "MulgaHeader"
     let disposeBag = DisposeBag()
     private let label = UILabel()
-    let button: UIButton = {
+    private let button: UIButton = {
         let v = UIButton()
         v.setTitle("전체보기", for: .normal) //title넣기
         v.setImage(UIImage(systemName: "chevron.right"), for: .normal)// 이미지 넣기

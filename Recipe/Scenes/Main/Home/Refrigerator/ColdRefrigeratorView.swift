@@ -19,7 +19,7 @@ class ColdRefrigeratorView: UIView {
     let disposeBag = DisposeBag()
     var delegate: TestViewDelegate?
     
-    let sinseonButton: UIButton = {
+    private let sinseonButton: UIButton = {
         let v = UIButton()
         v.setTitle("신선 식품", for: .normal)
         v.setTitleColor(.white, for: .normal)

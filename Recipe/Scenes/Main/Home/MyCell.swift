@@ -10,13 +10,13 @@ import SnapKit
 
 class MyCell: UITableViewCell {
 
-    let myLabel: UILabel = {
+    private let myLabel: UILabel = {
         let v = UILabel()
         v.text = "hello~"
         return v
     }()
     
-    let ingredientSepearate: UILabel = {
+    private let ingredientSepearate: UILabel = {
         let v = UILabel()
         v.text = "신선 식품"
         v.textColor = .gray
