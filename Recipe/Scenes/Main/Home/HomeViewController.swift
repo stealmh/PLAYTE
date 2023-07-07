@@ -62,9 +62,9 @@ extension HomeViewController {
         refrigeratorMock.append(Refrigerator(view: cold))
         refrigeratorMock.append(Refrigerator(view: normal))
         
-        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
-        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
-        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
+        priceTrendMock.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        priceTrendMock.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        priceTrendMock.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
         
         chucheonRecipeMockData.append(IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"))
         chucheonRecipeMockData.append(IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥에서 음식이길다면", cookTime: "조리 시간 10분"))

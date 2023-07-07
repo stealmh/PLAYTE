@@ -111,12 +111,11 @@ extension PriceTrendDetailViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     private func setMockData() {
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "우유", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
     }
     // 쿼리에 따른 필터링 진행 함수
     func filterText(_ query: String) {

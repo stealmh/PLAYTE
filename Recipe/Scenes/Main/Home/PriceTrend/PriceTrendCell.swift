@@ -54,7 +54,8 @@ class PriceTrendCell: UICollectionViewCell {
                     divideLine)
         
         self.setUI()
-        configure(ingredients: PriceTrend(title: "계란",
+        configure(ingredients: PriceTrend(image: UIImage(named: "popcat")!,
+                                          title: "계란",
                                           tagName: "유제품",
                                           date: "",
                                            transition: "+8원(0.4%)",
