@@ -8,7 +8,7 @@
 import UIKit
 
 /// For Coordinator
-protocol GoCoordinatorProtocol: Coordinator {
+protocol MypageCoordinatorProtocol: Coordinator {
     func startReadyFlow()
 }
 

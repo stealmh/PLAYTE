@@ -7,7 +7,7 @@
 
 import UIKit
 
-final class GoCoordinator: GoCoordinatorProtocol, CoordinatorFinishDelegate {
+final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDelegate {
     weak var finishDelegate: CoordinatorFinishDelegate?
     
     var navigationController: UINavigationController
@@ -36,7 +36,7 @@ final class GoCoordinator: GoCoordinatorProtocol, CoordinatorFinishDelegate {
     }
     
     func startReadyFlow()  {
-        let goVC = GoViewController()
+        let goVC = MypageViewController()
         goVC.didSendEventClosure = { [weak self] event in
             switch event {
             case .go:
@@ -48,7 +48,7 @@ final class GoCoordinator: GoCoordinatorProtocol, CoordinatorFinishDelegate {
     }
 }
 
-extension GoCoordinator {
+extension MypageCoordinator {
     func deleteChild(_ child: Coordinator) {
         guard let index = childCoordinators.firstIndex(where: { $0 === child }) else {
             return
