@@ -8,25 +8,25 @@
 import UIKit
 import SnapKit
 
-class RefrigeratorDetailCell: UITableViewCell {
+final class RefrigeratorDetailCell: UITableViewCell {
 
     
     // UI
-    let detailImageView: UIImageView = {
+    private let detailImageView: UIImageView = {
         let v = UIImageView()
         v.layer.cornerRadius = 5
         v.clipsToBounds = true
         return v
     }()
     
-    let ingredientTitle: UILabel = {
+    private let ingredientTitle: UILabel = {
         let v = UILabel()
         v.font = .boldSystemFont(ofSize: 20)
         return v
     }()
     
-    let expirationDateLabel = UILabel()
-    let deleteButton: UIButton = {
+    private let expirationDateLabel = UILabel()
+    private let deleteButton: UIButton = {
         let v = UIButton()
         let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
         let image = UIImage(systemName: "trash", withConfiguration: imageConfig)
@@ -80,6 +80,12 @@ class RefrigeratorDetailCell: UITableViewCell {
 //        detailContLabel.text = "1개"
         expirationDateLabel.text = "2023/02/12"
 //        detailPriceLabel.text = "10000000원"
+    }
+    
+    func setData(data: PriceTrend) {
+        detailImageView.image = UIImage(named: "popcat")!
+        ingredientTitle.text = "계란"
+        expirationDateLabel.text = "2023/02/12"
     }
 
 }

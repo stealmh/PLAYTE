@@ -8,15 +8,15 @@
 import UIKit
 import SnapKit
 
-class MyCell: UITableViewCell {
+final class MyCell: UITableViewCell {
 
-    let myLabel: UILabel = {
+    private let myLabel: UILabel = {
         let v = UILabel()
         v.text = "hello~"
         return v
     }()
     
-    let ingredientSepearate: UILabel = {
+    private let ingredientSepearate: UILabel = {
         let v = UILabel()
         v.text = "신선 식품"
         v.textColor = .gray
@@ -46,6 +46,10 @@ class MyCell: UITableViewCell {
             $0.top.equalToSuperview().inset(10)
             $0.left.equalTo(self.snp.centerX)
         }
+    }
+    
+    func setData(text: String) {
+        myLabel.text = text
     }
 
 }

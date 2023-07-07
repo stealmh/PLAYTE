@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol GoCoordinatorProtocol: Coordinator {
-    func startReadyFlow()
-}
-
 final class GoCoordinator: GoCoordinatorProtocol, CoordinatorFinishDelegate {
     weak var finishDelegate: CoordinatorFinishDelegate?
     

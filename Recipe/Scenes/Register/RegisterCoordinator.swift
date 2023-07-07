@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol RegisterCoordinatorProtocol: Coordinator {
-    func showRegisterViewController()
-}
-
 final class RegisterCoordinator: RegisterCoordinatorProtocol {
     
     var finishDelegate: CoordinatorFinishDelegate?

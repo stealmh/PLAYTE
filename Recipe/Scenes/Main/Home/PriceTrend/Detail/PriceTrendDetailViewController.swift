@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class PriceTrendDetailViewController: BaseViewController {
+final class PriceTrendDetailViewController: BaseViewController {
     
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()
@@ -111,12 +111,11 @@ extension PriceTrendDetailViewController: UITableViewDelegate, UITableViewDataSo
     }
     
     private func setMockData() {
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "우유", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
-        mockData.append(PriceTrend(title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        mockData.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
     }
     // 쿼리에 따른 필터링 진행 함수
     func filterText(_ query: String) {
@@ -162,9 +161,11 @@ extension PriceTrendDetailViewController: UITableViewDelegate, UITableViewDataSo
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PriceTrendDetailCell", for: indexPath) as! PriceTrendDetailCell
         if !filteredData.isEmpty {
-            cell.detailTitle.text = filteredData[indexPath.row].title
+            let filterData = filteredData[indexPath.row]
+            cell.setData(data: filterData)
         } else {
-            cell.detailTitle.text = mockData[indexPath.row].title
+            let mockData = mockData[indexPath.row]
+            cell.setData(data: mockData)
         }
         
         return cell

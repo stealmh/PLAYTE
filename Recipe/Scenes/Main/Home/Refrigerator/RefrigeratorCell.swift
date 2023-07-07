@@ -10,7 +10,7 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
-class RefrigeratorCell: UICollectionViewCell {
+final class RefrigeratorCell: UICollectionViewCell {
     
     let disposeBag = DisposeBag()
     

@@ -10,11 +10,12 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class TagCell: UICollectionViewCell {
+final class TagCell: UICollectionViewCell {
     static let identifier = "TagCell"
     
     let disposeBag = DisposeBag()
-    let tagBackground: UIView = {
+    var delegate: TagCellDelegate?
+    private let tagBackground: UIView = {
         let v = UIView()
         v.backgroundColor = .white
         v.layer.borderColor = UIColor.gray.cgColor
@@ -22,7 +23,7 @@ class TagCell: UICollectionViewCell {
         return v
     }()
     
-    let tagLabel: UILabel = {
+    private let tagLabel: UILabel = {
         let v = UILabel()
         v.textAlignment = .left
         v.font = .systemFont(ofSize: 14)
@@ -30,7 +31,7 @@ class TagCell: UICollectionViewCell {
         return v
     }()
     
-    let deleteButton: UIButton = {
+    private let deleteButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(systemName: "multiply.circle.fill"), for: .normal)
         v.contentMode = .scaleAspectFit
@@ -46,7 +47,8 @@ class TagCell: UICollectionViewCell {
         tagBackground.layer.masksToBounds = true
         tagBackground.layer.cornerRadius = 15
         setConstant()
-        configure(with: "hello")
+        configure(with: "hello",tag: 0)
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -71,8 +73,16 @@ class TagCell: UICollectionViewCell {
         }
     }
     
-    func configure(with title: String) {
+    func configure(with title: String, tag: Int) {
         tagLabel.text = title
+        deleteButton.tag = tag
+    }
+    
+    func bind() {
+        deleteButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.delegate?.deleteButtonTapped(sender: self.deleteButton.tag)
+            }).disposed(by: disposeBag)
     }
 }
 

@@ -21,6 +21,7 @@ struct IngredientRecipe: Hashable {
 
 struct PriceTrend: Hashable {
     let id = UUID()
+    let image: UIImage
     let title: String
     let tagName: String
     let date: String
@@ -34,4 +35,9 @@ struct IngredientsHandle: Hashable {
     let image: UIImage
     let title: String
     let contents: String
+}
+
+struct PagingInfo: Equatable, Hashable {
+    let sectionIndex: Int
+    let currentPage: Int
 }

@@ -10,10 +10,12 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class HomeViewController: BaseViewController, TestViewDelegate {
+final class HomeViewController: BaseViewController {
     
-    //UI
+    ///UI Properties
     private let titleView = TitleView()
+    private let cold = ColdRefrigeratorView()
+    private let normal = NormalRefrigeratorView()
     lazy var collectionView: UICollectionView = {
         let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         v.showsVerticalScrollIndicator = false
@@ -21,14 +23,12 @@ class HomeViewController: BaseViewController, TestViewDelegate {
         return v
     }()
     
-    //Property
+    /// Properties
     private var dataSource: HomeDatasource!
     private var disposeBag = DisposeBag()
     private let pagingInfoSubject = PublishSubject<PagingInfo>()
-    let cold = ColdRefrigeratorView()
-    let normal = NormalRefrigeratorView()
     
-    //Mock Data
+    ///Mock Data
     var refrigeratorMock = [Refrigerator]()
     var priceTrendMock = [PriceTrend]()
     var chucheonRecipeMockData = [IngredientRecipe]()
@@ -46,14 +46,7 @@ class HomeViewController: BaseViewController, TestViewDelegate {
         registerCell()
         configureDataSource()
     }
-    
-    func onClickButton(_ senderTitle: String) {
-        let refrigeratorVC = RefrigeratorViewController()
-        self.navigationController?.pushViewController(refrigeratorVC, animated: true)
-        print(senderTitle)
-    }
 
-    
 }
 
 //MARK: - MockData
@@ -62,9 +55,9 @@ extension HomeViewController {
         refrigeratorMock.append(Refrigerator(view: cold))
         refrigeratorMock.append(Refrigerator(view: normal))
         
-        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
-        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
-        priceTrendMock.append(PriceTrend(title: "계란",tagName: "유제품", date: "" ,transition: "+8%", count: 3, price: 231))
+        priceTrendMock.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        priceTrendMock.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
+        priceTrendMock.append(PriceTrend(image: UIImage(named: "popcat")!, title: "계란", tagName: "유제품", date: "05/13기준", transition: "+8원(0.4%)", count: 1, price: 214))
         
         chucheonRecipeMockData.append(IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"))
         chucheonRecipeMockData.append(IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥에서 음식이길다면", cookTime: "조리 시간 10분"))
@@ -356,14 +349,7 @@ extension HomeViewController {
             }
         case .priceTrend:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: HomeSecondSectionHeader.identifier, for: indexPath) as! HomeSecondSectionHeader
-            
-            headerView.button.rx.tap
-                .subscribe(onNext: { _ in
-                    self.navigationItem.backBarButtonItem = UIBarButtonItem(
-                        title: "", style: .plain, target: nil, action: nil)
-                    self.navigationController?.pushViewController(PriceTrendDetailViewController(), animated: true)
-                }).disposed(by: disposeBag)
-            
+            headerView.delegate = self
             return headerView
             
         case .ingredientRecipe:
@@ -394,6 +380,24 @@ extension HomeViewController: UIViewControllerTransitioningDelegate {
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         PresentationController(presentedViewController: presented, presenting: presenting)
+    }
+}
+
+//MARK: - 물가 추이 뷰 전체보기 Delegate
+extension HomeViewController: PriceTrendHeaderDelegate {
+    func showAllData() {
+        navigationItem.backBarButtonItem = UIBarButtonItem(
+            title: "", style: .plain, target: nil, action: nil)
+        navigationController?.pushViewController(PriceTrendDetailViewController(), animated: true)
+    }
+}
+
+//MARK: - 냉장고 세부 버튼 클릭 Delegate
+extension HomeViewController: RefrigeratorDetailDelegate {
+    func onClickButton(_ senderTitle: String) {
+        let refrigeratorVC = RefrigeratorViewController()
+        self.navigationController?.pushViewController(refrigeratorVC, animated: true)
+        print(senderTitle)
     }
 }
 

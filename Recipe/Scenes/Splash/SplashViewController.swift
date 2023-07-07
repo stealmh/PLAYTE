@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class SplashViewController: BaseViewController {
+final class SplashViewController: BaseViewController {
 
     var didSendEventClosure: ((SplashViewController.Event) -> Void)?
     private let testLabel: UILabel = {

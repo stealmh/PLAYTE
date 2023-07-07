@@ -10,11 +10,11 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class PriceTrendHeader: UICollectionReusableView {
+final class PriceTrendHeader: UICollectionReusableView {
     static let identifier = "MulgaHeader"
     let disposeBag = DisposeBag()
     private let label = UILabel()
-    let button: UIButton = {
+    private let button: UIButton = {
         let v = UIButton()
         v.setTitle("전체보기", for: .normal) //title넣기
         v.setImage(UIImage(systemName: "chevron.right"), for: .normal)// 이미지 넣기
@@ -29,6 +29,8 @@ class PriceTrendHeader: UICollectionReusableView {
     }()
     private let stackView = UIStackView()
     
+    var delegate: PriceTrendHeaderDelegate?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(stackView)
@@ -37,6 +39,7 @@ class PriceTrendHeader: UICollectionReusableView {
         label.text = "식재료 물가 추이"
         label.font = .boldSystemFont(ofSize: 17)
 //        backgroundColor = .red
+        bind()
     }
     
     override func layoutSubviews() {
@@ -52,6 +55,13 @@ class PriceTrendHeader: UICollectionReusableView {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func bind() {
+        button.rx.tap
+            .subscribe(onNext: { _ in
+                self.delegate?.showAllData()
+            }).disposed(by: disposeBag)
     }
 }
 

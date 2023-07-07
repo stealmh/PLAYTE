@@ -10,7 +10,7 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
-class IngredientRegistrationViewController: BaseViewController {
+final class IngredientRegistrationViewController: BaseViewController {
     
     
     // UI
@@ -263,9 +263,11 @@ extension IngredientRegistrationViewController: UITableViewDelegate, UITableView
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as! MyCell
         if !filteredData.isEmpty {
-            cell.myLabel.text = filteredData[indexPath.row]
+            let filterData = filteredData[indexPath.row]
+            cell.setData(text: filterData)
         } else {
-            cell.myLabel.text = data[indexPath.row]
+            let data = data[indexPath.row]
+            cell.setData(text: data)
         }
         
         return cell
@@ -331,18 +333,15 @@ extension IngredientRegistrationViewController: UICollectionViewDataSource,UICol
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "TagCell", for: indexPath) as! Tag
-        cell.configure(with: tagList[indexPath.row])
+        cell.delegate = self
+        cell.configure(with: tagList[indexPath.row], tag: indexPath.row)
         cell.sizeToFit()
-        
-        cell.deleteButton.tag = indexPath.row
-        cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped(sender:)), for: .touchUpInside)
         return cell
     }
 }
-private extension IngredientRegistrationViewController {
-    @objc func deleteButtonTapped(sender: UIButton) {
-        print(sender.tag)
-        tagList.remove(at: sender.tag)
+extension IngredientRegistrationViewController: TagCellDelegate {
+    func deleteButtonTapped(sender: Int) {
+        tagList.remove(at: sender)
         DispatchQueue.main.async {
             self.collectionView.reloadData()
         }

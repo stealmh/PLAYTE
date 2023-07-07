@@ -7,10 +7,6 @@
 
 import UIKit
 
-protocol SplashCoordinatorProtocol: Coordinator {
-    func showSplashView()
-}
-
 final class SplashCoordinator: SplashCoordinatorProtocol {
     
     weak var finishDelegate: CoordinatorFinishDelegate?

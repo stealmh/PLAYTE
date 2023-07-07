@@ -8,7 +8,7 @@
 import UIKit
 import SnapKit
 
-class IngredientRecipeCell: UICollectionViewCell {
+final class IngredientRecipeCell: UICollectionViewCell {
     
     private let recipeImageView: UIImageView = {
         let v = UIImageView()
