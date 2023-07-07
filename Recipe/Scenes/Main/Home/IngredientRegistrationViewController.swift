@@ -336,9 +336,6 @@ extension IngredientRegistrationViewController: UICollectionViewDataSource,UICol
         cell.delegate = self
         cell.configure(with: tagList[indexPath.row], tag: indexPath.row)
         cell.sizeToFit()
-        
-        cell.deleteButton.tag = indexPath.row
-        cell.deleteButton.addTarget(self, action: #selector(deleteButtonTapped(sender:)), for: .touchUpInside)
         return cell
     }
 }
