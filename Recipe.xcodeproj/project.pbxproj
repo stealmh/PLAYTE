@@ -64,6 +64,9 @@
 		5AF00F672A56762A00587BF9 /* PriceTrendDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F662A56762A00587BF9 /* PriceTrendDetailCell.swift */; };
 		5AF00F6A2A568FAD00587BF9 /* RefrigeratorViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F692A568FAD00587BF9 /* RefrigeratorViewController.swift */; };
 		5AF00F6C2A5694A600587BF9 /* RefrigeratorDetailCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F6B2A5694A600587BF9 /* RefrigeratorDetailCell.swift */; };
+		5AFE49C12A5BC164000B9A95 /* UILabel+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFE49C02A5BC164000B9A95 /* UILabel+util.swift */; };
+		5AFE49C32A5BC20F000B9A95 /* UIColor+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFE49C22A5BC20F000B9A95 /* UIColor+util.swift */; };
+		5AFE49C52A5BC352000B9A95 /* BaseStartingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AFE49C42A5BC352000B9A95 /* BaseStartingView.swift */; };
 		C14E5ECF67729C2D8562F1C7 /* Pods_Recipe_RecipeUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 43250A0DA83D570142864CA1 /* Pods_Recipe_RecipeUITests.framework */; };
 /* End PBXBuildFile section */
 
@@ -149,6 +152,9 @@
 		5AF00F662A56762A00587BF9 /* PriceTrendDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendDetailCell.swift; sourceTree = "<group>"; };
 		5AF00F692A568FAD00587BF9 /* RefrigeratorViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefrigeratorViewController.swift; sourceTree = "<group>"; };
 		5AF00F6B2A5694A600587BF9 /* RefrigeratorDetailCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RefrigeratorDetailCell.swift; sourceTree = "<group>"; };
+		5AFE49C02A5BC164000B9A95 /* UILabel+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UILabel+util.swift"; sourceTree = "<group>"; };
+		5AFE49C22A5BC20F000B9A95 /* UIColor+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIColor+util.swift"; sourceTree = "<group>"; };
+		5AFE49C42A5BC352000B9A95 /* BaseStartingView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseStartingView.swift; sourceTree = "<group>"; };
 		A8CE900025B9359CF850D014 /* Pods-Recipe-RecipeUITests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe-RecipeUITests.release.xcconfig"; path = "Target Support Files/Pods-Recipe-RecipeUITests/Pods-Recipe-RecipeUITests.release.xcconfig"; sourceTree = "<group>"; };
 		B4563E7FE258A2DCD5F58EC8 /* Pods-Recipe.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe.debug.xcconfig"; path = "Target Support Files/Pods-Recipe/Pods-Recipe.debug.xcconfig"; sourceTree = "<group>"; };
 		DF24270AD89DC117D4A60AF1 /* Pods-RecipeTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeTests.release.xcconfig"; path = "Target Support Files/Pods-RecipeTests/Pods-RecipeTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -257,6 +263,8 @@
 				5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */,
 				5A914AD02A53FD7E0020BA71 /* UIView+util.swift */,
 				5A914ADB2A5406550020BA71 /* UICollectionReusableView+util.swift */,
+				5AFE49C02A5BC164000B9A95 /* UILabel+util.swift */,
+				5AFE49C22A5BC20F000B9A95 /* UIColor+util.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -331,6 +339,7 @@
 				5AB4A5DB2A5502DF0095CD2B /* PresentationController.swift */,
 				5A0244D62A52A6F500AA418E /* BaseViewController.swift */,
 				5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */,
+				5AFE49C42A5BC352000B9A95 /* BaseStartingView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -743,6 +752,8 @@
 				5A0244932A529AA300AA418E /* ViewController.swift in Sources */,
 				5AF00F6A2A568FAD00587BF9 /* RefrigeratorViewController.swift in Sources */,
 				5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */,
+				5AFE49C12A5BC164000B9A95 /* UILabel+util.swift in Sources */,
+				5AFE49C32A5BC20F000B9A95 /* UIColor+util.swift in Sources */,
 				5A914ADA2A5405CC0020BA71 /* RefrigeratorCell.swift in Sources */,
 				5A0244E02A52A7C900AA418E /* LoginCoordinator.swift in Sources */,
 				5A914AEF2A5419C70020BA71 /* IngredientsHandleCell.swift in Sources */,
@@ -785,6 +796,7 @@
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
 				5A914ADE2A5407230020BA71 /* ColdRefrigeratorView.swift in Sources */,
 				5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */,
+				5AFE49C52A5BC352000B9A95 /* BaseStartingView.swift in Sources */,
 				5AB4A5DE2A55099C0095CD2B /* IngredientRegistrationViewController.swift in Sources */,
 				5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */,
 			);

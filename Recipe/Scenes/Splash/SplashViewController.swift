@@ -11,24 +11,23 @@ import SnapKit
 final class SplashViewController: BaseViewController {
 
     var didSendEventClosure: ((SplashViewController.Event) -> Void)?
-    private let testLabel: UILabel = {
-        let v = UILabel()
-        v.text = "Splash View"
-        v.font = .boldSystemFont(ofSize: 50)
-        v.textColor = .red
+    private let baseView: BaseStartingView = {
+        let v = BaseStartingView()
+        /// Todo: hexCode -> enum
+        v.appLabel.asColor(targetString: "RE", color: UIColor.hexStringToUIColor(hex: "#FF5520"))
         return v
     }()
     
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .white
-        view.addSubview(testLabel)
+        view.addSubview(baseView)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             self.didSendEventClosure?(.endSplash)
         }
         
-        testLabel.snp.makeConstraints {
-            $0.center.equalToSuperview()
+        baseView.snp.makeConstraints {
+            $0.top.left.right.bottom.equalToSuperview()
         }
 
     }
@@ -37,5 +36,13 @@ final class SplashViewController: BaseViewController {
 extension SplashViewController {
     enum Event {
         case endSplash
+    }
+}
+
+//MARK: - VC Preview
+import SwiftUI
+struct SplashViewController_preview: PreviewProvider {
+    static var previews: some View {
+        SplashViewController().toPreview()
     }
 }
