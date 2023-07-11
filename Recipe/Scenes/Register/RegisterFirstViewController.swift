@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import SnapKit
 
 protocol RegisterFlowDelegate {
     func moveToSecondView()
@@ -13,52 +14,32 @@ protocol RegisterFlowDelegate {
 }
 
 final class RegisterFirstViewController: BaseViewController {
-
-    var didSendEventClosure: ((RegisterFirstViewController.Event) -> Void)?
     var delegate: RegisterFlowDelegate?
-    
-    private let secondButton: UIButton = {
-        let button = UIButton()
-        button.setTitle("[1] Move to Second View", for: .normal)
-        button.backgroundColor = .systemYellow
-        button.setTitleColor(.white, for: .normal)
-        button.layer.cornerRadius = 8.0
-
-        return button
-    }()
+    private let registerView = RegisterView()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
-        view.backgroundColor = .white
-        
-        view.addSubview(secondButton)
-
-        secondButton.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            secondButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            secondButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
-            secondButton.widthAnchor.constraint(equalToConstant: 200),
-            secondButton.heightAnchor.constraint(equalToConstant: 50)
-        ])
-        
-        secondButton.addTarget(self, action: #selector(didTapSteadyButton(_:)), for: .touchUpInside)
+        view.backgroundColor = .black
+        view.addSubview(registerView)
+        registerView.delegate = self
+        configureLayout()
+        defaultNavigationBackButton(backButtonColor: .white)
     }
-
-    @objc private func didTapSteadyButton(_ sender: Any) {
-//        didSendEventClosure?(.showSecondView)
-        delegate?.moveToSecondView()
-    }
-    
-//    override func viewDidDisappear(_ animated: Bool) {
-//        delegate?.endFlow()
-//    }
 }
 
+//MARK: - Method
 extension RegisterFirstViewController {
-    enum Event {
-        case showSecondView
+    func configureLayout() {
+        registerView.snp.makeConstraints {
+            $0.top.equalTo(view.safeAreaLayoutGuide)
+            $0.left.right.bottom.equalToSuperview()
+        }
+    }
+}
+
+//MARK: - RegisterView Delegate
+extension RegisterFirstViewController: registerViewDelegate {
+    func didTapNextButton() {
+        delegate?.moveToSecondView()
     }
 }
