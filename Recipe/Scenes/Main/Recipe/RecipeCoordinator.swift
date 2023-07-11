@@ -37,13 +37,6 @@ final class RecipeCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
     
     func startReadyFlow()  {
         let goVC = RecipeViewController()
-        goVC.didSendEventClosure = { [weak self] event in
-            switch event {
-            case .go:
-                self?.finishDelegate?.coordinatorDidFinish(childCoordinator: self!)
-                return
-            }
-        }
         navigationController.pushViewController(goVC, animated: true)
     }
 }
