@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-protocol registerViewDelegate {
+protocol RegisterViewDelegate {
     func didTapNextButton()
 }
 
@@ -27,8 +27,9 @@ final class RegisterView: UIView {
     
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()
-        v.backgroundColor = .gray.withAlphaComponent(0.2)
-        v.placeholder = "식재료를 검색해보세요."
+        v.backgroundColor = .black
+//        v.placeholder = "식재료를 검색해보세요."
+        v.tintColor = .white
         v.layer.cornerRadius = 8
         v.textColor = .white
         v.clipsToBounds = true
@@ -45,6 +46,20 @@ final class RegisterView: UIView {
         return v
     }()
     
+    private let validationImage: UIImageView = {
+        let v = UIImageView()
+        v.image = UIImage(systemName: "checkmark")!
+        v.tintColor = .white
+        return v
+    }()
+    
+    private let validationLabel: UILabel = {
+        let v = UILabel()
+        v.text = "사용가능한 닉네임"
+        v.textColor = .white
+        return v
+    }()
+    
     private let nextButton: UIButton = {
         let v = UIButton()
         v.setTitle("다음", for: .normal)
@@ -57,12 +72,18 @@ final class RegisterView: UIView {
     
     ///Properties
     private let disposeBag = DisposeBag()
-    var delegate: registerViewDelegate?
+    var delegate: RegisterViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .black
-        addSubViews(titleLabel, searchTextField, searchImageButton, nextButton)
+        addSubViews(titleLabel,
+                    searchTextField,
+                    searchImageButton,
+                    nextButton,
+                    validationImage,
+                    validationLabel)
+        
         configureLayout()
         bind()
     }
@@ -74,7 +95,7 @@ final class RegisterView: UIView {
 
 //MARK: - Method
 extension RegisterView {
-    func configureLayout() {
+    private func configureLayout() {
         titleLabel.snp.makeConstraints {
             $0.left.equalTo(24)
             $0.top.equalTo(154)
@@ -95,6 +116,17 @@ extension RegisterView {
             $0.right.equalTo(searchTextField).inset(10)
         }
         
+        validationImage.snp.makeConstraints {
+            $0.top.equalTo(searchTextField.snp.top).offset(307-237)
+            $0.right.equalTo(validationLabel.snp.left)
+        }
+        
+        validationLabel.snp.makeConstraints {
+            $0.top.equalTo(validationImage).offset(3)
+            $0.right.equalTo(searchTextField).inset(10)
+            $0.height.equalTo(15)
+        }
+        
         nextButton.snp.makeConstraints {
             $0.centerX.equalToSuperview()
             $0.width.height.equalTo(searchTextField)
@@ -102,10 +134,16 @@ extension RegisterView {
         }
     }
     
-    func bind() {
+    private func bind() {
         nextButton.rx.tap
             .subscribe(onNext: { _ in
                 self.delegate?.didTapNextButton()
+            }
+        ).disposed(by: disposeBag)
+        
+        searchImageButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.searchTextField.text = ""
             }
         ).disposed(by: disposeBag)
     }

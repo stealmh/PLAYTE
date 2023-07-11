@@ -38,7 +38,7 @@ extension RegisterFirstViewController {
 }
 
 //MARK: - RegisterView Delegate
-extension RegisterFirstViewController: registerViewDelegate {
+extension RegisterFirstViewController: RegisterViewDelegate {
     func didTapNextButton() {
         delegate?.moveToSecondView()
     }
