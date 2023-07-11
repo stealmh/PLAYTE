@@ -65,7 +65,7 @@ extension LoginCoordinator: CoordinatorFinishDelegate {
         switch childCoordinator.type {
         case .register:
             navigationController.viewControllers.removeAll()
-            showLoginViewController()
+            finish()
         default:
             break
         }

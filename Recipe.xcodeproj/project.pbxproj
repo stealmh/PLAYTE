@@ -35,6 +35,8 @@
 		5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EB2A52A85500AA418E /* TabBarStyle.swift */; };
 		5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */; };
 		5A0244F22A52A8AA00AA418E /* MypageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244F12A52A8AA00AA418E /* MypageViewController.swift */; };
+		5A0941962A5CEB01005AEECF /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0941952A5CEB01005AEECF /* RegisterView.swift */; };
+		5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */; };
 		5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */; };
 		5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */; };
 		5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */; };
@@ -122,6 +124,8 @@
 		5A0244EB2A52A85500AA418E /* TabBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarStyle.swift; sourceTree = "<group>"; };
 		5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageCoordinator.swift; sourceTree = "<group>"; };
 		5A0244F12A52A8AA00AA418E /* MypageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageViewController.swift; sourceTree = "<group>"; };
+		5A0941952A5CEB01005AEECF /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
+		5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSucessView.swift; sourceTree = "<group>"; };
 		5A4115EE2A5B94B300531267 /* Recipe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Recipe.entitlements; sourceTree = "<group>"; };
 		5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
@@ -356,6 +360,8 @@
 		5A0244DC2A52A7A800AA418E /* Register */ = {
 			isa = PBXGroup;
 			children = (
+				5A0941952A5CEB01005AEECF /* RegisterView.swift */,
+				5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */,
 				5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */,
 				5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */,
 				5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */,
@@ -755,6 +761,7 @@
 				5AFE49C12A5BC164000B9A95 /* UILabel+util.swift in Sources */,
 				5AFE49C32A5BC20F000B9A95 /* UIColor+util.swift in Sources */,
 				5A914ADA2A5405CC0020BA71 /* RefrigeratorCell.swift in Sources */,
+				5A0941962A5CEB01005AEECF /* RegisterView.swift in Sources */,
 				5A0244E02A52A7C900AA418E /* LoginCoordinator.swift in Sources */,
 				5A914AEF2A5419C70020BA71 /* IngredientsHandleCell.swift in Sources */,
 				5A0244D72A52A6F500AA418E /* BaseViewController.swift in Sources */,
@@ -793,6 +800,7 @@
 				5A0244D22A52A59000AA418E /* Coordinator.swift in Sources */,
 				5A0244DE2A52A7B600AA418E /* LoginViewController.swift in Sources */,
 				5A914AEA2A54157E0020BA71 /* DefaultHeader.swift in Sources */,
+				5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */,
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
 				5A914ADE2A5407230020BA71 /* ColdRefrigeratorView.swift in Sources */,
 				5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */,
