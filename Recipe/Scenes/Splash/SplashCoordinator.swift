@@ -17,7 +17,7 @@ final class SplashCoordinator: SplashCoordinatorProtocol {
     
     var type: CoordinatorType { .splash }
     
-    var isUserAccount: Bool = false
+    var isUserAccount: Bool = true
         
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController

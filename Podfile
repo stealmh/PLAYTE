@@ -11,6 +11,7 @@ target 'Recipe' do
   pod 'RxCocoa'
   pod 'Alamofire'
   pod 'Kingfisher'
+  pod 'GoogleSignIn'
 
   target 'RecipeTests' do
     inherit! :search_paths

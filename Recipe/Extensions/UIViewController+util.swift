@@ -82,6 +82,11 @@ extension UIViewController {
                 v.removeFromSuperview()
             })
         }
+    
+    func defaultNavigationBackButton(backButtonColor: UIColor) {
+        self.navigationController?.navigationBar.topItem?.title = ""
+        self.navigationController?.navigationBar.tintColor = backButtonColor
+    }
 }
 #endif
 
