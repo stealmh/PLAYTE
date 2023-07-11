@@ -8,10 +8,13 @@
 import AuthenticationServices
 import UIKit
 import SnapKit
+import GoogleSignIn
+import RxSwift
+import RxCocoa
 
 final class LoginViewController: BaseViewController {
     var didSendEventClosure: ((LoginViewController.Event) -> Void)?
-    
+    private let disposeBag = DisposeBag()
     private let baseView: BaseStartingView = {
         let v = BaseStartingView()
         v.appLabel.textColor = .white
@@ -125,6 +128,12 @@ final class LoginViewController: BaseViewController {
         
         loginButton.addTarget(self, action: #selector(didTapLoginButton(_:)), for: .touchUpInside)
         appleLoginButton.addTarget(self, action: #selector(didTapAppleLoginButton), for: .touchUpInside)
+        
+        googleButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.signInWithGoogle()
+            }
+        ).disposed(by: disposeBag)
     }
 
     @objc private func didTapLoginButton(_ sender: Any) {
@@ -200,7 +209,19 @@ extension LoginViewController: ASAuthorizationControllerPresentationContextProvi
     func presentationAnchor(for controller: ASAuthorizationController) -> ASPresentationAnchor {
         self.view.window!
     }
-    
+}
+
+extension LoginViewController {
+    private func signInWithGoogle() {
+        GIDSignIn.sharedInstance.signIn(withPresenting: self) { [weak self] signInResult, _ in
+                    guard let self,
+                          let result = signInResult,
+                          let token = result.user.idToken?.tokenString else { return }
+            print(token)
+                    // 서버에 토큰을 보내기. 이 때 idToken, accessToken 차이에 주의할 것
+            }
+
+    }
 }
 
 //MARK: - VC Preview
