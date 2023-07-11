@@ -39,6 +39,8 @@
 		5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */; };
 		5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */; };
 		5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */; };
+		5A805C5C2A5D32A900C81D86 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A805C5B2A5D32A900C81D86 /* RecipeView.swift */; };
+		5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */; };
 		5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */; };
 		5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACE2A53FD430020BA71 /* TitleView.swift */; };
 		5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AD02A53FD7E0020BA71 /* UIView+util.swift */; };
@@ -53,6 +55,9 @@
 		5A914AEA2A54157E0020BA71 /* DefaultHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AE92A54157E0020BA71 /* DefaultHeader.swift */; };
 		5A914AEC2A54159B0020BA71 /* IngredientRecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */; };
 		5A914AEF2A5419C70020BA71 /* IngredientsHandleCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AEE2A5419C70020BA71 /* IngredientsHandleCell.swift */; };
+		5AAEC5552A5D3BDF00E9877C /* UIButton+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAEC5542A5D3BDF00E9877C /* UIButton+util.swift */; };
+		5AAEC5572A5D439F00E9877C /* RecipeCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAEC5562A5D439F00E9877C /* RecipeCategoryCell.swift */; };
+		5AAEC5592A5D511300E9877C /* RecipeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAEC5582A5D511300E9877C /* RecipeHeaderCell.swift */; };
 		5AB4A5DC2A5502DF0095CD2B /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5DB2A5502DF0095CD2B /* PresentationController.swift */; };
 		5AB4A5DE2A55099C0095CD2B /* IngredientRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5DD2A55099C0095CD2B /* IngredientRegistrationViewController.swift */; };
 		5AB4A5E02A552E900095CD2B /* PaddingUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */; };
@@ -130,6 +135,8 @@
 		5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
 		5A805C5A2A5D247700C81D86 /* Key.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Key.xcconfig; sourceTree = "<group>"; };
+		5A805C5B2A5D32A900C81D86 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
+		5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
 		5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+util.swift"; sourceTree = "<group>"; };
 		5A914ACE2A53FD430020BA71 /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		5A914AD02A53FD7E0020BA71 /* UIView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+util.swift"; sourceTree = "<group>"; };
@@ -144,6 +151,9 @@
 		5A914AE92A54157E0020BA71 /* DefaultHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultHeader.swift; sourceTree = "<group>"; };
 		5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientRecipeCell.swift; sourceTree = "<group>"; };
 		5A914AEE2A5419C70020BA71 /* IngredientsHandleCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientsHandleCell.swift; sourceTree = "<group>"; };
+		5AAEC5542A5D3BDF00E9877C /* UIButton+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+util.swift"; sourceTree = "<group>"; };
+		5AAEC5562A5D439F00E9877C /* RecipeCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategoryCell.swift; sourceTree = "<group>"; };
+		5AAEC5582A5D511300E9877C /* RecipeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeHeaderCell.swift; sourceTree = "<group>"; };
 		5AB4A5DB2A5502DF0095CD2B /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
 		5AB4A5DD2A55099C0095CD2B /* IngredientRegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientRegistrationViewController.swift; sourceTree = "<group>"; };
 		5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingUITextField.swift; sourceTree = "<group>"; };
@@ -270,6 +280,7 @@
 				5A914ADB2A5406550020BA71 /* UICollectionReusableView+util.swift */,
 				5AFE49C02A5BC164000B9A95 /* UILabel+util.swift */,
 				5AFE49C22A5BC20F000B9A95 /* UIColor+util.swift */,
+				5AAEC5542A5D3BDF00E9877C /* UIButton+util.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -460,8 +471,12 @@
 		5ACD7BBA2A57DAA100571259 /* Recipe */ = {
 			isa = PBXGroup;
 			children = (
+				5A805C5B2A5D32A900C81D86 /* RecipeView.swift */,
 				5ACD7BC02A57DC4200571259 /* RecipeViewController.swift */,
 				5ACD7BC22A57DC4C00571259 /* RecipeCoordinator.swift */,
+				5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */,
+				5AAEC5562A5D439F00E9877C /* RecipeCategoryCell.swift */,
+				5AAEC5582A5D511300E9877C /* RecipeHeaderCell.swift */,
 			);
 			path = Recipe;
 			sourceTree = "<group>";
@@ -760,6 +775,7 @@
 				5A0244932A529AA300AA418E /* ViewController.swift in Sources */,
 				5AF00F6A2A568FAD00587BF9 /* RefrigeratorViewController.swift in Sources */,
 				5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */,
+				5AAEC5572A5D439F00E9877C /* RecipeCategoryCell.swift in Sources */,
 				5AFE49C12A5BC164000B9A95 /* UILabel+util.swift in Sources */,
 				5AFE49C32A5BC20F000B9A95 /* UIColor+util.swift in Sources */,
 				5A914ADA2A5405CC0020BA71 /* RefrigeratorCell.swift in Sources */,
@@ -787,12 +803,16 @@
 				5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */,
 				5A0244E42A52A7F400AA418E /* RegisterFirstViewController.swift in Sources */,
 				5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */,
+				5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */,
 				5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */,
 				5AB4A5DC2A5502DF0095CD2B /* PresentationController.swift in Sources */,
 				5A914AE02A5407410020BA71 /* NormalRefrigeratorView.swift in Sources */,
+				5AAEC5592A5D511300E9877C /* RecipeHeaderCell.swift in Sources */,
 				5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */,
 				5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */,
+				5A805C5C2A5D32A900C81D86 /* RecipeView.swift in Sources */,
 				5AF00F6C2A5694A600587BF9 /* RefrigeratorDetailCell.swift in Sources */,
+				5AAEC5552A5D3BDF00E9877C /* UIButton+util.swift in Sources */,
 				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
 				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
 				5A0244992A529AA300AA418E /* Recipe.xcdatamodeld in Sources */,
