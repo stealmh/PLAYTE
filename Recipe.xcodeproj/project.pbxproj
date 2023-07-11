@@ -58,6 +58,7 @@
 		5AAEC5552A5D3BDF00E9877C /* UIButton+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAEC5542A5D3BDF00E9877C /* UIButton+util.swift */; };
 		5AAEC5572A5D439F00E9877C /* RecipeCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAEC5562A5D439F00E9877C /* RecipeCategoryCell.swift */; };
 		5AAEC5592A5D511300E9877C /* RecipeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAEC5582A5D511300E9877C /* RecipeHeaderCell.swift */; };
+		5AAEC55B2A5D595500E9877C /* RecipeDefaultTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AAEC55A2A5D595500E9877C /* RecipeDefaultTag.swift */; };
 		5AB4A5DC2A5502DF0095CD2B /* PresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5DB2A5502DF0095CD2B /* PresentationController.swift */; };
 		5AB4A5DE2A55099C0095CD2B /* IngredientRegistrationViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5DD2A55099C0095CD2B /* IngredientRegistrationViewController.swift */; };
 		5AB4A5E02A552E900095CD2B /* PaddingUITextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */; };
@@ -154,6 +155,7 @@
 		5AAEC5542A5D3BDF00E9877C /* UIButton+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIButton+util.swift"; sourceTree = "<group>"; };
 		5AAEC5562A5D439F00E9877C /* RecipeCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategoryCell.swift; sourceTree = "<group>"; };
 		5AAEC5582A5D511300E9877C /* RecipeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeHeaderCell.swift; sourceTree = "<group>"; };
+		5AAEC55A2A5D595500E9877C /* RecipeDefaultTag.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDefaultTag.swift; sourceTree = "<group>"; };
 		5AB4A5DB2A5502DF0095CD2B /* PresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PresentationController.swift; sourceTree = "<group>"; };
 		5AB4A5DD2A55099C0095CD2B /* IngredientRegistrationViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientRegistrationViewController.swift; sourceTree = "<group>"; };
 		5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PaddingUITextField.swift; sourceTree = "<group>"; };
@@ -357,6 +359,7 @@
 				5A0244D62A52A6F500AA418E /* BaseViewController.swift */,
 				5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */,
 				5AFE49C42A5BC352000B9A95 /* BaseStartingView.swift */,
+				5AAEC55A2A5D595500E9877C /* RecipeDefaultTag.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -805,6 +808,7 @@
 				5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */,
 				5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */,
 				5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */,
+				5AAEC55B2A5D595500E9877C /* RecipeDefaultTag.swift in Sources */,
 				5AB4A5DC2A5502DF0095CD2B /* PresentationController.swift in Sources */,
 				5A914AE02A5407410020BA71 /* NormalRefrigeratorView.swift in Sources */,
 				5AAEC5592A5D511300E9877C /* RecipeHeaderCell.swift in Sources */,

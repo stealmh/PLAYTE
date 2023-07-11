@@ -13,17 +13,34 @@ import SnapKit
 final class RecipeHeaderCell: UICollectionReusableView {
     
     let disposeBag = DisposeBag()
-    private let newFilterButton: UIButton = {
-        let v = UIButton()
-        v.backgroundColor = .red
-        return v
-    }()
+    private let recentBackground = RecipeDefaultTagView()
+    private let recentButton = RecipeDefaultTagButton()
+    
+    private let popularBackground = RecipeDefaultTagView()
+    private let popularButton = RecipeDefaultTagButton()
+    
+    private let IngredientBackground = RecipeDefaultTagView()
+    private let IngredientButton = RecipeDefaultTagButton()
+    
+    private let minimumBackground = RecipeDefaultTagView()
+    private let minimumButton = RecipeDefaultTagButton()
+
+    
+
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(newFilterButton)
-        newFilterButton.snp.makeConstraints {
-            $0.center.equalToSuperview()
+        addSubViews(recentBackground, recentButton)
+        
+        recentBackground.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.equalToSuperview().inset(10)
+            $0.centerY.equalToSuperview()
+            $0.width.equalTo(60)
+        }
+        
+        recentButton.snp.makeConstraints {
+            $0.center.equalTo(recentBackground)
         }
     }
     
