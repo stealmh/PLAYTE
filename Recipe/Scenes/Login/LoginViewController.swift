@@ -30,16 +30,6 @@ final class LoginViewController: BaseViewController {
         return v
     }()
     
-    private let appleLoginButton: UIButton = {
-        let v = UIButton()
-        v.setTitle("애플로그인", for: .normal)
-        v.backgroundColor = .systemBlue
-        v.setTitleColor(.white, for: .normal)
-        v.layer.cornerRadius = 8.0
-        v.isHidden = true
-        return v
-    }()
-    
     private let easyLoginLabel: UILabel = {
         let v = UILabel()
         v.text = "간편 로그인"
@@ -59,23 +49,34 @@ final class LoginViewController: BaseViewController {
         return v
     }()
     
-    private let circleButton: UIButton = {
+    private let appleLoginButton: UIButton = {
         let v = UIButton()
         v.layer.cornerRadius = 50/2
         v.clipsToBounds = true
-        v.setImage(UIImage(named: "popcat"), for: .normal)
+        v.layer.masksToBounds = true
+        v.setImage(UIImage(named: "apple_login"), for: .normal)
         v.backgroundColor = .black
+        return v
+    }()
+    
+    private let googleButton: UIButton = {
+        let v = UIButton()
+        v.layer.cornerRadius = 50/2
+        v.clipsToBounds = true
+        v.layer.masksToBounds = true
+        v.backgroundColor = .white
+        v.setImage(UIImage(named: "google_login"), for: .normal)
         return v
     }()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         baseView.addSubViews(loginButton,
-                             appleLoginButton,
                              easyLoginLabel,
                              easyLoginLeftLine,
                              easyLoginRightLine,
-                             circleButton)
+                             appleLoginButton,
+                            googleButton)
         view.addSubview(baseView)
         
         loginButton.snp.makeConstraints {
@@ -83,11 +84,6 @@ final class LoginViewController: BaseViewController {
             $0.left.equalToSuperview().inset(24)
             $0.top.equalTo(baseView.snp.centerY).offset(150)
             $0.height.equalTo(44)
-        }
-        
-        appleLoginButton.snp.makeConstraints {
-            $0.left.right.width.height.equalTo(loginButton)
-            $0.top.equalTo(loginButton.snp.bottom).offset(20)
         }
         
         baseView.snp.makeConstraints {
@@ -114,8 +110,15 @@ final class LoginViewController: BaseViewController {
             $0.height.equalTo(1)
         }
         
-        circleButton.snp.makeConstraints {
-            $0.top.left.equalToSuperview()
+        appleLoginButton.snp.makeConstraints {
+            $0.top.equalTo(easyLoginLabel).offset(30)
+            $0.right.equalTo(easyLoginLabel.snp.centerX).offset(-10)
+            $0.width.height.equalTo(50)
+        }
+        
+        googleButton.snp.makeConstraints {
+            $0.top.equalTo(easyLoginLabel).offset(30)
+            $0.left.equalTo(easyLoginLabel.snp.centerX).offset(10)
             $0.width.height.equalTo(50)
         }
         
