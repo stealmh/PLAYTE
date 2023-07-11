@@ -28,9 +28,8 @@ final class RefrigeratorDetailCell: UITableViewCell {
     private let expirationDateLabel = UILabel()
     private let deleteButton: UIButton = {
         let v = UIButton()
-        let imageConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .light)
-        let image = UIImage(systemName: "trash", withConfiguration: imageConfig)
-        v.setImage(image, for: .normal)
+        let img = v.buttonImageSize(systemImageName: "trash", size: 30)
+        v.setImage(img, for: .normal)
         v.tintColor = .gray
         return v
     }()
