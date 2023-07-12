@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */; };
 		2041B6D2CA32EDF56FAB5B7F /* Pods_Recipe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA97959A0831DCE25DB3AF54 /* Pods_Recipe.framework */; };
 		323C2F23D6784580310ECE67 /* Pods_RecipeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7E8A04628A7BAD1F0DA9DA7 /* Pods_RecipeTests.framework */; };
 		5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A02448E2A529AA300AA418E /* AppDelegate.swift */; };
@@ -96,6 +97,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+util.swift"; sourceTree = "<group>"; };
 		1F2FD8D18D32ADE96A905161 /* Pods-Recipe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe.release.xcconfig"; path = "Target Support Files/Pods-Recipe/Pods-Recipe.release.xcconfig"; sourceTree = "<group>"; };
 		424F2F41243C03197AE3BEC6 /* Pods-RecipeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeTests.debug.xcconfig"; path = "Target Support Files/Pods-RecipeTests/Pods-RecipeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		43250A0DA83D570142864CA1 /* Pods_Recipe_RecipeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recipe_RecipeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -283,6 +285,7 @@
 				5AFE49C02A5BC164000B9A95 /* UILabel+util.swift */,
 				5AFE49C22A5BC20F000B9A95 /* UIColor+util.swift */,
 				5AAEC5542A5D3BDF00E9877C /* UIButton+util.swift */,
+				16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -787,6 +790,7 @@
 				5A914AEF2A5419C70020BA71 /* IngredientsHandleCell.swift in Sources */,
 				5A0244D72A52A6F500AA418E /* BaseViewController.swift in Sources */,
 				5A0244912A529AA300AA418E /* SceneDelegate.swift in Sources */,
+				16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */,
 				5A914AD62A5404940020BA71 /* PageSectionFooterView.swift in Sources */,
 				5A0244F22A52A8AA00AA418E /* MypageViewController.swift in Sources */,
 				5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */,

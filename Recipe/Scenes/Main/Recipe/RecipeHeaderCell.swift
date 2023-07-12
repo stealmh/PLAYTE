@@ -12,43 +12,94 @@ import SnapKit
 
 final class RecipeHeaderCell: UICollectionReusableView {
     
-    let disposeBag = DisposeBag()
+    ///UI Properties
     private let recentBackground = RecipeDefaultTagView()
-    private let recentButton = RecipeDefaultTagButton()
-    
     private let popularBackground = RecipeDefaultTagView()
-    private let popularButton = RecipeDefaultTagButton()
-    
-    private let IngredientBackground = RecipeDefaultTagView()
-    private let IngredientButton = RecipeDefaultTagButton()
-    
     private let minimumBackground = RecipeDefaultTagView()
-    private let minimumButton = RecipeDefaultTagButton()
+    private let recentButton = RecipeDefaultTagButton(tagName:"최신순", tag: 0)
+    private let popularButton = RecipeDefaultTagButton(tagName:"인기순", tag: 1)
+    private let minimumButton = RecipeDefaultTagButton(tagName:"최소 시간순", tag: 2)
+    /// Constatns Size
+    private enum Constants {
+        static let tagWidth: Int = 64
+        static let tagHeight: Int = 29
+    }
+    /// Properties
+    private let disposeBag = DisposeBag()
+    private let buttonTappedSubject = BehaviorRelay<Int>(value: 0)
+    private lazy var tagBackgrounds = [recentBackground, popularBackground, minimumBackground]
+    private lazy var tagButtons = [recentButton, popularButton, minimumButton]
 
-    
-
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubViews(recentBackground, recentButton)
-        
-        recentBackground.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.left.equalToSuperview().inset(10)
-            $0.centerY.equalToSuperview()
-            $0.width.equalTo(60)
-        }
-        
-        recentButton.snp.makeConstraints {
-            $0.center.equalTo(recentBackground)
-        }
+        setAddView()
+        configureLayout()
+        bind()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+}
 
-
+//MARK: - Method
+extension RecipeHeaderCell {
+    private func setAddView() {
+        addSubViews(recentBackground, popularBackground,
+                    minimumBackground,
+                    recentButton,popularButton,
+                    minimumButton)
+    }
+    
+    private func configureLayout() {
+        recentBackground.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.equalToSuperview().inset(10)
+            $0.width.equalTo(Constants.tagWidth)
+            $0.height.equalTo(Constants.tagHeight)
+        }
+        popularBackground.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.equalTo(recentBackground.snp.right).offset(10)
+            $0.width.equalTo(Constants.tagWidth)
+            $0.height.equalTo(Constants.tagHeight)
+        }
+        minimumBackground.snp.makeConstraints {
+            $0.top.equalToSuperview()
+            $0.left.equalTo(popularBackground.snp.right).offset(10)
+            $0.width.equalTo(Constants.tagWidth)
+            $0.height.equalTo(Constants.tagHeight)
+        }
+        tagButtons.enumerated().forEach { idx, btn in
+            btn.snp.makeConstraints {
+                $0.center.equalTo(tagBackgrounds[idx])
+            }
+        }
+    }
+    
+    private func bind() {
+        tagButtons.forEach { btn in
+            btn.rx.tap
+                .subscribe(onNext: { _ in
+                    self.buttonTappedSubject.accept(btn.tag)
+                }
+            ).disposed(by: disposeBag)
+        }
+        
+        buttonTappedSubject.subscribe(onNext: { tagNumber in
+            self.tagButtons.forEach {
+                if $0.tag == tagNumber {
+                    self.tagBackgrounds
+                        .filter { $0 == self.tagBackgrounds[tagNumber]}
+                        .forEach { $0.backgroundColor = .orange }
+                } else {
+                    self.tagBackgrounds
+                        .filter { $0 != self.tagBackgrounds[tagNumber]}
+                        .forEach { $0.backgroundColor = .clear }
+                }
+            }
+        }).disposed(by: disposeBag)
+    }
 }
 
 import SwiftUI
