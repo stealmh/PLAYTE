@@ -8,10 +8,13 @@
 import UIKit
 
 class RecipeDefaultTagView: UIView {
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.borderWidth = 1
-        layer.borderColor = UIColor.blue.cgColor
+        layer.borderColor = UIColor.hexStringToUIColor(hex: "#FF5520").cgColor
+        layer.cornerRadius = 15
+        clipsToBounds = true
     }
     
     required init?(coder: NSCoder) {
@@ -22,7 +25,12 @@ class RecipeDefaultTagView: UIView {
 class RecipeDefaultTagButton: UIButton {
     override init(frame: CGRect) {
         super.init(frame: frame)
-        setTitle("더보기", for: .normal) //title넣기
+    }
+    
+    init(tagName: String, tag: Int) {
+        super.init(frame: .zero)
+        self.tag = tag
+        self.setTitle(tagName, for: .normal)
         setTitleColor(.black, for: .normal)
         imageView?.contentMode = .scaleAspectFit
         titleLabel?.font = .boldSystemFont(ofSize: 12)
