@@ -37,19 +37,20 @@ final class RecipeCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
     
     func startReadyFlow()  {
         let goVC = RecipeViewController()
-        ///Todo: Memory leak
-//        goVC.didSendEventClosure = { [weak self] event in
-//            switch event {
-//            case .showFloatingView:
-//                print("yes")
-//                let vc = PopupViewController()
-//                vc.modalPresentationStyle = .overCurrentContext
-////                self.tabBarController?.tabBar.layer.zPosition = -1
-//                goVC.present(vc, animated: false)
-//                return
-//            }
-//        }
+        goVC.didSendEventClosure = { [weak self] event in
+            switch event {
+            case .showFloatingView:
+                self?.showPopupView()
+                return
+            }
+        }
         navigationController.pushViewController(goVC, animated: true)
+    }
+    
+    func showPopupView() {
+        let vc = PopupViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        navigationController.present(vc, animated: false)
     }
 }
 
