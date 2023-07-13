@@ -42,6 +42,9 @@
 		5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */; };
 		5A805C5C2A5D32A900C81D86 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A805C5B2A5D32A900C81D86 /* RecipeView.swift */; };
 		5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */; };
+		5A8C2DD12A5F915A006B08A7 /* DefaultFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD02A5F915A006B08A7 /* DefaultFloatingButton.swift */; };
+		5A8C2DD32A5FC4B0006B08A7 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */; };
+		5A8C2DD52A5FC4B9006B08A7 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */; };
 		5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */; };
 		5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACE2A53FD430020BA71 /* TitleView.swift */; };
 		5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AD02A53FD7E0020BA71 /* UIView+util.swift */; };
@@ -140,6 +143,9 @@
 		5A805C5A2A5D247700C81D86 /* Key.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Key.xcconfig; sourceTree = "<group>"; };
 		5A805C5B2A5D32A900C81D86 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
+		5A8C2DD02A5F915A006B08A7 /* DefaultFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFloatingButton.swift; sourceTree = "<group>"; };
+		5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
+		5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
 		5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+util.swift"; sourceTree = "<group>"; };
 		5A914ACE2A53FD430020BA71 /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		5A914AD02A53FD7E0020BA71 /* UIView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+util.swift"; sourceTree = "<group>"; };
@@ -363,6 +369,9 @@
 				5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */,
 				5AFE49C42A5BC352000B9A95 /* BaseStartingView.swift */,
 				5AAEC55A2A5D595500E9877C /* RecipeDefaultTag.swift */,
+				5A8C2DD02A5F915A006B08A7 /* DefaultFloatingButton.swift */,
+				5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */,
+				5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -782,6 +791,7 @@
 				5AF00F6A2A568FAD00587BF9 /* RefrigeratorViewController.swift in Sources */,
 				5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */,
 				5AAEC5572A5D439F00E9877C /* RecipeCategoryCell.swift in Sources */,
+				5A8C2DD32A5FC4B0006B08A7 /* PopupViewController.swift in Sources */,
 				5AFE49C12A5BC164000B9A95 /* UILabel+util.swift in Sources */,
 				5AFE49C32A5BC20F000B9A95 /* UIColor+util.swift in Sources */,
 				5A914ADA2A5405CC0020BA71 /* RefrigeratorCell.swift in Sources */,
@@ -812,12 +822,14 @@
 				5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */,
 				5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */,
 				5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */,
+				5A8C2DD52A5FC4B9006B08A7 /* PopupView.swift in Sources */,
 				5AAEC55B2A5D595500E9877C /* RecipeDefaultTag.swift in Sources */,
 				5AB4A5DC2A5502DF0095CD2B /* PresentationController.swift in Sources */,
 				5A914AE02A5407410020BA71 /* NormalRefrigeratorView.swift in Sources */,
 				5AAEC5592A5D511300E9877C /* RecipeHeaderCell.swift in Sources */,
 				5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */,
 				5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */,
+				5A8C2DD12A5F915A006B08A7 /* DefaultFloatingButton.swift in Sources */,
 				5A805C5C2A5D32A900C81D86 /* RecipeView.swift in Sources */,
 				5AF00F6C2A5694A600587BF9 /* RefrigeratorDetailCell.swift in Sources */,
 				5AAEC5552A5D3BDF00E9877C /* UIButton+util.swift in Sources */,
