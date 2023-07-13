@@ -73,7 +73,6 @@ final class ColdRefrigeratorView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        print("ColdRefrigeratorView:", self)
         backgroundColor = .gray
         
         addSubViews(

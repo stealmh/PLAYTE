@@ -11,6 +11,7 @@ import SnapKit
 protocol RegisterFlowDelegate {
     func moveToSecondView()
     func endFlow()
+    func registerFail()
 }
 
 final class RegisterFirstViewController: BaseViewController {
@@ -24,6 +25,10 @@ final class RegisterFirstViewController: BaseViewController {
         registerView.delegate = self
         configureLayout()
         defaultNavigationBackButton(backButtonColor: .white)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        registerView.delegate = nil
     }
 }
 

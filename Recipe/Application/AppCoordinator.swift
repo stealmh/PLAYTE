@@ -85,6 +85,7 @@ extension AppCoordinator: CoordinatorFinishDelegate {
         }
     }
 }
+
 extension AppCoordinator: UINavigationControllerDelegate {
     func navigationController(_ navigationController: UINavigationController, didShow viewController: UIViewController, animated: Bool) {
 
@@ -100,9 +101,7 @@ extension AppCoordinator: UINavigationControllerDelegate {
 
         // child coordinator 가 일을 끝냈다고 알림.
         if let leftVC = fromViewController as? RegisterFirstViewController {
-//           childDidFinish(leftVC.coordinator)
-            leftVC.delegate?.endFlow()
-//            finish()
+            leftVC.delegate?.registerFail()
         }
     }
 }

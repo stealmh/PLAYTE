@@ -39,12 +39,18 @@ final class RecipeCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
         let goVC = RecipeViewController()
         goVC.didSendEventClosure = { [weak self] event in
             switch event {
-            case .go:
-                self?.finishDelegate?.coordinatorDidFinish(childCoordinator: self!)
+            case .showFloatingView:
+                self?.showPopupView()
                 return
             }
         }
         navigationController.pushViewController(goVC, animated: true)
+    }
+    
+    func showPopupView() {
+        let vc = PopupViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        navigationController.present(vc, animated: false)
     }
 }
 

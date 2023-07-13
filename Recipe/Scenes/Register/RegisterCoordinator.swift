@@ -7,9 +7,14 @@
 
 import UIKit
 
+protocol RegisterCoorProtocol {
+    func failRegister(_ coordinator: RegisterCoordinator)
+}
+
 final class RegisterCoordinator: RegisterCoordinatorProtocol {
     
     var finishDelegate: CoordinatorFinishDelegate?
+    var delegate: RegisterCoorProtocol?
     
     var navigationController: UINavigationController
     
@@ -44,7 +49,16 @@ extension RegisterCoordinator: RegisterFlowDelegate {
         navigationController.pushViewController(vc, animated: true)
     }
     
+    func registerFail() {
+        print(#function)
+//        finishDelegate?.coordinatorDidFinish(childCoordinator: self)
+//        navigationController.popToRootViewController(animated: true)
+//        finish()
+        delegate?.failRegister(self)
+    }
+    
     func endFlow() {
-        self.finish()
+        print(#function)
+        finishDelegate?.coordinatorDidFinish(childCoordinator: self)
     }
 }

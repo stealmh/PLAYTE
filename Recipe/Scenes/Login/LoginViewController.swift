@@ -14,7 +14,7 @@ import RxCocoa
 
 final class LoginViewController: BaseViewController {
     var didSendEventClosure: ((LoginViewController.Event) -> Void)?
-    private let disposeBag = DisposeBag()
+    private var disposeBag = DisposeBag()
     private let baseView: BaseStartingView = {
         let v = BaseStartingView()
         v.appLabel.textColor = .white
@@ -71,6 +71,10 @@ final class LoginViewController: BaseViewController {
         v.setImage(UIImage(named: "google_login"), for: .normal)
         return v
     }()
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        disposeBag = DisposeBag()
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
