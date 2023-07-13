@@ -22,6 +22,11 @@ final class RegisterSecondViewController: BaseViewController {
         registerSucessView.delegate = self
         configureLayout()
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        registerSucessView.delegate = nil
+    }
+    
 }
 
 //MARK: - Method(Normal)

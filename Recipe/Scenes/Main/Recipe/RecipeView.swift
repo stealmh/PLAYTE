@@ -72,7 +72,6 @@ final class RecipeView: UIView {
     ]
     
     override init(frame: CGRect) {
-        print("sucess init")
         super.init(frame: frame)
         addSubViews(searchTextField, searchImageButton, collectionView)
         configureLayout()

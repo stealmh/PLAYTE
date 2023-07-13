@@ -64,7 +64,18 @@ extension LoginCoordinator: CoordinatorFinishDelegate {
         childCoordinators = childCoordinators.filter({ $0.type != childCoordinator.type })
         switch childCoordinator.type {
         case .register:
-            finishDelegate?.coordinatorDidFinish(childCoordinator: self)
+            finish()
+//            navigationController.viewControllers.removeAll()
+//            finishDelegate?.coordinatorDidFinish(childCoordinator: self)
+            
+//            print(childCoordinator.navigationController)
+//            print(self.navigationController)
+////            finishDelegate?.coordinatorDidFinish(childCoordinator: self)
+////            finishDelegate?.coordinatorDidFinish(childCoordinator: childCoordinator)
+//            print("삭제전:", childCoordinators)
+//            deleteChild(childCoordinator)
+//            print("삭제후:", childCoordinators)
+//            finishDelegate?.coordinatorDidFinish(childCoordinator: self)
         default:
             break
         }
