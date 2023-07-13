@@ -13,4 +13,10 @@ extension UIButton {
         let image = UIImage(systemName: systemImageName, withConfiguration: imageConfig)!
         return image
     }
+    
+    func buttonImageSize(imageName: String, size: CGFloat) -> UIImage {
+        let imageConfig = UIImage.SymbolConfiguration(pointSize: size, weight: .light)
+        let image = UIImage(named: imageName, in: nil, with: imageConfig)!
+        return image
+    }
 }
