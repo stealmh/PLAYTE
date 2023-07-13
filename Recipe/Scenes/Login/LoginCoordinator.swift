@@ -32,6 +32,7 @@ final class LoginCoordinator: LoginCoordinatorProtocol {
     func showRegisterFlow() {
         let registerCoordinator = RegisterCoordinator(navigationController)
         registerCoordinator.finishDelegate = self
+        registerCoordinator.delegate = self
         registerCoordinator.start()
         childCoordinators.append(registerCoordinator)
     }
@@ -49,25 +50,29 @@ final class LoginCoordinator: LoginCoordinatorProtocol {
         
         navigationController.pushViewController(loginVC, animated: true)
     }
-}
-
-extension LoginCoordinator: CoordinatorFinishDelegate {
+    
     func deleteChild(_ child: Coordinator) {
         guard let index = childCoordinators.firstIndex(where: { $0 === child }) else {
             return
         }
         childCoordinators.remove(at: index)
     }
-    
+}
+
+extension LoginCoordinator: CoordinatorFinishDelegate {
     func coordinatorDidFinish(childCoordinator: Coordinator) {
         childCoordinators = childCoordinators.filter({ $0.type != childCoordinator.type })
-
         switch childCoordinator.type {
         case .register:
-            navigationController.viewControllers.removeAll()
-            finish()
+            finishDelegate?.coordinatorDidFinish(childCoordinator: self)
         default:
             break
         }
+    }
+}
+
+extension LoginCoordinator: RegisterCoorProtocol {
+    func failRegister(_ coordinator: RegisterCoordinator) {
+        deleteChild(coordinator)
     }
 }
