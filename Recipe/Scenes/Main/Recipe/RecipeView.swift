@@ -57,7 +57,7 @@ final class RecipeView: UIView {
     }()
     
     ///Properties
-    private let disposeBag = DisposeBag()
+//    private let disposeBag = DisposeBag()
     private var dataSource: Datasource!
     private let mockCategoryData: [MockCategoryData] = [
         MockCategoryData(text: "소중한 사람을 위해", color: .red),
@@ -72,6 +72,7 @@ final class RecipeView: UIView {
     ]
     
     override init(frame: CGRect) {
+        print("sucess init")
         super.init(frame: frame)
         addSubViews(searchTextField, searchImageButton, collectionView)
         configureLayout()

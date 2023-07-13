@@ -32,6 +32,7 @@ final class RecipeViewController: BaseViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         disposeBag = DisposeBag()
+        floatingButton.delegate = nil
     }
 }
 
