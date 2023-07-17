@@ -10,6 +10,11 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol PopupViewDelegate {
+    func createRecipeButtonTapped()
+    func createShortFormButtonTapped()
+}
+
 ///Todo: 재활용성을 위해 버튼의 레이블은 생성자로 입력받게 수정할 것!
 final class PopupView: UIView {
     
@@ -33,6 +38,7 @@ final class PopupView: UIView {
     }()
     /// Properites
     private let disposeBag = DisposeBag()
+    var delegate: PopupViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -70,13 +76,13 @@ extension PopupView {
     func bind() {
         addRecipeButton.rx.tap
             .subscribe(onNext: { _ in
-                print("")
+                self.delegate?.createRecipeButtonTapped()
             }
         ).disposed(by: disposeBag)
         
         makeShortFormButton.rx.tap
             .subscribe(onNext: { _ in
-                print("")
+                self.delegate?.createShortFormButtonTapped()
             }
         ).disposed(by: disposeBag)
     }

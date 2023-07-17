@@ -50,7 +50,22 @@ final class RecipeCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
     func showPopupView() {
         let vc = PopupViewController()
         vc.modalPresentationStyle = .overCurrentContext
-        navigationController.present(vc, animated: false)
+        navigationController.present(vc, animated: false) {
+            vc.didSendEventClosure = { [weak self] event in
+                switch event {
+                case .showCreateRecipeView:
+                    self?.showCreateRecipeView()
+                    return
+                }
+            }
+        }
+    }
+    
+    func showCreateRecipeView() {
+        let vc = CreateRecipeViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        self.navigationController.dismiss(animated: false)
+        navigationController.pushViewController(vc, animated: false)
     }
 }
 

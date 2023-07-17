@@ -14,9 +14,8 @@ final class RecipeViewController: BaseViewController {
     
     private var disposeBag = DisposeBag()
     private let recipeView = RecipeView()
-    private let floatingButton = DefaultFloatingButton()
+    private let floatingButton = DefaultCircleButton()
     var didSendEventClosure: ((RecipeViewController.Event) -> Void)?
-    
     enum Event {
         case showFloatingView
     }
@@ -33,6 +32,10 @@ final class RecipeViewController: BaseViewController {
     override func viewDidDisappear(_ animated: Bool) {
         disposeBag = DisposeBag()
         floatingButton.delegate = nil
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        floatingButton.delegate = self
     }
 }
 
@@ -75,8 +78,17 @@ extension RecipeViewController {
 //MARK: - Method(플로팅 버튼 Delegate)
 extension RecipeViewController: FloatingButtonDelegate {
     func floatingButtonTapped() {
+        print(#function)
         didSendEventClosure?(.showFloatingView)
         ///Todo: 어케분리하지
         self.tabBarController?.tabBar.layer.zPosition = -1
+    }
+}
+
+//MARK: - VC Preview
+import SwiftUI
+struct RecipeViewController_preview: PreviewProvider {
+    static var previews: some View {
+        RecipeViewController().toPreview()
     }
 }
