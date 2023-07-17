@@ -30,6 +30,16 @@ final class RegisterFirstViewController: BaseViewController {
     override func viewDidDisappear(_ animated: Bool) {
         registerView.delegate = nil
     }
+    override var preferredStatusBarStyle: UIStatusBarStyle {
+        if traitCollection.userInterfaceStyle == .dark {
+            // Dark mode is active
+            return .lightContent // Set the status bar style to light content
+        } else {
+            // Light mode is active
+            return .darkContent
+        }
+    }
+    
 }
 
 //MARK: - Method
