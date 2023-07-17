@@ -21,10 +21,7 @@ final class CreateRecipeViewController: BaseViewController {
         addView()
         configureLayout()
         bind()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .add)
-        navigationItem.title = "나의 레시피 작성"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
+//        configureNavigationBar()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -39,15 +36,21 @@ final class CreateRecipeViewController: BaseViewController {
 }
 //MARK: - Method(Normal)
 extension CreateRecipeViewController {
-    func addView() {
+    private func addView() {
         view.addSubViews(createRecipeView)
     }
     
-    func configureLayout() {
+    private func configureLayout() {
         createRecipeView.snp.makeConstraints {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.left.right.bottom.equalToSuperview()
         }
+    }
+    
+    private func configureNavigationBar() {
+        navigationItem.title = "나의 레시피 작성"
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always
     }
 }
 //MARK: - Method(Rx bind)
