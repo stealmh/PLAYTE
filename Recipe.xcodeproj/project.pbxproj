@@ -10,6 +10,7 @@
 		160209BA2A655C9300FD1A0D /* CookStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 160209B92A655C9300FD1A0D /* CookStepCell.swift */; };
 		163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */; };
 		16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */; };
+		16F79A5E2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F79A5D2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift */; };
 		2041B6D2CA32EDF56FAB5B7F /* Pods_Recipe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA97959A0831DCE25DB3AF54 /* Pods_Recipe.framework */; };
 		323C2F23D6784580310ECE67 /* Pods_RecipeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7E8A04628A7BAD1F0DA9DA7 /* Pods_RecipeTests.framework */; };
 		5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A02448E2A529AA300AA418E /* AppDelegate.swift */; };
@@ -47,7 +48,7 @@
 		5A5B90482A652AC00049E853 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B90472A652AC00049E853 /* CreateRecipeView.swift */; };
 		5A5B904D2A652E770049E853 /* CreateRecipeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B904C2A652E770049E853 /* CreateRecipeHeaderCell.swift */; };
 		5A5B904F2A6535010049E853 /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B904E2A6535010049E853 /* TextFieldCell.swift */; };
-		5A5B90512A653BA60049E853 /* CookTimeSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B90502A653BA60049E853 /* CookTimeSettingCell.swift */; };
+		5A5B90512A653BA60049E853 /* CookSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B90502A653BA60049E853 /* CookSettingCell.swift */; };
 		5A805C5C2A5D32A900C81D86 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A805C5B2A5D32A900C81D86 /* RecipeView.swift */; };
 		5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */; };
 		5A8C2DD12A5F915A006B08A7 /* DefaultCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD02A5F915A006B08A7 /* DefaultCircleButton.swift */; };
@@ -112,6 +113,7 @@
 		160209B92A655C9300FD1A0D /* CookStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCell.swift; sourceTree = "<group>"; };
 		163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewController.swift; sourceTree = "<group>"; };
 		16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+util.swift"; sourceTree = "<group>"; };
+		16F79A5D2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTextFieldCell.swift; sourceTree = "<group>"; };
 		1F2FD8D18D32ADE96A905161 /* Pods-Recipe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe.release.xcconfig"; path = "Target Support Files/Pods-Recipe/Pods-Recipe.release.xcconfig"; sourceTree = "<group>"; };
 		424F2F41243C03197AE3BEC6 /* Pods-RecipeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeTests.debug.xcconfig"; path = "Target Support Files/Pods-RecipeTests/Pods-RecipeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		43250A0DA83D570142864CA1 /* Pods_Recipe_RecipeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recipe_RecipeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -156,7 +158,7 @@
 		5A5B90472A652AC00049E853 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
 		5A5B904C2A652E770049E853 /* CreateRecipeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeHeaderCell.swift; sourceTree = "<group>"; };
 		5A5B904E2A6535010049E853 /* TextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
-		5A5B90502A653BA60049E853 /* CookTimeSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookTimeSettingCell.swift; sourceTree = "<group>"; };
+		5A5B90502A653BA60049E853 /* CookSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookSettingCell.swift; sourceTree = "<group>"; };
 		5A805C5A2A5D247700C81D86 /* Key.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Key.xcconfig; sourceTree = "<group>"; };
 		5A805C5B2A5D32A900C81D86 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
@@ -390,6 +392,7 @@
 				5A8C2DD02A5F915A006B08A7 /* DefaultCircleButton.swift */,
 				5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */,
 				5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */,
+				16F79A5D2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -470,7 +473,7 @@
 				163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */,
 				5A5B904C2A652E770049E853 /* CreateRecipeHeaderCell.swift */,
 				5A5B904E2A6535010049E853 /* TextFieldCell.swift */,
-				5A5B90502A653BA60049E853 /* CookTimeSettingCell.swift */,
+				5A5B90502A653BA60049E853 /* CookSettingCell.swift */,
 				160209B92A655C9300FD1A0D /* CookStepCell.swift */,
 				5A4970822A662DCC005725F8 /* CreateRecipeFooter.swift */,
 				5A907DB22A666C8300973935 /* TextViewCell.swift */,
@@ -838,6 +841,7 @@
 				16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */,
 				5A914AD62A5404940020BA71 /* PageSectionFooterView.swift in Sources */,
 				5A0244F22A52A8AA00AA418E /* MypageViewController.swift in Sources */,
+				16F79A5E2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift in Sources */,
 				5A5B904F2A6535010049E853 /* TextFieldCell.swift in Sources */,
 				5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */,
 				5A914AE32A5410E30020BA71 /* PriceTrendHeader.swift in Sources */,
@@ -887,7 +891,7 @@
 				5A5B90482A652AC00049E853 /* CreateRecipeView.swift in Sources */,
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
 				5A914ADE2A5407230020BA71 /* ColdRefrigeratorView.swift in Sources */,
-				5A5B90512A653BA60049E853 /* CookTimeSettingCell.swift in Sources */,
+				5A5B90512A653BA60049E853 /* CookSettingCell.swift in Sources */,
 				5A4970832A662DCC005725F8 /* CreateRecipeFooter.swift in Sources */,
 				5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */,
 				5AFE49C52A5BC352000B9A95 /* BaseStartingView.swift in Sources */,
@@ -1068,6 +1072,7 @@
 				DEVELOPMENT_TEAM = 69AX92X75M;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Recipe/Supporting Files/Info.plist";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "레시피 등록에 사용하기 위해 사용자의 앨범에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -1098,6 +1103,7 @@
 				DEVELOPMENT_TEAM = 69AX92X75M;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Recipe/Supporting Files/Info.plist";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "레시피 등록에 사용하기 위해 사용자의 앨범에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

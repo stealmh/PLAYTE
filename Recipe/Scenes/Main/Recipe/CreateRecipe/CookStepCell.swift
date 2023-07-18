@@ -15,7 +15,7 @@ final class CookStepCell: UICollectionViewCell {
     ///UI Properties
     private let stepBackground: UIView = {
         let v = UIView()
-        v.layer.cornerRadius = 20
+        v.layer.cornerRadius = 5
         return v
     }()
     
@@ -33,22 +33,31 @@ final class CookStepCell: UICollectionViewCell {
         return v
     }()
     
-    let addRecipeStepButton: UIButton = {
+    let addPhotoButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(systemName: "plus"), for: .normal)
+        v.setImage(UIImage(systemName: "photo.fill"), for: .normal)
         v.tintColor = .gray
+        return v
+    }()
+    
+    let selectImageView: UIImageView = {
+        let v = UIImageView()
+        v.contentMode = .scaleToFill
+        v.image = UIImage(named: "popcat")
         return v
     }()
     
     ///Properties
     private let disposeBag = DisposeBag()
-    var defaultCheck = BehaviorRelay(value: false)
+    var defaultCheck = BehaviorRelay(value: true)
+    let imageSelectSubject = PublishRelay<UIImage>()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
 //        configureLayout()
 //        defaultSetting()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -71,7 +80,7 @@ final class CookStepCell: UICollectionViewCell {
 extension CookStepCell {
     
     private func addViews() {
-        addSubViews(stepBackground, stepLabel, stepMoveButton, addRecipeStepButton)
+        addSubViews(stepBackground, stepLabel, stepMoveButton, selectImageView, addPhotoButton)
     }
     
     private func configureLayout() {
@@ -97,21 +106,43 @@ extension CookStepCell {
     func defaultSetting() {
         stepLabel.text = "레시피를 입력해주세요."
         stepLabel.textColor = .gray.withAlphaComponent(0.4)
+        stepMoveButton.setImage(UIImage(named: "hamburger_gray"), for: .normal)
         stepBackground.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
         
         stepLabel.snp.makeConstraints {
-            $0.center.equalTo(stepBackground)
+            $0.centerY.equalTo(stepBackground)
+            $0.left.equalTo(stepBackground).inset(10)
         }
         
-        addRecipeStepButton.snp.makeConstraints {
+        addPhotoButton.snp.makeConstraints {
             $0.centerY.equalTo(stepBackground)
-            $0.right.equalTo(stepLabel.snp.left).inset(-10)
+            $0.right.equalTo(stepMoveButton.snp.left).offset(-20)
+        }
+        
+        selectImageView.snp.makeConstraints {
+            $0.top.bottom.equalTo(stepBackground).inset(5)
+            $0.right.equalTo(stepMoveButton.snp.left).offset(-20)
+            $0.width.equalTo(40)
+            $0.height.equalTo(40)
+        }
+        
+        stepMoveButton.snp.makeConstraints {
+            $0.centerY.equalTo(stepBackground)
+            $0.right.equalTo(stepBackground).inset(10)
         }
     }
     func addSetting(text: String) {
         stepLabel.text = text
+    }
+}
+
+extension CookStepCell {
+    func bind() {
+        imageSelectSubject.subscribe(onNext: { img in
+            self.selectImageView.image = img
+        }).disposed(by: disposeBag)
     }
 }
 

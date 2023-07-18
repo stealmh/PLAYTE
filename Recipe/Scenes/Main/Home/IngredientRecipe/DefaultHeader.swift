@@ -11,14 +11,17 @@ import SnapKit
 final class DefaultHeader: UICollectionReusableView {
     static let identifier = "DefaultHeader"
     private let label = UILabel()
+    private let label2 = UILabel()
 
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubview(label)
+        addSubViews(label, label2)
         label.textColor = .black
         label.font = .boldSystemFont(ofSize: 17)
         label.text = "hello"
+        label2.text = "hello"
+        label2.font = .boldSystemFont(ofSize: 17)
     }
     
     override func layoutSubviews() {
@@ -33,8 +36,21 @@ final class DefaultHeader: UICollectionReusableView {
     func configureTitle(text: String) {
         label.text = text
     }
+    
     func highlightTextColor() {
         label.asColor(targetString: "분", color: .gray)
+    }
+    
+    func configureDoubleTitle(text: String, text2: String) {
+        label.text = text
+        label2.text = text2
+        label2.font = .boldSystemFont(ofSize: 17)
+        
+        label2.snp.makeConstraints {
+            $0.bottom.equalTo(label)
+            $0.left.equalTo(self.snp.centerX).offset(30)
+        }
+
     }
     
     required init?(coder: NSCoder) {

@@ -10,15 +10,16 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-protocol CreateRecipeViewDelegate {
+protocol CreateRecipeViewDelegate: AnyObject {
     func registerButtonTapped()
+    func addPhotoButtonTapped()
 }
 final class CreateRecipeView: UIView {
-    
     enum Section: Hashable {
         case header
         case recipeNameSection
-        case recipeSearchSection
+        case recipeDescriptSection
+        case recipeIngredientSection
         case cookTimeSettingSection
         case cookStepSection
     }
@@ -26,7 +27,8 @@ final class CreateRecipeView: UIView {
     enum Item: Hashable {
         case header
         case recipeNameSection
-        case recipeSearchSection
+        case recipeDiscriptSection
+        case recipeIngredientSection
         case cookTimeSettingSection
         case cookStepSection(Dummy)
     }
@@ -56,8 +58,9 @@ final class CreateRecipeView: UIView {
     /// Properties
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
-    var delegate: CreateRecipeViewDelegate?
+    weak var delegate: CreateRecipeViewDelegate?
     private var mockData: [Dummy] = [Dummy(contents: "")]
+    let imageRelay = PublishRelay<UIImage>()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -92,9 +95,11 @@ extension CreateRecipeView {
         collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
         collectionView.register(TextFieldCell.self , forCellWithReuseIdentifier: TextFieldCell.reuseIdentifier)
         collectionView.register(TextFieldViewCell.self , forCellWithReuseIdentifier: TextFieldViewCell.reuseIdentifier)
-        collectionView.register(CookTimeSettingCell.self , forCellWithReuseIdentifier: CookTimeSettingCell.reuseIdentifier)
+        collectionView.register(CookSettingCell.self , forCellWithReuseIdentifier: CookSettingCell.reuseIdentifier)
         collectionView.register(CookStepCell.self , forCellWithReuseIdentifier: CookStepCell.reuseIdentifier)
         collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
+        collectionView.register(DefaultTextFieldCell.self , forCellWithReuseIdentifier: DefaultTextFieldCell.reuseIdentifier)
+
     }
 }
 //MARK: Comp + Diff
@@ -111,9 +116,9 @@ extension CreateRecipeView {
         switch section {
         case .header:
             return createHeaderSection()
-        case .recipeNameSection, .cookTimeSettingSection:
+        case .recipeNameSection, .cookTimeSettingSection, .recipeIngredientSection:
             return createEqualSize()
-        case .recipeSearchSection:
+        case .recipeDescriptSection:
             return createRecipeDescription()
         case .cookStepSection:
             return createCookStepSection()
@@ -247,26 +252,30 @@ extension CreateRecipeView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as! TextFieldCell
             cell.configure(text: "레시피 이름을 입력해주세요", needSearchButton: false)
             return cell
-        case .recipeSearchSection:
+        case .recipeDiscriptSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldViewCell.reuseIdentifier, for: indexPath) as! TextFieldViewCell
             return cell
+        case .recipeIngredientSection:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DefaultTextFieldCell.reuseIdentifier, for: indexPath) as! DefaultTextFieldCell
+            cell.configure(text: "재료 및 양념을 입력해주세요.")
+            return cell
         case .cookTimeSettingSection:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookTimeSettingCell.reuseIdentifier, for: indexPath) as! CookTimeSettingCell
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
             return cell
         case .cookStepSection(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell.reuseIdentifier, for: indexPath) as! CookStepCell
-//            cell.defaultSetting()
+            imageRelay.subscribe(onNext: { data in
+                cell.imageSelectSubject.accept(data)
+            }).disposed(by: disposeBag)
+            cell.addPhotoButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.addPhotoButtonTapped()
+                }).disposed(by: disposeBag)
             if data.contents.isEmpty {
                 cell.defaultCheck.accept(true)
             } else {
                 cell.defaultCheck.accept(false)
-//                cell.addSetting(text: data)
             }
-            cell.addRecipeStepButton.rx.tap
-                .subscribe(onNext: { _ in
-                    self.mockData.insert(Dummy(contents: "안녕추가야"), at: 0)
-                    self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
-                }).disposed(by: disposeBag)
             return cell
         }
     }
@@ -279,19 +288,24 @@ extension CreateRecipeView {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
             headerView.configureTitle(text: "레시피 이름")
             return headerView
-        case .recipeSearchSection:
+        case .recipeDescriptSection:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
             headerView.configureTitle(text: "레시피 설명")
             return headerView
+        case .recipeIngredientSection:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
+            headerView.configureTitle(text: "재료/양념")
+            return headerView
         case .cookTimeSettingSection:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
-            headerView.configureTitle(text: "조리 시간 분")
+//            headerView.configureTitle(text: "조리 시간 분")
+            headerView.configureDoubleTitle(text: "조리시간", text2: "인분")
             headerView.highlightTextColor()
             return headerView
         case .cookStepSection:
             if kind == UICollectionView.elementKindSectionHeader {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
-                headerView.configureTitle(text: "단계")
+                headerView.configureTitle(text: "조리단계")
                 return headerView
             } else {
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateRecipeFooter.identifier, for: indexPath) as! CreateRecipeFooter
@@ -307,10 +321,11 @@ extension CreateRecipeView {
     
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
-        snapshot.appendSections([.header, .recipeNameSection, .recipeSearchSection, .cookTimeSettingSection, .cookStepSection])
+        snapshot.appendSections([.header, .recipeNameSection, .recipeDescriptSection, .recipeIngredientSection ,.cookTimeSettingSection, .cookStepSection])
         snapshot.appendItems([.header], toSection: .header)
         snapshot.appendItems([.recipeNameSection], toSection: .recipeNameSection)
-        snapshot.appendItems([.recipeSearchSection], toSection: .recipeSearchSection)
+        snapshot.appendItems([.recipeDiscriptSection], toSection: .recipeDescriptSection)
+        snapshot.appendItems([.recipeIngredientSection], toSection: .recipeIngredientSection)
         snapshot.appendItems([.cookTimeSettingSection], toSection: .cookTimeSettingSection)
         snapshot.appendItems(mockData.map { Item.cookStepSection($0)}, toSection: .cookStepSection)
 
