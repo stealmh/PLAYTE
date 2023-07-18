@@ -15,24 +15,25 @@ final class CreateRecipeViewController: BaseViewController {
     
     private let createRecipeView = CreateRecipeView()
     private var disposeBag = DisposeBag()
+    var didSendEventClosure: ((CreateRecipeViewController.Event) -> Void)?
+    
+    enum Event {
+        case registerButtonTapped
+        ///Todo: createShortFormButtonTapped 로직 연결하기
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
         addView()
         configureLayout()
         bind()
-//        configureNavigationBar()
+        createRecipeView.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         disposeBag = DisposeBag()
+        createRecipeView.delegate = nil
     }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        centerTitle()
-    }
-
 }
 //MARK: - Method(Normal)
 extension CreateRecipeViewController {
@@ -46,17 +47,18 @@ extension CreateRecipeViewController {
             $0.left.right.bottom.equalToSuperview()
         }
     }
-    
-    private func configureNavigationBar() {
-        navigationItem.title = "나의 레시피 작성"
-        navigationController?.navigationBar.prefersLargeTitles = true
-        navigationItem.largeTitleDisplayMode = .always
-    }
 }
 //MARK: - Method(Rx bind)
 extension CreateRecipeViewController {
     func bind() {
         
+    }
+}
+
+extension CreateRecipeViewController: CreateRecipeViewDelegate {
+    func registerButtonTapped() {
+        print(#function)
+        didSendEventClosure?(.registerButtonTapped)
     }
 }
 

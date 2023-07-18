@@ -10,6 +10,9 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol CreateRecipeViewDelegate {
+    func registerButtonTapped()
+}
 final class CreateRecipeView: UIView {
     
     enum Section: Hashable {
@@ -53,7 +56,8 @@ final class CreateRecipeView: UIView {
     /// Properties
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
-    var mockData: [Dummy] = [Dummy(contents: "")]
+    var delegate: CreateRecipeViewDelegate?
+    private var mockData: [Dummy] = [Dummy(contents: "")]
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -73,19 +77,13 @@ final class CreateRecipeView: UIView {
 extension CreateRecipeView {
     
     func addView() {
-        addSubViews(collectionView, registerButton)
+        addSubViews(collectionView)
     }
     
     func configureLayout() {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(self.safeAreaLayoutGuide)
             $0.left.right.bottom.equalToSuperview()
-        }
-        
-        registerButton.snp.makeConstraints {
-            $0.top.equalTo(collectionView.snp.bottom).inset(60)
-            $0.height.equalTo(51)
-            $0.left.right.equalToSuperview().inset(10)
         }
     }
     
@@ -95,6 +93,7 @@ extension CreateRecipeView {
         collectionView.register(TextFieldCell.self , forCellWithReuseIdentifier: TextFieldCell.reuseIdentifier)
         collectionView.register(CookTimeSettingCell.self , forCellWithReuseIdentifier: CookTimeSettingCell.reuseIdentifier)
         collectionView.register(CookStepCell.self , forCellWithReuseIdentifier: CookStepCell.reuseIdentifier)
+        collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
     }
 }
 //MARK: Comp + Diff
@@ -158,15 +157,18 @@ extension CreateRecipeView {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(1)))
+                heightDimension: .fractionalHeight(0.1)))
         item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(1)),
-            subitem: item,
-            count: 9)
+                heightDimension: .fractionalHeight(0.7)),
+            subitems: [item])
+        
+//        let grups = NSCollectionLayoutGroup.
+//        ,
+//            count: mockData.count)
         
         let section = NSCollectionLayoutSection(group: group)
         
@@ -176,7 +178,13 @@ extension CreateRecipeView {
             layoutSize: footerHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .topLeading)
-        section.boundarySupplementaryItems = [header]
+        
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom)
+        
+        section.boundarySupplementaryItems = [header, footer]
         section.orthogonalScrollingBehavior = .groupPaging
         
         
@@ -249,9 +257,18 @@ extension CreateRecipeView {
             headerView.highlightTextColor()
             return headerView
         case .cookStepSection:
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
-            headerView.configureTitle(text: "단계")
-            return headerView
+            if kind == UICollectionView.elementKindSectionHeader {
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
+                headerView.configureTitle(text: "단계")
+                return headerView
+            } else {
+                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateRecipeFooter.identifier, for: indexPath) as! CreateRecipeFooter
+                footerView.registerButton.rx.tap
+                    .subscribe(onNext: { _ in
+                        self.delegate?.registerButtonTapped()
+                    }).disposed(by: disposeBag)
+                return footerView
+            }
             
         }
     }

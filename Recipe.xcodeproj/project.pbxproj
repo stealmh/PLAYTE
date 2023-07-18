@@ -42,6 +42,8 @@
 		5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */; };
 		5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */; };
 		5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */; };
+		5A4970812A661CD7005725F8 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4970802A661CD7005725F8 /* LoginService.swift */; };
+		5A4970832A662DCC005725F8 /* CreateRecipeFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4970822A662DCC005725F8 /* CreateRecipeFooter.swift */; };
 		5A5B90482A652AC00049E853 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B90472A652AC00049E853 /* CreateRecipeView.swift */; };
 		5A5B904D2A652E770049E853 /* CreateRecipeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B904C2A652E770049E853 /* CreateRecipeHeaderCell.swift */; };
 		5A5B904F2A6535010049E853 /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B904E2A6535010049E853 /* TextFieldCell.swift */; };
@@ -148,6 +150,8 @@
 		5A4115EE2A5B94B300531267 /* Recipe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Recipe.entitlements; sourceTree = "<group>"; };
 		5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		5A4970802A661CD7005725F8 /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
+		5A4970822A662DCC005725F8 /* CreateRecipeFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeFooter.swift; sourceTree = "<group>"; };
 		5A5B90472A652AC00049E853 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
 		5A5B904C2A652E770049E853 /* CreateRecipeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeHeaderCell.swift; sourceTree = "<group>"; };
 		5A5B904E2A6535010049E853 /* TextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
@@ -393,6 +397,7 @@
 			children = (
 				5A0244DD2A52A7B600AA418E /* LoginViewController.swift */,
 				5A0244DF2A52A7C900AA418E /* LoginCoordinator.swift */,
+				5A4970802A661CD7005725F8 /* LoginService.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -465,6 +470,7 @@
 				5A5B904E2A6535010049E853 /* TextFieldCell.swift */,
 				5A5B90502A653BA60049E853 /* CookTimeSettingCell.swift */,
 				160209B92A655C9300FD1A0D /* CookStepCell.swift */,
+				5A4970822A662DCC005725F8 /* CreateRecipeFooter.swift */,
 			);
 			path = CreateRecipe;
 			sourceTree = "<group>";
@@ -841,6 +847,7 @@
 				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
 				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
 				5A914AE52A5411080020BA71 /* PriceTrendCell.swift in Sources */,
+				5A4970812A661CD7005725F8 /* LoginService.swift in Sources */,
 				5A914ADC2A5406550020BA71 /* UICollectionReusableView+util.swift in Sources */,
 				5A0244CC2A52A36C00AA418E /* Protocols.swift in Sources */,
 				5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */,
@@ -877,6 +884,7 @@
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
 				5A914ADE2A5407230020BA71 /* ColdRefrigeratorView.swift in Sources */,
 				5A5B90512A653BA60049E853 /* CookTimeSettingCell.swift in Sources */,
+				5A4970832A662DCC005725F8 /* CreateRecipeFooter.swift in Sources */,
 				5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */,
 				5AFE49C52A5BC352000B9A95 /* BaseStartingView.swift in Sources */,
 				5AB4A5DE2A55099C0095CD2B /* IngredientRegistrationViewController.swift in Sources */,
