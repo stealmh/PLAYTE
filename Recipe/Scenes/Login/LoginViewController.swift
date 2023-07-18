@@ -186,7 +186,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
             print("useridentifier: \(!userIdentifier.isEmpty)")
             print("fullName: \(fullName)")
             print("email: \(email)")
-            
+            LoginService.shared.postBodyJsonRequest()
             ///Todo: 이동로직
             didSendEventClosure?(.register)
             
@@ -230,6 +230,7 @@ extension LoginViewController {
 
 //MARK: - VC Preview
 import SwiftUI
+import Alamofire
 struct LoginViewController_preview: PreviewProvider {
     static var previews: some View {
         LoginViewController().toPreview()
