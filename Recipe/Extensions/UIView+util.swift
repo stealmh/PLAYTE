@@ -26,7 +26,7 @@ extension UIView {
         v.lineWidth = 2
         v.lineJoin = CAShapeLayerLineJoin.round
         v.lineDashPattern = [6,3]
-        v.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 20).cgPath
+        v.path = UIBezierPath(roundedRect: shapeRect, cornerRadius: 5).cgPath
         
         self.layer.addSublayer(v)
     }
