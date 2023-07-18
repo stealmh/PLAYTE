@@ -53,6 +53,7 @@
 		5A8C2DD12A5F915A006B08A7 /* DefaultCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD02A5F915A006B08A7 /* DefaultCircleButton.swift */; };
 		5A8C2DD32A5FC4B0006B08A7 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */; };
 		5A8C2DD52A5FC4B9006B08A7 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */; };
+		5A907DB32A666C8300973935 /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A907DB22A666C8300973935 /* TextViewCell.swift */; };
 		5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */; };
 		5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACE2A53FD430020BA71 /* TitleView.swift */; };
 		5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AD02A53FD7E0020BA71 /* UIView+util.swift */; };
@@ -162,6 +163,7 @@
 		5A8C2DD02A5F915A006B08A7 /* DefaultCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCircleButton.swift; sourceTree = "<group>"; };
 		5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 		5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
+		5A907DB22A666C8300973935 /* TextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
 		5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+util.swift"; sourceTree = "<group>"; };
 		5A914ACE2A53FD430020BA71 /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		5A914AD02A53FD7E0020BA71 /* UIView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+util.swift"; sourceTree = "<group>"; };
@@ -471,6 +473,7 @@
 				5A5B90502A653BA60049E853 /* CookTimeSettingCell.swift */,
 				160209B92A655C9300FD1A0D /* CookStepCell.swift */,
 				5A4970822A662DCC005725F8 /* CreateRecipeFooter.swift */,
+				5A907DB22A666C8300973935 /* TextViewCell.swift */,
 			);
 			path = CreateRecipe;
 			sourceTree = "<group>";
@@ -855,6 +858,7 @@
 				5A0244E42A52A7F400AA418E /* RegisterFirstViewController.swift in Sources */,
 				5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */,
 				5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */,
+				5A907DB32A666C8300973935 /* TextViewCell.swift in Sources */,
 				5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */,
 				5A8C2DD52A5FC4B9006B08A7 /* PopupView.swift in Sources */,
 				5AAEC55B2A5D595500E9877C /* RecipeDefaultTag.swift in Sources */,

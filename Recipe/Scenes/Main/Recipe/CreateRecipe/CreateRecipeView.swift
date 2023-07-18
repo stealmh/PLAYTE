@@ -91,6 +91,7 @@ extension CreateRecipeView {
         collectionView.register(CreateRecipeHeaderCell.self , forCellWithReuseIdentifier: CreateRecipeHeaderCell.reuseIdentifier)
         collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
         collectionView.register(TextFieldCell.self , forCellWithReuseIdentifier: TextFieldCell.reuseIdentifier)
+        collectionView.register(TextFieldViewCell.self , forCellWithReuseIdentifier: TextFieldViewCell.reuseIdentifier)
         collectionView.register(CookTimeSettingCell.self , forCellWithReuseIdentifier: CookTimeSettingCell.reuseIdentifier)
         collectionView.register(CookStepCell.self , forCellWithReuseIdentifier: CookStepCell.reuseIdentifier)
         collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
@@ -110,8 +111,10 @@ extension CreateRecipeView {
         switch section {
         case .header:
             return createHeaderSection()
-        case .recipeNameSection, .recipeSearchSection, .cookTimeSettingSection:
+        case .recipeNameSection, .cookTimeSettingSection:
             return createEqualSize()
+        case .recipeSearchSection:
+            return createRecipeDescription()
         case .cookStepSection:
             return createCookStepSection()
         }
@@ -119,8 +122,38 @@ extension CreateRecipeView {
     
     func createHeaderSection() -> NSCollectionLayoutSection {
         let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.2)), subitems: [headerItem])
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.025)), subitems: [headerItem])
         return NSCollectionLayoutSection(group: headerGroup)
+    }
+    
+    func createRecipeDescription() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(100)),
+            subitem: item,
+            count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(50.0))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .topLeading)
+        section.boundarySupplementaryItems = [header]
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        
+        // Return
+        return section
     }
     
     func createEqualSize() -> NSCollectionLayoutSection {
@@ -215,8 +248,7 @@ extension CreateRecipeView {
             cell.configure(text: "레시피 이름을 입력해주세요", needSearchButton: false)
             return cell
         case .recipeSearchSection:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as! TextFieldCell
-            cell.configure(text: "재료 이름을 검색해주세요", needSearchButton: true)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldViewCell.reuseIdentifier, for: indexPath) as! TextFieldViewCell
             return cell
         case .cookTimeSettingSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookTimeSettingCell.reuseIdentifier, for: indexPath) as! CookTimeSettingCell
@@ -249,7 +281,7 @@ extension CreateRecipeView {
             return headerView
         case .recipeSearchSection:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
-            headerView.configureTitle(text: "레시피 재료")
+            headerView.configureTitle(text: "레시피 설명")
             return headerView
         case .cookTimeSettingSection:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader

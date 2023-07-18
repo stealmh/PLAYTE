@@ -28,6 +28,14 @@ final class TextFieldCell: UICollectionViewCell {
         v.setImage(img, for: .normal)
         v.contentMode = .scaleAspectFit
         v.tintColor = .gray
+        v.isHidden = true
+        return v
+    }()
+    
+    private let textCountLabel: UILabel = {
+        let v = UILabel()
+        v.text = "0/20"
+        v.textColor = .gray
         return v
     }()
     
@@ -38,6 +46,7 @@ final class TextFieldCell: UICollectionViewCell {
         super.init(frame: frame)
         addViews()
         setupView()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -49,7 +58,7 @@ final class TextFieldCell: UICollectionViewCell {
 extension TextFieldCell {
     
     private func addViews() {
-        addSubViews(recipeNametextField, searchImageButton)
+        addSubViews(recipeNametextField, searchImageButton, textCountLabel)
     }
     
     private func setupView() {
@@ -62,11 +71,29 @@ extension TextFieldCell {
             $0.width.equalTo(recipeNametextField.snp.height)
             $0.right.equalTo(recipeNametextField).inset(10)
         }
+        
+        textCountLabel.snp.makeConstraints {
+            $0.right.equalTo(recipeNametextField).inset(10)
+            $0.centerY.equalTo(recipeNametextField)
+        }
     }
     
     func configure(text: String, needSearchButton: Bool) {
         recipeNametextField.placeholder = text
         searchImageButton.isHidden = !needSearchButton
+    }
+}
+
+//MARK: - Method(Rx Bind)
+extension TextFieldCell {
+    func bind() {
+        recipeNametextField.rx.text.orEmpty
+            .scan("") { previous, new in   (new.count > 20) ? previous : new  }
+            .subscribe(onNext: { data in
+                self.textCountLabel.text = "\(data.count)/20"
+                self.recipeNametextField.text = data
+            })
+            .disposed(by: disposeBag)
     }
 }
 

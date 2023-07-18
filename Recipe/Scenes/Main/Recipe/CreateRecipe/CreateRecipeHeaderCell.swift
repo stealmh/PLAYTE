@@ -21,21 +21,6 @@ final class CreateRecipeHeaderCell: UICollectionViewCell {
     }()
     private let headerBackground = UIView()
     
-    private let addPhotoView: UIImageView = {
-        let v = UIImageView()
-        v.layer.borderColor = UIColor.black.cgColor
-        v.layer.borderWidth = 1
-        v.layer.cornerRadius = 11.1
-        return v
-    }()
-    
-    private let addPhotoButton: UIButton = {
-        let v = UIButton()
-        let img = v.buttonImageSize(systemImageName: "plus.square", size: 30)
-        v.setImage(img, for: .normal)
-        return v
-    }()
-    
     ///Properties
     private let disposeBag = DisposeBag()
     override init(frame: CGRect) {
@@ -52,8 +37,6 @@ final class CreateRecipeHeaderCell: UICollectionViewCell {
 //MARK: - Method(Normal)
 extension CreateRecipeHeaderCell {
     private func addViews() {
-        headerBackground.addSubview(addPhotoView)
-        headerBackground.addSubview(addPhotoButton)
         headerBackground.addSubview(createRecipeTitle)
         addSubViews(headerBackground)
     }
@@ -61,16 +44,6 @@ extension CreateRecipeHeaderCell {
     private func configureLayout() {
         headerBackground.snp.makeConstraints {
             $0.edges.equalToSuperview()
-        }
-        
-        addPhotoView.snp.makeConstraints {
-            $0.centerX.equalToSuperview()
-            $0.top.equalTo(createRecipeTitle.snp.bottom).offset(30)
-            $0.width.height.equalTo(100)
-        }
-        
-        addPhotoButton.snp.makeConstraints {
-            $0.center.equalTo(addPhotoView)
         }
         
         createRecipeTitle.snp.makeConstraints {
