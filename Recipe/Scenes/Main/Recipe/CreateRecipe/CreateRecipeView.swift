@@ -209,7 +209,6 @@ extension CreateRecipeView {
 //            count: mockData.count)
         
         let section = NSCollectionLayoutSection(group: group)
-        
         let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                       heightDimension: .absolute(50.0))
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -264,13 +263,23 @@ extension CreateRecipeView {
             return cell
         case .cookStepSection(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell.reuseIdentifier, for: indexPath) as! CookStepCell
+            
             imageRelay.subscribe(onNext: { data in
                 cell.imageSelectSubject.accept(data)
             }).disposed(by: disposeBag)
+            
             cell.addPhotoButton.rx.tap
                 .subscribe(onNext: { _ in
                     self.delegate?.addPhotoButtonTapped()
                 }).disposed(by: disposeBag)
+            
+            cell.stepTextfield.rx.controlEvent(.editingDidEndOnExit)
+                .subscribe(onNext: { _ in
+//                    cell.
+                    self.mockData.insert(Dummy(contents: "할로~"), at: 0)
+                    self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                }).disposed(by: disposeBag)
+            
             if data.contents.isEmpty {
                 cell.defaultCheck.accept(true)
             } else {
@@ -334,10 +343,6 @@ extension CreateRecipeView {
 }
 
 //MARK: - Method(Rx Bind)
-extension CreateRecipeView {
-    
-}
-
 extension CreateRecipeView {
     
 }
