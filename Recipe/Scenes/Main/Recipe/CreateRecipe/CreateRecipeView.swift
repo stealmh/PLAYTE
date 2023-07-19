@@ -33,6 +33,10 @@ final class CreateRecipeView: UIView {
         case cookStepSection(Dummy)
     }
     
+    enum A: Hashable {
+        case cookStepSection(Dummy)
+    }
+    
     struct Dummy: Hashable {
         let id = UUID()
         let contents: String
@@ -68,9 +72,11 @@ final class CreateRecipeView: UIView {
         configureLayout()
         registerCell()
         configureDataSource()
-        
-        collectionView.dragDelegate = self
-        collectionView.dropDelegate = self
+        dataSource.reorderingHandlers.canReorderItem = { item in return true }
+        dataSource.reorderingHandlers.didReorder = { transaction in
+            // 구현
+        }
+
     }
     
     required init?(coder: NSCoder) {
@@ -102,6 +108,7 @@ extension CreateRecipeView {
         collectionView.register(CookStepCell.self , forCellWithReuseIdentifier: CookStepCell.reuseIdentifier)
         collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
         collectionView.register(DefaultTextFieldCell.self , forCellWithReuseIdentifier: DefaultTextFieldCell.reuseIdentifier)
+        collectionView.register(CookStepCell1.self, forCellWithReuseIdentifier: "CookStepCell1")
 
     }
 }
@@ -109,7 +116,19 @@ extension CreateRecipeView {
 extension CreateRecipeView {
     func createLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { [unowned self] index, env in
-            return self.sectionFor(index: index, environment: env)
+            let section = dataSource.snapshot().sectionIdentifiers[index]
+            switch section {
+            case .cookStepSection:
+                var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
+                configuration.headerMode = .supplementary
+                configuration.footerMode = .supplementary
+                let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: env)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                section.interGroupSpacing = 10
+                return section
+            default:
+                return self.sectionFor(index: index, environment: env)
+            }
         }
     }
     
@@ -265,8 +284,8 @@ extension CreateRecipeView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
             return cell
         case .cookStepSection(let data):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell.reuseIdentifier, for: indexPath) as! CookStepCell
-            
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell1.reuseIdentifier, for: indexPath) as! CookStepCell1
+            cell.accessories = [.reorder(displayed: .always)]
             imageRelay.subscribe(onNext: { data in
                 cell.imageSelectSubject.accept(data)
             }).disposed(by: disposeBag)
@@ -280,6 +299,7 @@ extension CreateRecipeView {
                 .subscribe(onNext: { _ in
 //                    cell.
                     self.mockData.insert(Dummy(contents: "할로~"), at: 0)
+                    print(self.mockData)
                     self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
                 }).disposed(by: disposeBag)
             
@@ -346,42 +366,7 @@ extension CreateRecipeView {
 }
 
 //MARK: - Method(Rx Bind)
-extension CreateRecipeView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
-    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
-        return [UIDragItem(itemProvider: NSItemProvider())]
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
-        if session.localDragSession != nil {
-            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
-        }
-        return UICollectionViewDropProposal(operation: .cancel, intent: .unspecified)
-    }
-    
-    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
-        guard let destinationIndexPath = coordinator.destinationIndexPath else {
-            return
-        }
 
-        coordinator.items.forEach { dropItem in
-            guard let sourceIndexPath = dropItem.sourceIndexPath else { return }
-            let categoryCell = mockData[sourceIndexPath.row]
-
-            collectionView.performBatchUpdates({
-                // reorder data list
-                collectionView.deleteItems(at: [sourceIndexPath])
-                collectionView.insertItems(at: [destinationIndexPath])
-                mockData.remove(at: sourceIndexPath.row)
-                self.mockData.insert(categoryCell, at: destinationIndexPath.row)
-            }, completion: { _ in
-                coordinator.drop(dropItem.dragItem, toItemAt: destinationIndexPath)
-            })
-
-        }
-    }
-    
-    
-}
 
 import SwiftUI
 struct ForNewCreateRecipeView: UIViewRepresentable {
