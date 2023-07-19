@@ -68,6 +68,9 @@ final class CreateRecipeView: UIView {
         configureLayout()
         registerCell()
         configureDataSource()
+        
+        collectionView.dragDelegate = self
+        collectionView.dropDelegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -343,7 +346,40 @@ extension CreateRecipeView {
 }
 
 //MARK: - Method(Rx Bind)
-extension CreateRecipeView {
+extension CreateRecipeView: UICollectionViewDragDelegate, UICollectionViewDropDelegate {
+    func collectionView(_ collectionView: UICollectionView, itemsForBeginning session: UIDragSession, at indexPath: IndexPath) -> [UIDragItem] {
+        return [UIDragItem(itemProvider: NSItemProvider())]
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, dropSessionDidUpdate session: UIDropSession, withDestinationIndexPath destinationIndexPath: IndexPath?) -> UICollectionViewDropProposal {
+        if session.localDragSession != nil {
+            return UICollectionViewDropProposal(operation: .move, intent: .insertAtDestinationIndexPath)
+        }
+        return UICollectionViewDropProposal(operation: .cancel, intent: .unspecified)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, performDropWith coordinator: UICollectionViewDropCoordinator) {
+        guard let destinationIndexPath = coordinator.destinationIndexPath else {
+            return
+        }
+
+        coordinator.items.forEach { dropItem in
+            guard let sourceIndexPath = dropItem.sourceIndexPath else { return }
+            let categoryCell = mockData[sourceIndexPath.row]
+
+            collectionView.performBatchUpdates({
+                // reorder data list
+                collectionView.deleteItems(at: [sourceIndexPath])
+                collectionView.insertItems(at: [destinationIndexPath])
+                mockData.remove(at: sourceIndexPath.row)
+                self.mockData.insert(categoryCell, at: destinationIndexPath.row)
+            }, completion: { _ in
+                coordinator.drop(dropItem.dragItem, toItemAt: destinationIndexPath)
+            })
+
+        }
+    }
+    
     
 }
 
