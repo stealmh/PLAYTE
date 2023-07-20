@@ -47,10 +47,10 @@ final class CreateRecipeView: UIView {
     
     /// UI Properties
     lazy var collectionView: UICollectionView = {
-    let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
-    v.showsVerticalScrollIndicator = false
-    v.translatesAutoresizingMaskIntoConstraints = false
-    return v
+        let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
+        v.showsVerticalScrollIndicator = false
+        v.translatesAutoresizingMaskIntoConstraints = false
+        return v
     }()
     
     private let registerButton: UIButton = {
@@ -72,17 +72,20 @@ final class CreateRecipeView: UIView {
         configureLayout()
         registerCell()
         configureDataSource()
-        dataSource.reorderingHandlers.canReorderItem = { item in return true }
+        dataSource.reorderingHandlers.canReorderItem = { item in
+            return true
+        }
         dataSource.reorderingHandlers.didReorder = { transaction in
             // 구현
         }
-
+        collectionView.delegate = self
+        
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
-
+    
 }
 
 //MARK: - Method(Normal)
@@ -109,7 +112,7 @@ extension CreateRecipeView {
         collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
         collectionView.register(DefaultTextFieldCell.self , forCellWithReuseIdentifier: DefaultTextFieldCell.reuseIdentifier)
         collectionView.register(CookStepCell1.self, forCellWithReuseIdentifier: "CookStepCell1")
-
+        
     }
 }
 //MARK: Comp + Diff
@@ -226,9 +229,9 @@ extension CreateRecipeView {
                 heightDimension: .fractionalHeight(0.7)),
             subitems: [item])
         
-//        let grups = NSCollectionLayoutGroup.
-//        ,
-//            count: mockData.count)
+        //        let grups = NSCollectionLayoutGroup.
+        //        ,
+        //            count: mockData.count)
         
         let section = NSCollectionLayoutSection(group: group)
         let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
@@ -250,7 +253,7 @@ extension CreateRecipeView {
         // Return
         return section
     }
-
+    
     
     private func configureDataSource() {
         dataSource = Datasource(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
@@ -297,7 +300,7 @@ extension CreateRecipeView {
             
             cell.stepTextfield.rx.controlEvent(.editingDidEndOnExit)
                 .subscribe(onNext: { _ in
-//                    cell.
+                    //                    cell.
                     self.mockData.insert(Dummy(contents: "할로~"), at: 0)
                     print(self.mockData)
                     self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
@@ -330,7 +333,7 @@ extension CreateRecipeView {
             return headerView
         case .cookTimeSettingSection:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
-//            headerView.configureTitle(text: "조리 시간 분")
+            //            headerView.configureTitle(text: "조리 시간 분")
             headerView.configureDoubleTitle(text: "조리시간", text2: "인분")
             headerView.highlightTextColor()
             return headerView
@@ -360,7 +363,7 @@ extension CreateRecipeView {
         snapshot.appendItems([.recipeIngredientSection], toSection: .recipeIngredientSection)
         snapshot.appendItems([.cookTimeSettingSection], toSection: .cookTimeSettingSection)
         snapshot.appendItems(mockData.map { Item.cookStepSection($0)}, toSection: .cookStepSection)
-
+        
         return snapshot
     }
 }
@@ -368,14 +371,23 @@ extension CreateRecipeView {
 //MARK: - Method(Rx Bind)
 
 
+extension CreateRecipeView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {
+        if originalIndexPath.section != proposedIndexPath.section {
+            return originalIndexPath
+        }
+        return proposedIndexPath
+    }
+}
+
 import SwiftUI
 struct ForNewCreateRecipeView: UIViewRepresentable {
     typealias UIViewType = UIView
-
+    
     func makeUIView(context: Context) -> UIView {
         CreateRecipeView()
     }
-
+    
     func updateUIView(_ uiView: UIView, context: Context) {
     }
 }
