@@ -108,11 +108,24 @@ extension CreateRecipeView {
         collectionView.register(TextFieldCell.self , forCellWithReuseIdentifier: TextFieldCell.reuseIdentifier)
         collectionView.register(TextFieldViewCell.self , forCellWithReuseIdentifier: TextFieldViewCell.reuseIdentifier)
         collectionView.register(CookSettingCell.self , forCellWithReuseIdentifier: CookSettingCell.reuseIdentifier)
-        collectionView.register(CookStepCell.self , forCellWithReuseIdentifier: CookStepCell.reuseIdentifier)
+//        collectionView.register(CookStepCell.self , forCellWithReuseIdentifier: CookStepCell.reuseIdentifier)
         collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
         collectionView.register(DefaultTextFieldCell.self , forCellWithReuseIdentifier: DefaultTextFieldCell.reuseIdentifier)
         collectionView.register(CookStepCell1.self, forCellWithReuseIdentifier: "CookStepCell1")
-        
+    }
+    
+    private func makeSwipeActions(for indexPath: IndexPath?) -> UISwipeActionsConfiguration? {
+        guard let indexPath = indexPath, let id = dataSource.itemIdentifier(for: indexPath) else { return nil }
+        let deleteActionTitle = NSLocalizedString("Delete", comment: "Delete action title")
+        let deleteAction = UIContextualAction(style: .destructive, title: deleteActionTitle) { [weak self] _, _, completion in
+//            self?.deleteReminder(with: id)
+//            self?.delete(id)
+            self?.mockData.remove(at: indexPath.row)
+            print(self?.mockData)
+            self?.configureDataSource()
+            completion(false)
+        }
+        return UISwipeActionsConfiguration(actions: [deleteAction])
     }
 }
 //MARK: Comp + Diff
@@ -125,6 +138,9 @@ extension CreateRecipeView {
                 var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
                 configuration.headerMode = .supplementary
                 configuration.footerMode = .supplementary
+                configuration.trailingSwipeActionsConfigurationProvider = makeSwipeActions
+                    
+                
                 let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: env)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
                 section.interGroupSpacing = 10
