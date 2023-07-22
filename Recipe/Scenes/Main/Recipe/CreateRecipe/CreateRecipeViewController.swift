@@ -12,12 +12,10 @@ import SnapKit
 
 
 final class CreateRecipeViewController: BaseViewController {
-    
     private let createRecipeView = CreateRecipeView()
     private var disposeBag = DisposeBag()
     var didSendEventClosure: ((CreateRecipeViewController.Event) -> Void)?
     let imagePicker = UIImagePickerController()
-    
     enum Event {
         case registerButtonTapped
         ///Todo: createShortFormButtonTapped 로직 연결하기

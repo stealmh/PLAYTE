@@ -63,7 +63,7 @@ final class CreateRecipeView: UIView {
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     weak var delegate: CreateRecipeViewDelegate?
-    private var mockData: [Dummy] = [Dummy(contents: "")]
+    private var mockData: [Dummy] = []
     let imageRelay = PublishRelay<UIImage>()
     
     override init(frame: CGRect) {
@@ -79,12 +79,12 @@ final class CreateRecipeView: UIView {
             // 구현
         }
         collectionView.delegate = self
-        
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
     }
+    
     
 }
 
@@ -105,27 +105,46 @@ extension CreateRecipeView {
     func registerCell() {
         collectionView.register(CreateRecipeHeaderCell.self , forCellWithReuseIdentifier: CreateRecipeHeaderCell.reuseIdentifier)
         collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
+        collectionView.register(CookStepHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CookStepHeaderView.identifier)
         collectionView.register(TextFieldCell.self , forCellWithReuseIdentifier: TextFieldCell.reuseIdentifier)
         collectionView.register(TextFieldViewCell.self , forCellWithReuseIdentifier: TextFieldViewCell.reuseIdentifier)
         collectionView.register(CookSettingCell.self , forCellWithReuseIdentifier: CookSettingCell.reuseIdentifier)
-//        collectionView.register(CookStepCell.self , forCellWithReuseIdentifier: CookStepCell.reuseIdentifier)
         collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
         collectionView.register(DefaultTextFieldCell.self , forCellWithReuseIdentifier: DefaultTextFieldCell.reuseIdentifier)
-        collectionView.register(CookStepCell1.self, forCellWithReuseIdentifier: "CookStepCell1")
+        collectionView.register(CookStepCell.self, forCellWithReuseIdentifier: "CookStepCell1")
+        collectionView.register(CookStepCountCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CookStepCountCell.identifier)
+        collectionView.register(CookStepFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CookStepFooterView.identifier)
     }
     
     private func makeSwipeActions(for indexPath: IndexPath?) -> UISwipeActionsConfiguration? {
         guard let indexPath = indexPath, let id = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let deleteActionTitle = NSLocalizedString("Delete", comment: "Delete action title")
-        let deleteAction = UIContextualAction(style: .destructive, title: deleteActionTitle) { [weak self] _, _, completion in
-//            self?.deleteReminder(with: id)
-//            self?.delete(id)
-            self?.mockData.remove(at: indexPath.row)
-            print(self?.mockData)
-            self?.configureDataSource()
+        let deleteAction = UIContextualAction(style: .destructive, title: deleteActionTitle) { [weak self] a, b, completion in
+            print("id:", id)
+            self?.deleteItem(id, idx: indexPath)
             completion(false)
         }
         return UISwipeActionsConfiguration(actions: [deleteAction])
+    }
+    
+    private func deleteItem(_ item: Item, idx: IndexPath) {
+        var snapShot = dataSource.snapshot()
+        snapShot.deleteItems([item])
+        mockData.remove(at: 0)
+        dataSource.apply(snapShot, animatingDifferences: true)
+        applyNewSnapshot()
+    }
+    
+    /// 조리단계의 리스트 셀을 추가하거나 삭제할 때 헤더의 카운트를 조절 하는 함수 입니다.
+    private func applyNewSnapshot() {
+        print(#function)
+        var newSnapshot = self.dataSource.snapshot()
+        if #available(iOS 15.0, *) {
+            self.dataSource.applySnapshotUsingReloadData(newSnapshot)
+        } else {
+            newSnapshot.reloadSections([.cookStepSection])
+            self.dataSource.apply(newSnapshot, animatingDifferences: false)
+        }
     }
 }
 //MARK: Comp + Diff
@@ -139,6 +158,7 @@ extension CreateRecipeView {
                 configuration.headerMode = .supplementary
                 configuration.footerMode = .supplementary
                 configuration.trailingSwipeActionsConfigurationProvider = makeSwipeActions
+                configuration.showsSeparators = false
                     
                 
                 let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: env)
@@ -303,8 +323,8 @@ extension CreateRecipeView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
             return cell
         case .cookStepSection(let data):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell1.reuseIdentifier, for: indexPath) as! CookStepCell1
-            cell.accessories = [.reorder(displayed: .always)]
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell.reuseIdentifier, for: indexPath) as! CookStepCell
+            cell.accessories = [.reorder(displayed: .always), .delete()]
             imageRelay.subscribe(onNext: { data in
                 cell.imageSelectSubject.accept(data)
             }).disposed(by: disposeBag)
@@ -314,19 +334,13 @@ extension CreateRecipeView {
                     self.delegate?.addPhotoButtonTapped()
                 }).disposed(by: disposeBag)
             
-            cell.stepTextfield.rx.controlEvent(.editingDidEndOnExit)
-                .subscribe(onNext: { _ in
-                    //                    cell.
-                    self.mockData.insert(Dummy(contents: "할로~"), at: 0)
-                    print(self.mockData)
-                    self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
-                }).disposed(by: disposeBag)
-            
             if data.contents.isEmpty {
                 cell.defaultCheck.accept(true)
             } else {
                 cell.defaultCheck.accept(false)
             }
+            
+            cell.configure(text: data.contents)
             return cell
         }
     }
@@ -348,22 +362,39 @@ extension CreateRecipeView {
             headerView.configureTitle(text: "재료/양념")
             return headerView
         case .cookTimeSettingSection:
-            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepHeaderView.identifier, for: indexPath) as! CookStepHeaderView
             //            headerView.configureTitle(text: "조리 시간 분")
             headerView.configureDoubleTitle(text: "조리시간", text2: "인분")
-            headerView.highlightTextColor()
+//            headerView.highlightTextColor()
             return headerView
         case .cookStepSection:
             if kind == UICollectionView.elementKindSectionHeader {
-                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
-                headerView.configureTitle(text: "조리단계")
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepCountCell.identifier, for: indexPath) as! CookStepCountCell
+                headerView.configureTitleCount(text: "조리 단계", count: mockData.count)
                 return headerView
             } else {
-                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateRecipeFooter.identifier, for: indexPath) as! CreateRecipeFooter
-                footerView.registerButton.rx.tap
+                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepFooterView.identifier, for: indexPath) as! CookStepFooterView
+                
+                imageRelay.subscribe(onNext: { data in
+                    footerView.imageSelectSubject.accept(data)
+                }).disposed(by: disposeBag)
+                
+                footerView.addPhotoButton.rx.tap
                     .subscribe(onNext: { _ in
-                        self.delegate?.registerButtonTapped()
+                        self.delegate?.addPhotoButtonTapped()
                     }).disposed(by: disposeBag)
+                
+                footerView.stepTextfield.rx.controlEvent(.editingDidEndOnExit)
+                    .subscribe(onNext: { _ in
+                        //                    cell.
+                        self.mockData.insert(Dummy(contents: footerView.stepTextfield.text ?? ""), at: 0)
+                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                        self.applyNewSnapshot()
+                    }).disposed(by: disposeBag)
+//                footerView.registerButton.rx.tap
+//                    .subscribe(onNext: { _ in
+//                        self.delegate?.registerButtonTapped()
+//                    }).disposed(by: disposeBag)
                 return footerView
             }
             

@@ -1,4 +1,11 @@
 //
+//  TestCell.swift
+//  Recipe
+//
+//  Created by 김민호 on 2023/07/19.
+//
+
+//
 //  CookStepCell.swift
 //  Recipe
 //
@@ -10,7 +17,7 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
-final class CookStepCell: UICollectionViewCell {
+final class CookStepCell: UICollectionViewListCell {
     
     ///UI Properties
     private let stepBackground: UIView = {
@@ -31,7 +38,8 @@ final class CookStepCell: UICollectionViewCell {
     
     let stepTextfield: PaddingUITextField = {
         let v = PaddingUITextField()
-        v.text = "안녕하세요"
+//        v.text = "레시피를 입력해주세요."
+        v.placeholder = "레시피를 입력해주세요."
         return v
     }()
     
@@ -74,8 +82,6 @@ final class CookStepCell: UICollectionViewCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
-//        configureLayout()
-//        defaultSetting()
         bind()
     }
     
@@ -85,12 +91,7 @@ final class CookStepCell: UICollectionViewCell {
     
     override func layoutSubviews() {
         defaultCheck.subscribe(onNext: { isNewData in
-            if isNewData {
-                self.stepBackground.addDashedBorder()
-                self.defaultSetting()
-            } else {
-                self.configureLayout()
-            }
+            self.configureLayout()
         }).disposed(by: disposeBag)
     }
 }
@@ -135,37 +136,7 @@ extension CookStepCell {
         }
         didPhotoExist()
     }
-    
-    func defaultSetting() {
-        addSubview(stepTextfield)
-        stepMoveButton.setImage(UIImage(named: "hamburger_gray"), for: .normal)
-        stepBackground.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-        }
-//        stepTextView.snp.makeConstraints {
-////            $0.edges.equalToSuperview()
-//            $0.top.equalToSuperview().inset(10)
-//            $0.left.equalTo(stepBackground).inset(15)
-//            $0.width.equalToSuperview().dividedBy(1.5)
-////            $0.height.equalTo(50)
-//            $0.bottom.equalToSuperview().inset(10)
-//        }
-        
-        stepTextfield.snp.makeConstraints {
-            $0.top.left.bottom.equalToSuperview()
-            $0.width.equalToSuperview().dividedBy(1.5)
-        }
-        
-        addPhotoButton.snp.makeConstraints {
-            $0.centerY.equalTo(stepBackground)
-            $0.right.equalTo(stepMoveButton.snp.left).offset(-20)
-        }
-        
-        stepMoveButton.snp.makeConstraints {
-            $0.centerY.equalTo(stepBackground)
-            $0.right.equalTo(stepBackground).inset(10)
-        }
-    }
+
     
     func didPhotoExist() {
         addPhotoButton.isHidden = true
@@ -175,9 +146,9 @@ extension CookStepCell {
         }
     }
     
-//    func addSetting(text: String) {
-//        stepLabel.text = text
-//    }
+    func configure(text: String) {
+        stepTextView.text = text
+    }
 }
 
 extension CookStepCell {
@@ -195,7 +166,7 @@ extension CookStepCell {
 
 //MARK: - Cell Preview
 import SwiftUI
-struct ForCookStepCell: UIViewRepresentable {
+struct ForCookStepCell1: UIViewRepresentable {
     typealias UIViewType = UIView
 
     func makeUIView(context: Context) -> UIView {
@@ -207,9 +178,9 @@ struct ForCookStepCell: UIViewRepresentable {
 }
 
 @available(iOS 13.0, *)
-struct CookStepCell_Preview: PreviewProvider {
+struct CookStepCell1_Preview: PreviewProvider {
     static var previews: some View {
-        ForCookStepCell()
+        ForCookStepCell1()
             .previewLayout(.fixed(width: 339, height: 60))
     }
 }
