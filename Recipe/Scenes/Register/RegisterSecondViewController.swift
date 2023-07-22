@@ -21,6 +21,7 @@ final class RegisterSecondViewController: BaseViewController {
         view.addSubview(registerSucessView)
         registerSucessView.delegate = self
         configureLayout()
+        defaultNavigationBackButton(backButtonColor: .white)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

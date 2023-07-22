@@ -7,7 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */; };
+		1699577D2A681BB100A1BF1E /* CookStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1699577C2A681BB100A1BF1E /* CookStepCell.swift */; };
+		16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */; };
+		16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */; };
+		16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */; };
 		16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */; };
+		16F79A5E2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16F79A5D2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift */; };
 		2041B6D2CA32EDF56FAB5B7F /* Pods_Recipe.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = EA97959A0831DCE25DB3AF54 /* Pods_Recipe.framework */; };
 		323C2F23D6784580310ECE67 /* Pods_RecipeTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = F7E8A04628A7BAD1F0DA9DA7 /* Pods_RecipeTests.framework */; };
 		5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A02448E2A529AA300AA418E /* AppDelegate.swift */; };
@@ -40,11 +46,18 @@
 		5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */; };
 		5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */; };
 		5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */; };
+		5A4970812A661CD7005725F8 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4970802A661CD7005725F8 /* LoginService.swift */; };
+		5A4970832A662DCC005725F8 /* CreateRecipeFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4970822A662DCC005725F8 /* CreateRecipeFooter.swift */; };
+		5A5B90482A652AC00049E853 /* CreateRecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B90472A652AC00049E853 /* CreateRecipeView.swift */; };
+		5A5B904D2A652E770049E853 /* CreateRecipeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B904C2A652E770049E853 /* CreateRecipeHeaderCell.swift */; };
+		5A5B904F2A6535010049E853 /* TextFieldCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B904E2A6535010049E853 /* TextFieldCell.swift */; };
+		5A5B90512A653BA60049E853 /* CookSettingCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A5B90502A653BA60049E853 /* CookSettingCell.swift */; };
 		5A805C5C2A5D32A900C81D86 /* RecipeView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A805C5B2A5D32A900C81D86 /* RecipeView.swift */; };
 		5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */; };
-		5A8C2DD12A5F915A006B08A7 /* DefaultFloatingButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD02A5F915A006B08A7 /* DefaultFloatingButton.swift */; };
+		5A8C2DD12A5F915A006B08A7 /* DefaultCircleButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD02A5F915A006B08A7 /* DefaultCircleButton.swift */; };
 		5A8C2DD32A5FC4B0006B08A7 /* PopupViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */; };
 		5A8C2DD52A5FC4B9006B08A7 /* PopupView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */; };
+		5A907DB32A666C8300973935 /* TextViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A907DB22A666C8300973935 /* TextViewCell.swift */; };
 		5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */; };
 		5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914ACE2A53FD430020BA71 /* TitleView.swift */; };
 		5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A914AD02A53FD7E0020BA71 /* UIView+util.swift */; };
@@ -100,7 +113,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewController.swift; sourceTree = "<group>"; };
+		1699577C2A681BB100A1BF1E /* CookStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCell.swift; sourceTree = "<group>"; };
+		16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCountCell.swift; sourceTree = "<group>"; };
+		16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepFooterView.swift; sourceTree = "<group>"; };
+		16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepHeaderView.swift; sourceTree = "<group>"; };
 		16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+util.swift"; sourceTree = "<group>"; };
+		16F79A5D2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultTextFieldCell.swift; sourceTree = "<group>"; };
 		1F2FD8D18D32ADE96A905161 /* Pods-Recipe.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Recipe.release.xcconfig"; path = "Target Support Files/Pods-Recipe/Pods-Recipe.release.xcconfig"; sourceTree = "<group>"; };
 		424F2F41243C03197AE3BEC6 /* Pods-RecipeTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RecipeTests.debug.xcconfig"; path = "Target Support Files/Pods-RecipeTests/Pods-RecipeTests.debug.xcconfig"; sourceTree = "<group>"; };
 		43250A0DA83D570142864CA1 /* Pods_Recipe_RecipeUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Recipe_RecipeUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -140,12 +159,19 @@
 		5A4115EE2A5B94B300531267 /* Recipe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Recipe.entitlements; sourceTree = "<group>"; };
 		5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
+		5A4970802A661CD7005725F8 /* LoginService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginService.swift; sourceTree = "<group>"; };
+		5A4970822A662DCC005725F8 /* CreateRecipeFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeFooter.swift; sourceTree = "<group>"; };
+		5A5B90472A652AC00049E853 /* CreateRecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeView.swift; sourceTree = "<group>"; };
+		5A5B904C2A652E770049E853 /* CreateRecipeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeHeaderCell.swift; sourceTree = "<group>"; };
+		5A5B904E2A6535010049E853 /* TextFieldCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextFieldCell.swift; sourceTree = "<group>"; };
+		5A5B90502A653BA60049E853 /* CookSettingCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookSettingCell.swift; sourceTree = "<group>"; };
 		5A805C5A2A5D247700C81D86 /* Key.xcconfig */ = {isa = PBXFileReference; lastKnownFileType = text.xcconfig; path = Key.xcconfig; sourceTree = "<group>"; };
 		5A805C5B2A5D32A900C81D86 /* RecipeView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeView.swift; sourceTree = "<group>"; };
 		5A805C5D2A5D365E00C81D86 /* RecipeCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCell.swift; sourceTree = "<group>"; };
-		5A8C2DD02A5F915A006B08A7 /* DefaultFloatingButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultFloatingButton.swift; sourceTree = "<group>"; };
+		5A8C2DD02A5F915A006B08A7 /* DefaultCircleButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultCircleButton.swift; sourceTree = "<group>"; };
 		5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupViewController.swift; sourceTree = "<group>"; };
 		5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupView.swift; sourceTree = "<group>"; };
+		5A907DB22A666C8300973935 /* TextViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TextViewCell.swift; sourceTree = "<group>"; };
 		5A914ACC2A53FD020020BA71 /* UIBarButtonItem+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIBarButtonItem+util.swift"; sourceTree = "<group>"; };
 		5A914ACE2A53FD430020BA71 /* TitleView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleView.swift; sourceTree = "<group>"; };
 		5A914AD02A53FD7E0020BA71 /* UIView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIView+util.swift"; sourceTree = "<group>"; };
@@ -364,14 +390,17 @@
 		5A0244D82A52A6FF00AA418E /* Common */ = {
 			isa = PBXGroup;
 			children = (
+				5A914AE92A54157E0020BA71 /* DefaultHeader.swift */,
 				5AB4A5DB2A5502DF0095CD2B /* PresentationController.swift */,
 				5A0244D62A52A6F500AA418E /* BaseViewController.swift */,
 				5AB4A5DF2A552E900095CD2B /* PaddingUITextField.swift */,
 				5AFE49C42A5BC352000B9A95 /* BaseStartingView.swift */,
 				5AAEC55A2A5D595500E9877C /* RecipeDefaultTag.swift */,
-				5A8C2DD02A5F915A006B08A7 /* DefaultFloatingButton.swift */,
+				5A8C2DD02A5F915A006B08A7 /* DefaultCircleButton.swift */,
 				5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */,
 				5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */,
+				16F79A5D2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift */,
+				5A5B904E2A6535010049E853 /* TextFieldCell.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -381,6 +410,7 @@
 			children = (
 				5A0244DD2A52A7B600AA418E /* LoginViewController.swift */,
 				5A0244DF2A52A7C900AA418E /* LoginCoordinator.swift */,
+				5A4970802A661CD7005725F8 /* LoginService.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -444,6 +474,23 @@
 			path = Home;
 			sourceTree = "<group>";
 		};
+		5A5B904B2A652DE30049E853 /* CreateRecipe */ = {
+			isa = PBXGroup;
+			children = (
+				5A5B90472A652AC00049E853 /* CreateRecipeView.swift */,
+				163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */,
+				5A5B904C2A652E770049E853 /* CreateRecipeHeaderCell.swift */,
+				5A4970822A662DCC005725F8 /* CreateRecipeFooter.swift */,
+				16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */,
+				5A5B90502A653BA60049E853 /* CookSettingCell.swift */,
+				5A907DB22A666C8300973935 /* TextViewCell.swift */,
+				1699577C2A681BB100A1BF1E /* CookStepCell.swift */,
+				16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */,
+				16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */,
+			);
+			path = CreateRecipe;
+			sourceTree = "<group>";
+		};
 		5A914AD42A5402FC0020BA71 /* Refrigerator */ = {
 			isa = PBXGroup;
 			children = (
@@ -469,7 +516,6 @@
 		5A914AE82A5415610020BA71 /* IngredientRecipe */ = {
 			isa = PBXGroup;
 			children = (
-				5A914AE92A54157E0020BA71 /* DefaultHeader.swift */,
 				5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */,
 			);
 			path = IngredientRecipe;
@@ -486,6 +532,7 @@
 		5ACD7BBA2A57DAA100571259 /* Recipe */ = {
 			isa = PBXGroup;
 			children = (
+				5A5B904B2A652DE30049E853 /* CreateRecipe */,
 				5A805C5B2A5D32A900C81D86 /* RecipeView.swift */,
 				5ACD7BC02A57DC4200571259 /* RecipeViewController.swift */,
 				5ACD7BC22A57DC4C00571259 /* RecipeCoordinator.swift */,
@@ -803,6 +850,8 @@
 				16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */,
 				5A914AD62A5404940020BA71 /* PageSectionFooterView.swift in Sources */,
 				5A0244F22A52A8AA00AA418E /* MypageViewController.swift in Sources */,
+				16F79A5E2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift in Sources */,
+				5A5B904F2A6535010049E853 /* TextFieldCell.swift in Sources */,
 				5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */,
 				5A914AE32A5410E30020BA71 /* PriceTrendHeader.swift in Sources */,
 				5ACD7BBF2A57DAEA00571259 /* CommunityCoordinator.swift in Sources */,
@@ -813,14 +862,19 @@
 				5ACD7BC32A57DC4C00571259 /* RecipeCoordinator.swift in Sources */,
 				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
 				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
+				16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */,
 				5A914AE52A5411080020BA71 /* PriceTrendCell.swift in Sources */,
+				5A4970812A661CD7005725F8 /* LoginService.swift in Sources */,
 				5A914ADC2A5406550020BA71 /* UICollectionReusableView+util.swift in Sources */,
 				5A0244CC2A52A36C00AA418E /* Protocols.swift in Sources */,
 				5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */,
 				5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */,
+				1699577D2A681BB100A1BF1E /* CookStepCell.swift in Sources */,
+				16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */,
 				5A0244E42A52A7F400AA418E /* RegisterFirstViewController.swift in Sources */,
 				5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */,
 				5A805C5E2A5D365E00C81D86 /* RecipeCell.swift in Sources */,
+				5A907DB32A666C8300973935 /* TextViewCell.swift in Sources */,
 				5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */,
 				5A8C2DD52A5FC4B9006B08A7 /* PopupView.swift in Sources */,
 				5AAEC55B2A5D595500E9877C /* RecipeDefaultTag.swift in Sources */,
@@ -829,7 +883,7 @@
 				5AAEC5592A5D511300E9877C /* RecipeHeaderCell.swift in Sources */,
 				5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */,
 				5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */,
-				5A8C2DD12A5F915A006B08A7 /* DefaultFloatingButton.swift in Sources */,
+				5A8C2DD12A5F915A006B08A7 /* DefaultCircleButton.swift in Sources */,
 				5A805C5C2A5D32A900C81D86 /* RecipeView.swift in Sources */,
 				5AF00F6C2A5694A600587BF9 /* RefrigeratorDetailCell.swift in Sources */,
 				5AAEC5552A5D3BDF00E9877C /* UIButton+util.swift in Sources */,
@@ -840,12 +894,18 @@
 				5A0244DB2A52A74D00AA418E /* SplashCoordinator.swift in Sources */,
 				5A914AD32A54024A0020BA71 /* Home.swift in Sources */,
 				5A0244D22A52A59000AA418E /* Coordinator.swift in Sources */,
+				5A5B904D2A652E770049E853 /* CreateRecipeHeaderCell.swift in Sources */,
+				163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */,
 				5A0244DE2A52A7B600AA418E /* LoginViewController.swift in Sources */,
 				5A914AEA2A54157E0020BA71 /* DefaultHeader.swift in Sources */,
 				5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */,
+				5A5B90482A652AC00049E853 /* CreateRecipeView.swift in Sources */,
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
 				5A914ADE2A5407230020BA71 /* ColdRefrigeratorView.swift in Sources */,
+				5A5B90512A653BA60049E853 /* CookSettingCell.swift in Sources */,
+				5A4970832A662DCC005725F8 /* CreateRecipeFooter.swift in Sources */,
 				5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */,
+				16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */,
 				5AFE49C52A5BC352000B9A95 /* BaseStartingView.swift in Sources */,
 				5AB4A5DE2A55099C0095CD2B /* IngredientRegistrationViewController.swift in Sources */,
 				5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */,
@@ -1024,6 +1084,7 @@
 				DEVELOPMENT_TEAM = 69AX92X75M;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Recipe/Supporting Files/Info.plist";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "레시피 등록에 사용하기 위해 사용자의 앨범에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
@@ -1054,6 +1115,7 @@
 				DEVELOPMENT_TEAM = 69AX92X75M;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_FILE = "Recipe/Supporting Files/Info.plist";
+				INFOPLIST_KEY_NSPhotoLibraryAddUsageDescription = "레시피 등록에 사용하기 위해 사용자의 앨범에 접근합니다.";
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";

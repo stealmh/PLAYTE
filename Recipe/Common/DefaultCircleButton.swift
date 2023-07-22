@@ -14,7 +14,7 @@ protocol FloatingButtonDelegate {
     func floatingButtonTapped()
 }
 
-final class DefaultFloatingButton: UIButton {
+final class DefaultCircleButton: UIButton {
     
     ///Properties
     private let disposeBag = DisposeBag()

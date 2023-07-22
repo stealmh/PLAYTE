@@ -82,11 +82,24 @@ extension UIViewController {
                 v.removeFromSuperview()
             })
         }
-    
+    /// Navigation의 BackButton의 Label을 지우고 "<" 의 색깔을 지정할 수 있습니다.
     func defaultNavigationBackButton(backButtonColor: UIColor) {
         self.navigationController?.navigationBar.topItem?.title = ""
         self.navigationController?.navigationBar.tintColor = backButtonColor
     }
+    
+    /// Navitaion Large Title의 Alignment를 Center로 바꿔줍니다.
+    func centerTitle() {
+        for navItem in(self.navigationController?.navigationBar.subviews)! {
+             for itemSubView in navItem.subviews {
+                 if let largeLabel = itemSubView as? UILabel {
+                    largeLabel.center = CGPoint(x: navItem.bounds.width/2, y: navItem.bounds.height/2)
+                    return
+                 }
+             }
+        }
+    }
+
 }
 #endif
 

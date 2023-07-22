@@ -29,4 +29,5 @@ extension UIColor {
                 alpha: CGFloat(1.0)
             )
         }
+    class var mainColor: UIColor? { return UIColor(named: "MainColor") }
 }
