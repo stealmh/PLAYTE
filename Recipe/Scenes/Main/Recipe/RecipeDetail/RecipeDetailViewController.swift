@@ -31,10 +31,12 @@ class RecipeDetailViewController: BaseViewController {
     
     enum Section: Hashable {
         case info
+        case ingredient
     }
     
     enum Item: Hashable {
         case info
+        case ingredient
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -78,6 +80,8 @@ extension RecipeDetailViewController {
     }
     func registerCell() {
         collectionView.register(RecipeDetailInfoCell.self, forCellWithReuseIdentifier: RecipeDetailInfoCell.reuseIdentifier)
+        collectionView.register(RecipeDetailIngredientHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecipeDetailIngredientHeader.identifier)
+        collectionView.register(RecipeDetailIngredientCell.self, forCellWithReuseIdentifier: RecipeDetailIngredientCell.reuseIdentifier)
     }
     
     func configureData(_ item: Recipe) {
@@ -100,6 +104,8 @@ extension RecipeDetailViewController {
         switch section {
         case .info:
             return createHeaderSection()
+        case .ingredient:
+            return createRecipeDescription()
         }
     }
     
@@ -110,8 +116,39 @@ extension RecipeDetailViewController {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(241)), subitem: item, count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 0, bottom: 0, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 0, bottom: 30, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
+        return section
+    }
+    
+    func createRecipeDescription() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 3, trailing: 10)
+        
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1.0),
+                heightDimension: .fractionalHeight(1.0)),
+            subitem: item,
+            count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(50.0))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .topLeading)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.boundarySupplementaryItems = [header]
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        
+        // Return
         return section
     }
     
@@ -131,18 +168,22 @@ extension RecipeDetailViewController {
         case .info:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailInfoCell.reuseIdentifier, for: indexPath) as! RecipeDetailInfoCell
             return cell
+        case .ingredient:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailIngredientCell.reuseIdentifier, for: indexPath) as! RecipeDetailIngredientCell
+            return cell
         }
     }
     
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView {
-//        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeHeaderCell.reuseIdentifier, for: indexPath) as! RecipeHeaderCell
-        return UICollectionReusableView()
+        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeDetailIngredientHeader.identifier, for: indexPath) as! RecipeDetailIngredientHeader
+        return headerView
     }
     
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
-        snapshot.appendSections([.info])
+        snapshot.appendSections([.info, .ingredient])
         snapshot.appendItems([.info], toSection: .info)
+        snapshot.appendItems([.ingredient], toSection: .ingredient)
         return snapshot
     }
 
