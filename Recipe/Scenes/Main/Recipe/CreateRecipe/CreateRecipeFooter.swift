@@ -50,4 +50,8 @@ extension CreateRecipeFooter {
     private func bind() {
         
     }
+    
+    func configure(_ text: String) {
+        registerButton.setTitle(text, for: .normal)
+    }
 }

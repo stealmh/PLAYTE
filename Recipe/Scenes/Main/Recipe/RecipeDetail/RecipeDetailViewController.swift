@@ -39,7 +39,7 @@ class RecipeDetailViewController: BaseViewController {
     
     enum Item: Hashable {
         case info
-        case ingredient
+        case ingredient(DetailIngredient)
         case shopingList(ShopingList)
         case recipe(RecipeDetailStep)
         case ingredientchucheon(IngredientRecipe)
@@ -60,6 +60,11 @@ class RecipeDetailViewController: BaseViewController {
     private var mockRecipe: [RecipeDetailStep] = [RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: false)]
     
     private var chucheonRecipeMockData = [IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분")]
+    
+    var mockData: [DetailIngredient] = [DetailIngredient(ingredientTitle: "토마토", ingredientCount: "2개", seasoningTitle: "굴소스", seasoningCount: "2T"),
+                                        DetailIngredient(ingredientTitle: "밥", ingredientCount: "3공기", seasoningTitle: "", seasoningCount: ""),
+                                        DetailIngredient(ingredientTitle: "토마토", ingredientCount: "2개", seasoningTitle: "굴소스", seasoningCount: "2T"),
+                                        DetailIngredient(ingredientTitle: "토마토", ingredientCount: "2개", seasoningTitle: "굴소스", seasoningCount: "2T")]
     private var dataSource: Datasource!
 
     override func viewDidLoad() {
@@ -95,7 +100,6 @@ extension RecipeDetailViewController {
     func registerCell() {
         collectionView.register(RecipeDetailInfoCell.self, forCellWithReuseIdentifier: RecipeDetailInfoCell.reuseIdentifier)
         collectionView.register(RecipeDetailIngredientHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecipeDetailIngredientHeader.identifier)
-        collectionView.register(RecipeDetailIngredientCell.self, forCellWithReuseIdentifier: RecipeDetailIngredientCell.reuseIdentifier)
         collectionView.register(ShopingListCell.self, forCellWithReuseIdentifier: ShopingListCell.reuseIdentifier)
         collectionView.register(RecipeDetailStepCell.self, forCellWithReuseIdentifier: RecipeDetailStepCell.reuseIdentifier)
         collectionView.register(RecipeDetailDefaultHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecipeDetailDefaultHeaderView.identifier)
@@ -103,6 +107,8 @@ extension RecipeDetailViewController {
         collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
         collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
         collectionView.register(IngredientRecipeCell.self, forCellWithReuseIdentifier: IngredientRecipeCell.reuseIdentifier)
+        collectionView.register(IngredientCell.self, forCellWithReuseIdentifier: IngredientCell.reuseIdentifier)
+        
         
     }
     
@@ -127,7 +133,7 @@ extension RecipeDetailViewController {
         case .info:
             return createHeaderSection()
         case .ingredient:
-            return createRecipeDescription()
+            return createIngredientList()
         case .shopingList:
             return createShopingListSection()
         case .recipe:
@@ -149,19 +155,18 @@ extension RecipeDetailViewController {
         return section
     }
     
-    func createRecipeDescription() -> NSCollectionLayoutSection {
+    func createIngredientList() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(1)))
+                heightDimension: .estimated(30)))
         item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(0.6)),
-            subitem: item,
-            count: 1)
+                heightDimension: .fractionalHeight(0.7)),
+            subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         
@@ -185,7 +190,7 @@ extension RecipeDetailViewController {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .fractionalHeight(1)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 3, trailing: 3)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 10, trailing: 3)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
@@ -195,6 +200,7 @@ extension RecipeDetailViewController {
             count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 30, trailing: 10)
         section.orthogonalScrollingBehavior = .groupPaging
         // Return
         return section
@@ -204,18 +210,18 @@ extension RecipeDetailViewController {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(123)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
+                heightDimension: .estimated(123)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(1.0)),
+                heightDimension: .fractionalHeight(0.6)),
             subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
         let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                      heightDimension: .absolute(50.0))
+                                                      heightDimension: .absolute(40.0))
         let header = NSCollectionLayoutBoundarySupplementaryItem(
             layoutSize: footerHeaderSize,
             elementKind: UICollectionView.elementKindSectionHeader,
@@ -227,7 +233,8 @@ extension RecipeDetailViewController {
             alignment: .bottom)
         
         section.boundarySupplementaryItems = [header, footer]
-        section.orthogonalScrollingBehavior = .groupPaging
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
+        section.orthogonalScrollingBehavior = .none
         
         
         // Return
@@ -239,11 +246,11 @@ extension RecipeDetailViewController {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .fractionalHeight(1)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 3)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 15, bottom: 0, trailing: 3)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(0.7),
+                widthDimension: .fractionalWidth(1),
                 heightDimension: .absolute(200)),
             subitem: item,
             count: 2)
@@ -262,6 +269,7 @@ extension RecipeDetailViewController {
             alignment: .bottom)
         
         section.boundarySupplementaryItems = [header, footer]
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 30, trailing: 0)
         section.orthogonalScrollingBehavior = .groupPaging
         
         
@@ -286,8 +294,9 @@ extension RecipeDetailViewController {
         case .info:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailInfoCell.reuseIdentifier, for: indexPath) as! RecipeDetailInfoCell
             return cell
-        case .ingredient:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailIngredientCell.reuseIdentifier, for: indexPath) as! RecipeDetailIngredientCell
+        case .ingredient(let item):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientCell.reuseIdentifier, for: indexPath) as! IngredientCell
+            cell.configure(item)
             return cell
         case .shopingList(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopingListCell.reuseIdentifier, for: indexPath) as! ShopingListCell
@@ -295,7 +304,7 @@ extension RecipeDetailViewController {
             return cell
         case .recipe(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailStepCell.reuseIdentifier, for: indexPath) as! RecipeDetailStepCell
-            cell.configure(data)
+            cell.configure(data, idx: indexPath.row + 1)
             return cell
         case .ingredientchucheon(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientRecipeCell.reuseIdentifier, for: indexPath) as! IngredientRecipeCell
@@ -324,6 +333,7 @@ extension RecipeDetailViewController {
                 return headerView
             } else {
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateRecipeFooter.identifier, for: indexPath) as! CreateRecipeFooter
+                footerView.configure("리뷰 작성하기")
                 return footerView
             }
         default: return UICollectionReusableView()
@@ -334,7 +344,7 @@ extension RecipeDetailViewController {
         var snapshot = Snapshot()
         snapshot.appendSections([.info, .ingredient, .shopingList, .recipe, .ingredientchucheon])
         snapshot.appendItems([.info], toSection: .info)
-        snapshot.appendItems([.ingredient], toSection: .ingredient)
+        snapshot.appendItems(mockData.map({ Item.ingredient($0) }), toSection: .ingredient)
         snapshot.appendItems(mockShopList.map({ Item.shopingList($0) }), toSection: .shopingList)
         snapshot.appendItems(mockRecipe.map({ Item.recipe($0) }), toSection: .recipe)
         snapshot.appendItems(chucheonRecipeMockData.map { Item.ingredientchucheon($0) }, toSection: .ingredientchucheon)

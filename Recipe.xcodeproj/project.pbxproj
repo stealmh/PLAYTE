@@ -16,7 +16,6 @@
 		16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */; };
 		16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */; };
 		16C852BC2A6C016500D67A73 /* RecipeDetailIngredientHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C852BB2A6C016500D67A73 /* RecipeDetailIngredientHeader.swift */; };
-		16C852BE2A6C035600D67A73 /* RecipeDetailIngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C852BD2A6C035600D67A73 /* RecipeDetailIngredientCell.swift */; };
 		16C852C02A6C04BA00D67A73 /* IngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C852BF2A6C04BA00D67A73 /* IngredientCell.swift */; };
 		16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */; };
 		16E615B12A6CA639002C1AE9 /* ShopingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E615B02A6CA639002C1AE9 /* ShopingListCell.swift */; };
@@ -132,7 +131,6 @@
 		16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepFooterView.swift; sourceTree = "<group>"; };
 		16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepHeaderView.swift; sourceTree = "<group>"; };
 		16C852BB2A6C016500D67A73 /* RecipeDetailIngredientHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailIngredientHeader.swift; sourceTree = "<group>"; };
-		16C852BD2A6C035600D67A73 /* RecipeDetailIngredientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailIngredientCell.swift; sourceTree = "<group>"; };
 		16C852BF2A6C04BA00D67A73 /* IngredientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientCell.swift; sourceTree = "<group>"; };
 		16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+util.swift"; sourceTree = "<group>"; };
 		16E615B02A6CA639002C1AE9 /* ShopingListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopingListCell.swift; sourceTree = "<group>"; };
@@ -267,12 +265,12 @@
 				16900CF92A6B9ACC00B06D8C /* RecipeDetailViewController.swift */,
 				16900CFB2A6BA06900B06D8C /* RecipeDetailInfoCell.swift */,
 				16C852BB2A6C016500D67A73 /* RecipeDetailIngredientHeader.swift */,
-				16C852BD2A6C035600D67A73 /* RecipeDetailIngredientCell.swift */,
 				16C852BF2A6C04BA00D67A73 /* IngredientCell.swift */,
 				16E615B02A6CA639002C1AE9 /* ShopingListCell.swift */,
 				16E615B22A6CE0C8002C1AE9 /* RecipeDetailDefaultHeaderView.swift */,
 				16E615B42A6CE124002C1AE9 /* LineFooter.swift */,
 				16E615B62A6CE18D002C1AE9 /* RecipeDetailStepCell.swift */,
+				5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */,
 			);
 			path = RecipeDetail;
 			sourceTree = "<group>";
@@ -553,7 +551,6 @@
 		5A914AE82A5415610020BA71 /* IngredientRecipe */ = {
 			isa = PBXGroup;
 			children = (
-				5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */,
 			);
 			path = IngredientRecipe;
 			sourceTree = "<group>";
@@ -909,7 +906,6 @@
 				5A914ADC2A5406550020BA71 /* UICollectionReusableView+util.swift in Sources */,
 				5A0244CC2A52A36C00AA418E /* Protocols.swift in Sources */,
 				5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */,
-				16C852BE2A6C035600D67A73 /* RecipeDetailIngredientCell.swift in Sources */,
 				5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */,
 				1699577D2A681BB100A1BF1E /* CookStepCell.swift in Sources */,
 				16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */,

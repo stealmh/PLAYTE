@@ -8,6 +8,15 @@
 import UIKit
 import SnapKit
 
+struct DetailIngredient: Hashable {
+    let id = UUID()
+    let ingredientTitle: String
+    let ingredientCount: String
+    let seasoningTitle: String
+    let seasoningCount: String
+    
+}
+
 final class IngredientCell: UICollectionViewCell {
     
     private let ingredientLabel: UILabel = {

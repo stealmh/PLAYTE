@@ -93,9 +93,9 @@ extension RecipeDetailStepCell {
         }
     }
     //for data inject
-    func configure(_ item: RecipeDetailStep) {
+    func configure(_ item: RecipeDetailStep, idx: Int) {
         stepImageView.image = item.image
-        stepTitleLabel.text = item.title
+        stepTitleLabel.text = "\(idx). " + item.title
         stepContentsLabel.text = item.contents
         pointLabel.isHidden = !item.point
     }
