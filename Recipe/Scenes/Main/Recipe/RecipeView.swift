@@ -70,7 +70,7 @@ final class RecipeView: UIView {
         MockCategoryData(text: "알뜰살뜰 만원의 행복", color: .yellow),
         MockCategoryData(text: "내가 바로 미슐랭 스타", color: .blue)]
     private let mockRecipeData: [Recipe] = [
-        Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥1", tag: "토마토", isFavorite: true, cookTime: "10분"),
+        Recipe(image: UIImage(named: "recipeDetail")!, title: "토마토 계란 볶음밥1", tag: "토마토", isFavorite: true, cookTime: "10분"),
         Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥 길이를 체크합니다", tag: "토마토", isFavorite: false, cookTime: "10분"),
         Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥2", tag: "토마토", isFavorite: true, cookTime: "10분"),
         Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥3", tag: "토마토", isFavorite: true, cookTime: "10분"),

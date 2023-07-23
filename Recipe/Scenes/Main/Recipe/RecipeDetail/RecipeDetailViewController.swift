@@ -32,11 +32,17 @@ class RecipeDetailViewController: BaseViewController {
     enum Section: Hashable {
         case info
         case ingredient
+        case shopingList
+        case recipe
+        case ingredientchucheon
     }
     
     enum Item: Hashable {
         case info
         case ingredient
+        case shopingList(ShopingList)
+        case recipe(RecipeDetailStep)
+        case ingredientchucheon(IngredientRecipe)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -48,6 +54,12 @@ class RecipeDetailViewController: BaseViewController {
 //        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
+    private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
+                                               ShopingList(title: "전남 국내산 대추 방울", price: 13000, image: UIImage(named: "popcat")!, isrocket: false)]
+    
+    private var mockRecipe: [RecipeDetailStep] = [RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: false)]
+    
+    private var chucheonRecipeMockData = [IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분")]
     private var dataSource: Datasource!
 
     override func viewDidLoad() {
@@ -74,14 +86,24 @@ extension RecipeDetailViewController {
         }
         
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(view.safeAreaLayoutGuide)
-            $0.left.right.bottom.equalToSuperview()
+//            $0.top.equalTo(view.safeAreaLayoutGuide)
+//            $0.left.right.bottom.equalToSuperview()
+            
+            $0.edges.equalToSuperview()
         }
     }
     func registerCell() {
         collectionView.register(RecipeDetailInfoCell.self, forCellWithReuseIdentifier: RecipeDetailInfoCell.reuseIdentifier)
         collectionView.register(RecipeDetailIngredientHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecipeDetailIngredientHeader.identifier)
         collectionView.register(RecipeDetailIngredientCell.self, forCellWithReuseIdentifier: RecipeDetailIngredientCell.reuseIdentifier)
+        collectionView.register(ShopingListCell.self, forCellWithReuseIdentifier: ShopingListCell.reuseIdentifier)
+        collectionView.register(RecipeDetailStepCell.self, forCellWithReuseIdentifier: RecipeDetailStepCell.reuseIdentifier)
+        collectionView.register(RecipeDetailDefaultHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecipeDetailDefaultHeaderView.identifier)
+        collectionView.register(LineFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: LineFooter.identifier)
+        collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
+        collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
+        collectionView.register(IngredientRecipeCell.self, forCellWithReuseIdentifier: IngredientRecipeCell.reuseIdentifier)
+        
     }
     
     func configureData(_ item: Recipe) {
@@ -106,6 +128,12 @@ extension RecipeDetailViewController {
             return createHeaderSection()
         case .ingredient:
             return createRecipeDescription()
+        case .shopingList:
+            return createShopingListSection()
+        case .recipe:
+            return createCookStepSection()
+        case .ingredientchucheon:
+            return createIngredientChucheon()
         }
     }
     
@@ -131,7 +159,7 @@ extension RecipeDetailViewController {
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1.0),
-                heightDimension: .fractionalHeight(1.0)),
+                heightDimension: .fractionalHeight(0.6)),
             subitem: item,
             count: 1)
         
@@ -145,6 +173,95 @@ extension RecipeDetailViewController {
             alignment: .topLeading)
         section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 10)
         section.boundarySupplementaryItems = [header]
+        section.orthogonalScrollingBehavior = .none
+        
+        
+        // Return
+        return section
+    }
+    
+    func createShopingListSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 3, trailing: 3)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.8),
+                heightDimension: .absolute(115)),
+            subitem: item,
+            count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .groupPaging
+        // Return
+        return section
+    }
+    
+    func createCookStepSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .absolute(123)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
+        
+        let group = NSCollectionLayoutGroup.vertical(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1.0)),
+            subitems: [item])
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(50.0))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .topLeading)
+        
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom)
+        
+        section.boundarySupplementaryItems = [header, footer]
+        section.orthogonalScrollingBehavior = .groupPaging
+        
+        
+        // Return
+        return section
+    }
+    
+    func createIngredientChucheon() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 0, trailing: 3)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.7),
+                heightDimension: .absolute(200)),
+            subitem: item,
+            count: 2)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(50.0))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .topLeading)
+        
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom)
+        
+        section.boundarySupplementaryItems = [header, footer]
         section.orthogonalScrollingBehavior = .groupPaging
         
         
@@ -157,7 +274,8 @@ extension RecipeDetailViewController {
             return self.cell(collectionView: collectionView, indexPath: indexPath, item: item)}
         
         dataSource.supplementaryViewProvider = { [unowned self] collectionView, kind, indexPath in
-            return self.supplementary(collectionView: collectionView, kind: kind, indexPath: indexPath)
+            let section = self.dataSource.snapshot().sectionIdentifiers[indexPath.section]
+            return self.supplementary(collectionView: collectionView, kind: kind, indexPath: indexPath, section: section)
         }
         
         dataSource.apply(createSnapshot(), animatingDifferences: true)
@@ -171,28 +289,64 @@ extension RecipeDetailViewController {
         case .ingredient:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailIngredientCell.reuseIdentifier, for: indexPath) as! RecipeDetailIngredientCell
             return cell
+        case .shopingList(let data):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShopingListCell.reuseIdentifier, for: indexPath) as! ShopingListCell
+            cell.configure(data)
+            return cell
+        case .recipe(let data):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailStepCell.reuseIdentifier, for: indexPath) as! RecipeDetailStepCell
+            cell.configure(data)
+            return cell
+        case .ingredientchucheon(let data):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientRecipeCell.reuseIdentifier, for: indexPath) as! IngredientRecipeCell
+            cell.configure(data)
+            return cell
         }
     }
     
-    private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView {
-        let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeDetailIngredientHeader.identifier, for: indexPath) as! RecipeDetailIngredientHeader
-        return headerView
+    private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath, section: Section) -> UICollectionReusableView {
+        switch section {
+        case .ingredient:
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeDetailIngredientHeader.identifier, for: indexPath) as! RecipeDetailIngredientHeader
+            return headerView
+        case .recipe:
+            if kind == UICollectionView.elementKindSectionHeader {
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeDetailDefaultHeaderView.identifier, for: indexPath) as! RecipeDetailDefaultHeaderView
+                return headerView
+            } else {
+                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: LineFooter.identifier, for: indexPath) as! LineFooter
+                return footerView
+            }
+        case .ingredientchucheon:
+            if kind == UICollectionView.elementKindSectionHeader {
+                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
+                headerView.configureTitle(text: "이런 레시피는 어때요?")
+                return headerView
+            } else {
+                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateRecipeFooter.identifier, for: indexPath) as! CreateRecipeFooter
+                return footerView
+            }
+        default: return UICollectionReusableView()
+        }
     }
     
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
-        snapshot.appendSections([.info, .ingredient])
+        snapshot.appendSections([.info, .ingredient, .shopingList, .recipe, .ingredientchucheon])
         snapshot.appendItems([.info], toSection: .info)
         snapshot.appendItems([.ingredient], toSection: .ingredient)
+        snapshot.appendItems(mockShopList.map({ Item.shopingList($0) }), toSection: .shopingList)
+        snapshot.appendItems(mockRecipe.map({ Item.recipe($0) }), toSection: .recipe)
+        snapshot.appendItems(chucheonRecipeMockData.map { Item.ingredientchucheon($0) }, toSection: .ingredientchucheon)
         return snapshot
     }
-
+    
 }
 
 //MARK: - VC Preview
 import SwiftUI
 struct RecipeDetailViewController_preview: PreviewProvider {
     static var previews: some View {
-        RecipeDetailViewController().toPreview().ignoresSafeArea()
+        UINavigationController(rootViewController: RecipeDetailViewController()).toPreview().ignoresSafeArea()
     }
 }

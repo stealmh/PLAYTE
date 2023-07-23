@@ -240,7 +240,8 @@ struct ForRecipeDetailInfoCell: UIViewRepresentable {
 struct ForRecipeDetailInfoCell_Preview: PreviewProvider {
     static var previews: some View {
         ForRecipeDetailInfoCell()
-            .previewLayout(.fixed(width: 327, height: 241))
+//            .previewLayout(.fixed(width: 327, height: 241))
+            .ignoresSafeArea()
     }
 }
 #endif
