@@ -27,15 +27,18 @@ final class RecipeViewController: BaseViewController {
         configureNavigationTabBar()
         bind()
         floatingButton.delegate = self
+        recipeView.delegate = self
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         disposeBag = DisposeBag()
         floatingButton.delegate = nil
+        recipeView.delegate = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {
         floatingButton.delegate = self
+        recipeView.delegate = self
     }
 }
 
@@ -82,6 +85,15 @@ extension RecipeViewController: FloatingButtonDelegate {
         didSendEventClosure?(.showFloatingView)
         ///Todo: 어케분리하지
         self.tabBarController?.tabBar.layer.zPosition = -1
+    }
+}
+
+//MARK: - Method(레시피 셀 Delegate)
+extension RecipeViewController: RecipeViewDelegate {
+    func didTappedRecipeCell(item: Recipe) {
+        let vc = RecipeDetailViewController()
+        vc.configureData(item)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
 

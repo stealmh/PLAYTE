@@ -9,6 +9,10 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol RecipeViewDelegate {
+    func didTappedRecipeCell(item: Recipe)
+}
+
 struct MockCategoryData: Hashable {
     let id = UUID()
     let text: String
@@ -58,6 +62,7 @@ final class RecipeView: UIView {
     
     ///Properties
 //    private let disposeBag = DisposeBag()
+    var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
     private let mockCategoryData: [MockCategoryData] = [
         MockCategoryData(text: "소중한 사람을 위해", color: .red),
@@ -65,7 +70,7 @@ final class RecipeView: UIView {
         MockCategoryData(text: "알뜰살뜰 만원의 행복", color: .yellow),
         MockCategoryData(text: "내가 바로 미슐랭 스타", color: .blue)]
     private let mockRecipeData: [Recipe] = [
-        Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥1", tag: "토마토", isFavorite: true, cookTime: "10분"),
+        Recipe(image: UIImage(named: "recipeDetail")!, title: "토마토 계란 볶음밥1", tag: "토마토", isFavorite: true, cookTime: "10분"),
         Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥 길이를 체크합니다", tag: "토마토", isFavorite: false, cookTime: "10분"),
         Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥2", tag: "토마토", isFavorite: true, cookTime: "10분"),
         Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥3", tag: "토마토", isFavorite: true, cookTime: "10분"),
@@ -77,6 +82,7 @@ final class RecipeView: UIView {
         configureLayout()
         registerCell()
         configureDataSource()
+        collectionView.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -200,6 +206,17 @@ extension RecipeView {
     }
 }
 
+extension RecipeView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        switch item {
+        case .recipe(let data):
+            delegate?.didTappedRecipeCell(item: data)
+        default:
+            return
+        }
+    }
+}
 
 
 #if DEBUG
