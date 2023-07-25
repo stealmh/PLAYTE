@@ -35,8 +35,9 @@ final class RecipeDetailStepCell: UICollectionViewCell {
     private let stepContentsLabel: UILabel = {
         let v = UILabel()
         v.font = .systemFont(ofSize: 14)
-        v.numberOfLines = 10
+        v.numberOfLines = 99
         v.textColor = .gray
+        
         return v
     }()
     
@@ -71,25 +72,26 @@ extension RecipeDetailStepCell {
             $0.top.equalToSuperview().inset(10)
             $0.left.equalToSuperview().inset(10)
             $0.width.equalToSuperview().dividedBy(3)
-            $0.height.equalTo(123)
+            $0.height.lessThanOrEqualTo(123)
         }
 //        stepTitleLabel.backgroundColor = .red
         stepTitleLabel.snp.makeConstraints {
             $0.top.equalTo(stepImageView).offset(25)
             $0.left.equalTo(stepImageView.snp.right).offset(20)
             $0.right.equalToSuperview().inset(10)
-            $0.height.equalTo(35)
+            $0.height.greaterThanOrEqualTo(35)
         }
         
         pointLabel.snp.makeConstraints {
             $0.top.equalTo(stepImageView).offset(10)
-            $0.left.equalTo(stepTitleLabel)
+            $0.left.right.equalTo(stepTitleLabel)
+            $0.height.equalTo(14)
         }
         
-//        stepContentsLabel.backgroundColor = .red
         stepContentsLabel.snp.makeConstraints {
             $0.left.right.equalTo(stepTitleLabel)
             $0.top.equalTo(stepTitleLabel.snp.bottom).offset(5)
+            $0.height.greaterThanOrEqualToSuperview().dividedBy(4)
         }
     }
     //for data inject
@@ -102,7 +104,7 @@ extension RecipeDetailStepCell {
     func mockData() {
         stepImageView.image = UIImage(named: "popcat")
         stepTitleLabel.text = "01 양파를 채 썰어서 준비해주세요"
-        stepContentsLabel.text = "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요."
+        stepContentsLabel.text = "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요"
     }
 }
 
@@ -128,7 +130,7 @@ struct ForRecipeDetailStepCell: UIViewRepresentable {
 struct RecipeDetailStepCell_Preview: PreviewProvider {
     static var previews: some View {
         ForRecipeDetailStepCell()
-            .previewLayout(.fixed(width: 380, height: 80))
+            .previewLayout(.fixed(width: 380, height: 123))
     }
 }
 #endif

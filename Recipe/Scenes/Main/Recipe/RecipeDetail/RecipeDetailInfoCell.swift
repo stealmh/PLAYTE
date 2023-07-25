@@ -6,7 +6,13 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
+
+protocol RecipeDetailInfoDelegate {
+    func showReview()
+}
 
 final class RecipeDetailInfoCell: UICollectionViewCell {
     
@@ -101,13 +107,15 @@ final class RecipeDetailInfoCell: UICollectionViewCell {
     }()
     
     /// Properties
-    
+    private let disposeBag = DisposeBag()
+    var delegate: RecipeDetailInfoDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         backgroundConfigure()
         addView()
+        bind()
         configureLayout()
         mockConfigure()
     }
@@ -220,7 +228,14 @@ extension RecipeDetailInfoCell {
 
 //MARK: - Method(Rx bind)
 extension RecipeDetailInfoCell {
-    private func bind() {}
+    private func bind() {
+        reviewButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("tapped")
+                self.delegate?.showReview()
+            }
+        ).disposed(by: disposeBag)
+    }
 }
 
 #if DEBUG

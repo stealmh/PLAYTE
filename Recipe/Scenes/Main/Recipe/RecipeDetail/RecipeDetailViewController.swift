@@ -57,7 +57,7 @@ class RecipeDetailViewController: BaseViewController {
     private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
                                                ShopingList(title: "전남 국내산 대추 방울", price: 13000, image: UIImage(named: "popcat")!, isrocket: false)]
     
-    private var mockRecipe: [RecipeDetailStep] = [RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: false)]
+    private var mockRecipe: [RecipeDetailStep] = [RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: false)]
     
     private var chucheonRecipeMockData = [IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분")]
     
@@ -210,13 +210,13 @@ extension RecipeDetailViewController {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(123)))
+                heightDimension: .estimated(360)))
         item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(0.6)),
+                heightDimension: .estimated(360)),
             subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -293,6 +293,7 @@ extension RecipeDetailViewController {
         switch item {
         case .info:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailInfoCell.reuseIdentifier, for: indexPath) as! RecipeDetailInfoCell
+            cell.delegate = self
             return cell
         case .ingredient(let item):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientCell.reuseIdentifier, for: indexPath) as! IngredientCell
@@ -350,7 +351,13 @@ extension RecipeDetailViewController {
         snapshot.appendItems(chucheonRecipeMockData.map { Item.ingredientchucheon($0) }, toSection: .ingredientchucheon)
         return snapshot
     }
-    
+}
+
+extension RecipeDetailViewController: RecipeDetailInfoDelegate {
+    func showReview() {
+        let vc = SegmentViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 //MARK: - VC Preview
