@@ -12,6 +12,13 @@
 		16900CFC2A6BA06900B06D8C /* RecipeDetailInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16900CFB2A6BA06900B06D8C /* RecipeDetailInfoCell.swift */; };
 		16900CFE2A6BA0D800B06D8C /* Template.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16900CFD2A6BA0D800B06D8C /* Template.swift */; };
 		1699577D2A681BB100A1BF1E /* CookStepCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1699577C2A681BB100A1BF1E /* CookStepCell.swift */; };
+		169968C12A6F54250074DB43 /* SegmentViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968C02A6F54250074DB43 /* SegmentViewController.swift */; };
+		169968C32A6F544F0074DB43 /* UnderlineSegmentedControl.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968C22A6F544F0074DB43 /* UnderlineSegmentedControl.swift */; };
+		169968C52A6F575E0074DB43 /* RecipeDetailReviewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968C42A6F575E0074DB43 /* RecipeDetailReviewHeader.swift */; };
+		169968C72A6F57960074DB43 /* ReviewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968C62A6F57960074DB43 /* ReviewHeader.swift */; };
+		169968C92A6F57B50074DB43 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968C82A6F57B50074DB43 /* ReviewCell.swift */; };
+		169968CB2A6F84B30074DB43 /* RecipeReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968CA2A6F84B30074DB43 /* RecipeReviewController.swift */; };
+		169968CD2A6FA69E0074DB43 /* TestCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968CC2A6FA69E0074DB43 /* TestCell.swift */; };
 		16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */; };
 		16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */; };
 		16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */; };
@@ -127,6 +134,13 @@
 		16900CFB2A6BA06900B06D8C /* RecipeDetailInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailInfoCell.swift; sourceTree = "<group>"; };
 		16900CFD2A6BA0D800B06D8C /* Template.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Template.swift; sourceTree = "<group>"; };
 		1699577C2A681BB100A1BF1E /* CookStepCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCell.swift; sourceTree = "<group>"; };
+		169968C02A6F54250074DB43 /* SegmentViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SegmentViewController.swift; sourceTree = "<group>"; };
+		169968C22A6F544F0074DB43 /* UnderlineSegmentedControl.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UnderlineSegmentedControl.swift; sourceTree = "<group>"; };
+		169968C42A6F575E0074DB43 /* RecipeDetailReviewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailReviewHeader.swift; sourceTree = "<group>"; };
+		169968C62A6F57960074DB43 /* ReviewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewHeader.swift; sourceTree = "<group>"; };
+		169968C82A6F57B50074DB43 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
+		169968CA2A6F84B30074DB43 /* RecipeReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeReviewController.swift; sourceTree = "<group>"; };
+		169968CC2A6FA69E0074DB43 /* TestCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestCell.swift; sourceTree = "<group>"; };
 		16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCountCell.swift; sourceTree = "<group>"; };
 		16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepFooterView.swift; sourceTree = "<group>"; };
 		16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepHeaderView.swift; sourceTree = "<group>"; };
@@ -273,6 +287,20 @@
 				5A914AEB2A54159B0020BA71 /* IngredientRecipeCell.swift */,
 			);
 			path = RecipeDetail;
+			sourceTree = "<group>";
+		};
+		169968BF2A6F54110074DB43 /* Review */ = {
+			isa = PBXGroup;
+			children = (
+				169968C02A6F54250074DB43 /* SegmentViewController.swift */,
+				169968C22A6F544F0074DB43 /* UnderlineSegmentedControl.swift */,
+				169968C42A6F575E0074DB43 /* RecipeDetailReviewHeader.swift */,
+				169968C62A6F57960074DB43 /* ReviewHeader.swift */,
+				169968C82A6F57B50074DB43 /* ReviewCell.swift */,
+				169968CA2A6F84B30074DB43 /* RecipeReviewController.swift */,
+				169968CC2A6FA69E0074DB43 /* TestCell.swift */,
+			);
+			path = Review;
 			sourceTree = "<group>";
 		};
 		5A0244822A529AA300AA418E = {
@@ -566,6 +594,7 @@
 		5ACD7BBA2A57DAA100571259 /* Recipe */ = {
 			isa = PBXGroup;
 			children = (
+				169968BF2A6F54110074DB43 /* Review */,
 				16900CF82A6B9AAF00B06D8C /* RecipeDetail */,
 				5A5B904B2A652DE30049E853 /* CreateRecipe */,
 				5A805C5B2A5D32A900C81D86 /* RecipeView.swift */,
@@ -873,6 +902,7 @@
 				5AF00F6A2A568FAD00587BF9 /* RefrigeratorViewController.swift in Sources */,
 				5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */,
 				5AAEC5572A5D439F00E9877C /* RecipeCategoryCell.swift in Sources */,
+				169968C52A6F575E0074DB43 /* RecipeDetailReviewHeader.swift in Sources */,
 				5A8C2DD32A5FC4B0006B08A7 /* PopupViewController.swift in Sources */,
 				5AFE49C12A5BC164000B9A95 /* UILabel+util.swift in Sources */,
 				5AFE49C32A5BC20F000B9A95 /* UIColor+util.swift in Sources */,
@@ -901,6 +931,7 @@
 				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
 				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
 				16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */,
+				169968C32A6F544F0074DB43 /* UnderlineSegmentedControl.swift in Sources */,
 				5A914AE52A5411080020BA71 /* PriceTrendCell.swift in Sources */,
 				5A4970812A661CD7005725F8 /* LoginService.swift in Sources */,
 				5A914ADC2A5406550020BA71 /* UICollectionReusableView+util.swift in Sources */,
@@ -909,6 +940,7 @@
 				5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */,
 				1699577D2A681BB100A1BF1E /* CookStepCell.swift in Sources */,
 				16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */,
+				169968CD2A6FA69E0074DB43 /* TestCell.swift in Sources */,
 				16E615B72A6CE18D002C1AE9 /* RecipeDetailStepCell.swift in Sources */,
 				5A0244E42A52A7F400AA418E /* RegisterFirstViewController.swift in Sources */,
 				5A914ACF2A53FD430020BA71 /* TitleView.swift in Sources */,
@@ -928,10 +960,12 @@
 				5AAEC5552A5D3BDF00E9877C /* UIButton+util.swift in Sources */,
 				16900CFE2A6BA0D800B06D8C /* Template.swift in Sources */,
 				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
+				169968C12A6F54250074DB43 /* SegmentViewController.swift in Sources */,
 				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
 				5A0244992A529AA300AA418E /* Recipe.xcdatamodeld in Sources */,
 				16E615B12A6CA639002C1AE9 /* ShopingListCell.swift in Sources */,
 				5A914AEC2A54159B0020BA71 /* IngredientRecipeCell.swift in Sources */,
+				169968C72A6F57960074DB43 /* ReviewHeader.swift in Sources */,
 				5A0244DB2A52A74D00AA418E /* SplashCoordinator.swift in Sources */,
 				5A914AD32A54024A0020BA71 /* Home.swift in Sources */,
 				5A0244D22A52A59000AA418E /* Coordinator.swift in Sources */,
@@ -939,6 +973,7 @@
 				16E615B32A6CE0C8002C1AE9 /* RecipeDetailDefaultHeaderView.swift in Sources */,
 				163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */,
 				16900CFA2A6B9ACC00B06D8C /* RecipeDetailViewController.swift in Sources */,
+				169968CB2A6F84B30074DB43 /* RecipeReviewController.swift in Sources */,
 				5A0244DE2A52A7B600AA418E /* LoginViewController.swift in Sources */,
 				5A914AEA2A54157E0020BA71 /* DefaultHeader.swift in Sources */,
 				16E615B52A6CE124002C1AE9 /* LineFooter.swift in Sources */,
@@ -951,6 +986,7 @@
 				5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */,
 				16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */,
 				5AFE49C52A5BC352000B9A95 /* BaseStartingView.swift in Sources */,
+				169968C92A6F57B50074DB43 /* ReviewCell.swift in Sources */,
 				5AB4A5DE2A55099C0095CD2B /* IngredientRegistrationViewController.swift in Sources */,
 				5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */,
 			);
