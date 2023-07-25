@@ -22,10 +22,6 @@ struct Review: Hashable {
     let photos: [UIImage]
 }
 
-struct ReviewTest: Hashable {
-    let id = UUID()
-    let txt: String
-}
 
 class RecipeReviewController: BaseViewController {
     
@@ -55,8 +51,6 @@ class RecipeReviewController: BaseViewController {
     private let disposeBag = DisposeBag()
     private var mockData: [Review] = [Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: []),Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: []),Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: [])]
     
-    private let mockData2: [ReviewTest] = [ReviewTest(txt: "물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요"),ReviewTest(txt: "내줘요"),ReviewTest(txt: "그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요"),ReviewTest(txt: "물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요")]
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
@@ -81,8 +75,6 @@ extension RecipeReviewController {
         collectionView.register(ReviewCell.self, forCellWithReuseIdentifier: ReviewCell.reuseIdentifier)
         collectionView.register(RecipeDetailReviewHeader.self, forCellWithReuseIdentifier: RecipeDetailReviewHeader.reuseIdentifier)
         collectionView.register(ReviewHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: ReviewHeader.identifier)
-        ///
-        collectionView.register(TestCell.self, forCellWithReuseIdentifier: TestCell.reuseIdentifier)
     }
 }
 
