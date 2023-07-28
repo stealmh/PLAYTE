@@ -12,22 +12,22 @@ import RxSwift
 
 class RecipeDetailViewController: BaseViewController {
     
-    private let backgroundImage: UIImageView = {
-        let v = UIImageView()
-        v.contentMode = .scaleAspectFill
-        v.image = UIImage(named: "recipeDetail")
-        v.layer.cornerRadius = 20
-//        v.backgroundColor = .white
-//        v.layer.shadowColor = UIColor.black.cgColor
-        v.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-        v.clipsToBounds = true
-//
-//        v.layer.masksToBounds = false
-//        v.layer.shadowRadius = 2
-//        v.layer.shadowOpacity = 0.1
-//        v.layer.shadowOffset = CGSize(width: 0 , height:3)
-        return v
-    }()
+//    private let backgroundImage: UIImageView = {
+//        let v = UIImageView()
+//        v.contentMode = .scaleAspectFill
+//        v.image = UIImage(named: "recipeDetail")
+//        v.layer.cornerRadius = 20
+////        v.backgroundColor = .white
+////        v.layer.shadowColor = UIColor.black.cgColor
+//        v.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+//        v.clipsToBounds = true
+////
+////        v.layer.masksToBounds = false
+////        v.layer.shadowRadius = 2
+////        v.layer.shadowOpacity = 0.1
+////        v.layer.shadowOffset = CGSize(width: 0 , height:3)
+//        return v
+//    }()
     
     enum Section: Hashable {
         case info
@@ -66,7 +66,7 @@ class RecipeDetailViewController: BaseViewController {
                                         DetailIngredient(ingredientTitle: "토마토", ingredientCount: "2개", seasoningTitle: "굴소스", seasoningCount: "2T"),
                                         DetailIngredient(ingredientTitle: "토마토", ingredientCount: "2개", seasoningTitle: "굴소스", seasoningCount: "2T")]
     private var dataSource: Datasource!
-
+    private let disposeBag = DisposeBag()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addView()
@@ -80,15 +80,15 @@ class RecipeDetailViewController: BaseViewController {
 //MARK: - Method(Normal)
 extension RecipeDetailViewController {
     func addView() {
-        view.addSubViews(backgroundImage)
+//        view.addSubViews(backgroundImage)
         view.addSubview(collectionView)
     }
     func configureLayout() {
-        collectionView.backgroundColor = .clear
-        backgroundImage.snp.makeConstraints {
-            $0.left.right.equalToSuperview()
-            $0.height.equalTo(274)
-        }
+//        collectionView.backgroundColor = .white
+//        backgroundImage.snp.makeConstraints {
+//            $0.left.right.equalToSuperview()
+//            $0.height.equalTo(274)
+//        }
         
         collectionView.snp.makeConstraints {
 //            $0.top.equalTo(view.safeAreaLayoutGuide)
@@ -113,7 +113,7 @@ extension RecipeDetailViewController {
     }
     
     func configureData(_ item: Recipe) {
-        backgroundImage.image = item.image
+//        backgroundImage.image = item.image
     }
 }
 
@@ -144,13 +144,13 @@ extension RecipeDetailViewController {
     }
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(1.0)))
-        item.contentInsets = .init(top: 0, leading: 30, bottom: 0, trailing: 30)
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(241)))
+        item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(241)), subitem: item, count: 1)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.4)), subitem: item, count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 50, leading: 0, bottom: 30, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: -100, leading: 0, bottom: 10, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         return section
     }
@@ -294,6 +294,14 @@ extension RecipeDetailViewController {
         case .info:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailInfoCell.reuseIdentifier, for: indexPath) as! RecipeDetailInfoCell
             cell.delegate = self
+            cell.reviewButton.rx.tap
+                .subscribe(onNext: { _ in
+                    print("tapped")
+                }).disposed(by: disposeBag)
+            cell.favoriteButton.rx.tap
+                .subscribe(onNext: { _ in
+                    print("tapped")
+                }).disposed(by: disposeBag)
             return cell
         case .ingredient(let item):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientCell.reuseIdentifier, for: indexPath) as! IngredientCell
