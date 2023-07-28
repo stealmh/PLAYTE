@@ -18,16 +18,20 @@ class SegmentViewController: BaseViewController {
 //    view.translatesAutoresizingMaskIntoConstraints = false
 //    return view
 //  }()
-  private let vc1: UIViewController = {
-    let vc = RecipeReviewController()
-    vc.view.backgroundColor = .red
-    return vc
-  }()
-  private let vc2: UIViewController = {
-    let vc = UIViewController()
-    vc.view.backgroundColor = .green
-    return vc
-  }()
+    
+    private let vc1 = RecipeReviewController()
+//  private let vc1: UIViewController = {
+//    let vc = RecipeReviewController()
+//    vc.view.backgroundColor = .red
+//    return vc
+//  }()
+//    private let vc2 = CommentViewController()
+    private let vc2 = CommentTestViewController()
+//  private let vc2: UIViewController = {
+//    let vc = UIViewController()
+//    vc.view.backgroundColor = .green
+//    return vc
+//  }()
 
   private lazy var pageViewController: UIPageViewController = {
     let vc = UIPageViewController(transitionStyle: .scroll, navigationOrientation: .horizontal, options: nil)
@@ -88,6 +92,7 @@ class SegmentViewController: BaseViewController {
     self.segmentedControl.addTarget(self, action: #selector(changeValue(control:)), for: .valueChanged)
     self.segmentedControl.selectedSegmentIndex = 0
     self.changeValue(control: self.segmentedControl)
+      vc1.delegate = self
   }
   
   @objc private func changeValue(control: UISegmentedControl) {
@@ -130,4 +135,12 @@ extension SegmentViewController: UIPageViewControllerDataSource, UIPageViewContr
     self.currentPage = index
     self.segmentedControl.selectedSegmentIndex = index
   }
+}
+
+extension SegmentViewController: RecipeReviewControllerDelegate {
+    func didTapMorePhotoButton() {
+        print(#function)
+        let vc = ReviewPhotoViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }

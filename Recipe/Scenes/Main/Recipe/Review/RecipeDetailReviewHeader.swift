@@ -10,6 +10,9 @@ import RxSwift
 import RxCocoa
 import SnapKit
 
+protocol RecipeDetailReviewHeaderDelegate {
+    func didTappedMorePhotoButton()
+}
 
 final class RecipeDetailReviewHeader: UICollectionViewCell {
     
@@ -162,7 +165,7 @@ final class RecipeDetailReviewHeader: UICollectionViewCell {
     
     /// Properties
     private let disposeBag = DisposeBag()
-    var delegate: RecipeDetailInfoDelegate?
+    var delegate: RecipeDetailReviewHeaderDelegate?
     lazy var starImages = [star1, star2, star3, star4 ,star5]
     var testrating: Double = 0.0
     override init(frame: CGRect) {
@@ -320,7 +323,16 @@ extension RecipeDetailReviewHeader {
         thumbnailSecondImageView.image = UIImage(named: "popcat")
         thumbnailThirdImageView.image = UIImage(named: "popcat")
         moreTitle.text = "57개"
-        bind()
+        
+        for i in 0..<5 {
+            if testrating > 1 {
+                testrating -= 1
+                starImages[i].image = UIImage(named: "StarFill")
+            }
+            else {
+                starImages[i].image = UIImage(named: "StarEmpty")
+            }
+        }
     } //for data inject
     
     func configure() {
@@ -341,15 +353,13 @@ extension RecipeDetailReviewHeader {
 //MARK: - Method(Rx bind)
 extension RecipeDetailReviewHeader {
     private func bind() {
-        for i in 0..<5 {
-            if testrating > 1 {
-                testrating -= 1
-                starImages[i].image = UIImage(named: "StarFill")
+        
+        moreButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("moreButton Tappd - RecipeDetailReviewHeader")
+                self.delegate?.didTappedMorePhotoButton()
             }
-            else {
-                starImages[i].image = UIImage(named: "StarEmpty")
-            }
-        }
+        ).disposed(by: disposeBag)
     }
 }
 

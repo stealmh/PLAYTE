@@ -22,8 +22,16 @@ struct Review: Hashable {
     let photos: [UIImage]
 }
 
+protocol RecipeReviewControllerDelegate: AnyObject {
+    func didTapMorePhotoButton()
+}
 
 class RecipeReviewController: BaseViewController {
+    var didSendEventClosure: ((RecipeReviewController.Event) -> Void)?
+    
+    enum Event {
+        case go
+    }
     
     enum Section: Hashable {
         case header
@@ -47,6 +55,7 @@ class RecipeReviewController: BaseViewController {
     }()
     
     /// Properties
+    weak var delegate: RecipeReviewControllerDelegate?
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     private var mockData: [Review] = [Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: []),Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: []),Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: [])]
@@ -162,6 +171,7 @@ extension RecipeReviewController {
         switch item {
         case .header:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailReviewHeader.reuseIdentifier, for: indexPath) as! RecipeDetailReviewHeader
+            cell.delegate = self
             return cell
         case .review(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCell.reuseIdentifier, for: indexPath) as! ReviewCell
@@ -177,9 +187,7 @@ extension RecipeReviewController {
             return UICollectionReusableView()
         case .review:
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ReviewHeader.identifier, for: indexPath) as! ReviewHeader
-                return headerView
-            
-            
+                return headerView   
         }
     }
     
@@ -191,6 +199,14 @@ extension RecipeReviewController {
 
         
         return snapshot
+    }
+}
+
+extension RecipeReviewController: RecipeDetailReviewHeaderDelegate {
+    func didTappedMorePhotoButton() {
+//        didSendEventClosure?(.go)
+        print(#function)
+        delegate?.didTapMorePhotoButton()
     }
 }
 

@@ -31,4 +31,5 @@ extension UIColor {
         }
     class var mainColor: UIColor? { return UIColor(named: "MainColor") }
     class var lineColor: UIColor? { return UIColor(named: "LineColor") }
+    class var replyColor: UIColor? { return UIColor(named: "reply") }
 }
