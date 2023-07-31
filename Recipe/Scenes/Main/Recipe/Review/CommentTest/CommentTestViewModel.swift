@@ -7,7 +7,7 @@
 
 import UIKit
 
-class CommentTestViewModel : NSObject, UITableViewDataSource, UITableViewDelegate, HeaderViewDelegate {
+class CommentTestViewModel : NSObject, UITableViewDataSource, UITableViewDelegate, CommentFooterViewDelegate {
     
     var reloadSections: ((_ section: Int, _ indexpaths: [IndexPath], _ isInserting: Bool) -> Void)?
     var model : CategoryModel?
@@ -61,7 +61,7 @@ class CommentTestViewModel : NSObject, UITableViewDataSource, UITableViewDelegat
         }
     }
     
-    func toggleSection(header: CustomFirstTableViewHeaderFooterView, section: Int) {
+    func toggleSection(header: CommentFooterView, section: Int) {
         let expandedSectionCollection = dataSourceCollection.filter({ $0.isExpanded == true })
         // count == 1, when a section is already expanded
         if expandedSectionCollection.count == 1 {
@@ -78,10 +78,10 @@ class CommentTestViewModel : NSObject, UITableViewDataSource, UITableViewDelegat
             expandOrShrinkSection(isExpanding: true, selectedSection: section)
         }
         // Set  title
-        header.nickNameLabel.text = categories[section]
+//        header.nickNameLabel.text = categories[section]
         // Toggle collapse
         let collapsed = !dataSourceCollection[section].isExpanded
-        header.setCollapsed(collapsed: collapsed)
+        header.setCollapsed(collapsed: collapsed, applyCount: dataSourceCollection.count)
     }
     
     private func expandOrShrinkSection(isExpanding: Bool, selectedSection: Int) {
@@ -112,10 +112,22 @@ class CommentTestViewModel : NSObject, UITableViewDataSource, UITableViewDelegat
         if let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "CustomFirstTableViewHeaderFooterView") as? CustomFirstTableViewHeaderFooterView {
             headerView.nickNameLabel.text = categories[section]
             headerView.section = section
-            headerView.delegate = self
+//            headerView.delegate = self
             // Toggle collapse
             let collapsed = !dataSourceCollection[section].isExpanded
             headerView.setCollapsed(collapsed: collapsed)
+            return headerView
+        }
+        return UIView()
+    }
+    
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        if let headerView = tableView.dequeueReusableHeaderFooterView(withIdentifier: "CommentFooterView") as? CommentFooterView {
+            headerView.section = section
+            headerView.delegate = self
+            // Toggle collapse
+            let collapsed = !dataSourceCollection[section].isExpanded
+            headerView.setCollapsed(collapsed: collapsed, applyCount: dataSourceCollection.count)
             return headerView
         }
         return UIView()
