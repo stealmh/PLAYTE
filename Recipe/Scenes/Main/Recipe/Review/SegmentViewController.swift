@@ -81,10 +81,10 @@ class SegmentViewController: BaseViewController {
       self.pageViewController.view.topAnchor.constraint(equalTo: self.segmentedControl.bottomAnchor, constant: 5),
     ])
     
-    self.segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.mainColor], for: .normal)
+      self.segmentedControl.setTitleTextAttributes([NSAttributedString.Key.foregroundColor: UIColor.gray.withAlphaComponent(0.5)], for: .normal)
     self.segmentedControl.setTitleTextAttributes(
       [
-        NSAttributedString.Key.foregroundColor: UIColor.green,
+        NSAttributedString.Key.foregroundColor: UIColor.mainColor,
         .font: UIFont.systemFont(ofSize: 13, weight: .semibold)
       ],
       for: .selected
@@ -93,6 +93,7 @@ class SegmentViewController: BaseViewController {
     self.segmentedControl.selectedSegmentIndex = 0
     self.changeValue(control: self.segmentedControl)
       vc1.delegate = self
+      defaultNavigationBackButton(backButtonColor: .gray)
   }
   
   @objc private func changeValue(control: UISegmentedControl) {
