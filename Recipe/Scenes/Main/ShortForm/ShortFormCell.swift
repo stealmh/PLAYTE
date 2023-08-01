@@ -1,0 +1,160 @@
+//
+//  TestCell.swift
+//  Recipe
+//
+//  Created by 김민호 on 2023/08/02.
+//
+
+import UIKit
+import SnapKit
+
+class ShortFormCell: UICollectionViewCell {
+    
+    private let shortFormbackground: UIView = {
+        let v = UIView()
+        v.backgroundColor = .blue.withAlphaComponent(0.6)
+        v.layer.cornerRadius = 15
+        return v
+    }()
+    
+    private let playtimeLabel: UILabel = {
+        let v = UILabel()
+        v.textColor = .white
+        v.font = .systemFont(ofSize: 14)
+        return v
+    }()
+    
+    private let likeButton: UIButton = {
+        let v = UIButton()
+        v.setImage(UIImage(named: "shortFormHeart"), for: .normal)
+        v.setTitle("132", for: .normal)
+        v.alignTextBelow(spacing: 10)
+        return v
+    }()
+    
+    private let commentButton: UIButton = {
+        let v = UIButton()
+        v.setImage(UIImage(named: "shortFormComment"), for: .normal)
+        v.setTitle("56", for: .normal)
+        v.alignTextBelow(spacing: 10)
+        return v
+    }()
+    
+    private let favoriteButton: UIButton = {
+        let v = UIButton()
+        v.setImage(UIImage(named: "shortFormFavorite"), for: .normal)
+        v.setTitle("21", for: .normal)
+        v.alignTextBelow(spacing: 10)
+        return v
+    }()
+    
+    private let nickNameLabel: UILabel = {
+        let v = UILabel()
+        v.textColor = .white
+        v.font = .boldSystemFont(ofSize: 14)
+        return v
+    }()
+    
+    private let explanationLabel: UILabel = {
+        let v = UILabel()
+        v.textColor = .white
+        v.font = .systemFont(ofSize: 14)
+        return v
+    }()
+    
+    
+    override init(frame: CGRect) {
+        super.init(frame: frame)
+        addView()
+        configureLayout()
+        mockConfigure()
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+//MARK: - Method(Normal)
+extension ShortFormCell {
+    func addView() {
+        shortFormbackground.addSubViews(playtimeLabel, likeButton, commentButton, favoriteButton, nickNameLabel, explanationLabel)
+        addSubViews(shortFormbackground)
+    }
+    func configureLayout() {
+        shortFormbackground.snp.makeConstraints {
+            $0.edges.equalToSuperview()
+        }
+        
+        playtimeLabel.snp.makeConstraints {
+            $0.top.right.equalTo(shortFormbackground).inset(30)
+            $0.width.equalTo(40)
+            $0.height.equalTo(14)
+        }
+        
+        likeButton.snp.makeConstraints {
+            $0.bottom.equalTo(commentButton.snp.top).offset(-40)
+            $0.right.equalTo(shortFormbackground).inset(20)
+            $0.width.equalTo(30)
+        }
+        
+        commentButton.snp.makeConstraints {
+            $0.bottom.equalTo(favoriteButton.snp.top).offset(-40)
+            $0.right.width.equalTo(likeButton)
+        }
+        
+        favoriteButton.snp.makeConstraints {
+            $0.bottom.equalTo(nickNameLabel.snp.top)
+            $0.right.width.equalTo(likeButton)
+        }
+        
+        nickNameLabel.snp.makeConstraints {
+            $0.bottom.equalTo(explanationLabel.snp.top).offset(-10)
+            $0.left.equalTo(shortFormbackground).inset(20)
+        }
+
+        explanationLabel.snp.makeConstraints {
+            $0.top.equalTo(shortFormbackground.snp.bottom).inset(30)
+            $0.left.equalTo(nickNameLabel)
+            $0.right.equalTo(favoriteButton.snp.left).inset(20)
+        }
+    }
+    func mockConfigure() {
+        playtimeLabel.text = "00:49"
+        nickNameLabel.text = "happyday125"
+        explanationLabel.text = "탕후루를 집에서 손쉽게 만드는 법을 공개합니다"
+    }
+}
+
+////MARK: - VC Preview
+//import SwiftUI
+//struct ShortFormViewController1_preview: PreviewProvider {
+//    static var previews: some View {
+//        
+//        UINavigationController(rootViewController: ShortFormViewController())
+//            .toPreview()
+//            .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
+//    }
+//}
+
+#if DEBUG
+import SwiftUI
+struct ForShortFormCell: UIViewRepresentable {
+    typealias UIViewType = UIView
+    
+    func makeUIView(context: Context) -> UIView {
+        ShortFormCell()
+    }
+    
+    func updateUIView(_ uiView: UIView, context: Context) {
+    }
+}
+
+@available(iOS 13.0, *)
+struct ForShortFormCell_Preview: PreviewProvider {
+    static var previews: some View {
+        ForShortFormCell()
+            .previewLayout(.fixed(width: 250, height: 500))
+    }
+}
+#endif

@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		161647962A79590D0055D740 /* ShortFormCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161647952A79590D0055D740 /* ShortFormCell.swift */; };
 		162DFEB22A6FDF0D00338A18 /* ReviewPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162DFEB12A6FDF0C00338A18 /* ReviewPhotoViewController.swift */; };
 		162DFEB42A6FDFA400338A18 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162DFEB32A6FDFA400338A18 /* PhotoCell.swift */; };
 		163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */; };
@@ -20,6 +21,9 @@
 		169968C72A6F57960074DB43 /* ReviewHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968C62A6F57960074DB43 /* ReviewHeader.swift */; };
 		169968C92A6F57B50074DB43 /* ReviewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968C82A6F57B50074DB43 /* ReviewCell.swift */; };
 		169968CB2A6F84B30074DB43 /* RecipeReviewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169968CA2A6F84B30074DB43 /* RecipeReviewController.swift */; };
+		169FE66E2A78A22E00593041 /* UITabBarController+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FE66D2A78A22E00593041 /* UITabBarController+util.swift */; };
+		169FE6712A78A45D00593041 /* ShortFormCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */; };
+		169FE6732A78A50300593041 /* ShortFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FE6722A78A50300593041 /* ShortFormViewController.swift */; };
 		16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */; };
 		16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */; };
 		16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */; };
@@ -140,6 +144,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		161647952A79590D0055D740 /* ShortFormCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormCell.swift; sourceTree = "<group>"; };
 		162DFEB12A6FDF0C00338A18 /* ReviewPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPhotoViewController.swift; sourceTree = "<group>"; };
 		162DFEB32A6FDFA400338A18 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewController.swift; sourceTree = "<group>"; };
@@ -153,6 +158,9 @@
 		169968C62A6F57960074DB43 /* ReviewHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewHeader.swift; sourceTree = "<group>"; };
 		169968C82A6F57B50074DB43 /* ReviewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewCell.swift; sourceTree = "<group>"; };
 		169968CA2A6F84B30074DB43 /* RecipeReviewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeReviewController.swift; sourceTree = "<group>"; };
+		169FE66D2A78A22E00593041 /* UITabBarController+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+util.swift"; sourceTree = "<group>"; };
+		169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormCoordinator.swift; sourceTree = "<group>"; };
+		169FE6722A78A50300593041 /* ShortFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormViewController.swift; sourceTree = "<group>"; };
 		16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCountCell.swift; sourceTree = "<group>"; };
 		16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepFooterView.swift; sourceTree = "<group>"; };
 		16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepHeaderView.swift; sourceTree = "<group>"; };
@@ -328,6 +336,16 @@
 			path = Review;
 			sourceTree = "<group>";
 		};
+		169FE66F2A78A44500593041 /* ShortForm */ = {
+			isa = PBXGroup;
+			children = (
+				169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */,
+				169FE6722A78A50300593041 /* ShortFormViewController.swift */,
+				161647952A79590D0055D740 /* ShortFormCell.swift */,
+			);
+			path = ShortForm;
+			sourceTree = "<group>";
+		};
 		16C5FFAE2A72BDD500EA599F /* CommentTest */ = {
 			isa = PBXGroup;
 			children = (
@@ -430,6 +448,7 @@
 				5AFE49C22A5BC20F000B9A95 /* UIColor+util.swift */,
 				5AAEC5542A5D3BDF00E9877C /* UIButton+util.swift */,
 				16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */,
+				169FE66D2A78A22E00593041 /* UITabBarController+util.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -544,6 +563,7 @@
 			isa = PBXGroup;
 			children = (
 				5A0244E82A52A83E00AA418E /* Tab */,
+				169FE66F2A78A44500593041 /* ShortForm */,
 				5ACD7BBA2A57DAA100571259 /* Recipe */,
 				5ACD7BBB2A57DAA800571259 /* Community */,
 				5A0244ED2A52A87B00AA418E /* MyPage */,
@@ -998,6 +1018,7 @@
 				5AB4A5DC2A5502DF0095CD2B /* PresentationController.swift in Sources */,
 				5A914AE02A5407410020BA71 /* NormalRefrigeratorView.swift in Sources */,
 				16CE3E5C2A77665600102F27 /* CreateReviewController.swift in Sources */,
+				169FE66E2A78A22E00593041 /* UITabBarController+util.swift in Sources */,
 				5AAEC5592A5D511300E9877C /* RecipeHeaderCell.swift in Sources */,
 				5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */,
 				5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */,
@@ -1007,8 +1028,10 @@
 				5AAEC5552A5D3BDF00E9877C /* UIButton+util.swift in Sources */,
 				16900CFE2A6BA0D800B06D8C /* Template.swift in Sources */,
 				16C5FFB62A72BE1F00EA599F /* CommentTestItemCell.swift in Sources */,
+				169FE6712A78A45D00593041 /* ShortFormCoordinator.swift in Sources */,
 				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
 				169968C12A6F54250074DB43 /* SegmentViewController.swift in Sources */,
+				169FE6732A78A50300593041 /* ShortFormViewController.swift in Sources */,
 				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
 				5A0244992A529AA300AA418E /* Recipe.xcdatamodeld in Sources */,
 				16C5FFB22A72BE0500EA599F /* CommentTestViewModel.swift in Sources */,
@@ -1019,6 +1042,7 @@
 				5A0244DB2A52A74D00AA418E /* SplashCoordinator.swift in Sources */,
 				5A914AD32A54024A0020BA71 /* Home.swift in Sources */,
 				5A0244D22A52A59000AA418E /* Coordinator.swift in Sources */,
+				161647962A79590D0055D740 /* ShortFormCell.swift in Sources */,
 				5A5B904D2A652E770049E853 /* CreateRecipeHeaderCell.swift in Sources */,
 				16E615B32A6CE0C8002C1AE9 /* RecipeDetailDefaultHeaderView.swift in Sources */,
 				163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */,
