@@ -30,4 +30,14 @@ extension UIView {
         
         self.layer.addSublayer(v)
     }
+    
+    /// 사진의 배경색을 어둡게 만들어 줌
+    func addoverlay(color: UIColor = .black, alpha : CGFloat = 0.6) {
+        let v = UIView()
+        v.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        v.frame = bounds
+        v.backgroundColor = color
+        v.alpha = alpha
+        addSubview(v)
+    }
 }

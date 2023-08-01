@@ -6,9 +6,44 @@
 //
 
 import UIKit
+import RxSwift
+import RxCocoa
 import SnapKit
 
+protocol RecipeDetailInfoDelegate {
+    func showReview()
+}
+
 final class RecipeDetailInfoCell: UICollectionViewCell {
+    
+    private let backgroundImage: UIImageView = {
+        let v = UIImageView()
+        v.contentMode = .scaleAspectFill
+        v.image = UIImage(named: "recipeDetail")
+        v.layer.cornerRadius = 20
+//        v.backgroundColor = .white
+//        v.layer.shadowColor = UIColor.black.cgColor
+        v.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
+        v.clipsToBounds = true
+//
+//        v.layer.masksToBounds = false
+//        v.layer.shadowRadius = 2
+//        v.layer.shadowOpacity = 0.1
+//        v.layer.shadowOffset = CGSize(width: 0 , height:3)
+        return v
+    }()
+    
+    private let cellBackground: UIView = {
+        let v = UIView()
+        v.layer.cornerRadius = 20
+        v.layer.shadowColor = UIColor.black.cgColor
+        v.clipsToBounds = true
+        v.layer.masksToBounds = false
+        v.layer.shadowRadius = 2
+        v.layer.shadowOpacity = 0.1
+        v.layer.shadowOffset = CGSize(width: 0 , height:3)
+        return v
+    }()
     
     /// UI Properties
     private let nickNameLabel: UILabel = {
@@ -31,7 +66,7 @@ final class RecipeDetailInfoCell: UICollectionViewCell {
         return v
     }()
     
-    private let favoriteButton: UIButton = {
+    let favoriteButton: UIButton = {
         let v = UIButton()
         let img = v.buttonImageSize(systemImageName: "bookmark.fill", size: 23)
         v.setImage(img, for: .normal)
@@ -74,7 +109,7 @@ final class RecipeDetailInfoCell: UICollectionViewCell {
         return v
     }()
     
-    private let reviewButton: UIButton = {
+    let reviewButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(systemName: "chevron.right"), for: .normal)// 이미지 넣기
         v.setTitleColor(.black, for: .normal)
@@ -101,13 +136,14 @@ final class RecipeDetailInfoCell: UICollectionViewCell {
     }()
     
     /// Properties
-    
+    private let disposeBag = DisposeBag()
+    var delegate: RecipeDetailInfoDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
-        backgroundConfigure()
         addView()
+        bind()
         configureLayout()
         mockConfigure()
     }
@@ -131,20 +167,34 @@ extension RecipeDetailInfoCell {
     }
     
     private func addView() {
-        addSubViews(nickNameLabel,uploadDateLabel,titleLabel,favoriteButton,contentsLabel,lineBackground,reviewImage,personImage,timeImage,reviewButton,personLabel,timeLabel)
+        addSubview(backgroundImage)
+addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButton,contentsLabel,lineBackground,reviewImage,personImage,timeImage,personLabel,timeLabel,reviewButton)
     }
     
     private func configureLayout() {
+        
+        backgroundImage.snp.makeConstraints {
+            $0.top.left.right.equalToSuperview()
+            $0.height.equalTo(250)
+        }
+        cellBackground.backgroundColor = .white
+        cellBackground.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(100)
+            $0.left.equalToSuperview().offset(20)
+            $0.right.equalToSuperview().inset(20)
+            $0.height.equalTo(240)
+        }
+        
         nickNameLabel.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(20)
-            $0.left.equalToSuperview().inset(35)
+            $0.top.equalTo(cellBackground).inset(20)
+            $0.left.equalTo(cellBackground).inset(35)
             $0.width.equalTo(140)
             $0.height.equalTo(14)
         }
         
         uploadDateLabel.snp.makeConstraints {
             $0.top.height.equalTo(nickNameLabel)
-            $0.right.equalToSuperview().inset(35)
+            $0.right.equalTo(cellBackground).inset(35)
         }
 
         titleLabel.snp.makeConstraints {
@@ -220,7 +270,14 @@ extension RecipeDetailInfoCell {
 
 //MARK: - Method(Rx bind)
 extension RecipeDetailInfoCell {
-    private func bind() {}
+    private func bind() {
+        reviewButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("tapped")
+                self.delegate?.showReview()
+            }
+        ).disposed(by: disposeBag)
+    }
 }
 
 #if DEBUG

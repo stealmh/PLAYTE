@@ -1,0 +1,70 @@
+{
+  "Action & Adventure": [
+    {
+      "name": "Gladiator"
+    },
+    {
+      "name": "John Wick"
+    },
+    {
+      "name": "Kingdom of Heaven"
+    },
+    {
+      "name": "Blood Diamond"
+    },
+    {
+      "name": "300"
+    },
+    {
+      "name": "Pirates of the Caribbean"
+    }
+  ],
+  "Action Comedies": [
+    {
+      "name": "The Gentlemen"
+    },
+    {
+      "name": "Bad Boys for Life"
+    },
+    {
+      "name": "Jumanji: The Next Level"
+    },
+    {
+      "name": "Spenser Confidential"
+    }
+  ],
+  "Action Sci-Fi & Fantasy": [
+    {
+      "name": "The Matrix"
+    },
+    {
+      "name": "Ender's Game"
+    },
+    {
+      "name": "Aliens"
+    },
+    {
+      "name": "The Game"
+    },
+    {
+      "name": "Gothika"
+    }
+  ],
+  "Action Thrillers": [
+    {
+      "name": "Léon: The Professional"
+    },
+    {
+      "name": "Heat"
+    },
+    {
+      "name": "Sanjuro"
+    },
+    {
+      "name": "The Crow"
+    },
+    {
+      "name": "The Raid 2"
+    }
+  ]
+}
