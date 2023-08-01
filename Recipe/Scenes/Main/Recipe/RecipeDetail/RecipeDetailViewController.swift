@@ -12,23 +12,6 @@ import RxSwift
 
 class RecipeDetailViewController: BaseViewController {
     
-//    private let backgroundImage: UIImageView = {
-//        let v = UIImageView()
-//        v.contentMode = .scaleAspectFill
-//        v.image = UIImage(named: "recipeDetail")
-//        v.layer.cornerRadius = 20
-////        v.backgroundColor = .white
-////        v.layer.shadowColor = UIColor.black.cgColor
-//        v.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
-//        v.clipsToBounds = true
-////
-////        v.layer.masksToBounds = false
-////        v.layer.shadowRadius = 2
-////        v.layer.shadowOpacity = 0.1
-////        v.layer.shadowOffset = CGSize(width: 0 , height:3)
-//        return v
-//    }()
-    
     enum Section: Hashable {
         case info
         case ingredient
@@ -51,7 +34,7 @@ class RecipeDetailViewController: BaseViewController {
     lazy var collectionView: UICollectionView = {
         let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         v.showsVerticalScrollIndicator = false
-//        v.translatesAutoresizingMaskIntoConstraints = false
+        //        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
     private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
@@ -80,20 +63,10 @@ class RecipeDetailViewController: BaseViewController {
 //MARK: - Method(Normal)
 extension RecipeDetailViewController {
     func addView() {
-//        view.addSubViews(backgroundImage)
         view.addSubview(collectionView)
     }
     func configureLayout() {
-//        collectionView.backgroundColor = .white
-//        backgroundImage.snp.makeConstraints {
-//            $0.left.right.equalToSuperview()
-//            $0.height.equalTo(274)
-//        }
-        
         collectionView.snp.makeConstraints {
-//            $0.top.equalTo(view.safeAreaLayoutGuide)
-//            $0.left.right.bottom.equalToSuperview()
-            
             $0.edges.equalToSuperview()
         }
     }
@@ -113,7 +86,7 @@ extension RecipeDetailViewController {
     }
     
     func configureData(_ item: Recipe) {
-//        backgroundImage.image = item.image
+        //        backgroundImage.image = item.image
     }
 }
 
@@ -343,6 +316,13 @@ extension RecipeDetailViewController {
             } else {
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateRecipeFooter.identifier, for: indexPath) as! CreateRecipeFooter
                 footerView.configure("리뷰 작성하기")
+                footerView.registerButton.rx.tap
+                    .subscribe(onNext: { _ in
+                        ///Todo: 분리
+                        let vc = CreateReviewController()
+                        vc.delegate = self
+                        self.navigationController?.pushViewController(vc, animated: true)
+                    }).disposed(by: disposeBag)
                 return footerView
             }
         default: return UICollectionReusableView()
@@ -366,6 +346,14 @@ extension RecipeDetailViewController: RecipeDetailInfoDelegate {
         let vc = SegmentViewController()
         navigationController?.pushViewController(vc, animated: true)
     }
+}
+
+extension RecipeDetailViewController: CreateReviewControllerDelegate {
+    func endFlow() {
+        print("RecipeDetailViewController")
+        self.navigationController?.popViewController(animated: true)
+    }
+    
 }
 
 //MARK: - VC Preview

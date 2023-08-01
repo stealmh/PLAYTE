@@ -127,7 +127,7 @@ class CommentTestViewModel : NSObject, UITableViewDataSource, UITableViewDelegat
             headerView.delegate = self
             // Toggle collapse
             let collapsed = !dataSourceCollection[section].isExpanded
-            headerView.setCollapsed(collapsed: collapsed, applyCount: dataSourceCollection.count)
+            headerView.setCollapsed(collapsed: collapsed, applyCount: dataSourceCollection[section].categoryItems.count)
             return headerView
         }
         return UIView()
@@ -163,6 +163,6 @@ class CommentTestViewModel : NSObject, UITableViewDataSource, UITableViewDelegat
 
 struct ExpandableCategories : Equatable {
     var isExpanded: Bool
-    let categoryHeader: String
-    let categoryItems: [Item]
+    let categoryHeader: String /// nickName
+    let categoryItems: [Item] /// reply
 }

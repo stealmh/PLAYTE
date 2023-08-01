@@ -8,7 +8,6 @@
 import UIKit
 
 enum TabBarPage {
-    case home
     case community
     case myPage
     case recipe
@@ -16,12 +15,10 @@ enum TabBarPage {
     init?(index: Int) {
         switch index {
         case 0:
-            self = .home
-        case 1:
             self = .recipe
-        case 2:
+        case 1:
             self = .community
-        case 3:
+        case 2:
             self = .myPage
         default:
             return nil
@@ -30,8 +27,6 @@ enum TabBarPage {
     
     func pageTitleValue() -> String {
         switch self {
-        case .home:
-            return "홈"
         case .recipe:
             return "레시피"
         case .community:
@@ -44,22 +39,18 @@ enum TabBarPage {
     //tag
     func pageOrderNumber() -> Int {
         switch self {
-        case .home:
-            return 0
         case .recipe:
-            return 1
+            return 0
         case .community:
-            return 2
+            return 1
         case .myPage:
-            return 3
+            return 2
         }
     }
 
     // Add tab icon value
     func tabIcon() -> UIImage {
         switch self {
-        case .home:
-            return UIImage(systemName: "house")!
         case .recipe:
             return UIImage(systemName: "house")!
         case .community:
@@ -72,8 +63,6 @@ enum TabBarPage {
     // Add tab icon selected / deselected color
     func selectedImage() -> UIImage {
         switch self {
-        case .home:
-            return UIImage(systemName: "house.fill")!
         case .recipe:
             return UIImage(systemName: "house.fill")!
         case .community:

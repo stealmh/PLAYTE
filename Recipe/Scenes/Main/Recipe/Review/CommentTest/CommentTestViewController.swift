@@ -44,6 +44,8 @@ class CommentTestViewController: UIViewController {
         v.backgroundColor = .mainColor?.withAlphaComponent(0.1)
         v.layer.borderColor = UIColor.mainColor?.cgColor
         v.layer.borderWidth = 1
+        /// Todo: 얘도 키보드따라 움직이게 수정
+        v.isHidden = true
         return v
     }()
     
@@ -98,7 +100,7 @@ class CommentTestViewController: UIViewController {
         applyingLabel.snp.makeConstraints {
             $0.center.equalTo(applyingBackground)
         }
-        
+        commentBackground.backgroundColor = .white
         
         keyboardCheck()
 

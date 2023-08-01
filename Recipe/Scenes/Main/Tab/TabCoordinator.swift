@@ -36,7 +36,7 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
 
     func start() {
         // Let's define which pages do we want to add into tab bar
-        let pages: [TabBarPage] = [.myPage, .home, .community, .recipe]
+        let pages: [TabBarPage] = [.myPage, .community, .recipe]
             .sorted(by: { $0.pageOrderNumber() < $1.pageOrderNumber() })
         
         // Initialization of ViewControllers or these pages
@@ -57,7 +57,7 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
         /// Assign page's controllers
 //        tabBarController.setViewControllers(tabControllers, animated: true)
         /// Let set index
-        tabBarController.selectedIndex = TabBarPage.home.pageOrderNumber()
+        tabBarController.selectedIndex = TabBarPage.recipe.pageOrderNumber()
         /// Styling
         tabBarController.tabBar.isTranslucent = false
         
@@ -79,13 +79,6 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
 
         tabBarController.tabBar.backgroundColor = .white
         switch page {
-        case .home:
-            // If needed: Each tab bar flow can have it's own Coordinator.
-            let readyCoordinator = HomeCoordinator(navController)
-            readyCoordinator.finishDelegate = self
-            childCoordinators.append(readyCoordinator)
-            readyCoordinator.start()
-            
         case .recipe:
             let readyCoordinator = RecipeCoordinator(navController)
             readyCoordinator.finishDelegate = self

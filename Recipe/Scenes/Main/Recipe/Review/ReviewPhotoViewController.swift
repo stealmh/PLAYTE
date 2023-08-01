@@ -73,6 +73,7 @@ class ReviewPhotoViewController: BaseViewController {
         v.font = .boldSystemFont(ofSize: 16)
         v.asColor(targetString: "사진 리뷰", color: .black)
         navigationItem.titleView = v
+        defaultNavigationBackButton(backButtonColor: .gray)
     }
 }
 
