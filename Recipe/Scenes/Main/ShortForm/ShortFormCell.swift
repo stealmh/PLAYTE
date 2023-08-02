@@ -7,14 +7,23 @@
 
 import UIKit
 import SnapKit
+import AVFoundation
 
 class ShortFormCell: UICollectionViewCell {
     
     private let shortFormbackground: UIView = {
         let v = UIView()
-        v.backgroundColor = .blue.withAlphaComponent(0.6)
+        v.backgroundColor = .black.withAlphaComponent(0.6)
         v.layer.cornerRadius = 15
         return v
+    }()
+    
+    private lazy var player: AVPlayer = AVPlayer(playerItem: nil)
+
+    private lazy var playerLayer: AVPlayerLayer = {
+        let playerLayer = AVPlayerLayer(player: self.player)
+        playerLayer.videoGravity = .resize
+        return playerLayer
     }()
     
     private let playtimeLabel: UILabel = {
@@ -62,28 +71,50 @@ class ShortFormCell: UICollectionViewCell {
         return v
     }()
     
+    let watchImageView: UIImageView = {
+        let v = UIImageView()
+        v.image = UIImage(named: "watch")
+        v.contentMode = .scaleAspectFit
+        return v
+    }()
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addView()
         configureLayout()
         mockConfigure()
+        self.shortFormbackground.layer.addSublayer(self.playerLayer)
+    }
+    
+    override func layoutSubviews() {
+        super.layoutSubviews()
+        print(#function)
+        playerLayer.frame = shortFormbackground.layer.bounds
     }
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func prepareForReuse() {
+        print(#function)
+        super.prepareForReuse()
+        player.replaceCurrentItem(with: nil)
+        self.stop()
     }
 }
 
 //MARK: - Method(Normal)
 extension ShortFormCell {
     func addView() {
-        shortFormbackground.addSubViews(playtimeLabel, likeButton, commentButton, favoriteButton, nickNameLabel, explanationLabel)
-        addSubViews(shortFormbackground)
+        addSubViews(shortFormbackground, watchImageView, playtimeLabel, likeButton, commentButton, favoriteButton, nickNameLabel, explanationLabel)
     }
     func configureLayout() {
         shortFormbackground.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.equalToSuperview().inset(10)
+//            $0.edges.equalToSuperview()
+            $0.left.right.bottom.equalToSuperview()
         }
         
         playtimeLabel.snp.makeConstraints {
@@ -112,17 +143,34 @@ extension ShortFormCell {
             $0.bottom.equalTo(explanationLabel.snp.top).offset(-10)
             $0.left.equalTo(shortFormbackground).inset(20)
         }
-
         explanationLabel.snp.makeConstraints {
             $0.top.equalTo(shortFormbackground.snp.bottom).inset(30)
             $0.left.equalTo(nickNameLabel)
-            $0.right.equalTo(favoriteButton.snp.left).inset(20)
+            $0.right.equalTo(favoriteButton.snp.left).offset(-20)
+        }
+        
+        watchImageView.snp.makeConstraints {
+            $0.top.equalToSuperview().offset(-10)
+            $0.centerX.equalToSuperview()
+            $0.width.equalTo(47.24)
+            $0.height.equalTo(50)
         }
     }
     func mockConfigure() {
         playtimeLabel.text = "00:49"
         nickNameLabel.text = "happyday125"
         explanationLabel.text = "탕후루를 집에서 손쉽게 만드는 법을 공개합니다"
+    }
+    
+    func playVideo(url: String) {
+        let playerItem = AVPlayerItem(url: URL(string: url)!)
+        player.replaceCurrentItem(with: playerItem)
+        player.volume = 0
+        player.play()
+    }
+    
+    func stop() {
+        player.replaceCurrentItem(with: nil)
     }
 }
 
