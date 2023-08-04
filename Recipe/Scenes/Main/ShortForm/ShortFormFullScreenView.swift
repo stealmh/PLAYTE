@@ -45,7 +45,7 @@ class ShortFormFullScreenView: UIView {
         return v
     }()
     
-    private let commentButton: UIButton = {
+    let commentButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(named: "shortFormComment"), for: .normal)
         v.setTitle("56", for: .normal)

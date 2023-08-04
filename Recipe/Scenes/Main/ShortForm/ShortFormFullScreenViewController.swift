@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 import AVFoundation
 
 class ShortFormFullScreenViewController: BaseViewController {
@@ -14,6 +16,7 @@ class ShortFormFullScreenViewController: BaseViewController {
     var player: AVPlayer
     var playerLayer: AVPlayerLayer
     
+    /// UI Properties
     private let background = ShortFormFullScreenView()
     private var slider: UISlider = {
         let v = UISlider()
@@ -55,6 +58,9 @@ class ShortFormFullScreenViewController: BaseViewController {
         return v
     }()
     
+    /// Properties
+    private let disposeBag = DisposeBag()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupPlayer()
@@ -65,6 +71,7 @@ class ShortFormFullScreenViewController: BaseViewController {
         configureLayout()
         defaultNavigationBackButton(backButtonColor: .white)
         setupUI()
+        self.bind()
     }
     
     init(videoURL: URL?, player: AVPlayer, playerLayer: AVPlayerLayer) {
@@ -185,6 +192,31 @@ extension ShortFormFullScreenViewController {
         let minutes = (seconds % 3600) / 60
         let seconds = seconds % 60
         return String(format: "%02d:%02d", minutes, seconds)
+    }
+}
+
+extension ShortFormFullScreenViewController: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        PresentationController(presentedViewController: presented, presenting: presenting)
+    }
+    
+    func bind() {
+        let vc = CommentTestViewController()
+        
+        background.commentButton.rx.tap
+            .subscribe(onNext: { _ in
+                if #available(iOS 15.0, *) {
+                    guard let sheet = vc.sheetPresentationController else { return }
+                    sheet.detents = [.medium(), .large()]
+                    sheet.preferredCornerRadius = 20
+                    sheet.prefersGrabberVisible = true
+                } else {
+                    vc.modalPresentationStyle = .automatic
+                    vc.transitioningDelegate = self
+                }
+                self.present(vc, animated: true)
+            }).disposed(by: disposeBag)
     }
 }
 
