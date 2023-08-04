@@ -7,12 +7,20 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		161494142A7CFD8900395AA4 /* SearchDefaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161494132A7CFD8900395AA4 /* SearchDefaultView.swift */; };
+		161494162A7CFDE100395AA4 /* RecentSearchHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161494152A7CFDE100395AA4 /* RecentSearchHeader.swift */; };
+		161494182A7CFDF000395AA4 /* RecentSearchTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161494172A7CFDF000395AA4 /* RecentSearchTagCell.swift */; };
+		1614941A2A7CFE1300395AA4 /* PopularHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161494192A7CFE1300395AA4 /* PopularHeader.swift */; };
+		1614941C2A7CFE3900395AA4 /* PopularCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1614941B2A7CFE3900395AA4 /* PopularCell.swift */; };
 		161647962A79590D0055D740 /* ShortFormCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161647952A79590D0055D740 /* ShortFormCell.swift */; };
 		161EA8542A7A74C100F454F9 /* ShortFormFullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161EA8532A7A74C100F454F9 /* ShortFormFullScreenViewController.swift */; };
 		161EA8562A7A7AD000F454F9 /* ShortFormFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161EA8552A7A7AD000F454F9 /* ShortFormFullScreenView.swift */; };
 		161EA8582A7A7E6E00F454F9 /* ShortFormTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161EA8572A7A7E6E00F454F9 /* ShortFormTagCell.swift */; };
 		162DFEB22A6FDF0D00338A18 /* ReviewPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162DFEB12A6FDF0C00338A18 /* ReviewPhotoViewController.swift */; };
 		162DFEB42A6FDFA400338A18 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162DFEB32A6FDFA400338A18 /* PhotoCell.swift */; };
+		1636558C2A7CDE2100208813 /* ShortFormSearchCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636558B2A7CDE2100208813 /* ShortFormSearchCell.swift */; };
+		1636558E2A7CDE2C00208813 /* ShortFormSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636558D2A7CDE2C00208813 /* ShortFormSearchViewController.swift */; };
+		163655902A7CE2CD00208813 /* UIImage+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636558F2A7CE2CD00208813 /* UIImage+util.swift */; };
 		163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */; };
 		16900CFA2A6B9ACC00B06D8C /* RecipeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16900CF92A6B9ACC00B06D8C /* RecipeDetailViewController.swift */; };
 		16900CFC2A6BA06900B06D8C /* RecipeDetailInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16900CFB2A6BA06900B06D8C /* RecipeDetailInfoCell.swift */; };
@@ -147,12 +155,20 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		161494132A7CFD8900395AA4 /* SearchDefaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SearchDefaultView.swift; sourceTree = "<group>"; };
+		161494152A7CFDE100395AA4 /* RecentSearchHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchHeader.swift; sourceTree = "<group>"; };
+		161494172A7CFDF000395AA4 /* RecentSearchTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentSearchTagCell.swift; sourceTree = "<group>"; };
+		161494192A7CFE1300395AA4 /* PopularHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularHeader.swift; sourceTree = "<group>"; };
+		1614941B2A7CFE3900395AA4 /* PopularCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopularCell.swift; sourceTree = "<group>"; };
 		161647952A79590D0055D740 /* ShortFormCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormCell.swift; sourceTree = "<group>"; };
 		161EA8532A7A74C100F454F9 /* ShortFormFullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormFullScreenViewController.swift; sourceTree = "<group>"; };
 		161EA8552A7A7AD000F454F9 /* ShortFormFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormFullScreenView.swift; sourceTree = "<group>"; };
 		161EA8572A7A7E6E00F454F9 /* ShortFormTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormTagCell.swift; sourceTree = "<group>"; };
 		162DFEB12A6FDF0C00338A18 /* ReviewPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPhotoViewController.swift; sourceTree = "<group>"; };
 		162DFEB32A6FDFA400338A18 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
+		1636558B2A7CDE2100208813 /* ShortFormSearchCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormSearchCell.swift; sourceTree = "<group>"; };
+		1636558D2A7CDE2C00208813 /* ShortFormSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormSearchViewController.swift; sourceTree = "<group>"; };
+		1636558F2A7CE2CD00208813 /* UIImage+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+util.swift"; sourceTree = "<group>"; };
 		163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewController.swift; sourceTree = "<group>"; };
 		16900CF92A6B9ACC00B06D8C /* RecipeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailViewController.swift; sourceTree = "<group>"; };
 		16900CFB2A6BA06900B06D8C /* RecipeDetailInfoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailInfoCell.swift; sourceTree = "<group>"; };
@@ -309,6 +325,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1636558A2A7CDE1100208813 /* Search */ = {
+			isa = PBXGroup;
+			children = (
+				1636558B2A7CDE2100208813 /* ShortFormSearchCell.swift */,
+				1636558D2A7CDE2C00208813 /* ShortFormSearchViewController.swift */,
+				161494132A7CFD8900395AA4 /* SearchDefaultView.swift */,
+				161494152A7CFDE100395AA4 /* RecentSearchHeader.swift */,
+				161494172A7CFDF000395AA4 /* RecentSearchTagCell.swift */,
+				161494192A7CFE1300395AA4 /* PopularHeader.swift */,
+				1614941B2A7CFE3900395AA4 /* PopularCell.swift */,
+			);
+			path = Search;
+			sourceTree = "<group>";
+		};
 		16900CF82A6B9AAF00B06D8C /* RecipeDetail */ = {
 			isa = PBXGroup;
 			children = (
@@ -345,6 +375,7 @@
 		169FE66F2A78A44500593041 /* ShortForm */ = {
 			isa = PBXGroup;
 			children = (
+				1636558A2A7CDE1100208813 /* Search */,
 				169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */,
 				169FE6722A78A50300593041 /* ShortFormViewController.swift */,
 				161647952A79590D0055D740 /* ShortFormCell.swift */,
@@ -458,6 +489,7 @@
 				5AAEC5542A5D3BDF00E9877C /* UIButton+util.swift */,
 				16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */,
 				169FE66D2A78A22E00593041 /* UITabBarController+util.swift */,
+				1636558F2A7CE2CD00208813 /* UIImage+util.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -986,6 +1018,7 @@
 				5A0244E02A52A7C900AA418E /* LoginCoordinator.swift in Sources */,
 				5A914AEF2A5419C70020BA71 /* IngredientsHandleCell.swift in Sources */,
 				5A0244D72A52A6F500AA418E /* BaseViewController.swift in Sources */,
+				1636558E2A7CDE2C00208813 /* ShortFormSearchViewController.swift in Sources */,
 				5A0244912A529AA300AA418E /* SceneDelegate.swift in Sources */,
 				16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */,
 				5A914AD62A5404940020BA71 /* PageSectionFooterView.swift in Sources */,
@@ -998,12 +1031,15 @@
 				5A914AE32A5410E30020BA71 /* PriceTrendHeader.swift in Sources */,
 				5ACD7BBF2A57DAEA00571259 /* CommunityCoordinator.swift in Sources */,
 				16C5FFB02A72BDEF00EA599F /* CommentTestViewController.swift in Sources */,
+				161494182A7CFDF000395AA4 /* RecentSearchTagCell.swift in Sources */,
 				16C5FFB42A72BE1300EA599F /* CommentTestHeaderView.swift in Sources */,
 				5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */,
+				1614941A2A7CFE1300395AA4 /* PopularHeader.swift in Sources */,
 				5AF00F642A56725A00587BF9 /* PriceTrendDetailViewController.swift in Sources */,
 				5AB4A5E42A554BDF0095CD2B /* TagCell.swift in Sources */,
 				5AF00F672A56762A00587BF9 /* PriceTrendDetailCell.swift in Sources */,
 				5ACD7BC32A57DC4C00571259 /* RecipeCoordinator.swift in Sources */,
+				1614941C2A7CFE3900395AA4 /* PopularCell.swift in Sources */,
 				162DFEB22A6FDF0D00338A18 /* ReviewPhotoViewController.swift in Sources */,
 				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
 				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
@@ -1026,11 +1062,13 @@
 				5A8C2DD52A5FC4B9006B08A7 /* PopupView.swift in Sources */,
 				5AAEC55B2A5D595500E9877C /* RecipeDefaultTag.swift in Sources */,
 				5AB4A5DC2A5502DF0095CD2B /* PresentationController.swift in Sources */,
+				163655902A7CE2CD00208813 /* UIImage+util.swift in Sources */,
 				5A914AE02A5407410020BA71 /* NormalRefrigeratorView.swift in Sources */,
 				16CE3E5C2A77665600102F27 /* CreateReviewController.swift in Sources */,
 				169FE66E2A78A22E00593041 /* UITabBarController+util.swift in Sources */,
 				5AAEC5592A5D511300E9877C /* RecipeHeaderCell.swift in Sources */,
 				5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */,
+				161494162A7CFDE100395AA4 /* RecentSearchHeader.swift in Sources */,
 				5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */,
 				5A8C2DD12A5F915A006B08A7 /* DefaultCircleButton.swift in Sources */,
 				5A805C5C2A5D32A900C81D86 /* RecipeView.swift in Sources */,
@@ -1044,6 +1082,7 @@
 				169968C12A6F54250074DB43 /* SegmentViewController.swift in Sources */,
 				169FE6732A78A50300593041 /* ShortFormViewController.swift in Sources */,
 				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
+				1636558C2A7CDE2100208813 /* ShortFormSearchCell.swift in Sources */,
 				5A0244992A529AA300AA418E /* Recipe.xcdatamodeld in Sources */,
 				16C5FFB22A72BE0500EA599F /* CommentTestViewModel.swift in Sources */,
 				16CE3E592A774C4600102F27 /* CommentFooterView.swift in Sources */,
@@ -1057,6 +1096,7 @@
 				161647962A79590D0055D740 /* ShortFormCell.swift in Sources */,
 				5A5B904D2A652E770049E853 /* CreateRecipeHeaderCell.swift in Sources */,
 				16E615B32A6CE0C8002C1AE9 /* RecipeDetailDefaultHeaderView.swift in Sources */,
+				161494142A7CFD8900395AA4 /* SearchDefaultView.swift in Sources */,
 				163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */,
 				16900CFA2A6B9ACC00B06D8C /* RecipeDetailViewController.swift in Sources */,
 				16C5FFBA2A72C35600EA599F /* CategoryModel.swift in Sources */,
