@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		161647962A79590D0055D740 /* ShortFormCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161647952A79590D0055D740 /* ShortFormCell.swift */; };
+		161EA8542A7A74C100F454F9 /* ShortFormFullScreenViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161EA8532A7A74C100F454F9 /* ShortFormFullScreenViewController.swift */; };
+		161EA8562A7A7AD000F454F9 /* ShortFormFullScreenView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161EA8552A7A7AD000F454F9 /* ShortFormFullScreenView.swift */; };
+		161EA8582A7A7E6E00F454F9 /* ShortFormTagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 161EA8572A7A7E6E00F454F9 /* ShortFormTagCell.swift */; };
 		162DFEB22A6FDF0D00338A18 /* ReviewPhotoViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162DFEB12A6FDF0C00338A18 /* ReviewPhotoViewController.swift */; };
 		162DFEB42A6FDFA400338A18 /* PhotoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 162DFEB32A6FDFA400338A18 /* PhotoCell.swift */; };
 		163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */; };
@@ -145,6 +148,9 @@
 
 /* Begin PBXFileReference section */
 		161647952A79590D0055D740 /* ShortFormCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormCell.swift; sourceTree = "<group>"; };
+		161EA8532A7A74C100F454F9 /* ShortFormFullScreenViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormFullScreenViewController.swift; sourceTree = "<group>"; };
+		161EA8552A7A7AD000F454F9 /* ShortFormFullScreenView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormFullScreenView.swift; sourceTree = "<group>"; };
+		161EA8572A7A7E6E00F454F9 /* ShortFormTagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormTagCell.swift; sourceTree = "<group>"; };
 		162DFEB12A6FDF0C00338A18 /* ReviewPhotoViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReviewPhotoViewController.swift; sourceTree = "<group>"; };
 		162DFEB32A6FDFA400338A18 /* PhotoCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoCell.swift; sourceTree = "<group>"; };
 		163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewController.swift; sourceTree = "<group>"; };
@@ -342,6 +348,9 @@
 				169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */,
 				169FE6722A78A50300593041 /* ShortFormViewController.swift */,
 				161647952A79590D0055D740 /* ShortFormCell.swift */,
+				161EA8532A7A74C100F454F9 /* ShortFormFullScreenViewController.swift */,
+				161EA8552A7A7AD000F454F9 /* ShortFormFullScreenView.swift */,
+				161EA8572A7A7E6E00F454F9 /* ShortFormTagCell.swift */,
 			);
 			path = ShortForm;
 			sourceTree = "<group>";
@@ -961,6 +970,7 @@
 				5AB4A5E02A552E900095CD2B /* PaddingUITextField.swift in Sources */,
 				5ACD7BC12A57DC4200571259 /* RecipeViewController.swift in Sources */,
 				5A0244932A529AA300AA418E /* ViewController.swift in Sources */,
+				161EA8562A7A7AD000F454F9 /* ShortFormFullScreenView.swift in Sources */,
 				5AF00F6A2A568FAD00587BF9 /* RefrigeratorViewController.swift in Sources */,
 				5A02448F2A529AA300AA418E /* AppDelegate.swift in Sources */,
 				5AAEC5572A5D439F00E9877C /* RecipeCategoryCell.swift in Sources */,
@@ -1029,6 +1039,7 @@
 				16900CFE2A6BA0D800B06D8C /* Template.swift in Sources */,
 				16C5FFB62A72BE1F00EA599F /* CommentTestItemCell.swift in Sources */,
 				169FE6712A78A45D00593041 /* ShortFormCoordinator.swift in Sources */,
+				161EA8542A7A74C100F454F9 /* ShortFormFullScreenViewController.swift in Sources */,
 				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
 				169968C12A6F54250074DB43 /* SegmentViewController.swift in Sources */,
 				169FE6732A78A50300593041 /* ShortFormViewController.swift in Sources */,
@@ -1038,6 +1049,7 @@
 				16CE3E592A774C4600102F27 /* CommentFooterView.swift in Sources */,
 				16E615B12A6CA639002C1AE9 /* ShopingListCell.swift in Sources */,
 				5A914AEC2A54159B0020BA71 /* IngredientRecipeCell.swift in Sources */,
+				161EA8582A7A7E6E00F454F9 /* ShortFormTagCell.swift in Sources */,
 				169968C72A6F57960074DB43 /* ReviewHeader.swift in Sources */,
 				5A0244DB2A52A74D00AA418E /* SplashCoordinator.swift in Sources */,
 				5A914AD32A54024A0020BA71 /* Home.swift in Sources */,
