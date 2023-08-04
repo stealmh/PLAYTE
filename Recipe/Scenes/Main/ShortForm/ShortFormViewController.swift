@@ -113,20 +113,14 @@ extension ShortFormViewController {
 
 //MARK: - CollectionView Delegate
 extension ShortFormViewController: UICollectionViewDelegate, UICollectionViewDataSource {
+    
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return video.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ShortFormCell.reuseIdentifier, for: indexPath) as! ShortFormCell
-        //        print(collectionView.indexPathsForSelectedItems)
-        //        if cell == collectionView.visibleCells.first {
-        //            print("yes!")
-        //            cell.playVideo(url: video[indexPath.row])
-        //        }
-//        if indexPath.row == 0 {
-//            cell.playVideo(url: video[0])
-//        }
+        cell.delegate = self
         return cell
     }
     
@@ -141,10 +135,23 @@ extension ShortFormViewController: UICollectionViewDelegate, UICollectionViewDat
             cell.stop()
         }
     }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let vc = UIViewController()
+        navigationController?.pushViewController(vc, animated: true)
+    }
+}
+
+extension ShortFormViewController: ShortFormCellDelegate {
+    func didTapVideo(videoURL: URL?, player: AVPlayer, playerLayer: AVPlayerLayer) {
+        let vc = ShortFormFullScreenViewController(videoURL: URL(string: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"), player: player, playerLayer: playerLayer)
+        navigationController?.pushViewController(vc, animated: true)
+    }
 }
 
 //MARK: - VC Preview
 import SwiftUI
+import AVKit
 struct ShortFormViewController_preview: PreviewProvider {
     static var previews: some View {
         
