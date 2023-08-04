@@ -22,6 +22,7 @@ final class ShortFormViewController: BaseViewController {
         v.placeholder = "레시피 및 재료를 검색해보세요."
         v.layer.cornerRadius = 10
         v.clipsToBounds = true
+        v.isEnabled = false
         return v
     }()
     
@@ -59,11 +60,16 @@ final class ShortFormViewController: BaseViewController {
         configureLayout()
         configureNavigationTabBar()
         collectionView.reloadData()
+        searchImageButton.rx.tap
+            .subscribe(onNext: { _ in
+                let vc = ShortFormSearchViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+            }).disposed(by: disposeBag)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        disposeBag = DisposeBag()
+//        disposeBag = DisposeBag()
     }
     
     enum Event {
