@@ -8,6 +8,11 @@
 import UIKit
 import SnapKit
 import AVFoundation
+import AVKit
+
+protocol ShortFormCellDelegate: AnyObject {
+    func didTapVideo(videoURL: URL?, player: AVPlayer, playerLayer: AVPlayerLayer)
+}
 
 class ShortFormCell: UICollectionViewCell {
     
@@ -15,6 +20,7 @@ class ShortFormCell: UICollectionViewCell {
         let v = UIView()
         v.backgroundColor = .black.withAlphaComponent(0.6)
         v.layer.cornerRadius = 15
+        v.layer.masksToBounds = true
         return v
     }()
     
@@ -78,6 +84,7 @@ class ShortFormCell: UICollectionViewCell {
         return v
     }()
     
+    weak var delegate: ShortFormCellDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -85,6 +92,14 @@ class ShortFormCell: UICollectionViewCell {
         configureLayout()
         mockConfigure()
         self.shortFormbackground.layer.addSublayer(self.playerLayer)
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTapGesture(_:)))
+        contentView.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc func handleTapGesture(_ sender: UITapGestureRecognizer) {
+        // AVPlayerViewController를 모달로 표시합니다.
+        delegate?.didTapVideo(videoURL: URL(string: ""), player: player, playerLayer: playerLayer)
+        
     }
     
     override func layoutSubviews() {
