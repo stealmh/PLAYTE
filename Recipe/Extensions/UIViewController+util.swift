@@ -58,25 +58,20 @@ extension UIViewController {
             })
         }
     
-    func showToastTest(message : String,
-                   textColor: UIColor,
-                   backgroundColor: UIColor,
+    func stopPlayAnimation(img: UIImage,
                    width:CGFloat,
                    height: CGFloat) {
-            let v = UILabel(frame: CGRect(x: self.view.frame.size.width/2 - (width/2), y: self.view.frame.size.height-100, width: width, height: height))
-        v.backgroundColor = backgroundColor.withAlphaComponent(0.6)
-            v.textColor = textColor
-            v.font = UIFont.systemFont(ofSize: 14)
-            v.textAlignment = .center
-            v.text = message
-            v.alpha = 1.0
-            v.layer.cornerRadius = 10
+        let v = UIImageView(frame: CGRect(x: self.view.frame.size.width/2 - (width/2), y: self.view.frame.size.height-100, width: width, height: height))
+            v.image = img
             v.clipsToBounds = true
             self.view.addSubview(v)
-        UIView.animate(withDuration: .infinity, delay: 1, options: .curveEaseOut, animations: {
+        v.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+        UIView.animate(withDuration: 0.6, delay: 0.2, options: .curveEaseOut, animations: {
                  v.alpha = 0.0
             //아래쪽으로 사라지게 하기 위함
-            let scale = CGAffineTransform(translationX: 0, y: 200)
+            let scale = CGAffineTransform(translationX: 0, y: 0)
             v.transform = scale
             }, completion: {(isCompleted) in
                 v.removeFromSuperview()
