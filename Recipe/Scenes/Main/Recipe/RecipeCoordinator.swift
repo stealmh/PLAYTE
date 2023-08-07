@@ -14,7 +14,7 @@ final class RecipeCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
     
     var childCoordinators: [Coordinator] = []
     
-    var type: CoordinatorType { .community }
+    var type: CoordinatorType { .recipe }
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController

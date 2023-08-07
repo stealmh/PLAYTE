@@ -15,6 +15,7 @@ class RecipeDefaultTagView: UIView {
         layer.borderColor = UIColor.hexStringToUIColor(hex: "#FF5520").cgColor
         layer.cornerRadius = 15
         clipsToBounds = true
+        backgroundColor = .sub1
     }
     
     required init?(coder: NSCoder) {
@@ -22,24 +23,5 @@ class RecipeDefaultTagView: UIView {
     }
 }
 
-class RecipeDefaultTagButton: UIButton {
-    override init(frame: CGRect) {
-        super.init(frame: frame)
-    }
-    
-    init(tagName: String, tag: Int) {
-        super.init(frame: .zero)
-        self.tag = tag
-        self.setTitle(tagName, for: .normal)
-        setTitleColor(.black, for: .normal)
-        imageView?.contentMode = .scaleAspectFit
-        titleLabel?.font = .boldSystemFont(ofSize: 12)
-        contentHorizontalAlignment = .center
-    }
-    
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-}
 
 

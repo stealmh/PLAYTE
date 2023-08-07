@@ -10,11 +10,20 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class CommentTestViewController: UIViewController {
+class CommentTestViewController: BaseViewController {
     
     fileprivate let viewModel = CommentTestViewModel()
     private let tableView = UITableView()
     private let commentBackground = UIView()
+    
+    private let applyTitle: UILabel = {
+        let v = UILabel()
+        v.text = "댓글 10"
+        v.font = .boldSystemFont(ofSize: 16)
+        v.textColor = .mainColor
+        v.asColor(targetString: "댓글", color: .black)
+        return v
+    }()
     
     private let textView: UITextView = {
         let v = UITextView()
@@ -61,14 +70,19 @@ class CommentTestViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        view.addSubview(applyTitle)
         view.addSubViews(tableView)
         applyingBackground.addSubview(applyingLabel)
         commentBackground.addSubViews(textView, placeholderLabel, applyRegisterButton)
         view.addSubview(commentBackground)
         view.addSubview(applyingBackground)
+        applyTitle.snp.makeConstraints {
+            $0.top.left.right.equalToSuperview().inset(20)
+            $0.height.equalTo(16)
+        }
         tableView.snp.makeConstraints {
-            $0.edges.equalToSuperview()
-            $0.top.left.right.equalToSuperview()
+            $0.top.equalTo(applyTitle.snp.bottom).offset(10)
+            $0.left.right.equalToSuperview().inset(10)
             $0.bottom.equalToSuperview().inset(60)
         }
         commentBackground.snp.makeConstraints {
