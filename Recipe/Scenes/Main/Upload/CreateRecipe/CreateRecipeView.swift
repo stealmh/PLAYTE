@@ -63,6 +63,7 @@ final class CreateRecipeView: UIView {
     weak var delegate: CreateRecipeViewDelegate?
     private var mockData: [Dummy] = []
     let imageRelay = PublishRelay<UIImage>()
+    var mybool = false
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -172,8 +173,10 @@ extension CreateRecipeView {
         
         let section = dataSource.snapshot().sectionIdentifiers[index]
         switch section {
-        case .recipeNameSection, .cookTimeSettingSection, .recipeIngredientSection:
+        case .recipeNameSection, .cookTimeSettingSection:
             return createEqualSize()
+        case .recipeIngredientSection:
+            return aa()
         case .recipeDescriptSection:
             return createRecipeDescription()
         case .cookStepSection:
@@ -236,6 +239,42 @@ extension CreateRecipeView {
         section.boundarySupplementaryItems = [header]
         section.orthogonalScrollingBehavior = .groupPaging
         
+        
+        // Return
+        return section
+    }
+    
+    func calculateSectionHeight() -> CGFloat {
+        return mybool ? 100 : 50
+    }
+    
+    
+    func aa() -> NSCollectionLayoutSection {
+        let sectionHeight = self.calculateSectionHeight()
+        
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(sectionHeight)))
+//        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .estimated(sectionHeight)),
+            subitem: item,
+            count: 1)
+        group.interItemSpacing = .fixed(10)
+        let section = NSCollectionLayoutSection(group: group)
+        
+        let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
+                                                      heightDimension: .absolute(50.0))
+        let header = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionHeader,
+            alignment: .topLeading)
+        section.boundarySupplementaryItems = [header]
+        section.orthogonalScrollingBehavior = .groupPaging
         
         // Return
         return section
@@ -304,6 +343,17 @@ extension CreateRecipeView {
         case .recipeIngredientSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DefaultTextFieldCell.reuseIdentifier, for: indexPath) as! DefaultTextFieldCell
             cell.configure(text: "재료 및 양념을 입력해주세요.")
+            cell.recipeNametextField.rx.text.orEmpty
+                .debounce(.seconds(1), scheduler: MainScheduler.instance)
+                .subscribe(onNext: { txt in
+                    if cell.filteredData.isEmpty {
+                        self.mybool = false
+                    } else {
+                        self.mybool = true
+                    }
+                    self.collectionView.collectionViewLayout.invalidateLayout()
+                    self.collectionView.layoutIfNeeded()
+                }).disposed(by: disposeBag)
             return cell
         case .cookTimeSettingSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
