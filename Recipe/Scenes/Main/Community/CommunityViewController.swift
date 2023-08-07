@@ -31,12 +31,13 @@ final class CommunityViewController: BaseViewController {
         }
         button.rx.tap
             .subscribe(onNext: { _ in
+                print("tapped")
                 self.didSendEventClosure?(.go)
             }).disposed(by: disposeBag)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        disposeBag = DisposeBag()
+//        disposeBag = DisposeBag()
     }
     
     enum Event {

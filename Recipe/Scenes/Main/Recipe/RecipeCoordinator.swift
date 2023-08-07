@@ -39,8 +39,8 @@ final class RecipeCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
         let goVC = RecipeViewController()
         goVC.didSendEventClosure = { [weak self] event in
             switch event {
-            case .showFloatingView:
-                self?.showPopupView()
+            case .moveTorecipeDetail:
+                ///Todo: 이동로직 옮기기
                 return
             }
         }

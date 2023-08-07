@@ -104,7 +104,7 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
             readyCoordinator.start()
             
         case .upload:
-            let readyCoordinator = CommunityCoordinator(navController)
+            let readyCoordinator = UploadCoordinator(navController)
             readyCoordinator.finishDelegate = self
             childCoordinators.append(readyCoordinator)
             readyCoordinator.start()

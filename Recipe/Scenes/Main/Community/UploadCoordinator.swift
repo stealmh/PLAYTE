@@ -7,14 +7,14 @@
 
 import UIKit
 
-final class CommunityCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDelegate {
+final class UploadCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDelegate {
     weak var finishDelegate: CoordinatorFinishDelegate?
     
     var navigationController: UINavigationController
     
     var childCoordinators: [Coordinator] = []
     
-    var type: CoordinatorType { .community }
+    var type: CoordinatorType { .upload }
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
@@ -28,27 +28,34 @@ final class CommunityCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDe
         print("🍎\(String(describing: Self.self)) deinit.")
     }
     
-    func showRegisterFlow() {
-        let registerCoordinator = RegisterCoordinator(navigationController)
-        registerCoordinator.finishDelegate = self
-        registerCoordinator.start()
-        childCoordinators.append(registerCoordinator)
-    }
-    
     func startReadyFlow()  {
-        let goVC = CommunityViewController()
+        let goVC = PopupViewController()
         goVC.didSendEventClosure = { [weak self] event in
             switch event {
-            case .go:
-                self?.finishDelegate?.coordinatorDidFinish(childCoordinator: self!)
+            case .showCreateRecipeView:
+                self?.showCreateRecipeView()
                 return
             }
         }
         navigationController.pushViewController(goVC, animated: true)
     }
+    
+    func showCreateRecipeView() {
+        let vc = CreateRecipeViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.didSendEventClosure = { [weak self] event in
+            switch event {
+            case .registerButtonTapped:
+                self?.navigationController.popViewController(animated: true)
+                return
+            }
+        }
+        self.navigationController.dismiss(animated: false)
+        navigationController.pushViewController(vc, animated: false)
+    }
 }
 
-extension CommunityCoordinator {
+extension UploadCoordinator {
     func deleteChild(_ child: Coordinator) {
         guard let index = childCoordinators.firstIndex(where: { $0 === child }) else {
             return

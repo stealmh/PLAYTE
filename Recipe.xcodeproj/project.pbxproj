@@ -129,7 +129,7 @@
 		5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5E12A553E7F0095CD2B /* MyCell.swift */; };
 		5AB4A5E42A554BDF0095CD2B /* TagCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AB4A5E32A554BDF0095CD2B /* TagCell.swift */; };
 		5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BBC2A57DADD00571259 /* CommunityViewController.swift */; };
-		5ACD7BBF2A57DAEA00571259 /* CommunityCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BBE2A57DAEA00571259 /* CommunityCoordinator.swift */; };
+		5ACD7BBF2A57DAEA00571259 /* UploadCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BBE2A57DAEA00571259 /* UploadCoordinator.swift */; };
 		5ACD7BC12A57DC4200571259 /* RecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BC02A57DC4200571259 /* RecipeViewController.swift */; };
 		5ACD7BC32A57DC4C00571259 /* RecipeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5ACD7BC22A57DC4C00571259 /* RecipeCoordinator.swift */; };
 		5AF00F642A56725A00587BF9 /* PriceTrendDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5AF00F632A56725A00587BF9 /* PriceTrendDetailViewController.swift */; };
@@ -290,7 +290,7 @@
 		5AB4A5E12A553E7F0095CD2B /* MyCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyCell.swift; sourceTree = "<group>"; };
 		5AB4A5E32A554BDF0095CD2B /* TagCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TagCell.swift; sourceTree = "<group>"; };
 		5ACD7BBC2A57DADD00571259 /* CommunityViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityViewController.swift; sourceTree = "<group>"; };
-		5ACD7BBE2A57DAEA00571259 /* CommunityCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityCoordinator.swift; sourceTree = "<group>"; };
+		5ACD7BBE2A57DAEA00571259 /* UploadCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UploadCoordinator.swift; sourceTree = "<group>"; };
 		5ACD7BC02A57DC4200571259 /* RecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewController.swift; sourceTree = "<group>"; };
 		5ACD7BC22A57DC4C00571259 /* RecipeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCoordinator.swift; sourceTree = "<group>"; };
 		5AF00F632A56725A00587BF9 /* PriceTrendDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PriceTrendDetailViewController.swift; sourceTree = "<group>"; };
@@ -583,7 +583,6 @@
 				5AFE49C42A5BC352000B9A95 /* BaseStartingView.swift */,
 				5AAEC55A2A5D595500E9877C /* RecipeDefaultTag.swift */,
 				5A8C2DD02A5F915A006B08A7 /* DefaultCircleButton.swift */,
-				5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */,
 				5A8C2DD42A5FC4B9006B08A7 /* PopupView.swift */,
 				16F79A5D2A66ABE400FDF3B6 /* DefaultTextFieldCell.swift */,
 				5A5B904E2A6535010049E853 /* TextFieldCell.swift */,
@@ -727,8 +726,9 @@
 		5ACD7BBB2A57DAA800571259 /* Community */ = {
 			isa = PBXGroup;
 			children = (
+				5A8C2DD22A5FC4B0006B08A7 /* PopupViewController.swift */,
 				5ACD7BBC2A57DADD00571259 /* CommunityViewController.swift */,
-				5ACD7BBE2A57DAEA00571259 /* CommunityCoordinator.swift */,
+				5ACD7BBE2A57DAEA00571259 /* UploadCoordinator.swift */,
 			);
 			path = Community;
 			sourceTree = "<group>";
@@ -1044,7 +1044,7 @@
 				5A5B904F2A6535010049E853 /* TextFieldCell.swift in Sources */,
 				5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */,
 				5A914AE32A5410E30020BA71 /* PriceTrendHeader.swift in Sources */,
-				5ACD7BBF2A57DAEA00571259 /* CommunityCoordinator.swift in Sources */,
+				5ACD7BBF2A57DAEA00571259 /* UploadCoordinator.swift in Sources */,
 				16C5FFB02A72BDEF00EA599F /* CommentTestViewController.swift in Sources */,
 				161494182A7CFDF000395AA4 /* RecentSearchTagCell.swift in Sources */,
 				16C5FFB42A72BE1300EA599F /* CommentTestHeaderView.swift in Sources */,
