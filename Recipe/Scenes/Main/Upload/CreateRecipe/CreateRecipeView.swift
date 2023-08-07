@@ -16,7 +16,6 @@ protocol CreateRecipeViewDelegate: AnyObject {
 }
 final class CreateRecipeView: UIView {
     enum Section: Hashable {
-        case header
         case recipeNameSection
         case recipeDescriptSection
         case recipeIngredientSection
@@ -25,7 +24,6 @@ final class CreateRecipeView: UIView {
     }
     
     enum Item: Hashable {
-        case header
         case recipeNameSection
         case recipeDiscriptSection
         case recipeIngredientSection
@@ -103,7 +101,6 @@ extension CreateRecipeView {
     }
     
     func registerCell() {
-        collectionView.register(CreateRecipeHeaderCell.self , forCellWithReuseIdentifier: CreateRecipeHeaderCell.reuseIdentifier)
         collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
         collectionView.register(CookStepHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CookStepHeaderView.identifier)
         collectionView.register(TextFieldCell.self , forCellWithReuseIdentifier: TextFieldCell.reuseIdentifier)
@@ -175,8 +172,6 @@ extension CreateRecipeView {
         
         let section = dataSource.snapshot().sectionIdentifiers[index]
         switch section {
-        case .header:
-            return createHeaderSection()
         case .recipeNameSection, .cookTimeSettingSection, .recipeIngredientSection:
             return createEqualSize()
         case .recipeDescriptSection:
@@ -184,12 +179,6 @@ extension CreateRecipeView {
         case .cookStepSection:
             return createCookStepSection()
         }
-    }
-    
-    func createHeaderSection() -> NSCollectionLayoutSection {
-        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(0.025)), subitems: [headerItem])
-        return NSCollectionLayoutSection(group: headerGroup)
     }
     
     func createRecipeDescription() -> NSCollectionLayoutSection {
@@ -305,9 +294,6 @@ extension CreateRecipeView {
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell{
         switch item {
-        case .header:
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateRecipeHeaderCell.reuseIdentifier, for: indexPath) as! CreateRecipeHeaderCell
-            return cell
         case .recipeNameSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as! TextFieldCell
             cell.configure(text: "레시피 이름을 입력해주세요", needSearchButton: false)
@@ -347,8 +333,6 @@ extension CreateRecipeView {
     
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath, section: Section) -> UICollectionReusableView {
         switch section {
-        case .header:
-            return UICollectionReusableView()
         case .recipeNameSection:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
             headerView.configureTitle(text: "레시피 이름")
@@ -403,8 +387,7 @@ extension CreateRecipeView {
     
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
-        snapshot.appendSections([.header, .recipeNameSection, .recipeDescriptSection, .recipeIngredientSection ,.cookTimeSettingSection, .cookStepSection])
-        snapshot.appendItems([.header], toSection: .header)
+        snapshot.appendSections([.recipeNameSection, .recipeDescriptSection, .recipeIngredientSection ,.cookTimeSettingSection, .cookStepSection])
         snapshot.appendItems([.recipeNameSection], toSection: .recipeNameSection)
         snapshot.appendItems([.recipeDiscriptSection], toSection: .recipeDescriptSection)
         snapshot.appendItems([.recipeIngredientSection], toSection: .recipeIngredientSection)
