@@ -11,6 +11,7 @@ extension UIColor {
     class var mainColor: UIColor? { return UIColor(named: "MainColor") }
     class var lineColor: UIColor? { return UIColor(named: "LineColor") }
     class var replyColor: UIColor? { return UIColor(named: "reply") }
+    class var textFieldColor: UIColor? { return UIColor(named: "textFieldColor") }
     
     class var sub1: UIColor? { return UIColor(named: "Sub1") }
     class var sub2: UIColor? { return UIColor(named: "Sub2") }

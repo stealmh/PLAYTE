@@ -21,6 +21,7 @@ class RecentSearchHeader: UICollectionReusableView {
     let clearButton: UIButton = {
         let v = UIButton()
         v.setTitle("모두 지우기", for: .normal)
+        v.titleLabel?.font = .systemFont(ofSize: 14)
         v.setTitleColor(.grayScale4, for: .normal)
         return v
     }()

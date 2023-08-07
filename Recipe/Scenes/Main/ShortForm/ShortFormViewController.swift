@@ -18,7 +18,7 @@ final class ShortFormViewController: BaseViewController {
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()
         v.textPadding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        v.backgroundColor = .gray.withAlphaComponent(0.2)
+        v.backgroundColor = .gray.withAlphaComponent(0.1)
         v.placeholder = "레시피 및 재료를 검색해보세요."
         v.layer.cornerRadius = 10
         v.clipsToBounds = true
@@ -28,7 +28,7 @@ final class ShortFormViewController: BaseViewController {
     
     private let searchImageButton: UIButton = {
         let v = UIButton()
-        let img = v.buttonImageSize(systemImageName: "magnifyingglass", size: 25)
+        let img = v.buttonImageSize(imageName: "search_svg", size: 24)
         v.setImage(img, for: .normal)
         v.contentMode = .scaleAspectFit
         v.tintColor = UIColor.hexStringToUIColor(hex: "#FF5520")
@@ -72,6 +72,12 @@ final class ShortFormViewController: BaseViewController {
 //        disposeBag = DisposeBag()
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+//        player.play()
+    }
+    
     enum Event {
         case go
     }
@@ -91,17 +97,19 @@ extension ShortFormViewController {
             $0.right.equalTo(searchTextField).inset(15)
             $0.centerY.equalTo(searchTextField)
         }
-        
+//        collectionView.backgroundColor = .red
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(searchTextField.snp.bottom).offset(10)
+            $0.top.equalTo(searchTextField.snp.bottom)
             $0.left.right.equalToSuperview()
-            $0.bottom.equalToSuperview().inset(30)
+            $0.height.equalToSuperview().dividedBy(1.4)
+//            $0.bottom.equalToSuperview().inset(30)
         }
     }
     
     private func configureNavigationTabBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem.menuButton(imageName: "bell.hasAlert")
-        navigationItem.leftBarButtonItem = UIBarButtonItem.menuButtonWithLabel(imageName: "logo", size: CGSize(width: 90, height: 50))
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem.menuButton(imageName: "bell.default_svg", size: CGSize(width: 50, height: 40))
+        navigationItem.leftBarButtonItem = UIBarButtonItem.menuButton(imageName: "shorts", size: CGSize(width: 110, height: 40))
         navigationController?.navigationBar.barTintColor = .white
     }
     
@@ -111,7 +119,7 @@ extension ShortFormViewController {
         layout.spacingMode = .fixed(spacing: 15)
 //        layout.spacingMode = .fixed(spacing: 50)
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSizeMake(view.frame.width * 0.8, view.frame.height * 0.6)
+        layout.itemSize = CGSizeMake(view.frame.width * 0.8, view.frame.height * 0.65)
         return layout
     }
     
@@ -147,10 +155,12 @@ extension ShortFormViewController: UICollectionViewDelegate, UICollectionViewDat
         navigationController?.pushViewController(vc, animated: true)
     }
 }
-
+//https://d1jg55wkcrciwu.cloudfront.net/videos/testvideo.mp4
+//https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4
 extension ShortFormViewController: ShortFormCellDelegate {
     func didTapVideo(videoURL: URL?, player: AVPlayer, playerLayer: AVPlayerLayer) {
-        let vc = ShortFormFullScreenViewController(videoURL: URL(string: "https://storage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4"), player: player, playerLayer: playerLayer)
+        let vc = ShortFormFullScreenViewController(videoURL: URL(string: "https://d1jg55wkcrciwu.cloudfront.net/videos/testvideo.mp4"), player: player, playerLayer: playerLayer)
+        self.tabBarController?.tabBar.isHidden = true
         navigationController?.pushViewController(vc, animated: true)
     }
 }
@@ -163,6 +173,6 @@ struct ShortFormViewController_preview: PreviewProvider {
         
         UINavigationController(rootViewController: ShortFormViewController())
             .toPreview()
-            .previewDevice(PreviewDevice(rawValue: "iPhone 12"))
+            .ignoresSafeArea()
     }
 }

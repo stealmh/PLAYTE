@@ -15,6 +15,7 @@ class RecipeDefaultTagView: UIView {
         layer.borderColor = UIColor.hexStringToUIColor(hex: "#FF5520").cgColor
         layer.cornerRadius = 15
         clipsToBounds = true
+        backgroundColor = .sub1
     }
     
     required init?(coder: NSCoder) {

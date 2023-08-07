@@ -59,13 +59,13 @@ enum TabBarPage {
     func tabIcon() -> UIImage {
         switch self {
         case .shortForm:
-            return UIImage(named: "shortform")!
+            return UIImage(named: "shortform_svg")!
         case .recipe:
-            return UIImage(named: "recipe")!
+            return UIImage(named: "recipe_svg")!
         case .upload:
-            return UIImage(named: "upload")!
+            return UIImage(named: "upload_svg")!
         case .myPage:
-            return UIImage(named: "mypage")!
+            return UIImage(named: "mypage_svg")!
         }
     }
     
@@ -73,13 +73,13 @@ enum TabBarPage {
     func selectedImage() -> UIImage {
         switch self {
         case .shortForm:
-            return UIImage(named: "shortform.fill")!
+            return UIImage(named: "shortformfill_svg")!
         case .recipe:
-            return UIImage(named: "recipe.fill")!
+            return UIImage(named: "recipefill_svg")!
         case .upload:
-            return UIImage(named: "upload.fill")!
+            return UIImage(named: "uploadfill_svg")!
         case .myPage:
-            return UIImage(named: "mypage.fill")!
+            return UIImage(named: "mypagefill_svg")!
         }
     }
     // etc

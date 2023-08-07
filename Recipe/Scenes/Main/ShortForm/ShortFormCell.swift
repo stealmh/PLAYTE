@@ -41,7 +41,7 @@ class ShortFormCell: UICollectionViewCell {
     
     private let likeButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "shortFormHeart"), for: .normal)
+        v.setImage(UIImage(named: "heart_svg"), for: .normal)
         v.setTitle("132", for: .normal)
         v.alignTextBelow(spacing: 10)
         return v
@@ -49,7 +49,7 @@ class ShortFormCell: UICollectionViewCell {
     
     private let commentButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "shortFormComment"), for: .normal)
+        v.setImage(UIImage(named: "comment_svg"), for: .normal)
         v.setTitle("56", for: .normal)
         v.alignTextBelow(spacing: 10)
         return v
@@ -57,7 +57,7 @@ class ShortFormCell: UICollectionViewCell {
     
     private let favoriteButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "shortFormFavorite"), for: .normal)
+        v.setImage(UIImage(named: "favorite_svg"), for: .normal)
         v.setTitle("21", for: .normal)
         v.alignTextBelow(spacing: 10)
         return v
@@ -79,7 +79,7 @@ class ShortFormCell: UICollectionViewCell {
     
     let watchImageView: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "watch")
+        v.image = UIImage(named: "noon")
         v.contentMode = .scaleAspectFit
         return v
     }()

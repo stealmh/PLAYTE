@@ -7,6 +7,8 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
 
 struct Tag: Hashable {
     let id = UUID()
@@ -39,7 +41,7 @@ class ShortFormFullScreenView: UIView {
     
     private let likeButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "shortFormHeart"), for: .normal)
+        v.setImage(UIImage(named: "heart_svg"), for: .normal)
         v.setTitle("132", for: .normal)
         v.alignTextBelow(spacing: 10)
         return v
@@ -47,7 +49,7 @@ class ShortFormFullScreenView: UIView {
     
     let commentButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "shortFormComment"), for: .normal)
+        v.setImage(UIImage(named: "comment_svg"), for: .normal)
         v.setTitle("56", for: .normal)
         v.alignTextBelow(spacing: 10)
         return v
@@ -55,7 +57,7 @@ class ShortFormFullScreenView: UIView {
     
     private let favoriteButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "shortFormFavorite"), for: .normal)
+        v.setImage(UIImage(named: "favorite_svg"), for: .normal)
         v.setTitle("21", for: .normal)
         v.alignTextBelow(spacing: 10)
         return v
@@ -83,6 +85,7 @@ class ShortFormFullScreenView: UIView {
     
     /// Properties
     private var dataSource: Datasource!
+    private let disposeBag = DisposeBag()
     
     private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
     ShopingList(title: "전남 국내산 대추 방울", price: 13000, image: UIImage(named: "popcat")!, isrocket: false)]
@@ -99,6 +102,16 @@ class ShortFormFullScreenView: UIView {
         registerCell()
         backgroundColor = .blue
         collectionView.backgroundColor = .clear
+//        likeButton.backgroundColor = .red
+        likeButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.likeButton.setImage(UIImage(named:"heartFill_svg"), for: .normal)
+            }).disposed(by: disposeBag)
+        favoriteButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.favoriteButton.setImage(UIImage(named:"favoriteFill_svg"), for: .normal)
+            }).disposed(by: disposeBag)
+        
     }
     
     required init?(coder: NSCoder) {
@@ -115,7 +128,7 @@ extension ShortFormFullScreenView {
         likeButton.snp.makeConstraints {
             $0.bottom.equalTo(self.snp.centerY).offset(40)
             $0.right.equalToSuperview().inset(20)
-            $0.width.equalTo(30)
+            $0.width.equalTo(40)
         }
         
         commentButton.snp.makeConstraints {

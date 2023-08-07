@@ -16,7 +16,7 @@ class RecipeDefaultTagButton: UIButton {
         super.init(frame: .zero)
         self.tag = tag
         self.setTitle(tagName, for: .normal)
-        setTitleColor(.black, for: .normal)
+        setTitleColor(.mainColor, for: .normal)
         imageView?.contentMode = .scaleAspectFit
         titleLabel?.font = .boldSystemFont(ofSize: 12)
         contentHorizontalAlignment = .center

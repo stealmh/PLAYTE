@@ -80,4 +80,10 @@ extension UIBarButtonItem {
         return menuBarItem
     }
 
+    static func menuButtonTap(imageName: String, size: CGSize) -> UIBarButtonItem {
+        let button = UIButton(type: .custom)
+        button.setImage(UIImage(named: imageName), for: .normal)
+        button.frame = CGRect(origin: .zero, size: size)
+        return UIBarButtonItem(customView: button)
+    }
 }
