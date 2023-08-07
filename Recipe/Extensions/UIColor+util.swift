@@ -8,6 +8,23 @@
 import UIKit
 
 extension UIColor {
+    class var mainColor: UIColor? { return UIColor(named: "MainColor") }
+    class var lineColor: UIColor? { return UIColor(named: "LineColor") }
+    class var replyColor: UIColor? { return UIColor(named: "reply") }
+    class var textFieldColor: UIColor? { return UIColor(named: "textFieldColor") }
+    
+    class var sub1: UIColor? { return UIColor(named: "Sub1") }
+    class var sub2: UIColor? { return UIColor(named: "Sub2") }
+    class var sub3: UIColor? { return UIColor(named: "Sub3") }
+    class var sub4: UIColor? { return UIColor(named: "Sub4") }
+    
+    class var grayScale1: UIColor? { return UIColor(named: "GrayScale1") }
+    class var grayScale2: UIColor? { return UIColor(named: "GrayScale2") }
+    class var grayScale3: UIColor? { return UIColor(named: "GrayScale3") }
+    class var grayScale4: UIColor? { return UIColor(named: "GrayScale4") }
+    class var grayScale5: UIColor? { return UIColor(named: "GrayScale5") }
+    class var grayScale6: UIColor? { return UIColor(named: "GrayScale6") }
+    
     static func hexStringToUIColor (hex: String) -> UIColor {
             var cString:String = hex.trimmingCharacters(in: .whitespacesAndNewlines).uppercased()
 
@@ -29,6 +46,4 @@ extension UIColor {
                 alpha: CGFloat(1.0)
             )
         }
-    class var mainColor: UIColor? { return UIColor(named: "MainColor") }
-    class var lineColor: UIColor? { return UIColor(named: "LineColor") }
 }

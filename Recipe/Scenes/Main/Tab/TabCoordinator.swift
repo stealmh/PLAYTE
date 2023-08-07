@@ -20,31 +20,40 @@ protocol TabCoordinatorProtocol: Coordinator {
 final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishDelegate {
     
     weak var finishDelegate: CoordinatorFinishDelegate?
-        
+    
     var childCoordinators: [Coordinator] = []
-
+    
     var navigationController: UINavigationController
     
     var tabBarController: UITabBarController
-
+    
     var type: CoordinatorType { .tab }
     
     required init(_ navigationController: UINavigationController) {
         self.navigationController = navigationController
         self.tabBarController = .init()
     }
-
+    
     func start() {
         // Let's define which pages do we want to add into tab bar
-        let pages: [TabBarPage] = [.myPage, .home, .community, .recipe]
+        let pages: [TabBarPage] = [.shortForm, .recipe, .upload, .myPage]
             .sorted(by: { $0.pageOrderNumber() < $1.pageOrderNumber() })
         
         // Initialization of ViewControllers or these pages
         let controllers: [UINavigationController] = pages.map({ getTabController($0) })
-//        print(controllers)
+        //        print(controllers)
         
         prepareTabBarController(withTabControllers: controllers)
-    
+        if #available(iOS 15.0, *) {
+            let appearance = UITabBarAppearance()
+            appearance.configureWithOpaqueBackground()
+            appearance.backgroundColor = .white
+            tabBarController.tabBar.standardAppearance = appearance
+            tabBarController.tabBar.scrollEdgeAppearance = tabBarController.tabBar.standardAppearance
+        } else {
+            tabBarController.tabBar.barTintColor = .white
+        }
+        
     }
     
     deinit {
@@ -55,33 +64,35 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
         /// Set delegate for UITabBarController
         tabBarController.delegate = self
         /// Assign page's controllers
-//        tabBarController.setViewControllers(tabControllers, animated: true)
+        //        tabBarController.setViewControllers(tabControllers, animated: true)
         /// Let set index
-        tabBarController.selectedIndex = TabBarPage.home.pageOrderNumber()
+        tabBarController.selectedIndex = TabBarPage.recipe.pageOrderNumber()
         /// Styling
         tabBarController.tabBar.isTranslucent = false
         
         /// In this step, we attach tabBarController to navigation controller associated with this coordanator
-//        navigationController.viewControllers = [tabBarController]
+        //        navigationController.viewControllers = [tabBarController]
         tabBarController.viewControllers = tabControllers
-
+        changeRadius(cornerRadius: 13)
+        tabBarController.viewDidLayoutSubviews()
         
     }
-      
+    
     private func getTabController(_ page: TabBarPage) -> UINavigationController {
         let navController = UINavigationController()
-//        navController.setNavigationBarHidden(false, animated: false)
-
+        //        navController.setNavigationBarHidden(false, animated: false)
+        
         navController.tabBarItem = UITabBarItem.init(title: page.pageTitleValue(),
                                                      image: page.tabIcon(),
                                                      tag: page.pageOrderNumber())
         navController.tabBarItem.selectedImage = page.selectedImage()
-
         tabBarController.tabBar.backgroundColor = .white
+        tabBarController.tabBar.tintColor = .mainColor
+        tabBarController.tabBar.unselectedItemTintColor = .grayScale5
+        
         switch page {
-        case .home:
-            // If needed: Each tab bar flow can have it's own Coordinator.
-            let readyCoordinator = HomeCoordinator(navController)
+        case .shortForm:
+            let readyCoordinator = ShortFormCoordinator(navController)
             readyCoordinator.finishDelegate = self
             childCoordinators.append(readyCoordinator)
             readyCoordinator.start()
@@ -92,12 +103,12 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
             childCoordinators.append(readyCoordinator)
             readyCoordinator.start()
             
-        case .community:
+        case .upload:
             let readyCoordinator = CommunityCoordinator(navController)
             readyCoordinator.finishDelegate = self
             childCoordinators.append(readyCoordinator)
             readyCoordinator.start()
-
+            
         case .myPage:
             let readyCoordinator = MypageCoordinator(navController)
             readyCoordinator.finishDelegate = self
@@ -109,7 +120,7 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
     }
     
     func currentPage() -> TabBarPage? { TabBarPage.init(index: tabBarController.selectedIndex) }
-
+    
     func selectPage(_ page: TabBarPage) {
         tabBarController.selectedIndex = page.pageOrderNumber()
     }
@@ -122,6 +133,13 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
     
     func coordinatorDidFinish(childCoordinator: Coordinator) {
         finishDelegate?.coordinatorDidFinish(childCoordinator: self)
+    }
+    
+    private func changeRadius(cornerRadius: CGFloat) {
+        tabBarController.tabBar.layer.masksToBounds = true
+        tabBarController.tabBar.isTranslucent = true
+        tabBarController.tabBar.layer.cornerRadius = cornerRadius
+//        tabBarController.tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
 }
 

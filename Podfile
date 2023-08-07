@@ -12,6 +12,7 @@ target 'Recipe' do
   pod 'Alamofire'
   pod 'Kingfisher'
   pod 'GoogleSignIn'
+  pod 'UPCarouselFlowLayout'
 
   target 'RecipeTests' do
     inherit! :search_paths

@@ -8,19 +8,19 @@
 import UIKit
 
 enum TabBarPage {
-    case home
-    case community
-    case myPage
+    case shortForm
     case recipe
+    case upload
+    case myPage
 
     init?(index: Int) {
         switch index {
         case 0:
-            self = .home
+            self = .shortForm
         case 1:
             self = .recipe
         case 2:
-            self = .community
+            self = .upload
         case 3:
             self = .myPage
         default:
@@ -30,12 +30,12 @@ enum TabBarPage {
     
     func pageTitleValue() -> String {
         switch self {
-        case .home:
-            return "홈"
+        case .shortForm:
+            return "숏폼"
         case .recipe:
             return "레시피"
-        case .community:
-            return "커뮤니티"
+        case .upload:
+            return "업로드"
         case .myPage:
             return "마이페이지"
         }
@@ -44,11 +44,11 @@ enum TabBarPage {
     //tag
     func pageOrderNumber() -> Int {
         switch self {
-        case .home:
+        case .shortForm:
             return 0
         case .recipe:
             return 1
-        case .community:
+        case .upload:
             return 2
         case .myPage:
             return 3
@@ -58,28 +58,28 @@ enum TabBarPage {
     // Add tab icon value
     func tabIcon() -> UIImage {
         switch self {
-        case .home:
-            return UIImage(systemName: "house")!
+        case .shortForm:
+            return UIImage(named: "shortform_svg")!
         case .recipe:
-            return UIImage(systemName: "house")!
-        case .community:
-            return UIImage(systemName: "house")!
+            return UIImage(named: "recipe_svg")!
+        case .upload:
+            return UIImage(named: "upload_svg")!
         case .myPage:
-            return UIImage(systemName: "plus")!
+            return UIImage(named: "mypage_svg")!
         }
     }
     
     // Add tab icon selected / deselected color
     func selectedImage() -> UIImage {
         switch self {
-        case .home:
-            return UIImage(systemName: "house.fill")!
+        case .shortForm:
+            return UIImage(named: "shortformfill_svg")!
         case .recipe:
-            return UIImage(systemName: "house.fill")!
-        case .community:
-            return UIImage(systemName: "house.fill")!
+            return UIImage(named: "recipefill_svg")!
+        case .upload:
+            return UIImage(named: "uploadfill_svg")!
         case .myPage:
-            return UIImage(systemName: "plus.circle.fill")!
+            return UIImage(named: "mypagefill_svg")!
         }
     }
     // etc
