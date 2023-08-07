@@ -52,7 +52,7 @@ extension ShortFormSearchViewController {
         searchBar.placeholder = "검색어를 입력하세요"
         searchBar.barTintColor = .lightGray // 바 배경 색상 설정
         searchBar.setImage(UIImage(), for: .search, state: .normal)
-        searchBar.setImage(UIImage(named: "clearButton"), for: .clear, state: .normal)
+        searchBar.setImage(UIImage(named: "clearButton_svg"), for: .clear, state: .normal)
 
         // 네비게이션 바에 UISearchBar 추가
         navigationItem.titleView = searchBar
