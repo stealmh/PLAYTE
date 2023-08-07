@@ -14,7 +14,7 @@ class ShortFormSearchViewController: BaseViewController, UISearchBarDelegate {
 
     var searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
     var defaultBackground = SearchDefaultView()
-    var searchResultBackground = UIView()
+    var searchResultBackground = ShortFormSearchView()
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {

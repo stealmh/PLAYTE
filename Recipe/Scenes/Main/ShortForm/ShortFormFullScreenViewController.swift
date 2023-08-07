@@ -26,12 +26,12 @@ class ShortFormFullScreenViewController: BaseViewController {
         return v
     }()
     
-    private let pausePlayButton: UIButton = {
-        let v = UIButton()
-        v.setImage(UIImage(named: "pause"), for: .normal)
-        v.isEnabled = false
-        return v
-    }()
+    //    private let pausePlayButton: UIButton = {
+    //        let v = UIButton()
+    //        v.setImage(UIImage(named: "pause_svg"), for: .normal)
+    //        v.isEnabled = false
+    //        return v
+    //    }()
     
     private let currentPlayTimeLabel: UILabel = {
         let v = UILabel()
@@ -60,11 +60,12 @@ class ShortFormFullScreenViewController: BaseViewController {
     
     /// Properties
     private let disposeBag = DisposeBag()
+    private var soundToggle = true
     
     override func viewDidLoad() {
         super.viewDidLoad()
         setupPlayer()
-        stackView.addArrangeViews(pausePlayButton, currentPlayTimeLabel, totalPlayTimeLabel)
+        stackView.addArrangeViews( currentPlayTimeLabel, totalPlayTimeLabel)
         view.addSubview(background)
         view.addSubview(slider)
         view.addSubview(stackView)
@@ -72,6 +73,41 @@ class ShortFormFullScreenViewController: BaseViewController {
         defaultNavigationBackButton(backButtonColor: .white)
         setupUI()
         self.bind()
+        view.backgroundColor = .gray
+        
+        //        let moreButton = UIBarButtonItem.menuButtonTap(imageName: "more_svg", size: CGSize(width: 40, height: 40))
+        let moreButton = UIBarButtonItem(image: UIImage(named: "more_svg"), style: .plain, target: self, action: #selector(moreButtonTapped))
+        let soundButton = UIBarButtonItem(image: UIImage(named: "soundplay_svg1"), style: .plain, target: self, action: #selector(speakerButtonTapped))
+        
+        let rightBarButtonItems = [moreButton, soundButton]
+        
+        // 바 버튼 아이템들을 화면의 navigationItem에 설정합니다.
+        navigationItem.rightBarButtonItems = rightBarButtonItems
+        /*
+         asdas asdasdasd asdasda sd asda das das das
+         */
+    }
+    
+    @objc func moreButtonTapped(sender: UIBarButtonItem) {
+        
+        let customViewController = ShortFormSheetViewController()
+        customViewController.modalPresentationStyle = .custom
+        customViewController.transitioningDelegate = self
+
+        present(customViewController, animated: true, completion: nil)
+        
+    }
+    
+    @objc func speakerButtonTapped(sender: UIBarButtonItem) {
+        print("tapped")
+        soundToggle.toggle()
+        if soundToggle {
+            player.volume = 30
+            sender.image = UIImage(named: "soundplay_svg1")
+        } else {
+            player.volume = 0
+            sender.image = UIImage(named: "soundplayStop_svg")
+        }
     }
     
     init(videoURL: URL?, player: AVPlayer, playerLayer: AVPlayerLayer) {
@@ -88,7 +124,7 @@ class ShortFormFullScreenViewController: BaseViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
+        //        self.tabBarController?.tabBar.isHidden = true
         player.play()
     }
     
@@ -123,7 +159,7 @@ extension ShortFormFullScreenViewController {
             $0.left.right.equalToSuperview()
             $0.height.equalTo(20)
         }
-
+        
         stackView.snp.makeConstraints {
             $0.top.equalTo(slider.snp.bottom)
             $0.centerX.equalToSuperview()
@@ -131,14 +167,14 @@ extension ShortFormFullScreenViewController {
             $0.height.equalTo(slider)
         }
         
-        pausePlayButton.snp.makeConstraints {
-            $0.top.left.height.equalTo(stackView)
-            $0.width.equalTo(20)
-        }
+        //        pausePlayButton.snp.makeConstraints {
+        //            $0.top.left.height.equalTo(stackView)
+        //            $0.width.equalTo(20)
+        //        }
         
         currentPlayTimeLabel.snp.makeConstraints {
             $0.top.height.equalTo(stackView)
-            $0.left.equalTo(pausePlayButton.snp.right).offset(10)
+            $0.left.equalTo(stackView).offset(20)
             $0.width.equalTo(stackView).dividedBy(3)
         }
         
@@ -154,13 +190,14 @@ extension ShortFormFullScreenViewController {
     func setupPlayer() {
         guard let videoURL else { return }
         player = AVPlayer(url: videoURL)
-        player.volume = 0
+        player.volume = 30
         playerLayer = AVPlayerLayer(player: player)
         playerLayer.videoGravity = .resize
         view.layer.addSublayer(playerLayer)
         
         // 재생 위치 변경을 감지하는 옵저버를 추가합니다.
-        let timeObserver = player.addPeriodicTimeObserver(forInterval: CMTime(value: 1, timescale: 1), queue: DispatchQueue.main) { [weak self] time in
+        let interval = CMTime(seconds: 0.01, preferredTimescale: CMTimeScale(NSEC_PER_SEC))
+        let timeObserver = player.addPeriodicTimeObserver(forInterval: interval, queue: DispatchQueue.main) { [weak self] time in
             guard let player = self?.player else { return }
             let duration = CMTimeGetSeconds(player.currentItem?.duration ?? CMTime(value: 0, timescale: 1))
             let currentTime = CMTimeGetSeconds(time)
@@ -198,7 +235,8 @@ extension ShortFormFullScreenViewController {
 extension ShortFormFullScreenViewController: UIViewControllerTransitioningDelegate {
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-        PresentationController(presentedViewController: presented, presenting: presenting)
+//        PresentationController(presentedViewController: presented, presenting: presenting)
+        return CustomPresentationController(presentedViewController: presented, presenting: presenting)
     }
     
     func bind() {
@@ -220,6 +258,7 @@ extension ShortFormFullScreenViewController: UIViewControllerTransitioningDelega
     }
 }
 
+
 private extension ShortFormFullScreenViewController {
     @objc func sliderValueChanged(_ sender: UISlider) {
         print(#function)
@@ -238,10 +277,12 @@ private extension ShortFormFullScreenViewController {
     @objc func handleTap(_ gesture: UITapGestureRecognizer) {
         if player.rate == 1.0 { // 현재 재생 중인 상태
             player.pause()
-            pausePlayButton.setImage(UIImage(named: "play"), for: .normal)
+            stopPlayAnimation(img: UIImage(named: "viewstop_svg")!,width: 50,height: 50)
+            //            pausePlayButton.setImage(UIImage(named: "play_svg"), for: .normal)
         } else { // 일시정지 상태
             player.play()
-            pausePlayButton.setImage(UIImage(named: "pause"), for: .normal)
+            stopPlayAnimation(img: UIImage(named: "viewplay_svg")!,width: 50,height: 50)
+            //            pausePlayButton.setImage(UIImage(named: "pause_svg"), for: .normal)
         }
     }
 }
@@ -251,7 +292,9 @@ import SwiftUI
 import AVKit
 struct ShortFormViewController1_preview: PreviewProvider {
     static var previews: some View {
-        
+        //        UINavigationController(rootViewController: ShortFormFullScreenViewController(videoURL: nil, player: AVPlayer(), playerLayer: AVPlayerLayer()))
+        //            .toPreview()
+        //            .ignoresSafeArea()
         UINavigationController(rootViewController: ShortFormViewController())
             .toPreview()
             .ignoresSafeArea()
