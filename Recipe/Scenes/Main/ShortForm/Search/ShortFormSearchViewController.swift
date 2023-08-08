@@ -44,6 +44,11 @@ class ShortFormSearchViewController: BaseViewController, UISearchBarDelegate {
                 }
             }).disposed(by: disposeBag)
     }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.tabBarController?.tabBar.isHidden = false
+    }
 }
 
 extension ShortFormSearchViewController {

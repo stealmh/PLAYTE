@@ -29,12 +29,14 @@ final class RecipeViewController: BaseViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        disposeBag = DisposeBag()
+        super.viewDidDisappear(animated)
         recipeView.delegate = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         recipeView.delegate = self
+//        self.tabBarController?.tabBar.isHidden = false
     }
 }
 
@@ -52,12 +54,10 @@ extension RecipeViewController {
     }
     
     private func configureNavigationTabBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .add)
-        navigationItem.leftBarButtonItem = UIBarButtonItem.menuButton(imageName: "recipe_logo", size: CGSize(width: 64, height: 14))
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem.menuButton(imageName: "bell.default_svg", size: CGSize(width: 50, height: 40))
+        navigationItem.leftBarButtonItem = UIBarButtonItem.menuButton(imageName: "recipe", size: CGSize(width: 110, height: 40))
         navigationController?.navigationBar.barTintColor = .white
-        let v = UILabel()
-        v.text = "레시피"
-        navigationItem.titleView = v
     }
 }
 
@@ -66,6 +66,14 @@ extension RecipeViewController {
     private func bind() {
         navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { _ in
+            }).disposed(by: disposeBag)
+        
+        recipeView.searchImageButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("tapped")
+                let vc = RecipeSearchViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+                self.tabBarController?.tabBar.isHidden = true
             }).disposed(by: disposeBag)
     }
 }
@@ -83,6 +91,8 @@ extension RecipeViewController: RecipeViewDelegate {
 import SwiftUI
 struct RecipeViewController_preview: PreviewProvider {
     static var previews: some View {
-        RecipeViewController().toPreview()
+        UINavigationController(rootViewController: RecipeViewController())
+            .toPreview()
+            .ignoresSafeArea()
     }
 }
