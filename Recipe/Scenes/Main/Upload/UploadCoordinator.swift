@@ -35,6 +35,10 @@ final class UploadCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
             case .showCreateRecipeView:
                 self?.showCreateRecipeView()
                 return
+            case .showCreateShortFormView:
+                self?.showCreateShortFormView()
+                return
+
             }
         }
         navigationController.pushViewController(goVC, animated: true)
@@ -42,6 +46,20 @@ final class UploadCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
     
     func showCreateRecipeView() {
         let vc = CreateRecipeViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.didSendEventClosure = { [weak self] event in
+            switch event {
+            case .registerButtonTapped:
+                self?.navigationController.popViewController(animated: true)
+                return
+            }
+        }
+        self.navigationController.dismiss(animated: false)
+        navigationController.pushViewController(vc, animated: false)
+    }
+    
+    func showCreateShortFormView() {
+        let vc = CreateShortFormViewController()
         vc.modalPresentationStyle = .overCurrentContext
         vc.didSendEventClosure = { [weak self] event in
             switch event {
