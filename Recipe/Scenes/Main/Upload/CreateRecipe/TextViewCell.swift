@@ -13,7 +13,7 @@ import SnapKit
 final class TextFieldViewCell: UICollectionViewCell {
     
     ///UI Properties
-    private let textView: UITextView = {
+    let textView: UITextView = {
         let v = UITextView()
         v.layer.cornerRadius = 10
         v.backgroundColor = .gray.withAlphaComponent(0.2)
