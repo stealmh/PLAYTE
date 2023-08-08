@@ -102,16 +102,18 @@ extension CreateRecipeView {
     }
     
     func registerCell() {
-        collectionView.register(DefaultHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: DefaultHeader.identifier)
-        collectionView.register(CookStepHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CookStepHeaderView.identifier)
-        collectionView.register(TextFieldCell.self , forCellWithReuseIdentifier: TextFieldCell.reuseIdentifier)
-        collectionView.register(TextFieldViewCell.self , forCellWithReuseIdentifier: TextFieldViewCell.reuseIdentifier)
-        collectionView.register(CookSettingCell.self , forCellWithReuseIdentifier: CookSettingCell.reuseIdentifier)
-        collectionView.register(CreateRecipeFooter.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CreateRecipeFooter.identifier)
-        collectionView.register(DefaultTextFieldCell.self , forCellWithReuseIdentifier: DefaultTextFieldCell.reuseIdentifier)
-        collectionView.register(CookStepCell.self, forCellWithReuseIdentifier: "CookStepCell1")
-        collectionView.register(CookStepCountCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: CookStepCountCell.identifier)
-        collectionView.register(CookStepFooterView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionFooter, withReuseIdentifier: CookStepFooterView.identifier)
+        collectionView.registerCell(cellType: TextFieldCell.self)
+        collectionView.registerCell(cellType: TextFieldViewCell.self)
+        collectionView.registerCell(cellType: CookSettingCell.self)
+        collectionView.registerCell(cellType: DefaultTextFieldCell.self)
+        collectionView.registerCell(cellType: CookStepCell.self)
+
+        collectionView.registerHeaderView(viewType: DefaultHeader.self)
+        collectionView.registerHeaderView(viewType: CookStepHeaderView.self)
+        collectionView.registerHeaderView(viewType: CookStepCountCell.self)
+
+        collectionView.registerFooterView(viewType: CreateRecipeFooter.self)
+        collectionView.registerFooterView(viewType: CookStepFooterView.self)
     }
     
     private func makeSwipeActions(for indexPath: IndexPath?) -> UISwipeActionsConfiguration? {

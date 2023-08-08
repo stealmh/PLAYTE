@@ -13,7 +13,7 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     
     enum Event {
         case showCreateRecipeView
-        ///Todo: createShortFormButtonTapped 로직 연결하기
+        case showCreateShortFormView
     }
     
     func createRecipeButtonTapped() {
@@ -21,7 +21,7 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     }
     
     func createShortFormButtonTapped() {
-        print("short tapped")
+        didSendEventClosure?(.showCreateShortFormView)
     }
     
     ///UI Properties
