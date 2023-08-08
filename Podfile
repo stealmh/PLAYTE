@@ -9,6 +9,7 @@ target 'Recipe' do
   pod 'SnapKit'
   pod 'RxSwift'
   pod 'RxCocoa'
+  pod 'RxKeyboard'
   pod 'Alamofire'
   pod 'Kingfisher'
   pod 'GoogleSignIn'

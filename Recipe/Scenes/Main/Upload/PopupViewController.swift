@@ -13,7 +13,7 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     
     enum Event {
         case showCreateRecipeView
-        ///Todo: createShortFormButtonTapped 로직 연결하기
+        case showCreateShortFormView
     }
     
     func createRecipeButtonTapped() {
@@ -21,13 +21,13 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     }
     
     func createShortFormButtonTapped() {
-        print("short tapped")
+        didSendEventClosure?(.showCreateShortFormView)
     }
-    
     
     ///UI Properties
     private let popupView = PopupView()
 
+    /// Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .black.withAlphaComponent(0.2)
@@ -36,16 +36,16 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
         popupView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(didTapView))
-        popupView.addGestureRecognizer(tapGestureRecognizer)
     }
     
-    @objc func didTapView() {
-        self.dismiss(animated: false)
-    }
     
     override func viewDidDisappear(_ animated: Bool) {
         popupView.delegate = nil
+    }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        popupView.delegate = self
     }
 
 }

@@ -20,20 +20,28 @@ final class CreateRecipeViewController: BaseViewController {
         case registerButtonTapped
         ///Todo: createShortFormButtonTapped 로직 연결하기
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         addView()
         configureLayout()
         bind()
+        setNavigationTitle("나의 레시피 작성")
         createRecipeView.delegate = self
         imagePicker.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
         disposeBag = DisposeBag()
         createRecipeView.delegate = nil
         imagePicker.delegate = nil
+        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        self.tabBarController?.tabBar.isHidden = true
     }
 }
 //MARK: - Method(Normal)
@@ -76,7 +84,7 @@ extension CreateRecipeViewController: CreateRecipeViewDelegate {
 extension CreateRecipeViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
         if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-//            imageView.contentMode = .scaleAspectFit
+            //            imageView.contentMode = .scaleAspectFit
             print(pickedImage)
             createRecipeView.imageRelay.accept(pickedImage)
         }
