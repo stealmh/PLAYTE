@@ -22,7 +22,17 @@ final class RecipeCategoryCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let v = UILabel()
         v.text = "소중한 사람을 위해"
+        v.numberOfLines = 2
         v.font = .boldSystemFont(ofSize: 14)
+        return v
+    }()
+    
+    private let circleBackground: UIView = {
+        let v = UIView()
+        v.backgroundColor = .mainColor
+        v.layer.borderColor = UIColor.white.cgColor
+        v.layer.borderWidth = 10
+        v.layer.cornerRadius = 20
         return v
     }()
     
@@ -30,7 +40,7 @@ final class RecipeCategoryCell: UICollectionViewCell {
         super.init(frame: frame)
         backgroundColor = .white
         
-        addSubViews(background,titleLabel)
+        addSubViews(background, titleLabel, circleBackground)
         
         configureLayout()
         configureData(text: "소중한 사람을 위해", color: UIColor.red)
@@ -52,6 +62,7 @@ extension RecipeCategoryCell {
             $0.centerY.equalTo(background)
             $0.left.equalTo(background).inset(20)
         }
+        
     }
     
     func configureData(text: String, color: UIColor) {

@@ -87,15 +87,18 @@ extension RecipeHeaderCell {
         }
         
         buttonTappedSubject.subscribe(onNext: { tagNumber in
+            print(tagNumber)
             self.tagButtons.forEach {
                 if $0.tag == tagNumber {
                     self.tagBackgrounds
                         .filter { $0 == self.tagBackgrounds[tagNumber]}
-                        .forEach { $0.backgroundColor = .orange }
+                        .forEach { $0.backgroundColor = .mainColor }
+                    $0.setTitleColor(.white, for: .normal)
                 } else {
                     self.tagBackgrounds
                         .filter { $0 != self.tagBackgrounds[tagNumber]}
-                        .forEach { $0.backgroundColor = .clear }
+                        .forEach { $0.backgroundColor = .sub1 }
+                    $0.setTitleColor(.mainColor, for: .normal)
                 }
             }
         }).disposed(by: disposeBag)
