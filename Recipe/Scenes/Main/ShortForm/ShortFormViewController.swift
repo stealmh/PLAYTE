@@ -31,7 +31,7 @@ final class ShortFormViewController: BaseViewController {
         let img = v.buttonImageSize(imageName: "search_svg", size: 24)
         v.setImage(img, for: .normal)
         v.contentMode = .scaleAspectFit
-        v.tintColor = UIColor.hexStringToUIColor(hex: "#FF5520")
+        v.tintColor = .mainColor
         return v
     }()
     
@@ -64,6 +64,7 @@ final class ShortFormViewController: BaseViewController {
             .subscribe(onNext: { _ in
                 let vc = ShortFormSearchViewController()
                 self.navigationController?.pushViewController(vc, animated: true)
+                self.tabBarController?.tabBar.isHidden = true
             }).disposed(by: disposeBag)
     }
     

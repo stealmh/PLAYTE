@@ -1,33 +1,21 @@
 //
-//  RecipeView.swift
+//  RecipeSearchView.swift
 //  Recipe
 //
-//  Created by KindSoft on 2023/07/11.
+//  Created by 김민호 on 2023/08/05.
 //
+
 import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
 
-protocol RecipeViewDelegate {
-    func didTappedRecipeCell(item: Recipe)
-}
-
-struct MockCategoryData: Hashable {
-    let id = UUID()
-    let text: String
-    let color: UIColor
-    let img: UIImage
-}
-
-final class RecipeView: UIView {
+final class RecipeSearchView: UIView {
     enum Section: Hashable {
-        case header
         case recipe
     }
     
     enum Item: Hashable {
-        case header(MockCategoryData)
         case recipe(Recipe)
     }
     
@@ -59,7 +47,6 @@ final class RecipeView: UIView {
         let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         v.showsVerticalScrollIndicator = false
         v.translatesAutoresizingMaskIntoConstraints = false
-//        v.isScrollEnabled = false
         return v
     }()
     
@@ -67,12 +54,7 @@ final class RecipeView: UIView {
 //    private let disposeBag = DisposeBag()
     var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
-    private let mockCategoryData: [MockCategoryData] = [
-        MockCategoryData(text: "자취생 필수!", color: .mainColor ?? .white, img: UIImage(named: "homealone_svg")!),
-        MockCategoryData(text: "다이어터를\n위한 레시피", color: .sub3 ?? .white, img: UIImage(named: "diet_svg")!),
-        MockCategoryData(text: "알뜰살뜰\n만원의 행복", color: .sub2 ?? .white, img: UIImage(named: "manwon_svg")!),
-        MockCategoryData(text: "집들이용\n레시피", color: .sub4 ?? .white, img: UIImage(named: "homeparty_svg")!)]
-    
+//    recipeDetail
     private let mockRecipeData: [Recipe] = [
         Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
         Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
@@ -85,7 +67,7 @@ final class RecipeView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        addSubViews(searchTextField, searchImageButton, collectionView)
+        addSubViews(collectionView)
         configureLayout()
         registerCell()
         configureDataSource()
@@ -98,21 +80,11 @@ final class RecipeView: UIView {
 }
 
 //MARK: - Method(Normal)
-extension RecipeView {
+extension RecipeSearchView {
     func configureLayout() {
-        searchTextField.snp.makeConstraints {
-            $0.top.equalTo(self.safeAreaLayoutGuide).offset(10)
-            $0.left.right.equalToSuperview().inset(20)
-            $0.height.equalTo(51.57)
-        }
-        
-        searchImageButton.snp.makeConstraints {
-            $0.right.equalTo(searchTextField).inset(15)
-            $0.centerY.equalTo(searchTextField)
-        }
         
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(searchTextField.snp.bottom).offset(10)
+            $0.top.equalTo(self.safeAreaLayoutGuide)
             $0.left.right.bottom.equalToSuperview()
         }
     }
@@ -125,7 +97,7 @@ extension RecipeView {
 }
 
 //MARK: Comp + Diff
-extension RecipeView {
+extension RecipeSearchView {
     func createLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { [unowned self] index, env in
             return self.sectionFor(index: index, environment: env)
@@ -136,25 +108,10 @@ extension RecipeView {
         
         let section = dataSource.snapshot().sectionIdentifiers[index]
         switch section {
-        case .header:
-            return createHeaderSection()
         case .recipe:
             return createRecipeSection()
         }
     }
-    
-    func createHeaderSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(85)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 10, trailing: 10)
-        
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(85)), subitem: item, count: 2)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 5)
-//        section.orthogonalScrollingBehavior = .continuous
-        return section
-    }
-    
     func createRecipeSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100)))
         item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
@@ -162,10 +119,10 @@ extension RecipeView {
         let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 5, bottom: 10, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
         
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
@@ -187,11 +144,6 @@ extension RecipeView {
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell{
         switch item {
-        case .header(let data):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCategoryCell.reuseIdentifier, for: indexPath) as! RecipeCategoryCell
-            cell.configureData(text: data.text, color: data.color)
-            return cell
-            
         case .recipe(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCell.reuseIdentifier, for: indexPath) as! RecipeCell
             cell.configure(data)
@@ -206,22 +158,19 @@ extension RecipeView {
     
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
-        snapshot.appendSections([.header, .recipe])
-        snapshot.appendItems(mockCategoryData.map({ Item.header($0) }), toSection: .header)
+        snapshot.appendSections([.recipe])
         snapshot.appendItems(mockRecipeData.map({ Item.recipe($0) }), toSection: .recipe)
 
         return snapshot
     }
 }
 
-extension RecipeView: UICollectionViewDelegate {
+extension RecipeSearchView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
         case .recipe(let data):
             delegate?.didTappedRecipeCell(item: data)
-        default:
-            return
         }
     }
 }
@@ -229,11 +178,11 @@ extension RecipeView: UICollectionViewDelegate {
 
 #if DEBUG
 import SwiftUI
-struct ForRecipeView: UIViewRepresentable {
+struct ForRecipeSearchView: UIViewRepresentable {
     typealias UIViewType = UIView
     
     func makeUIView(context: Context) -> UIView {
-        RecipeView()
+        RecipeSearchView()
     }
     
     func updateUIView(_ uiView: UIView, context: Context) {
@@ -241,9 +190,9 @@ struct ForRecipeView: UIViewRepresentable {
 }
 
 @available(iOS 13.0, *)
-struct RecipeView_Preview: PreviewProvider {
+struct RecipeSearchView_Preview: PreviewProvider {
     static var previews: some View {
-        ForRecipeView().ignoresSafeArea()
+        ForRecipeSearchView()
     }
 }
 #endif

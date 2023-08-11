@@ -1,8 +1,8 @@
 //
-//  ShortFormSearchViewController.swift
+//  RecipeSearchViewController.swift
 //  Recipe
 //
-//  Created by 김민호 on 2023/08/04.
+//  Created by 김민호 on 2023/08/09.
 //
 
 import UIKit
@@ -10,11 +10,11 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-class ShortFormSearchViewController: BaseViewController, UISearchBarDelegate {
+class RecipeSearchViewController: BaseViewController, UISearchBarDelegate {
 
     var searchBar = UISearchBar(frame: CGRect(x: 0, y: 0, width: 300, height: 44))
     var defaultBackground = SearchDefaultView()
-    var searchResultBackground = ShortFormSearchView()
+    var searchResultBackground = RecipeSearchView()
     private let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
@@ -43,6 +43,20 @@ class ShortFormSearchViewController: BaseViewController, UISearchBarDelegate {
                     self.searchResultBackground.isHidden = true
                 }
             }).disposed(by: disposeBag)
+//        searchBar.rx.textDidBeginEditing
+//            .skip(1)
+//            .subscribe(onNext: { _ in
+//                print("a")
+//                self.defaultBackground.isHidden = true
+//                self.searchResultBackground.isHidden = false
+//            }).disposed(by: disposeBag)
+//        searchBar.rx.textDidEndEditing
+//            .skip(1)
+//            .subscribe(onNext: { _ in
+//                print("b")
+//                self.defaultBackground.isHidden = false
+//                self.searchResultBackground.isHidden = true
+//            }).disposed(by: disposeBag)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -51,7 +65,7 @@ class ShortFormSearchViewController: BaseViewController, UISearchBarDelegate {
     }
 }
 
-extension ShortFormSearchViewController {
+extension RecipeSearchViewController {
     func searchBarConfigure() {
         searchBar.delegate = self
         searchBar.placeholder = "검색어를 입력하세요"
@@ -70,12 +84,20 @@ extension ShortFormSearchViewController {
     }
 }
 
+extension RecipeSearchViewController: RecipeViewDelegate {
+    func didTappedRecipeCell(item: Recipe) {
+        print("")
+    }
+    
+    
+}
+
 //MARK: - VC Preview
 import SwiftUI
-struct ShortFormViewController12_preview: PreviewProvider {
+struct RecipeSearchViewController_preview: PreviewProvider {
     static var previews: some View {
         
-        UINavigationController(rootViewController: ShortFormViewController())
+        UINavigationController(rootViewController: RecipeSearchViewController())
             .toPreview()
     }
 }
