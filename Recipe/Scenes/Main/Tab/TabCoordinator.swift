@@ -53,7 +53,6 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
         } else {
             tabBarController.tabBar.barTintColor = .white
         }
-        
     }
     
     deinit {
@@ -136,10 +135,17 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
     }
     
     private func changeRadius(cornerRadius: CGFloat) {
-        tabBarController.tabBar.layer.masksToBounds = true
+        
+        tabBarController.tabBar.layer.shadowColor = UIColor.black.cgColor
+        tabBarController.tabBar.layer.shadowOpacity = 0.5
+        tabBarController.tabBar.layer.shadowOffset = CGSize(width: 0, height: -2)
+        tabBarController.tabBar.layer.shadowRadius = 10
+//        tabBarController.tabBar.layer.masksToBounds = false
+        
+//        tabBarController.tabBar.layer.masksToBounds = true
         tabBarController.tabBar.isTranslucent = true
         tabBarController.tabBar.layer.cornerRadius = cornerRadius
-//        tabBarController.tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
+        tabBarController.tabBar.layer.maskedCorners = [.layerMinXMinYCorner, .layerMaxXMinYCorner]
     }
 }
 
