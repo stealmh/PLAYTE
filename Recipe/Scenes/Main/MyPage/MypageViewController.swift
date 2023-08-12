@@ -20,19 +20,28 @@ final class MypageViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(myPageView)
+        myPageView.delegate = self
         configureLayout()
         configureNavigationTabBar()
     }
     
     enum Event {
         case go
+        case favoriteReceipeButtonTapped
+        case writeRecipeButtonTapped
+        case myReviewButtonTapped
+        case recentShortFormCellTapped
+        case recentRecipeCellTapped
+        case settingButtonTapped
     }
     
     @objc func settingButtonTapped() {
-        ///Todo: 세팅눌렀을 때 
+        self.tabBarController?.tabBar.isHidden = true
+        didSendEventClosure?(.settingButtonTapped)
     }
 }
 
+//MARK: - Method(Normal)
 extension MypageViewController {
     
     private func configureLayout() {
@@ -49,5 +58,30 @@ extension MypageViewController {
         navigationItem.rightBarButtonItem = settingButton
         navigationItem.leftBarButtonItem = UIBarButtonItem.menuButton(imageName: "mypage", size: CGSize(width: 120, height: 38))
         navigationController?.navigationBar.barTintColor = .white
+    }
+}
+
+extension MypageViewController: MyPageViewDelegate {
+    func favoriteReceipeButtonTapped() {
+        self.tabBarController?.tabBar.isHidden = true
+        didSendEventClosure?(.favoriteReceipeButtonTapped)
+    }
+    
+    func writeRecipeButtonTapped() {
+        self.tabBarController?.tabBar.isHidden = true
+        didSendEventClosure?(.writeRecipeButtonTapped)
+    }
+    
+    func myReviewButtonTapped() {
+        self.tabBarController?.tabBar.isHidden = true
+        didSendEventClosure?(.myReviewButtonTapped)
+    }
+    
+    func recentShortFormCellTapped() {
+        ///Todo:
+    }
+    
+    func recentRecipeCellTapped() {
+        ///Todo:
     }
 }

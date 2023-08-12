@@ -71,19 +71,19 @@ final class MyPageHeaderView: UICollectionViewCell {
         return v
     }()
     
-    private let favoriteRecipeButton: UIButton = {
+    let favoriteRecipeButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(named: "favoriteRecipe_svg"), for: .normal)
         return v
     }()
     
-    private let writeRecipeButton: UIButton = {
+    let writeRecipeButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(named: "writeRecipe_svg"), for: .normal)
         return v
     }()
     
-    private let myReviewRecipeButton: UIButton = {
+    let myReviewRecipeButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(named: "myReview_svg"), for: .normal)
         return v

@@ -10,6 +10,14 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol MyPageViewDelegate: AnyObject {
+    func favoriteReceipeButtonTapped()
+    func writeRecipeButtonTapped()
+    func myReviewButtonTapped()
+    func recentShortFormCellTapped()
+    func recentRecipeCellTapped()
+}
+
 class MyPageView: UIView {
     
     enum Section: Hashable {
@@ -34,6 +42,8 @@ class MyPageView: UIView {
         return v
     }()
     
+    weak var delegate: MyPageViewDelegate?
+    private let disposeBag = DisposeBag()
     private var dataSource: Datasource!
     private var mockHeader: [MyInfo] = [MyInfo(nickName: "미노", email: "kmh922@naver.com", loginType: "apple")]
     private var mockRecentShortForm: [MyPageRecentWatch] = [MyPageRecentWatch(views: "1.4k", contents: "맛있는 바나나를 구워보았다"),MyPageRecentWatch(views: "1.4만", contents: "맛있는 바나나를 3개먹었다"),MyPageRecentWatch(views: "1.4천", contents: "맛있는 바나나를 3개먹었다"),MyPageRecentWatch(views: "1.4만", contents: "토마토 볶음밥")]
@@ -150,6 +160,18 @@ extension MyPageView {
         case .header(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyPageHeaderView.reuseIdentifier, for: indexPath) as! MyPageHeaderView
             cell.configure(data)
+            cell.favoriteRecipeButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.favoriteReceipeButtonTapped()
+                }).disposed(by: disposeBag)
+            cell.myReviewRecipeButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.myReviewButtonTapped()
+                }).disposed(by: disposeBag)
+            cell.writeRecipeButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.writeRecipeButtonTapped()
+                }).disposed(by: disposeBag)
             return cell
             
         case .recentShortForm(let data):
