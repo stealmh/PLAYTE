@@ -13,7 +13,7 @@ import SnapKit
 final class DefaultTextFieldCell: UICollectionViewCell {
     
     ///UI Properties
-    private let recipeNametextField: PaddingUITextField = {
+    let recipeNametextField: PaddingUITextField = {
         let v = PaddingUITextField()
         v.backgroundColor = .gray.withAlphaComponent(0.2)
         v.placeholder = "placeholder"
@@ -36,6 +36,7 @@ final class DefaultTextFieldCell: UICollectionViewCell {
         bind()
         configureTableView()
         setupData()
+        table.isHidden = true
     }
     
     required init?(coder: NSCoder) {
@@ -47,18 +48,18 @@ final class DefaultTextFieldCell: UICollectionViewCell {
 extension DefaultTextFieldCell {
     
     private func addViews() {
-        addSubViews(recipeNametextField,table)
+        addSubViews(recipeNametextField, table)
     }
-    
     private func setupView() {
         recipeNametextField.snp.makeConstraints {
-            $0.edges.equalToSuperview()
+            $0.top.left.right.equalToSuperview()
+            $0.height.greaterThanOrEqualTo(50)
         }
         
         table.snp.makeConstraints {
-            $0.top.equalTo(recipeNametextField.snp.bottom).offset(5)
-            $0.left.right.equalTo(recipeNametextField).inset(10)
-            $0.height.equalTo(70)
+            $0.top.equalTo(recipeNametextField.snp.bottom)
+            $0.left.right.equalTo(recipeNametextField)
+            $0.height.greaterThanOrEqualTo(70)
 //            $0.edges.equalTo(recipeNametextField)
         }
     }
@@ -95,6 +96,7 @@ extension DefaultTextFieldCell {
 extension DefaultTextFieldCell {
     func bind() {
         recipeNametextField.rx.text.orEmpty
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .subscribe(onNext: { data in
                 self.filterText(data)
                 if data.count > 0 {
@@ -159,6 +161,10 @@ extension DefaultTextFieldCell: UITableViewDelegate, UITableViewDataSource {
     }
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 35
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        print("tapped")
     }
 }
 

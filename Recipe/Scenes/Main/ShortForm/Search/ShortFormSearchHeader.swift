@@ -33,6 +33,10 @@ class ShortFormSearchHeader: UICollectionReusableView {
     }()
     /// Properties
     private let disposeBag = DisposeBag()
+    private let buttonTappedSubject = BehaviorRelay<Int>(value: 0)
+    private lazy var tagBackgrounds = [recentBackground, popularBackground, minimumBackground]
+    private lazy var tagButtons = [recentButton, popularButton, minimumButton]
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         recentBackground.addSubview(recentButton)
@@ -42,6 +46,7 @@ class ShortFormSearchHeader: UICollectionReusableView {
         addSubViews(stackView)
         configureLayout()
         recentButton.setTitleColor(.white, for: .normal)
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -92,7 +97,35 @@ extension ShortFormSearchHeader {
 }
 
 //MARK: - Method(Rx bind)
-extension ShortFormSearchHeader {}
+extension ShortFormSearchHeader {
+    private func bind() {
+        tagButtons.forEach { btn in
+            btn.rx.tap
+                .subscribe(onNext: { _ in
+                    self.buttonTappedSubject.accept(btn.tag)
+                }
+            ).disposed(by: disposeBag)
+        }
+        
+        buttonTappedSubject.subscribe(onNext: { tagNumber in
+            print(tagNumber)
+            self.tagButtons.forEach {
+                if $0.tag == tagNumber {
+                    self.tagBackgrounds
+                        .filter { $0 == self.tagBackgrounds[tagNumber]}
+                        .forEach { $0.backgroundColor = .mainColor }
+                    $0.setTitleColor(.white, for: .normal)
+                } else {
+                    self.tagBackgrounds
+                        .filter { $0 != self.tagBackgrounds[tagNumber]}
+                        .forEach { $0.backgroundColor = .sub1 }
+                    $0.setTitleColor(.mainColor, for: .normal)
+                }
+            }
+        }).disposed(by: disposeBag)
+    }
+
+}
 
 #if DEBUG
 import SwiftUI

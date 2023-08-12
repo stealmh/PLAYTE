@@ -42,6 +42,28 @@ final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
             case .go:
                 self?.finishDelegate?.coordinatorDidFinish(childCoordinator: self!)
                 return
+            case .favoriteReceipeButtonTapped:
+                let vc = FavoriteRecipeViewController()
+                self?.navigationController.pushViewController(vc, animated: true)
+                return
+            case .writeRecipeButtonTapped:
+                let vc = WriteRecipeViewController()
+                self?.navigationController.pushViewController(vc, animated: true)
+                return
+            case .myReviewButtonTapped:
+                let vc = MyReviewViewController()
+                self?.navigationController.pushViewController(vc, animated: true)
+                return
+            case .recentShortFormCellTapped:
+                ///Todo:
+                return
+            case .recentRecipeCellTapped:
+                ///Todo:
+                return
+            case .settingButtonTapped:
+                let vc = SettingViewController()
+                self?.navigationController.pushViewController(vc, animated: true)
+                return
             }
         }
         navigationController.pushViewController(goVC, animated: true)

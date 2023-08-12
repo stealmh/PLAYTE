@@ -10,10 +10,12 @@ import SnapKit
 
 struct Recipe: Hashable {
     let image: UIImage
+    let uploadTime: String
+    let nickName: String
     let title: String
-    let tag: String
-    let isFavorite: Bool
     let cookTime: String
+    let rate: String
+    let isFavorite: Bool
 }
 
 final class RecipeCell: UICollectionViewCell {
@@ -26,23 +28,60 @@ final class RecipeCell: UICollectionViewCell {
     }()
     private let recipeTitle: UILabel = {
         let v = UILabel()
-        v.font = .boldSystemFont(ofSize: 15)
+        v.font = .boldSystemFont(ofSize: 16)
+        v.textColor = .black
+        
         return v
     }()
     
     private let favoriteButton: UIButton = {
         let v = UIButton()
-        let img = v.buttonImageSize(systemImageName: "bookmark.fill", size: 30)
-        v.setImage(img, for: .normal)
+        v.setImage(UIImage(named: "bookmarkfill_svg"), for: .normal)
         return v
     }()
     private let tagLabel = UILabel()
     private let cookTimeLabel: UIButton = {
         let v = UIButton()
-        v.setTitle("10분", for: .normal)
-        v.setImage(UIImage(systemName: "stopwatch"), for: .normal)
-        v.tintColor = .black
-        v.setTitleColor(.black, for: .normal)
+        v.setImage(UIImage(named: "time_svg"), for: .normal)
+        v.setTitleColor(.grayScale4, for: .normal)
+        v.titleLabel?.font = .systemFont(ofSize: 14)
+        v.contentHorizontalAlignment = .left
+        return v
+    }()
+    
+    private let uploadTimeLabel: UILabel = {
+        let v = UILabel()
+        v.textColor = .grayScale4
+        v.font = .systemFont(ofSize: 14)
+        return v
+    }()
+    private let divideLine: UIView = {
+        let v = UIView()
+        v.layer.borderColor = UIColor.grayScale4?.cgColor
+        v.layer.borderWidth = 1
+        return v
+    }()
+    private let nickName: UILabel = {
+        let v = UILabel()
+        v.font = .systemFont(ofSize: 14)
+        v.textColor = .grayScale4
+        return v
+    }()
+    private let rate: UIButton = {
+        let v = UIButton()
+        v.setImage(UIImage(named: "star_svg"), for: .normal)
+        v.setTitleColor(.mainColor, for: .normal)
+        v.titleLabel?.font = .systemFont(ofSize: 14)
+        v.contentHorizontalAlignment = .left
+        return v
+    }()
+    
+    private let circleBackground: UIView = {
+        let v = UIView()
+        v.backgroundColor = .mainColor
+        v.layer.borderColor = UIColor.white.cgColor
+        v.layer.borderWidth = 10
+        v.layer.cornerRadius = 20
         return v
     }()
     
@@ -52,58 +91,93 @@ final class RecipeCell: UICollectionViewCell {
         
         addSubViews(recipeImageView,
                     recipeTitle,
-                    tagLabel,favoriteButton,cookTimeLabel)
+                    tagLabel,favoriteButton,cookTimeLabel, uploadTimeLabel, divideLine, nickName, rate, circleBackground)
         
-        self.setUI()
-
-    }
-    
-    func configure(_ data: Recipe) {
-        recipeImageView.image = data.image
-        recipeTitle.text = data.title
-        tagLabel.text = data.tag
-        favoriteButton.setImage(
-            data.isFavorite ? UIImage(systemName: "bookmark.fill")! : UIImage(systemName: "bookmark")!,
-            for: .normal)
-        cookTimeLabel.setTitle(data.cookTime, for: .normal)
-    }
-    
-    func setUI() {
-        recipeImageView.snp.makeConstraints {
-            $0.top.equalToSuperview().inset(10)
-            $0.left.equalToSuperview().inset(10)
-            $0.width.height.equalTo(60)
-            $0.centerY.equalToSuperview()
-        }
-        
-        recipeTitle.snp.makeConstraints {
-            $0.top.equalTo(recipeImageView.snp.top).offset(10)
-            $0.left.equalTo(recipeImageView.snp.right).offset(15)
-            $0.width.equalToSuperview()
-        }
-        
-        tagLabel.snp.makeConstraints {
-            $0.top.equalTo(recipeTitle.snp.bottom).offset(5)
-            $0.left.equalTo(recipeImageView.snp.right).offset(15)
-            $0.width.equalToSuperview()
-        }
-        
-        favoriteButton.snp.makeConstraints {
-            $0.top.equalTo(recipeTitle)
-            $0.right.equalToSuperview().inset(30)
-            $0.width.equalTo(14)
-            $0.height.equalTo(17.82)
-        }
-        
-        cookTimeLabel.snp.makeConstraints {
-            $0.top.equalTo(favoriteButton.snp.bottom).inset(10)
-            $0.right.equalTo(favoriteButton)
-            $0.bottom.equalToSuperview()
-        }
+        self.configureLayout()
+        mockData()
     }
     
     required init?(coder: NSCoder) {
         super.init(coder: coder)
+    }
+}
+
+//MARK: - Method(Normal)
+extension RecipeCell {
+    
+    func configureLayout() {
+        recipeImageView.snp.makeConstraints {
+            $0.top.left.bottom.equalToSuperview()
+            $0.width.height.equalTo(100)
+        }
+
+        uploadTimeLabel.snp.makeConstraints {
+            $0.top.equalToSuperview().inset(10)
+            $0.left.equalTo(recipeImageView.snp.right).offset(20)
+            $0.height.equalTo(17)
+            $0.width.greaterThanOrEqualTo(35)
+        }
+        
+        divideLine.snp.makeConstraints {
+            $0.top.height.equalTo(uploadTimeLabel)
+            $0.left.equalTo(uploadTimeLabel.snp.right).offset(10)
+            $0.width.equalTo(1)
+        }
+
+        nickName.snp.makeConstraints {
+            $0.top.height.equalTo(uploadTimeLabel)
+            $0.left.equalTo(divideLine.snp.right).offset(10)
+            $0.width.equalTo(150)
+        }
+
+        recipeTitle.snp.makeConstraints {
+            $0.top.equalTo(uploadTimeLabel.snp.bottom).offset(10)
+            $0.left.equalTo(uploadTimeLabel)
+            $0.width.equalTo(200)
+            $0.height.equalTo(19)
+        }
+
+        rate.snp.makeConstraints {
+            $0.top.equalTo(recipeTitle.snp.bottom).offset(10)
+            $0.left.equalTo(uploadTimeLabel)
+            $0.height.equalTo(20)
+            $0.width.greaterThanOrEqualTo(74)
+        }
+        
+        cookTimeLabel.snp.makeConstraints {
+            $0.top.height.width.equalTo(rate)
+            $0.left.equalTo(rate.snp.right).offset(10)
+        }
+        
+        favoriteButton.snp.makeConstraints {
+            $0.top.equalTo(recipeTitle)
+            $0.right.equalToSuperview().inset(10)
+            $0.width.equalTo(30)
+            $0.height.equalTo(24)
+        }
+    }
+    
+    func mockData() {
+        recipeImageView.image = UIImage(named: "popcat")
+        recipeTitle.text = "토마토 계란 볶음밥"
+        tagLabel.text = "??"
+        cookTimeLabel.setTitle("10분", for: .normal)
+        uploadTimeLabel.text = "31분전"
+        rate.setTitle("4.7(104)", for: .normal)
+        nickName.text = "규땡뿡야"
+    }
+    
+    func configure(_ data: Recipe) {
+        recipeImageView.image = data.image
+        uploadTimeLabel.text = data.uploadTime
+        rate.setTitle(data.rate, for: .normal)
+        nickName.text = data.nickName
+        recipeTitle.text = data.title
+        favoriteButton.setImage(
+            data.isFavorite ? UIImage(named: "bookmarkfill_svg")! : UIImage(named: "bookmark_svg")!,
+            for: .normal)
+        cookTimeLabel.setTitle(data.cookTime, for: .normal)
+
     }
 }
 
@@ -124,7 +198,7 @@ struct ForRecipeCell: UIViewRepresentable {
 struct ForRecipeCellPreview: PreviewProvider {
     static var previews: some View {
         ForRecipeCell()
-            .previewLayout(.fixed(width: 380, height: 80))
+            .previewLayout(.fixed(width: 380, height: 100))
     }
 }
 #endif

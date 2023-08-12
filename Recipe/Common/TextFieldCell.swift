@@ -13,7 +13,7 @@ import SnapKit
 final class TextFieldCell: UICollectionViewCell {
     
     ///UI Properties
-    private let recipeNametextField: PaddingUITextField = {
+    let recipeNametextField: PaddingUITextField = {
         let v = PaddingUITextField()
         v.backgroundColor = .gray.withAlphaComponent(0.2)
         v.placeholder = "placeholder"

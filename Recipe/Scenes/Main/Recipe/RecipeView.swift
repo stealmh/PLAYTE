@@ -17,6 +17,7 @@ struct MockCategoryData: Hashable {
     let id = UUID()
     let text: String
     let color: UIColor
+    let img: UIImage
 }
 
 final class RecipeView: UIView {
@@ -36,20 +37,21 @@ final class RecipeView: UIView {
     ///UI Properties
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()
-        v.textPadding = UIEdgeInsets(top: 20, left: 50, bottom: 20, right: 20)
-        v.backgroundColor = .gray.withAlphaComponent(0.2)
+        v.textPadding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
+        v.backgroundColor = .gray.withAlphaComponent(0.1)
         v.placeholder = "레시피 및 재료를 검색해보세요."
         v.layer.cornerRadius = 10
         v.clipsToBounds = true
+        v.isEnabled = false
         return v
     }()
     
-    private let searchImageButton: UIButton = {
+    let searchImageButton: UIButton = {
         let v = UIButton()
-        let img = v.buttonImageSize(systemImageName: "magnifyingglass", size: 25)
+        let img = v.buttonImageSize(imageName: "search_svg", size: 24)
         v.setImage(img, for: .normal)
         v.contentMode = .scaleAspectFit
-        v.tintColor = UIColor.hexStringToUIColor(hex: "#FF5520")
+        v.tintColor = .mainColor
         return v
     }()
     
@@ -57,6 +59,7 @@ final class RecipeView: UIView {
         let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         v.showsVerticalScrollIndicator = false
         v.translatesAutoresizingMaskIntoConstraints = false
+//        v.isScrollEnabled = false
         return v
     }()
     
@@ -65,15 +68,19 @@ final class RecipeView: UIView {
     var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
     private let mockCategoryData: [MockCategoryData] = [
-        MockCategoryData(text: "소중한 사람을 위해", color: .red),
-        MockCategoryData(text: "건강한 식습관", color: .green),
-        MockCategoryData(text: "알뜰살뜰 만원의 행복", color: .yellow),
-        MockCategoryData(text: "내가 바로 미슐랭 스타", color: .blue)]
+        MockCategoryData(text: "자취생 필수!", color: .mainColor ?? .white, img: UIImage(named: "homealone_svg")!),
+        MockCategoryData(text: "다이어터를\n위한 레시피", color: .sub3 ?? .white, img: UIImage(named: "diet_svg")!),
+        MockCategoryData(text: "알뜰살뜰\n만원의 행복", color: .sub2 ?? .white, img: UIImage(named: "manwon_svg")!),
+        MockCategoryData(text: "집들이용\n레시피", color: .sub4 ?? .white, img: UIImage(named: "homeparty_svg")!)]
+    
     private let mockRecipeData: [Recipe] = [
-        Recipe(image: UIImage(named: "recipeDetail")!, title: "토마토 계란 볶음밥1", tag: "토마토", isFavorite: true, cookTime: "10분"),
-        Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥 길이를 체크합니다", tag: "토마토", isFavorite: false, cookTime: "10분"),
-        Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥2", tag: "토마토", isFavorite: true, cookTime: "10분"),
-        Recipe(image: UIImage(named: "popcat")!, title: "토마토 계란 볶음밥3", tag: "토마토", isFavorite: true, cookTime: "10분"),
+        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
+        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
+        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
+        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
+        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
+        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을 먹어요", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
+        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥좋아", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
     ]
     
     override init(frame: CGRect) {
@@ -94,18 +101,18 @@ final class RecipeView: UIView {
 extension RecipeView {
     func configureLayout() {
         searchTextField.snp.makeConstraints {
-            $0.top.equalToSuperview()
-            $0.left.right.equalToSuperview().inset(13)
+            $0.top.equalTo(self.safeAreaLayoutGuide).offset(10)
+            $0.left.right.equalToSuperview().inset(20)
             $0.height.equalTo(51.57)
         }
         
         searchImageButton.snp.makeConstraints {
-            $0.left.equalTo(searchTextField).inset(15)
+            $0.right.equalTo(searchTextField).inset(15)
             $0.centerY.equalTo(searchTextField)
         }
         
         collectionView.snp.makeConstraints {
-            $0.top.equalTo(searchTextField.snp.bottom)
+            $0.top.equalTo(searchTextField.snp.bottom).offset(10)
             $0.left.right.bottom.equalToSuperview()
         }
     }
@@ -137,32 +144,33 @@ extension RecipeView {
     }
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalWidth(1.0)))
-        item.contentInsets = .init(top: 10, leading: 5, bottom: 0, trailing: 5)
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(85)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 10, trailing: 10)
         
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(0.49), heightDimension: .absolute(150)), subitem: item, count: 2)
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(85)), subitem: item, count: 2)
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 5, bottom: 10, trailing: 10)
-        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 5)
+//        section.orthogonalScrollingBehavior = .continuous
         return section
     }
     
     func createRecipeSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
-        item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100)))
+        item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
         
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.7)), subitem: item, count: 5)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 5, bottom: 10, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         
-        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
+        let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
         
         let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .top)
         
         section.boundarySupplementaryItems = [header]
+        section.orthogonalScrollingBehavior = .none
         return section
     }
     
@@ -235,7 +243,7 @@ struct ForRecipeView: UIViewRepresentable {
 @available(iOS 13.0, *)
 struct RecipeView_Preview: PreviewProvider {
     static var previews: some View {
-        ForRecipeView()
+        ForRecipeView().ignoresSafeArea()
     }
 }
 #endif

@@ -39,39 +39,12 @@ final class RecipeCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
         let goVC = RecipeViewController()
         goVC.didSendEventClosure = { [weak self] event in
             switch event {
-            case .showFloatingView:
-                self?.showPopupView()
+            case .moveTorecipeDetail:
+                ///Todo: 이동로직 옮기기
                 return
             }
         }
         navigationController.pushViewController(goVC, animated: true)
-    }
-    
-    func showPopupView() {
-        let vc = PopupViewController()
-        vc.modalPresentationStyle = .overCurrentContext
-        navigationController.present(vc, animated: false) {
-            vc.didSendEventClosure = { [weak self] event in
-                switch event {
-                case .showCreateRecipeView:
-                    self?.showCreateRecipeView()
-                    return
-                }
-            }
-        }
-    }
-    func showCreateRecipeView() {
-        let vc = CreateRecipeViewController()
-        vc.modalPresentationStyle = .overCurrentContext
-        vc.didSendEventClosure = { [weak self] event in
-            switch event {
-            case .registerButtonTapped:
-                self?.navigationController.popViewController(animated: true)
-                return
-            }
-        }
-        self.navigationController.dismiss(animated: false)
-        navigationController.pushViewController(vc, animated: false)
     }
 }
 

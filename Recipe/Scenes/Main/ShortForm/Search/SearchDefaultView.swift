@@ -31,6 +31,7 @@ class SearchDefaultView: UIView {
         let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         v.showsVerticalScrollIndicator = false
         v.translatesAutoresizingMaskIntoConstraints = false
+        v.isScrollEnabled = false
         return v
     }()
     

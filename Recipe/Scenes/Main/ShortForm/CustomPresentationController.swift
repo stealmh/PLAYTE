@@ -3,17 +3,23 @@
 //  Recipe
 //
 //  Created by 김민호 on 2023/08/07.
-//
+// 205
 
 import UIKit
 
 class CustomPresentationController: UIPresentationController {
     var interactionController: UIPercentDrivenInteractiveTransition?
     var backgroundView: UIView!
+    let presentedHeight: CGFloat
+    
+    init(presentedViewController: UIViewController, presenting presentingViewController: UIViewController?, presentedHeight: CGFloat) {
+        self.presentedHeight = presentedHeight
+        super.init(presentedViewController: presentedViewController, presenting: presentingViewController)
+    }
 
     override var frameOfPresentedViewInContainerView: CGRect {
         guard let containerBounds = containerView?.bounds else { return CGRect.zero }
-        let presentedSize = CGSize(width: containerBounds.width, height: 205)
+        let presentedSize = CGSize(width: containerBounds.width, height: presentedHeight)
         let presentedOrigin = CGPoint(x: 0, y: containerBounds.height - presentedSize.height)
         return CGRect(origin: presentedOrigin, size: presentedSize)
     }

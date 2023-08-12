@@ -94,6 +94,14 @@ extension UIViewController {
              }
         }
     }
+    
+    func setNavigationTitle(_ title: String) {
+        let v = UILabel()
+        v.text = title
+        v.font = .boldSystemFont(ofSize: 18)
+        v.textColor = .black
+        navigationItem.titleView = v
+    }
 
 }
 #endif

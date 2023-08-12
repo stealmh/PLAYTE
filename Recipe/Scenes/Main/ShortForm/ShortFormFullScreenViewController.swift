@@ -131,6 +131,7 @@ class ShortFormFullScreenViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
+        player.replaceCurrentItem(with: nil)
     }
     
     override func viewDidLayoutSubviews() {
@@ -236,7 +237,7 @@ extension ShortFormFullScreenViewController: UIViewControllerTransitioningDelega
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
 //        PresentationController(presentedViewController: presented, presenting: presenting)
-        return CustomPresentationController(presentedViewController: presented, presenting: presenting)
+        return CustomPresentationController(presentedViewController: presented, presenting: presenting, presentedHeight: 205)
     }
     
     func bind() {

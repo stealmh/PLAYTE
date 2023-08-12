@@ -14,10 +14,9 @@ final class RecipeViewController: BaseViewController {
     
     private var disposeBag = DisposeBag()
     private let recipeView = RecipeView()
-    private let floatingButton = DefaultCircleButton()
     var didSendEventClosure: ((RecipeViewController.Event) -> Void)?
     enum Event {
-        case showFloatingView
+        case moveTorecipeDetail
     }
     
     override func viewDidLoad() {
@@ -26,26 +25,25 @@ final class RecipeViewController: BaseViewController {
         configureLayout()
         configureNavigationTabBar()
         bind()
-        floatingButton.delegate = self
         recipeView.delegate = self
     }
     
     override func viewDidDisappear(_ animated: Bool) {
-        disposeBag = DisposeBag()
-        floatingButton.delegate = nil
+        super.viewDidDisappear(animated)
         recipeView.delegate = nil
     }
     
     override func viewDidAppear(_ animated: Bool) {
-        floatingButton.delegate = self
+        super.viewDidAppear(animated)
         recipeView.delegate = self
+//        self.tabBarController?.tabBar.isHidden = false
     }
 }
 
 //MARK: - Method(Normal)
 extension RecipeViewController {
     private func addView() {
-        view.addSubViews(recipeView, floatingButton)
+        view.addSubViews(recipeView)
     }
     
     private func configureLayout() {
@@ -53,20 +51,13 @@ extension RecipeViewController {
             $0.top.equalTo(view.safeAreaLayoutGuide)
             $0.left.right.bottom.equalToSuperview()
         }
-        floatingButton.snp.makeConstraints {
-            $0.width.height.equalTo(62)
-            $0.bottom.equalToSuperview().inset(20)
-            $0.right.equalToSuperview().inset(20)
-        }
     }
     
     private func configureNavigationTabBar() {
-        navigationItem.rightBarButtonItem = UIBarButtonItem(systemItem: .add)
-        navigationItem.leftBarButtonItem = UIBarButtonItem.menuButton(imageName: "recipe_logo", size: CGSize(width: 64, height: 14))
+
+        navigationItem.rightBarButtonItem = UIBarButtonItem.menuButton(imageName: "bell.default_svg", size: CGSize(width: 50, height: 40))
+        navigationItem.leftBarButtonItem = UIBarButtonItem.menuButton(imageName: "recipe", size: CGSize(width: 110, height: 40))
         navigationController?.navigationBar.barTintColor = .white
-        let v = UILabel()
-        v.text = "레시피"
-        navigationItem.titleView = v
     }
 }
 
@@ -76,15 +67,14 @@ extension RecipeViewController {
         navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { _ in
             }).disposed(by: disposeBag)
-    }
-}
-//MARK: - Method(플로팅 버튼 Delegate)
-extension RecipeViewController: FloatingButtonDelegate {
-    func floatingButtonTapped() {
-        print(#function)
-        didSendEventClosure?(.showFloatingView)
-        ///Todo: 어케분리하지
-        self.tabBarController?.tabBar.layer.zPosition = -1
+        
+        recipeView.searchImageButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("tapped")
+                let vc = RecipeSearchViewController()
+                self.navigationController?.pushViewController(vc, animated: true)
+                self.tabBarController?.tabBar.isHidden = true
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -101,6 +91,8 @@ extension RecipeViewController: RecipeViewDelegate {
 import SwiftUI
 struct RecipeViewController_preview: PreviewProvider {
     static var previews: some View {
-        RecipeViewController().toPreview()
+        UINavigationController(rootViewController: RecipeViewController())
+            .toPreview()
+            .ignoresSafeArea()
     }
 }
