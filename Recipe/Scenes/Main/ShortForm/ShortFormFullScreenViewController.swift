@@ -237,7 +237,7 @@ extension ShortFormFullScreenViewController: UIViewControllerTransitioningDelega
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
 //        PresentationController(presentedViewController: presented, presenting: presenting)
-        return CustomPresentationController(presentedViewController: presented, presenting: presenting)
+        return CustomPresentationController(presentedViewController: presented, presenting: presenting, presentedHeight: 205)
     }
     
     func bind() {
