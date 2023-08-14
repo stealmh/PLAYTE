@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 protocol RegisterViewDelegate {
-    func didTapNextButton()
+    func didTapNextButton(_ txt: String)
 }
 
 final class RegisterView: UIView {
@@ -64,9 +64,10 @@ final class RegisterView: UIView {
         let v = UIButton()
         v.setTitle("다음", for: .normal)
         v.tintColor = .white
-        v.backgroundColor = UIColor.hexStringToUIColor(hex: "#FF5520")
+        v.backgroundColor = .grayScale3
         v.layer.cornerRadius = 20
         v.clipsToBounds = true
+        v.isEnabled = false
         return v
     }()
     
@@ -137,13 +138,28 @@ extension RegisterView {
     private func bind() {
         nextButton.rx.tap
             .subscribe(onNext: { _ in
-                self.delegate?.didTapNextButton()
+                self.delegate?.didTapNextButton(self.searchTextField.text!)
             }
         ).disposed(by: disposeBag)
         
         searchImageButton.rx.tap
             .subscribe(onNext: { _ in
                 self.searchTextField.text = ""
+            }
+        ).disposed(by: disposeBag)
+        
+        searchTextField.rx.text.orEmpty
+            .debounce(.seconds(1), scheduler: MainScheduler.instance)
+            .subscribe(onNext: { txt in
+                if !txt.isEmpty {
+                    LoginService.shared.nickNameCheck(nickName: txt, completion: { data in
+                        DispatchQueue.main.async {
+                            self.validationLabel.text = "\(!data)"
+                            self.nextButton.isEnabled = !data
+                            self.nextButton.backgroundColor = self.nextButton.isEnabled ? .mainColor : .gray
+                        }
+                    })
+                }
             }
         ).disposed(by: disposeBag)
     }

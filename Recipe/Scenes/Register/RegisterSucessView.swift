@@ -82,7 +82,7 @@ extension RegisterSucessView {
     private func bind() {
         sucessButton.rx.tap
             .subscribe(onNext: { _ in
-                self.delegate?.didTapNextButton()
+                self.delegate?.didTapNextButton("")
             }
         ).disposed(by: disposeBag)
     }

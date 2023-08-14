@@ -23,6 +23,7 @@ final class SplashViewController: BaseViewController {
         super.viewDidLoad()
         view.addSubview(baseView)
         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+            LoginService.shared.appleLogin(accessToken: KeyChain.shared.read(account: .accessToken))
             self.didSendEventClosure?(.endSplash)
         }
         

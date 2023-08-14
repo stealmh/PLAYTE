@@ -42,7 +42,7 @@ extension RegisterSecondViewController {
 
 //MARK: - Method(RegisterSucessView Delegate)
 extension RegisterSecondViewController: RegisterViewDelegate {
-    func didTapNextButton() {
+    func didTapNextButton(_ txt: String) {
         delegate?.endFlow()
     }
 }

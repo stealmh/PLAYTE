@@ -1,10 +1,3 @@
-//
-//  LoginViewController.swift
-//  Recipe
-//
-//  Created by KindSoft on 2023/07/03.
-//
-
 import AuthenticationServices
 import UIKit
 import SnapKit
@@ -148,6 +141,7 @@ final class LoginViewController: BaseViewController {
         let appleIDProvider = ASAuthorizationAppleIDProvider()
         let request = appleIDProvider.createRequest()
         request.requestedScopes = [.fullName, .email]
+//        request.nonce = "recipe_nonce_val12"
                
         let authVC = ASAuthorizationController(authorizationRequests: [request])
         authVC.delegate = self
@@ -170,25 +164,15 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
         case let appleIDCredential as ASAuthorizationAppleIDCredential:
             // You can create an account in your system.
             let userIdentifier = appleIDCredential.user
-            let fullName = appleIDCredential.fullName
             let email = appleIDCredential.email
-            
             if  let authorizationCode = appleIDCredential.authorizationCode,
                 let identityToken = appleIDCredential.identityToken,
                 let authCodeString = String(data: authorizationCode, encoding: .utf8),
                 let identifyTokenString = String(data: identityToken, encoding: .utf8) {
-                print("authorizationCode: \(!authorizationCode.isEmpty)")
-                print("identityToken: \(!identityToken.isEmpty)")
-                print("authCodeString: \(!authCodeString.isEmpty)")
-                print("identifyTokenString: \(!identifyTokenString.isEmpty)")
+                KeyChain.shared.create(account: .accessToken, data: identifyTokenString)
+                ///Todo: 이동로직
+                didSendEventClosure?(.register)
             }
-            
-            print("useridentifier: \(!userIdentifier.isEmpty)")
-            print("fullName: \(fullName)")
-            print("email: \(email)")
-            LoginService.shared.postBodyJsonRequest()
-            ///Todo: 이동로직
-            didSendEventClosure?(.register)
             
         case let passwordCredential as ASPasswordCredential:
             // Sign in using an existing iCloud Keychain credential.
