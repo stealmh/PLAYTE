@@ -26,6 +26,14 @@ final class RecipeViewController: BaseViewController {
         configureNavigationTabBar()
         bind()
         recipeView.delegate = self
+        NetworkManager.shared.performRequest(endpoint: .recipes) { data in
+            switch data {
+            case .success(let data):
+                print(String(data: data, encoding: .utf8))
+            case .failure(let error):
+                print(error)
+            }
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
