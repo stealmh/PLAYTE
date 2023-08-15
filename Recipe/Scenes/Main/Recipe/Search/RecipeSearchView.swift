@@ -16,7 +16,7 @@ final class RecipeSearchView: UIView {
     }
     
     enum Item: Hashable {
-        case recipe(Recipe)
+        case recipe(RecipeInfo)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -64,6 +64,8 @@ final class RecipeSearchView: UIView {
         Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을 먹어요", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
         Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥좋아", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
     ]
+    
+    private let mockRecipeData1: [RecipeInfo] = []
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -159,7 +161,7 @@ extension RecipeSearchView {
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
         snapshot.appendSections([.recipe])
-        snapshot.appendItems(mockRecipeData.map({ Item.recipe($0) }), toSection: .recipe)
+        snapshot.appendItems(mockRecipeData1.map({ Item.recipe($0) }), toSection: .recipe)
 
         return snapshot
     }

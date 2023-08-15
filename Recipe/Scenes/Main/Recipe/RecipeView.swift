@@ -10,7 +10,7 @@ import RxSwift
 import RxCocoa
 
 protocol RecipeViewDelegate {
-    func didTappedRecipeCell(item: Recipe)
+    func didTappedRecipeCell(item: RecipeInfo)
 }
 
 struct MockCategoryData: Hashable {
@@ -28,7 +28,7 @@ final class RecipeView: UIView {
     
     enum Item: Hashable {
         case header(MockCategoryData)
-        case recipe(Recipe)
+        case recipe(RecipeInfo)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -64,6 +64,13 @@ final class RecipeView: UIView {
     }()
     
     ///Properties
+    var viewModel: RecipeViewModel? {
+        didSet {
+            Task {
+                await setViewModel()
+            }
+        }
+    }
 //    private let disposeBag = DisposeBag()
     var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
@@ -73,15 +80,7 @@ final class RecipeView: UIView {
         MockCategoryData(text: "알뜰살뜰\n만원의 행복", color: .sub2 ?? .white, img: UIImage(named: "manwon_svg")!),
         MockCategoryData(text: "집들이용\n레시피", color: .sub4 ?? .white, img: UIImage(named: "homeparty_svg")!)]
     
-    private let mockRecipeData: [Recipe] = [
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을 먹어요", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥좋아", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-    ]
+    private var recipeList = [RecipeInfo]()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -121,6 +120,18 @@ extension RecipeView {
         collectionView.register(RecipeCategoryCell.self, forCellWithReuseIdentifier: RecipeCategoryCell.reuseIdentifier)
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: RecipeCell.reuseIdentifier)
         collectionView.register(RecipeHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecipeHeaderCell.reuseIdentifier)
+    }
+    
+    private func setViewModel() async {
+        if let viewModel {
+            print("")
+            let a = try? await viewModel.getMyInfo()
+            if let a {
+                let contents = a.data.content
+                recipeList = contents
+                dataSource.apply(createSnapshot(), animatingDifferences: true)
+            }
+        }
     }
 }
 
@@ -208,7 +219,7 @@ extension RecipeView {
         var snapshot = Snapshot()
         snapshot.appendSections([.header, .recipe])
         snapshot.appendItems(mockCategoryData.map({ Item.header($0) }), toSection: .header)
-        snapshot.appendItems(mockRecipeData.map({ Item.recipe($0) }), toSection: .recipe)
+//        snapshot.appendItems(mockRecipeData1.map({ Item.recipe($0) }), toSection: .recipe)
 
         return snapshot
     }

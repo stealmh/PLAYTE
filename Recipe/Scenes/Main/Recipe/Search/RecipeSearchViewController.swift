@@ -85,7 +85,7 @@ extension RecipeSearchViewController {
 }
 
 extension RecipeSearchViewController: RecipeViewDelegate {
-    func didTappedRecipeCell(item: Recipe) {
+    func didTappedRecipeCell(item: RecipeInfo) {
         print("")
     }
     

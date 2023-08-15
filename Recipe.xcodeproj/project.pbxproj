@@ -38,6 +38,11 @@
 		1636558E2A7CDE2C00208813 /* ShortFormSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636558D2A7CDE2C00208813 /* ShortFormSearchViewController.swift */; };
 		163655902A7CE2CD00208813 /* UIImage+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636558F2A7CE2CD00208813 /* UIImage+util.swift */; };
 		163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */; };
+		164E523E2A8B42210058C44B /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E523D2A8B42210058C44B /* MyPage.swift */; };
+		164E52402A8B44D10058C44B /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E523F2A8B44D10058C44B /* MyPageViewModel.swift */; };
+		164E52422A8B5C160058C44B /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E52412A8B5C160058C44B /* UIImageView.swift */; };
+		164E52442A8B5EB30058C44B /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E52432A8B5EB30058C44B /* RecipeViewModel.swift */; };
+		164E52462A8B62C80058C44B /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E52452A8B62C80058C44B /* Recipe.swift */; };
 		166333632A85E982007639D9 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166333622A85E982007639D9 /* MyPageView.swift */; };
 		166333652A85E9DF007639D9 /* MyPageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166333642A85E9DF007639D9 /* MyPageHeaderView.swift */; };
 		166333672A85F69E007639D9 /* MyPageTitleHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166333662A85F69E007639D9 /* MyPageTitleHeader.swift */; };
@@ -216,6 +221,11 @@
 		1636558D2A7CDE2C00208813 /* ShortFormSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormSearchViewController.swift; sourceTree = "<group>"; };
 		1636558F2A7CE2CD00208813 /* UIImage+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+util.swift"; sourceTree = "<group>"; };
 		163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewController.swift; sourceTree = "<group>"; };
+		164E523D2A8B42210058C44B /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
+		164E523F2A8B44D10058C44B /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
+		164E52412A8B5C160058C44B /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
+		164E52432A8B5EB30058C44B /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
+		164E52452A8B62C80058C44B /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
 		166333622A85E982007639D9 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		166333642A85E9DF007639D9 /* MyPageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderView.swift; sourceTree = "<group>"; };
 		166333662A85F69E007639D9 /* MyPageTitleHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageTitleHeader.swift; sourceTree = "<group>"; };
@@ -612,6 +622,7 @@
 				169FE66D2A78A22E00593041 /* UITabBarController+util.swift */,
 				1636558F2A7CE2CD00208813 /* UIImage+util.swift */,
 				16FCB94B2A82ACD500C2CD27 /* UICollectionView+util.swift */,
+				164E52412A8B5C160058C44B /* UIImageView.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -622,6 +633,8 @@
 				5A0244972A529AA300AA418E /* Recipe.xcdatamodeld */,
 				5A914AD22A54024A0020BA71 /* Home.swift */,
 				16D809E62A8A2B25005C791E /* Login.swift */,
+				164E523D2A8B42210058C44B /* MyPage.swift */,
+				164E52452A8B62C80058C44B /* Recipe.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -760,6 +773,7 @@
 				166333642A85E9DF007639D9 /* MyPageHeaderView.swift */,
 				166333662A85F69E007639D9 /* MyPageTitleHeader.swift */,
 				166333682A85F752007639D9 /* MyPageRecentWatchCell.swift */,
+				164E523F2A8B44D10058C44B /* MyPageViewModel.swift */,
 			);
 			path = MyPage;
 			sourceTree = "<group>";
@@ -837,9 +851,10 @@
 				5AAEC5562A5D439F00E9877C /* RecipeCategoryCell.swift */,
 				5AAEC5582A5D511300E9877C /* RecipeHeaderCell.swift */,
 				16DE65E62A82D05F008100DE /* DefaultRecipeCategoryView.swift */,
+				16DE65E82A82D52A008100DE /* RecipeCategoryView.swift */,
+				164E52432A8B5EB30058C44B /* RecipeViewModel.swift */,
 				16900CF82A6B9AAF00B06D8C /* RecipeDetail */,
 				169968BF2A6F54110074DB43 /* Review */,
-				16DE65E82A82D52A008100DE /* RecipeCategoryView.swift */,
 			);
 			path = Recipe;
 			sourceTree = "<group>";
@@ -1173,6 +1188,7 @@
 				5ACD7BBF2A57DAEA00571259 /* UploadCoordinator.swift in Sources */,
 				16C5FFB02A72BDEF00EA599F /* CommentTestViewController.swift in Sources */,
 				161494182A7CFDF000395AA4 /* RecentSearchTagCell.swift in Sources */,
+				164E52442A8B5EB30058C44B /* RecipeViewModel.swift in Sources */,
 				163076D52A8295D70007B6BE /* CreateShortFormVideoHeaderCell.swift in Sources */,
 				16C5FFB42A72BE1300EA599F /* CommentTestHeaderView.swift in Sources */,
 				5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */,
@@ -1186,6 +1202,7 @@
 				162DFEB22A6FDF0D00338A18 /* ReviewPhotoViewController.swift in Sources */,
 				163076D32A8293CE0007B6BE /* CreateShortFormView.swift in Sources */,
 				163076D72A8299900007B6BE /* CreateShortFormViewController.swift in Sources */,
+				164E523E2A8B42210058C44B /* MyPage.swift in Sources */,
 				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
 				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
 				16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */,
@@ -1199,6 +1216,7 @@
 				5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */,
 				5A914ACD2A53FD020020BA71 /* UIBarButtonItem+util.swift in Sources */,
 				1699577D2A681BB100A1BF1E /* CookStepCell.swift in Sources */,
+				164E52462A8B62C80058C44B /* Recipe.swift in Sources */,
 				16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */,
 				16E615B72A6CE18D002C1AE9 /* RecipeDetailStepCell.swift in Sources */,
 				1619543F2A879E7300884247 /* WriteRecipeSheetViewController.swift in Sources */,
@@ -1223,6 +1241,7 @@
 				166333632A85E982007639D9 /* MyPageView.swift in Sources */,
 				16D809E72A8A2B25005C791E /* Login.swift in Sources */,
 				5AB4A5E22A553E7F0095CD2B /* MyCell.swift in Sources */,
+				164E52422A8B5C160058C44B /* UIImageView.swift in Sources */,
 				161494162A7CFDE100395AA4 /* RecentSearchHeader.swift in Sources */,
 				5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */,
 				5A8C2DD12A5F915A006B08A7 /* DefaultCircleButton.swift in Sources */,
@@ -1239,6 +1258,7 @@
 				169968C12A6F54250074DB43 /* SegmentViewController.swift in Sources */,
 				162C28B52A7DDF8C0004D771 /* RecipeDefaultTagButton.swift in Sources */,
 				169FE6732A78A50300593041 /* ShortFormViewController.swift in Sources */,
+				164E52402A8B44D10058C44B /* MyPageViewModel.swift in Sources */,
 				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
 				1636558C2A7CDE2100208813 /* ShortFormSearchCell.swift in Sources */,
 				5A0244992A529AA300AA418E /* Recipe.xcdatamodeld in Sources */,

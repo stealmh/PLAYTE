@@ -8,16 +8,6 @@
 import UIKit
 import SnapKit
 
-struct Recipe: Hashable {
-    let image: UIImage
-    let uploadTime: String
-    let nickName: String
-    let title: String
-    let cookTime: String
-    let rate: String
-    let isFavorite: Bool
-}
-
 final class RecipeCell: UICollectionViewCell {
     
     private let recipeImageView: UIImageView = {
@@ -167,17 +157,17 @@ extension RecipeCell {
         nickName.text = "규땡뿡야"
     }
     
-    func configure(_ data: Recipe) {
-        recipeImageView.image = data.image
-        uploadTimeLabel.text = data.uploadTime
-        rate.setTitle(data.rate, for: .normal)
-        nickName.text = data.nickName
-        recipeTitle.text = data.title
+    func configure(_ data: RecipeInfo) {
+        
+        recipeImageView.loadImage(from: data.recipe_thumbnail_img)
+        uploadTimeLabel.text = data.created_date
+        rate.setTitle("\(data.rating)(\(data.comment_count))", for: .normal)
+        nickName.text = data.nickname
+        recipeTitle.text = data.recipe_name
         favoriteButton.setImage(
-            data.isFavorite ? UIImage(named: "bookmarkfill_svg")! : UIImage(named: "bookmark_svg")!,
+            data.is_saved ? UIImage(named: "bookmarkfill_svg")! : UIImage(named: "bookmark_svg")!,
             for: .normal)
-        cookTimeLabel.setTitle(data.cookTime, for: .normal)
-
+        cookTimeLabel.setTitle("10분", for: .normal)
     }
 }
 

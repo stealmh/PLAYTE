@@ -14,6 +14,7 @@ final class RecipeViewController: BaseViewController {
     
     private var disposeBag = DisposeBag()
     private let recipeView = RecipeView()
+    var viewModel = RecipeViewModel()
     var didSendEventClosure: ((RecipeViewController.Event) -> Void)?
     enum Event {
         case moveTorecipeDetail
@@ -26,14 +27,6 @@ final class RecipeViewController: BaseViewController {
         configureNavigationTabBar()
         bind()
         recipeView.delegate = self
-        NetworkManager.shared.performRequest(endpoint: .recipes) { data in
-            switch data {
-            case .success(let data):
-                print(String(data: data, encoding: .utf8))
-            case .failure(let error):
-                print(error)
-            }
-        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -45,6 +38,11 @@ final class RecipeViewController: BaseViewController {
         super.viewDidAppear(animated)
         recipeView.delegate = self
 //        self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        recipeView.viewModel = viewModel
     }
 }
 
@@ -88,9 +86,9 @@ extension RecipeViewController {
 
 //MARK: - Method(레시피 셀 Delegate)
 extension RecipeViewController: RecipeViewDelegate {
-    func didTappedRecipeCell(item: Recipe) {
+    func didTappedRecipeCell(item: RecipeInfo) {
         let vc = RecipeDetailViewController()
-        vc.configureData(item)
+//        vc.configureData(item)
         navigationController?.pushViewController(vc, animated: true)
     }
 }
