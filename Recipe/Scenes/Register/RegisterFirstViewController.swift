@@ -55,7 +55,15 @@ extension RegisterFirstViewController {
 //MARK: - RegisterView Delegate
 extension RegisterFirstViewController: RegisterViewDelegate {
     func didTapNextButton(_ txt: String) {
-        LoginService.shared.appleRegister(idToken: KeyChain.shared.read(account: .accessToken), nickName: txt)
-        delegate?.moveToSecondView()
+        LoginService.shared.appleRegister(
+            idToken: KeyChain.shared.read(account: .idToken),
+            nickName: txt) { result in
+                switch result {
+                case .success:
+                    self.delegate?.moveToSecondView()
+                case .failure(let error):
+                    print(error.localizedDescription)
+                }
+            }
     }
 }
