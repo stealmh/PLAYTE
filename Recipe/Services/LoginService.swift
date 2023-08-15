@@ -13,99 +13,98 @@ struct LoginService{
 
     // MARK: - [Post Body Json Request 방식 http 요청 실시]
     
-    func appleRegister(idToken: String, nickName: String){
-        print(#function)
-        let url = "https://api.rec1pe.store/api/v1/auth/apple/signup"
-        let header : HTTPHeaders = [
-            "Content-Type" : "application/json"
-        ]
-        let bodyData : Parameters = [
+    func appleRegister(idToken: String, nickName: String, completion: @escaping (Result<LoginSucess, Error>) -> Void) {
+        let url = URL(string: "https://api.rec1pe.store/api/v1/auth/apple/signup")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let parameters: [String: Any] = [
             "idToken" : idToken,
             "nickname": nickName
         ]
-
-//        print(idToken, nickName)
-        AF.request(
-            url, // [주소]
-            method: .post, // [전송 타입]
-            parameters: bodyData, // [전송 데이터]
-            encoding: JSONEncoding.default, // [인코딩 스타일]
-            headers: header // [헤더 지정]
-        )
-        .validate(statusCode: 200..<300)
-        .responseData { response in
-            switch response.result {
-            case .success(let res):
-                do {
-                    let decoder = JSONDecoder()
-                    guard let decodedData = try? decoder.decode(LoginTokenInfo.self, from: res) else {
-                        print("LoginTokenInfo Type Decoded Error")
-                        print(String(data: res, encoding: .utf8)!)
-                        print(res)
-                        return
-                    }
-                    print(decodedData)
-                    KeyChain.shared.create(account: .accessToken, data: decodedData.data.accessToken)
-                    KeyChain.shared.create(account: .refreshToken, data: decodedData.data.refreshToken)
-                    self.appleLogin(accessToken: KeyChain.shared.read(account: .accessToken))
-                    // [비동기 작업 수행]
-                    DispatchQueue.main.async {
-                    }
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+        } catch {
+            completion(.failure(error))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(NetworkError.invalidResponse))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let decodedData = try decoder.decode(LoginTokenInfo.self, from: data)
+                KeyChain.shared.create(account: .accessToken, data: decodedData.data.accessToken)
+                KeyChain.shared.create(account: .refreshToken, data: decodedData.data.refreshToken)
+                
+                // Assuming self.appleLogin is a synchronous function
+//                self.appleLogin(accessToken: KeyChain.shared.read(account: .idToken))
+                
+                DispatchQueue.main.async {
+                    // You might call the completion handler here to signal success
                 }
-                catch (let err){
-                    print("catch :: ", err.localizedDescription)
-                }
-                break
-            case .failure(let err):
-                print("응답 코드 :: ", response.response?.statusCode ?? 0)
-                print("에 러 :: ", err.localizedDescription)
-                break
+            } catch {
+                completion(.failure(error))
             }
         }
+        
+        task.resume()
     }
-    func appleLogin(accessToken: String) {
-        print(#function)
-        let url = "https://api.rec1pe.store/api/v1/auth/apple/signin"
-        let header : HTTPHeaders = [
-            "Content-Type" : "application/json"
-        ]
-        let bodyData : Parameters = [
+    
+    func appleLogin(accessToken: String, completion: @escaping (Result<LoginSucess, Error>) -> Void) {
+        let url = URL(string: "https://api.rec1pe.store/api/v1/auth/apple/signin")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let parameters: [String: Any] = [
             "idToken" : accessToken,
         ]
-        print(accessToken)
-        AF.request(
-            url, // [주소]
-            method: .post, // [전송 타입]
-            parameters: bodyData, // [전송 데이터]
-            encoding: JSONEncoding.default, // [인코딩 스타일]
-            headers: header // [헤더 지정]
-        )
-        .validate(statusCode: 200..<300)
-        .responseData { response in
-            switch response.result {
-            case .success(let res):
-                do {
-                    let decoder = JSONDecoder()
-                    guard let decodedData = try? decoder.decode(LoginSucess.self, from: res) else {
-                        print("LoginSucess Type Decoded Error")
-                        print(res)
-                        return
-                    }
-                    print(decodedData)
-                    // [비동기 작업 수행]
-                    DispatchQueue.main.async {
-                    }
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+        } catch {
+            completion(.failure(error))
+            return
+        }
+        
+        let task = URLSession.shared.dataTask(with: request) { data, response, error in
+            if let error = error {
+                completion(.failure(error))
+                return
+            }
+            
+            guard let data = data else {
+                completion(.failure(NetworkError.invalidResponse))
+                return
+            }
+            
+            do {
+                let decoder = JSONDecoder()
+                let decodedData = try decoder.decode(LoginSucess.self, from: data)
+                
+                DispatchQueue.main.async {
+                    completion(.success(decodedData))
                 }
-                catch (let err){
-                    print("catch :: ", err.localizedDescription)
-                }
-                break
-            case .failure(let err):
-                print("응답 코드 :: ", response.response?.statusCode ?? 0)
-                print("에 러 :: ", err.localizedDescription)
-                break
+            } catch {
+                completion(.failure(error))
             }
         }
+        
+        task.resume()
     }
     
     // MARK: - [Post Body Json Request 방식 http 요청 실시]
