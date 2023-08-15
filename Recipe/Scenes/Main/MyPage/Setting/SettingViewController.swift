@@ -96,6 +96,20 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
                     print("error")
                 }
             }
+        case .logout:
+            NetworkManager.shared.performRequest(endpoint: .logout, responseType: Withdrawal.self) { result in
+                switch result {
+                case .success(let data):
+                    print("==  data ==: ", data)
+                    if data.code == "SUCCESS" || data.message == "성공" {
+                        self.didSendEventClosure?(.withdrawal)
+                    } else {
+                        print("error")
+                    }
+                case .failure(let error):
+                    print("error")
+                }
+            }
         default: return
         }
     }

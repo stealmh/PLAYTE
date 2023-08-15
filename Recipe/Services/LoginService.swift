@@ -139,6 +139,10 @@ struct LoginService{
             do {
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(LoginSucess.self, from: data)
+                KeyChain.shared.create(account: .accessToken,
+                                       data: decodedData.data.jwtTokens.accessToken)
+                KeyChain.shared.create(account: .refreshToken,
+                                       data: decodedData.data.jwtTokens.refreshToken)
                 
                 DispatchQueue.main.async {
                     completion(.success(decodedData))
