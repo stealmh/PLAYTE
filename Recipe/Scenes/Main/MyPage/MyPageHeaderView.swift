@@ -10,12 +10,6 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-struct MyInfo: Hashable {
-    let id = UUID()
-    let nickName: String
-    let email: String
-    let loginType: String
-}
 
 final class MyPageHeaderView: UICollectionViewCell {
     
@@ -113,6 +107,25 @@ final class MyPageHeaderView: UICollectionViewCell {
         return v
     }()
     
+    private let skeletonNickNameLabel: UILabel = {
+        let v = UILabel()
+        v.backgroundColor = .gray
+        return v
+    }()
+    
+    private let skeletonEmailLabel: UILabel = {
+        let v = UILabel()
+        v.backgroundColor = .gray
+        return v
+    }()
+    
+    private let skeletonLoginTypeImageView: UIImageView = {
+        let v = UIImageView()
+        v.backgroundColor = .gray // Skeleton-like color
+        // ... configure other skeleton-like appearance ...
+        return v
+    }()
+    
     /// Properties
     
     override init(frame: CGRect) {
@@ -121,6 +134,7 @@ final class MyPageHeaderView: UICollectionViewCell {
         addView()
         configureLayout()
         mockConfigure()
+        showSkeletonViews()
     }
     
     required init?(coder: NSCoder) {
@@ -152,7 +166,8 @@ extension MyPageHeaderView {
                     nickNameGuideLabel,
                     loginTypeImageView,
                     emailLabel,
-                    buttonActionBackground)
+                    buttonActionBackground,
+        skeletonNickNameLabel, skeletonEmailLabel, skeletonLoginTypeImageView)
     }
     
     private func configureLayout() {
@@ -160,6 +175,11 @@ extension MyPageHeaderView {
             $0.top.left.equalToSuperview().inset(25)
             $0.height.equalTo(26)
             $0.width.greaterThanOrEqualTo(40)
+        }
+        
+        skeletonNickNameLabel.snp.makeConstraints {
+            $0.top.left.height.equalTo(nickNameLabel)
+            $0.right.equalTo(nickNameGuideLabel)
         }
         
         nickNameGuideLabel.snp.makeConstraints {
@@ -174,9 +194,17 @@ extension MyPageHeaderView {
             $0.top.equalTo(nickNameLabel.snp.bottom).offset(10)
         }
         
+        skeletonLoginTypeImageView.snp.makeConstraints {
+            $0.edges.equalTo(loginTypeImageView)
+        }
+        
         emailLabel.snp.makeConstraints {
             $0.top.equalTo(loginTypeImageView)
             $0.left.equalTo(loginTypeImageView.snp.right).offset(10)
+        }
+        
+        skeletonEmailLabel.snp.makeConstraints {
+            $0.edges.equalTo(emailLabel)
         }
         
         buttonActionBackground.snp.makeConstraints {
@@ -238,10 +266,30 @@ extension MyPageHeaderView {
     }
     
     //for data inject
-    func configure(_ item: MyInfo) {
-        nickNameLabel.text = item.nickName
-        emailLabel.text = item.email
-        loginTypeImageView.image = item.loginType == "apple" ? UIImage(named: "loginType_apple_svg") : UIImage(named: "loginType_apple_svg")
+    func configure(_ item: MyInfo1) {
+        if item.data.nickname.isEmpty { return }
+        nickNameLabel.text = item.data.nickname
+        emailLabel.text = item.data.email
+        loginTypeImageView.image = item.data.provider == "APPLE" ? UIImage(named: "loginType_apple_svg") : UIImage(named: "loginType_apple_svg")
+        hideSkeletonViews()
+    }
+    
+    private func showSkeletonViews() {
+        skeletonNickNameLabel.isHidden = false
+        skeletonEmailLabel.isHidden = false
+        skeletonLoginTypeImageView.isHidden = false
+        nickNameLabel.isHidden = true
+        emailLabel.isHidden = true
+        loginTypeImageView.isHidden = true
+    }
+
+    private func hideSkeletonViews() {
+        skeletonNickNameLabel.isHidden = true
+        skeletonEmailLabel.isHidden = true
+        skeletonLoginTypeImageView.isHidden = true
+        nickNameLabel.isHidden = false
+        emailLabel.isHidden = false
+        loginTypeImageView.isHidden = false
     }
 }
 

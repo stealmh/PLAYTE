@@ -15,6 +15,7 @@ final class MypageViewController: BaseViewController {
     var didSendEventClosure: ((MypageViewController.Event) -> Void)?
     var disposeBag = DisposeBag()
     private var myPageView = MyPageView()
+    var viewModel = MyPageViewModel()
 
     
     override func viewDidLoad() {
@@ -23,6 +24,12 @@ final class MypageViewController: BaseViewController {
         myPageView.delegate = self
         configureLayout()
         configureNavigationTabBar()
+    }
+
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        myPageView.viewModel = viewModel
     }
     
     enum Event {

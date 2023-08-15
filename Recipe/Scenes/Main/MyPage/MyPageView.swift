@@ -27,7 +27,7 @@ class MyPageView: UIView {
     }
     
     enum Item: Hashable {
-        case header(MyInfo)
+        case header(MyInfo1)
         case recentShortForm(MyPageRecentWatch)
         case recentRecipe(IngredientRecipe)
     }
@@ -43,9 +43,16 @@ class MyPageView: UIView {
     }()
     
     weak var delegate: MyPageViewDelegate?
+    var viewModel: MyPageViewModel? {
+        didSet {
+            Task {
+                await setViewModel()
+            }
+        }
+    }
     private let disposeBag = DisposeBag()
     private var dataSource: Datasource!
-    private var mockHeader: [MyInfo] = [MyInfo(nickName: "미노", email: "kmh922@naver.com", loginType: "apple")]
+    private var mockHeader2: MyInfo1 = MyInfo1(data: MyDetailInfo(memberId: 0, email: "", nickname: "", provider: "apple"))
     private var mockRecentShortForm: [MyPageRecentWatch] = [MyPageRecentWatch(views: "1.4k", contents: "맛있는 바나나를 구워보았다"),MyPageRecentWatch(views: "1.4만", contents: "맛있는 바나나를 3개먹었다"),MyPageRecentWatch(views: "1.4천", contents: "맛있는 바나나를 3개먹었다"),MyPageRecentWatch(views: "1.4만", contents: "토마토 볶음밥")]
     private var mockRecentRecipe: [IngredientRecipe] = [IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목제목", cookTime: "23분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목2입니다", cookTime: "2분"), IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목목", cookTime: "100분")]
     
@@ -62,6 +69,7 @@ class MyPageView: UIView {
     }
 }
 
+//MARK: - Method(Normal)
 extension MyPageView {
     func configureLayout() {
         collectionView.snp.makeConstraints {
@@ -75,7 +83,18 @@ extension MyPageView {
         collectionView.registerCell(cellType: IngredientRecipeCell.self)
         collectionView.registerHeaderView(viewType: MyPageTitleHeader.self)
     }
-    //    func configureDataSource() {}
+    
+    func setViewModel() async {
+        if let viewModel {
+            print("")
+            let a = try? await viewModel.getMyInfo()
+            if let a {
+                mockHeader2 = a
+                dataSource.apply(createSnapshot(), animatingDifferences: true)
+            }
+        }
+    }
+
 }
 
 //MARK: Comp + Diff
@@ -204,7 +223,7 @@ extension MyPageView {
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
         snapshot.appendSections([.header, .recentShortForm, .recentRecipe])
-        snapshot.appendItems(mockHeader.map({ Item.header($0) }), toSection: .header)
+        snapshot.appendItems([.header(mockHeader2)], toSection: .header)
         snapshot.appendItems(mockRecentShortForm.map({ Item.recentShortForm($0) }), toSection: .recentShortForm)
         snapshot.appendItems(mockRecentRecipe.map({ Item.recentRecipe($0) }), toSection: .recentRecipe)
         
