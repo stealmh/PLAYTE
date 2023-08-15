@@ -62,6 +62,13 @@ final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
                 return
             case .settingButtonTapped:
                 let vc = SettingViewController()
+                vc.didSendEventClosure = { [weak self] event in
+                    switch event {
+                    case .withdrawal:
+                        self?.finishDelegate?.coordinatorDidFinish(childCoordinator: self!)
+                        return
+                    }
+                }
                 self?.navigationController.pushViewController(vc, animated: true)
                 return
             }

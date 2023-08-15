@@ -38,6 +38,7 @@
 		1636558E2A7CDE2C00208813 /* ShortFormSearchViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636558D2A7CDE2C00208813 /* ShortFormSearchViewController.swift */; };
 		163655902A7CE2CD00208813 /* UIImage+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636558F2A7CE2CD00208813 /* UIImage+util.swift */; };
 		163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */; };
+		164D14082A8B8DE000038A28 /* Withdrawal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164D14072A8B8DE000038A28 /* Withdrawal.swift */; };
 		164E523E2A8B42210058C44B /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E523D2A8B42210058C44B /* MyPage.swift */; };
 		164E52402A8B44D10058C44B /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E523F2A8B44D10058C44B /* MyPageViewModel.swift */; };
 		164E52422A8B5C160058C44B /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E52412A8B5C160058C44B /* UIImageView.swift */; };
@@ -115,7 +116,6 @@
 		5A0244E02A52A7C900AA418E /* LoginCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244DF2A52A7C900AA418E /* LoginCoordinator.swift */; };
 		5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */; };
 		5A0244E42A52A7F400AA418E /* RegisterFirstViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */; };
-		5A0244E62A52A80000AA418E /* RegisterSecondViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */; };
 		5A0244EA2A52A84800AA418E /* TabCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244E92A52A84800AA418E /* TabCoordinator.swift */; };
 		5A0244EC2A52A85500AA418E /* TabBarStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EB2A52A85500AA418E /* TabBarStyle.swift */; };
 		5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */; };
@@ -221,6 +221,7 @@
 		1636558D2A7CDE2C00208813 /* ShortFormSearchViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormSearchViewController.swift; sourceTree = "<group>"; };
 		1636558F2A7CE2CD00208813 /* UIImage+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+util.swift"; sourceTree = "<group>"; };
 		163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewController.swift; sourceTree = "<group>"; };
+		164D14072A8B8DE000038A28 /* Withdrawal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Withdrawal.swift; sourceTree = "<group>"; };
 		164E523D2A8B42210058C44B /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
 		164E523F2A8B44D10058C44B /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		164E52412A8B5C160058C44B /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
@@ -304,7 +305,6 @@
 		5A0244DF2A52A7C900AA418E /* LoginCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginCoordinator.swift; sourceTree = "<group>"; };
 		5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterCoordinator.swift; sourceTree = "<group>"; };
 		5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterFirstViewController.swift; sourceTree = "<group>"; };
-		5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSecondViewController.swift; sourceTree = "<group>"; };
 		5A0244E92A52A84800AA418E /* TabCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabCoordinator.swift; sourceTree = "<group>"; };
 		5A0244EB2A52A85500AA418E /* TabBarStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBarStyle.swift; sourceTree = "<group>"; };
 		5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageCoordinator.swift; sourceTree = "<group>"; };
@@ -635,6 +635,7 @@
 				16D809E62A8A2B25005C791E /* Login.swift */,
 				164E523D2A8B42210058C44B /* MyPage.swift */,
 				164E52452A8B62C80058C44B /* Recipe.swift */,
+				164D14072A8B8DE000038A28 /* Withdrawal.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -734,7 +735,6 @@
 				5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */,
 				5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */,
 				5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */,
-				5A0244E52A52A80000AA418E /* RegisterSecondViewController.swift */,
 			);
 			path = Register;
 			sourceTree = "<group>";
@@ -1151,7 +1151,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				5A0244E62A52A80000AA418E /* RegisterSecondViewController.swift in Sources */,
 				5AB4A5E02A552E900095CD2B /* PaddingUITextField.swift in Sources */,
 				5ACD7BC12A57DC4200571259 /* RecipeViewController.swift in Sources */,
 				5A0244932A529AA300AA418E /* ViewController.swift in Sources */,
@@ -1286,6 +1285,7 @@
 				5A914AEA2A54157E0020BA71 /* DefaultHeader.swift in Sources */,
 				16E615B52A6CE124002C1AE9 /* LineFooter.swift in Sources */,
 				16CD3C362A80BDC300801F2F /* ShortFormSheetViewController.swift in Sources */,
+				164D14082A8B8DE000038A28 /* Withdrawal.swift in Sources */,
 				5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */,
 				5A5B90482A652AC00049E853 /* CreateRecipeView.swift in Sources */,
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,

@@ -74,21 +74,27 @@ extension AppCoordinator: CoordinatorFinishDelegate {
             LoginService.shared.appleLogin(accessToken: KeyChain.shared.read(account: .idToken)) { result in
                 switch result {
                 case .success(let data):
-                    self.navigationController.viewControllers.removeAll()
-                    if data.data.isMember {
-                        self.showMainFlow()
-                    } else {
-                        self.showLoginFlow()
+                    DispatchQueue.main.async {
+                        self.navigationController.viewControllers.removeAll()
+                        if data.data.isMember {
+                            self.showMainFlow()
+                        } else {
+                            self.showLoginFlow()
+                        }
                     }
                 case .failure(let data): ///Todo: 에러에 따른 처리추가
-                    self.navigationController.viewControllers.removeAll()
-                    self.showLoginFlow()
+                    DispatchQueue.main.async {
+                        self.navigationController.viewControllers.removeAll()
+                        self.showLoginFlow()
+                    }
                 }
             }
             
         case .tab:
-            navigationController.viewControllers.removeAll()
-            showLoginFlow()
+            DispatchQueue.main.async {
+                self.navigationController.viewControllers.removeAll()
+                self.showLoginFlow()
+            }
             
         case .login:
             navigationController.viewControllers.removeAll()

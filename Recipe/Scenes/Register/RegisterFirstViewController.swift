@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 protocol RegisterFlowDelegate {
-    func moveToSecondView()
     func endFlow()
     func registerFail()
 }
@@ -54,16 +53,12 @@ extension RegisterFirstViewController {
 
 //MARK: - RegisterView Delegate
 extension RegisterFirstViewController: RegisterViewDelegate {
-    func didTapNextButton(_ txt: String) {
-        LoginService.shared.appleRegister(
-            idToken: KeyChain.shared.read(account: .idToken),
-            nickName: txt) { result in
-                switch result {
-                case .success:
-                    self.delegate?.moveToSecondView()
-                case .failure(let error):
-                    print(error.localizedDescription)
-                }
-            }
+    func didTapNextButton(_ txt: String) async {
+        let data = try? await LoginService.shared.appleRegister(
+            idToken: KeyChain.shared.read(account: .idToken), nickName: txt)
+        if (data != nil), data?.message == "성공" {
+            self.delegate?.endFlow()
+        }
+
     }
 }

@@ -14,6 +14,7 @@ struct LoginService{
     // MARK: - [Post Body Json Request 방식 http 요청 실시]
     
     func appleRegister(idToken: String, nickName: String, completion: @escaping (Result<LoginSucess, Error>) -> Void) {
+        print(#function)
         let url = URL(string: "https://api.rec1pe.store/api/v1/auth/apple/signup")!
         
         var request = URLRequest(url: url)
@@ -28,17 +29,20 @@ struct LoginService{
         do {
             request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
         } catch {
+            print("parameter Error")
             completion(.failure(error))
             return
         }
         
         let task = URLSession.shared.dataTask(with: request) { data, response, error in
             if let error = error {
+                print("dataTask Error")
                 completion(.failure(error))
                 return
             }
             
             guard let data = data else {
+                print("invalidResponse Error")
                 completion(.failure(NetworkError.invalidResponse))
                 return
             }
@@ -46,6 +50,7 @@ struct LoginService{
             do {
                 let decoder = JSONDecoder()
                 let decodedData = try decoder.decode(LoginTokenInfo.self, from: data)
+                print(decodedData)
                 KeyChain.shared.create(account: .accessToken, data: decodedData.data.accessToken)
                 KeyChain.shared.create(account: .refreshToken, data: decodedData.data.refreshToken)
                 
@@ -61,6 +66,45 @@ struct LoginService{
         }
         
         task.resume()
+    }
+    
+    func appleRegister(idToken: String, nickName: String) async throws -> LoginTokenInfo {
+        let url = URL(string: "https://api.rec1pe.store/api/v1/auth/apple/signup")!
+        
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.addValue("application/json", forHTTPHeaderField: "Content-Type")
+        
+        let parameters: [String: Any] = [
+            "idToken" : idToken,
+            "nickname": nickName
+        ]
+        
+        do {
+            request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
+        } catch {
+            throw error
+        }
+        
+        let (data, response) = try await URLSession.shared.data(for: request)
+        
+        guard let httpResponse = response as? HTTPURLResponse, httpResponse.statusCode == 200 else {
+            throw NetworkError.invalidResponse
+        }
+        
+        do {
+            let decoder = JSONDecoder()
+            let decodedData = try decoder.decode(LoginTokenInfo.self, from: data)
+            KeyChain.shared.create(account: .accessToken, data: decodedData.data.accessToken)
+            KeyChain.shared.create(account: .refreshToken, data: decodedData.data.refreshToken)
+            
+            // Assuming self.appleLogin is a synchronous function
+    //        self.appleLogin(accessToken: KeyChain.shared.read(account: .idToken))
+            
+            return decodedData
+        } catch {
+            throw error
+        }
     }
     
     func appleLogin(accessToken: String, completion: @escaping (Result<LoginSucess, Error>) -> Void) {
@@ -138,8 +182,6 @@ struct LoginService{
                         print("catch")
                         return
                     }
-                    print(decodedData.message)
-                    print(decodedData.data.isDuplicated)
                     completion(decodedData.data.isDuplicated)
                     // [비동기 작업 수행]
                     DispatchQueue.main.async {

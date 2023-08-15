@@ -11,7 +11,7 @@ import RxSwift
 import RxCocoa
 
 protocol RegisterViewDelegate {
-    func didTapNextButton(_ txt: String)
+    func didTapNextButton(_ txt: String) async
 }
 
 final class RegisterView: UIView {
@@ -138,7 +138,9 @@ extension RegisterView {
     private func bind() {
         nextButton.rx.tap
             .subscribe(onNext: { _ in
-                self.delegate?.didTapNextButton(self.searchTextField.text!)
+                Task {
+                    await self.delegate?.didTapNextButton(self.searchTextField.text!)
+                }
             }
         ).disposed(by: disposeBag)
         

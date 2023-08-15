@@ -11,6 +11,10 @@ import RxSwift
 
 class SettingViewController: BaseViewController {
     
+    var didSendEventClosure: ((SettingViewController.Event) -> Void)?
+    enum Event {
+        case withdrawal
+    }
     private var tableView = UITableView()
     private let disposeBag = DisposeBag()
     
@@ -73,6 +77,27 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        guard let itemType = SettingItemType(rawValue: indexPath.row) else { return }
+        switch itemType {
+        case .withdrawal:
+            NetworkManager.shared.performRequest(endpoint: .withdrawal, responseType: Withdrawal.self) { result in
+                switch result {
+                case .success(let data):
+                    print("==  data ==: ", data)
+                    if data.code == "SUCCESS" || data.message == "성공" {
+                        self.didSendEventClosure?(.withdrawal)
+                    } else {
+                        print("error")
+                    }
+                case .failure(let error):
+                    print("error")
+                }
+            }
+        default: return
+        }
     }
 
 }

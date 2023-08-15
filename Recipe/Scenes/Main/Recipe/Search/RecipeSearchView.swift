@@ -55,15 +55,7 @@ final class RecipeSearchView: UIView {
     var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
 //    recipeDetail
-    private let mockRecipeData: [Recipe] = [
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을 먹어요", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥좋아", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-    ]
+
     
     private let mockRecipeData1: [RecipeInfo] = []
     

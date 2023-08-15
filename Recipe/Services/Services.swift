@@ -36,6 +36,7 @@ class NetworkManager {
         case mySaveRecipeSearch                 /// 내가 저장한 레시피 조회
         case myWrittenRecipeSearch              /// 내가 작성한 레시피 조회
         case myInfo                             /// 내정보 조회
+        case withdrawal                         /// 회원탈퇴
         
         var url: String {
             switch self {
@@ -61,6 +62,8 @@ class NetworkManager {
                 return "https://api.rec1pe.store/api/v1/recipes/written"
             case .myInfo:
                 return "https://api.rec1pe.store/api/v1/users/me"
+            case .withdrawal:
+                return "https://api.rec1pe.store/api/v1/auth/withdrawal"
             }
         }
         
@@ -82,6 +85,8 @@ class NetworkManager {
                 return .get
             case .myInfo:
                 return .get
+            case .withdrawal:
+                return .post
             }
             
         }
@@ -98,7 +103,8 @@ class NetworkManager {
                     .recipeUnSave,
                     .mySaveRecipeSearch,
                     .myWrittenRecipeSearch,
-                    .myInfo:
+                    .myInfo,
+                    .withdrawal:
                 return [
                     "Authorization": KeyChain.shared.read(account: .accessToken),
                     "Content-Type": "application/json"
@@ -164,4 +170,5 @@ class NetworkManager {
         
         task.resume()
     }
+    
 }

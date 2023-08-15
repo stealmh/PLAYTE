@@ -169,7 +169,7 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 let identityToken = appleIDCredential.identityToken,
                 let authCodeString = String(data: authorizationCode, encoding: .utf8),
                 let identifyTokenString = String(data: identityToken, encoding: .utf8) {
-                KeyChain.shared.create(account: .accessToken, data: identifyTokenString)
+                KeyChain.shared.create(account: .idToken, data: identifyTokenString)
                 ///Todo: 이동로직
                 didSendEventClosure?(.register)
             }
