@@ -8,21 +8,10 @@ import RxCocoa
 final class LoginViewController: BaseViewController {
     var didSendEventClosure: ((LoginViewController.Event) -> Void)?
     private var disposeBag = DisposeBag()
-    private let baseView: BaseStartingView = {
-        let v = BaseStartingView()
-        v.appLabel.textColor = .white
-        v.subLabel.textColor = .white
-        /// Todo: hexCode -> enum
-        v.backgroundColor = UIColor.hexStringToUIColor(hex: "#FF5520")
-        return v
-    }()
-
-    private let loginButton: UIButton = {
-        let v = UIButton()
-        v.setTitle("로그인", for: .normal)
-        v.backgroundColor = .white
-        v.setTitleColor(.black, for: .normal)
-        v.layer.cornerRadius = 20.0
+    
+    private let splashImageView: UIImageView = {
+        let v = UIImageView()
+        v.image = UIImage(named: "splash2")
         return v
     }()
     
@@ -71,42 +60,51 @@ final class LoginViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        baseView.addSubViews(loginButton,
-                             easyLoginLabel,
-                             easyLoginLeftLine,
-                             easyLoginRightLine,
-                             appleLoginButton,
-                            googleButton)
-        view.addSubview(baseView)
+//        baseView.addSubViews(
+//                             easyLoginLabel,
+//                             easyLoginLeftLine,
+//                             easyLoginRightLine,
+//                             appleLoginButton,
+//                            googleButton)
+        view.addSubViews(splashImageView,
+                         easyLoginLabel,
+                         easyLoginLeftLine,
+                         easyLoginRightLine,
+                         appleLoginButton,
+                        googleButton)
+        view.backgroundColor = .mainColor
+//        view.addSubview(baseView)
         
-        loginButton.snp.makeConstraints {
-            $0.centerX.equalTo(baseView)
-            $0.left.equalToSuperview().inset(24)
-            $0.top.equalTo(baseView.snp.centerY).offset(150)
-            $0.height.equalTo(44)
-        }
+//        baseView.snp.makeConstraints {
+//            $0.top.left.right.bottom.equalToSuperview()
+//        }
         
-        baseView.snp.makeConstraints {
-            $0.top.left.right.bottom.equalToSuperview()
+        splashImageView.snp.makeConstraints {
+            $0.centerX.equalToSuperview()
+            $0.bottom.equalTo(view.snp.centerY).offset(-40)
+            $0.width.equalTo(239.06)
+            $0.height.equalTo(81.57)
         }
         
         easyLoginLabel.snp.makeConstraints {
-            $0.centerX.equalTo(baseView)
-            $0.top.equalTo(loginButton.snp.bottom).offset(20)
+            $0.centerX.equalToSuperview()
+            $0.top.equalTo(view.snp.bottom).inset(180)
             $0.height.equalTo(17)
         }
         
         easyLoginLeftLine.snp.makeConstraints {
             $0.centerY.equalTo(easyLoginLabel)
-            $0.right.equalTo(easyLoginLabel.snp.left).offset(-5)
-            $0.width.equalTo(20)
+            $0.right.equalTo(easyLoginLabel.snp.left).offset(-20)
+            $0.left.equalTo(splashImageView).inset(10)
+//            $0.width.equalTo(20)
             $0.height.equalTo(1)
         }
         
         easyLoginRightLine.snp.makeConstraints {
             $0.centerY.equalTo(easyLoginLabel)
-            $0.left.equalTo(easyLoginLabel.snp.right).offset(5)
-            $0.width.equalTo(20)
+            $0.left.equalTo(easyLoginLabel.snp.right).offset(20)
+            $0.right.equalTo(splashImageView).inset(10)
+//            $0.width.equalTo(20)
             $0.height.equalTo(1)
         }
         
@@ -123,7 +121,6 @@ final class LoginViewController: BaseViewController {
         }
         
         
-        loginButton.addTarget(self, action: #selector(didTapLoginButton(_:)), for: .touchUpInside)
         appleLoginButton.addTarget(self, action: #selector(didTapAppleLoginButton), for: .touchUpInside)
         
         googleButton.rx.tap
@@ -131,10 +128,6 @@ final class LoginViewController: BaseViewController {
                 self.signInWithGoogle()
             }
         ).disposed(by: disposeBag)
-    }
-
-    @objc private func didTapLoginButton(_ sender: Any) {
-        didSendEventClosure?(.login)
     }
     
     @objc private func didTapAppleLoginButton(_ sender: Any) {
@@ -152,8 +145,8 @@ final class LoginViewController: BaseViewController {
 
 extension LoginViewController {
     enum Event {
-        case login
         case register
+        case isMember
     }
 }
 
@@ -171,7 +164,20 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 let identifyTokenString = String(data: identityToken, encoding: .utf8) {
                 KeyChain.shared.create(account: .idToken, data: identifyTokenString)
                 ///Todo: 이동로직
-                didSendEventClosure?(.register)
+                LoginService.shared.appleLogin(accessToken: KeyChain.shared.read(account: .idToken)) { result in
+                    switch result {
+                    case .success(let data):
+                        if data.data.isMember {
+                            print("")
+                            self.didSendEventClosure?(.isMember)
+                        } else {
+                            self.didSendEventClosure?(.register)
+                        }
+                    case .failure(let error):
+                        ///Todo: 에러처리 하기
+                        print(error.localizedDescription)
+                    }
+                }
             }
             
         case let passwordCredential as ASPasswordCredential:
@@ -217,6 +223,8 @@ import SwiftUI
 import Alamofire
 struct LoginViewController_preview: PreviewProvider {
     static var previews: some View {
-        LoginViewController().toPreview()
+        LoginViewController()
+            .toPreview()
+            .ignoresSafeArea()
     }
 }

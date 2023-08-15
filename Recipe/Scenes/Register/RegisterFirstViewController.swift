@@ -19,11 +19,10 @@ final class RegisterFirstViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
         view.addSubview(registerView)
         registerView.delegate = self
         configureLayout()
-        defaultNavigationBackButton(backButtonColor: .white)
+        defaultNavigationBackButton(backButtonColor: .grayScale5 ?? .gray)
     }
     
     override func viewDidDisappear(_ animated: Bool) {

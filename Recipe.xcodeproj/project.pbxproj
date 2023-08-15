@@ -39,6 +39,7 @@
 		163655902A7CE2CD00208813 /* UIImage+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1636558F2A7CE2CD00208813 /* UIImage+util.swift */; };
 		163AFE462A6050D200A8D943 /* CreateRecipeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */; };
 		164D14082A8B8DE000038A28 /* Withdrawal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164D14072A8B8DE000038A28 /* Withdrawal.swift */; };
+		164D140A2A8BA4B600038A28 /* String+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164D14092A8BA4B600038A28 /* String+util.swift */; };
 		164E523E2A8B42210058C44B /* MyPage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E523D2A8B42210058C44B /* MyPage.swift */; };
 		164E52402A8B44D10058C44B /* MyPageViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E523F2A8B44D10058C44B /* MyPageViewModel.swift */; };
 		164E52422A8B5C160058C44B /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E52412A8B5C160058C44B /* UIImageView.swift */; };
@@ -121,7 +122,6 @@
 		5A0244F02A52A8A200AA418E /* MypageCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */; };
 		5A0244F22A52A8AA00AA418E /* MypageViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244F12A52A8AA00AA418E /* MypageViewController.swift */; };
 		5A0941962A5CEB01005AEECF /* RegisterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0941952A5CEB01005AEECF /* RegisterView.swift */; };
-		5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */; };
 		5A43FF6E2A52ABE90048E213 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */; };
 		5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */; };
 		5A4970812A661CD7005725F8 /* LoginService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A4970802A661CD7005725F8 /* LoginService.swift */; };
@@ -222,6 +222,7 @@
 		1636558F2A7CE2CD00208813 /* UIImage+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIImage+util.swift"; sourceTree = "<group>"; };
 		163AFE452A6050D200A8D943 /* CreateRecipeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeViewController.swift; sourceTree = "<group>"; };
 		164D14072A8B8DE000038A28 /* Withdrawal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Withdrawal.swift; sourceTree = "<group>"; };
+		164D14092A8BA4B600038A28 /* String+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "String+util.swift"; sourceTree = "<group>"; };
 		164E523D2A8B42210058C44B /* MyPage.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPage.swift; sourceTree = "<group>"; };
 		164E523F2A8B44D10058C44B /* MyPageViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageViewModel.swift; sourceTree = "<group>"; };
 		164E52412A8B5C160058C44B /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
@@ -310,7 +311,6 @@
 		5A0244EF2A52A8A200AA418E /* MypageCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageCoordinator.swift; sourceTree = "<group>"; };
 		5A0244F12A52A8AA00AA418E /* MypageViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MypageViewController.swift; sourceTree = "<group>"; };
 		5A0941952A5CEB01005AEECF /* RegisterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterView.swift; sourceTree = "<group>"; };
-		5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterSucessView.swift; sourceTree = "<group>"; };
 		5A4115EE2A5B94B300531267 /* Recipe.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Recipe.entitlements; sourceTree = "<group>"; };
 		5A43FF6D2A52ABE90048E213 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
 		5A43FF6F2A52ABFB0048E213 /* HomeCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeCoordinator.swift; sourceTree = "<group>"; };
@@ -623,6 +623,7 @@
 				1636558F2A7CE2CD00208813 /* UIImage+util.swift */,
 				16FCB94B2A82ACD500C2CD27 /* UICollectionView+util.swift */,
 				164E52412A8B5C160058C44B /* UIImageView.swift */,
+				164D14092A8BA4B600038A28 /* String+util.swift */,
 			);
 			path = Extensions;
 			sourceTree = "<group>";
@@ -732,7 +733,6 @@
 			isa = PBXGroup;
 			children = (
 				5A0941952A5CEB01005AEECF /* RegisterView.swift */,
-				5A0941972A5D02B3005AEECF /* RegisterSucessView.swift */,
 				5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */,
 				5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */,
 			);
@@ -1257,6 +1257,7 @@
 				169968C12A6F54250074DB43 /* SegmentViewController.swift in Sources */,
 				162C28B52A7DDF8C0004D771 /* RecipeDefaultTagButton.swift in Sources */,
 				169FE6732A78A50300593041 /* ShortFormViewController.swift in Sources */,
+				164D140A2A8BA4B600038A28 /* String+util.swift in Sources */,
 				164E52402A8B44D10058C44B /* MyPageViewModel.swift in Sources */,
 				5A43FF702A52ABFB0048E213 /* HomeCoordinator.swift in Sources */,
 				1636558C2A7CDE2100208813 /* ShortFormSearchCell.swift in Sources */,
@@ -1286,7 +1287,6 @@
 				16E615B52A6CE124002C1AE9 /* LineFooter.swift in Sources */,
 				16CD3C362A80BDC300801F2F /* ShortFormSheetViewController.swift in Sources */,
 				164D14082A8B8DE000038A28 /* Withdrawal.swift in Sources */,
-				5A0941982A5D02B3005AEECF /* RegisterSucessView.swift in Sources */,
 				5A5B90482A652AC00049E853 /* CreateRecipeView.swift in Sources */,
 				5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */,
 				5A914ADE2A5407230020BA71 /* ColdRefrigeratorView.swift in Sources */,

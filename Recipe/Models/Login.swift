@@ -36,4 +36,5 @@ struct LoginSucess: Codable {
 
 struct LoginInfo: Codable {
     let isMember: Bool
+    let jwtTokens: Token
 }
