@@ -87,6 +87,7 @@ extension CreateRecipeViewController: UIImagePickerControllerDelegate, UINavigat
             //            imageView.contentMode = .scaleAspectFit
             print(pickedImage)
             createRecipeView.imageRelay.accept(pickedImage)
+            createRecipeView.imageBehaviorRelay.accept(pickedImage)
         }
         dismiss(animated: true, completion: nil)
     }

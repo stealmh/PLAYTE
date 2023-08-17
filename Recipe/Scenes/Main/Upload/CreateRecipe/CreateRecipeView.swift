@@ -10,12 +10,19 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+struct Dummy: Hashable {
+    let id = UUID()
+    let contents: String
+    let img: UIImage?
+}
+
 protocol CreateRecipeViewDelegate: AnyObject {
     func registerButtonTapped()
     func addPhotoButtonTapped()
 }
 final class CreateRecipeView: UIView {
     enum Section: Hashable {
+        case thumbnailSection
         case recipeNameSection
         case recipeDescriptSection
         case recipeIngredientSection
@@ -24,6 +31,7 @@ final class CreateRecipeView: UIView {
     }
     
     enum Item: Hashable {
+        case thumbnailSection
         case recipeNameSection
         case recipeDiscriptSection
         case recipeIngredientSection
@@ -33,11 +41,6 @@ final class CreateRecipeView: UIView {
     
     enum A: Hashable {
         case cookStepSection(Dummy)
-    }
-    
-    struct Dummy: Hashable {
-        let id = UUID()
-        let contents: String
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -53,7 +56,11 @@ final class CreateRecipeView: UIView {
     
     private let registerButton: UIButton = {
         let v = UIButton()
-        v.backgroundColor = .red
+        v.setTitle("등록", for: .normal)
+        v.setTitleColor(.white, for: .normal)
+        v.backgroundColor = .grayScale3
+        v.layer.cornerRadius = 10
+        v.clipsToBounds = true
         return v
     }()
     
@@ -61,8 +68,9 @@ final class CreateRecipeView: UIView {
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     weak var delegate: CreateRecipeViewDelegate?
-    private var mockData: [Dummy] = []
+    private var mockData: [Dummy] = [Dummy(contents: "", img: UIImage())]
     let imageRelay = PublishRelay<UIImage>()
+    let imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage())
     var mybool = false
     
     override init(frame: CGRect) {
@@ -74,9 +82,30 @@ final class CreateRecipeView: UIView {
         dataSource.reorderingHandlers.canReorderItem = { item in
             return true
         }
-        dataSource.reorderingHandlers.didReorder = { transaction in
-            // 구현
+        
+        dataSource.reorderingHandlers.didReorder = { [weak self] transaction in
+            guard let self = self else { return }
+            for sectionTransaction in transaction.sectionTransactions {
+                let sectionIdentifier = sectionTransaction.sectionIdentifier
+                switch sectionIdentifier {
+                case .cookStepSection:
+                    var myData = [Dummy]()
+                    for a in sectionTransaction.finalSnapshot.items {
+                        switch a {
+                        case .cookStepSection(let data):
+                            myData.append(data)
+                        default:
+                            return
+                        }
+                    }
+                    self.mockData = myData
+                default:
+                    return
+                    
+                }
+            }
         }
+        
         collectionView.delegate = self
     }
     
@@ -91,28 +120,37 @@ final class CreateRecipeView: UIView {
 extension CreateRecipeView {
     
     func addView() {
-        addSubViews(collectionView)
+        addSubViews(collectionView, registerButton)
     }
     
     func configureLayout() {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(self.safeAreaLayoutGuide)
-            $0.left.right.bottom.equalToSuperview()
+            $0.left.right.equalToSuperview()
+            $0.bottom.equalTo(registerButton.snp.top)
+        }
+        
+        registerButton.snp.makeConstraints {
+            $0.left.right.equalToSuperview().inset(10)
+            $0.height.equalTo(50) // 버튼 높이 설정
+            $0.bottom.equalTo(self.safeAreaLayoutGuide).inset(10)
         }
     }
     
     func registerCell() {
+        collectionView.registerCell(cellType: CreateRecipeHeaderCell.self)
         collectionView.registerCell(cellType: TextFieldCell.self)
         collectionView.registerCell(cellType: TextFieldViewCell.self)
         collectionView.registerCell(cellType: CookSettingCell.self)
         collectionView.registerCell(cellType: DefaultTextFieldCell.self)
         collectionView.registerCell(cellType: CookStepCell.self)
-
+        collectionView.registerCell(cellType: CookStepCell2.self)
+        
         collectionView.registerHeaderView(viewType: DefaultHeader.self)
         collectionView.registerHeaderView(viewType: CookStepHeaderView.self)
         collectionView.registerHeaderView(viewType: CookStepCountCell.self)
-
-        collectionView.registerFooterView(viewType: CreateRecipeFooter.self)
+        
+//        collectionView.registerFooterView(viewType: CreateRecipeFooter.self)
         collectionView.registerFooterView(viewType: CookStepFooterView.self)
     }
     
@@ -128,9 +166,13 @@ extension CreateRecipeView {
     }
     
     private func deleteItem(_ item: Item, idx: IndexPath) {
+        guard case let .cookStepSection(dummyData) = item else { return }
         var snapShot = dataSource.snapshot()
         snapShot.deleteItems([item])
-        mockData.remove(at: 0)
+        
+        if let index = mockData.firstIndex(of: dummyData) {
+            mockData.remove(at: index)
+        }
         dataSource.apply(snapShot, animatingDifferences: true)
         applyNewSnapshot()
     }
@@ -156,10 +198,10 @@ extension CreateRecipeView {
             case .cookStepSection:
                 var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
                 configuration.headerMode = .supplementary
-                configuration.footerMode = .supplementary
+//                configuration.footerMode = .supplementary
                 configuration.trailingSwipeActionsConfigurationProvider = makeSwipeActions
                 configuration.showsSeparators = false
-                    
+                
                 
                 let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: env)
                 section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
@@ -175,10 +217,12 @@ extension CreateRecipeView {
         
         let section = dataSource.snapshot().sectionIdentifiers[index]
         switch section {
+        case .thumbnailSection:
+            return createThumbnailSection()
         case .recipeNameSection, .cookTimeSettingSection:
             return createEqualSize()
         case .recipeIngredientSection:
-            return aa()
+            return createIngredientSection()
         case .recipeDescriptSection:
             return createRecipeDescription()
         case .cookStepSection:
@@ -210,6 +254,28 @@ extension CreateRecipeView {
             alignment: .topLeading)
         section.boundarySupplementaryItems = [header]
         section.orthogonalScrollingBehavior = .groupPaging
+        
+        
+        // Return
+        return section
+    }
+    
+    func createThumbnailSection() -> NSCollectionLayoutSection {
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(0.25)),
+            subitem: item,
+            count: 1)
+        
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .none
         
         
         // Return
@@ -251,14 +317,14 @@ extension CreateRecipeView {
     }
     
     
-    func aa() -> NSCollectionLayoutSection {
+    func createIngredientSection() -> NSCollectionLayoutSection {
         let sectionHeight = self.calculateSectionHeight()
         
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .estimated(sectionHeight)))
-//        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
+        //        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
@@ -300,6 +366,7 @@ extension CreateRecipeView {
         //            count: mockData.count)
         
         let section = NSCollectionLayoutSection(group: group)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 0, trailing: 0)
         let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                       heightDimension: .absolute(50.0))
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -307,12 +374,12 @@ extension CreateRecipeView {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .topLeading)
         
-        let footer = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: footerHeaderSize,
-            elementKind: UICollectionView.elementKindSectionFooter,
-            alignment: .bottom)
+//        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+//            layoutSize: footerHeaderSize,
+//            elementKind: UICollectionView.elementKindSectionFooter,
+//            alignment: .bottom)
         
-        section.boundarySupplementaryItems = [header, footer]
+        section.boundarySupplementaryItems = [header]
         section.orthogonalScrollingBehavior = .groupPaging
         
         
@@ -335,6 +402,9 @@ extension CreateRecipeView {
     
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell{
         switch item {
+        case .thumbnailSection:
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateRecipeHeaderCell.reuseIdentifier, for: indexPath) as! CreateRecipeHeaderCell
+            return cell
         case .recipeNameSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as! TextFieldCell
             cell.configure(text: "레시피 이름을 입력해주세요", needSearchButton: false)
@@ -361,30 +431,66 @@ extension CreateRecipeView {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
             return cell
         case .cookStepSection(let data):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell.reuseIdentifier, for: indexPath) as! CookStepCell
-            cell.accessories = [.reorder(displayed: .always), .delete()]
-            imageRelay.subscribe(onNext: { data in
-                cell.imageSelectSubject.accept(data)
-            }).disposed(by: disposeBag)
-            
-            cell.addPhotoButton.rx.tap
-                .subscribe(onNext: { _ in
-                    self.delegate?.addPhotoButtonTapped()
+            if data.contents == "" {
+                // Show a different cell when the array is empty
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell2.reuseIdentifier, for: indexPath) as! CookStepCell2
+                imageRelay.subscribe(onNext: { data in
+                    cell.imageSelectSubject.accept(data)
                 }).disposed(by: disposeBag)
-            
-            if data.contents.isEmpty {
-                cell.defaultCheck.accept(true)
+                
+                cell.addPhotoButton.rx.tap
+                    .subscribe(onNext: { _ in
+                        self.delegate?.addPhotoButtonTapped()
+                    }).disposed(by: disposeBag)
+                
+                cell.stepTextfield.rx.controlEvent(.editingDidEndOnExit)
+                    .subscribe(onNext: { [weak self, weak cell] _ in
+                        guard let self = self, let cell = cell, let newText = cell.stepTextfield.text else { return }
+                        if newText.isEmpty {
+                            // Skip empty text
+                            return
+                        }
+                        let defaultImage = UIImage(named: "popcat")
+                        let newStep = Dummy(contents: newText, img: self.imageBehaviorRelay.value)
+                        if !mockData.contains(newStep) {
+                            self.mockData.insert(newStep, at: 0)
+                            print(self.mockData)
+                        }
+                        //                        self.mockData.insert(newStep, at: 0)
+                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                        self.applyNewSnapshot()
+                        cell.stepTextfield.text = ""
+                        self.imageBehaviorRelay.accept(defaultImage!)
+                        if let initialIndexPath = dataSource.indexPath(for: .cookStepSection(mockData.last!)) {
+                            collectionView.scrollToItem(at: initialIndexPath, at: .bottom, animated: true)
+                        }
+                    }).disposed(by: cell.disposeBag)
+                return cell
             } else {
+                // Show the CookStepCell when the array has values
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell.reuseIdentifier, for: indexPath) as! CookStepCell
+                cell.accessories = [.reorder(displayed: .always), .delete()]
+//                imageBehaviorRelay.subscribe(onNext: { data in
+//                    cell.imageSelectSubject.accept(data)
+//                }).disposed(by: disposeBag)
+                
+                cell.addPhotoButton.rx.tap
+                    .subscribe(onNext: { _ in
+                        self.delegate?.addPhotoButtonTapped()
+                    }).disposed(by: disposeBag)
+                
                 cell.defaultCheck.accept(false)
+                cell.configure(data)
+                print(data)
+                return cell
             }
-            
-            cell.configure(text: data.contents)
-            return cell
         }
     }
     
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath, section: Section) -> UICollectionReusableView {
         switch section {
+        case .thumbnailSection:
+            return UICollectionReusableView()
         case .recipeNameSection:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
             headerView.configureTitle(text: "레시피 이름")
@@ -401,45 +507,29 @@ extension CreateRecipeView {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepHeaderView.identifier, for: indexPath) as! CookStepHeaderView
             //            headerView.configureTitle(text: "조리 시간 분")
             headerView.configureDoubleTitle(text: "조리시간", text2: "인분")
-//            headerView.highlightTextColor()
+            //            headerView.highlightTextColor()
             return headerView
         case .cookStepSection:
-            if kind == UICollectionView.elementKindSectionHeader {
+//            if kind == UICollectionView.elementKindSectionHeader {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepCountCell.identifier, for: indexPath) as! CookStepCountCell
-                headerView.configureTitleCount(text: "조리 단계", count: mockData.count)
+                headerView.configureTitleCount(text: "조리 단계", count: mockData.count - 1)
                 return headerView
-            } else {
-                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepFooterView.identifier, for: indexPath) as! CookStepFooterView
-                
-                imageRelay.subscribe(onNext: { data in
-                    footerView.imageSelectSubject.accept(data)
-                }).disposed(by: disposeBag)
-                
-                footerView.addPhotoButton.rx.tap
-                    .subscribe(onNext: { _ in
-                        self.delegate?.addPhotoButtonTapped()
-                    }).disposed(by: disposeBag)
-                
-                footerView.stepTextfield.rx.controlEvent(.editingDidEndOnExit)
-                    .subscribe(onNext: { _ in
-                        //                    cell.
-                        self.mockData.insert(Dummy(contents: footerView.stepTextfield.text ?? ""), at: 0)
-                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
-                        self.applyNewSnapshot()
-                    }).disposed(by: disposeBag)
-//                footerView.registerButton.rx.tap
-//                    .subscribe(onNext: { _ in
-//                        self.delegate?.registerButtonTapped()
-//                    }).disposed(by: disposeBag)
-                return footerView
-            }
+//            } else {
+//                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepFooterView.identifier, for: indexPath) as! CookStepFooterView
+//                //                footerView.registerButton.rx.tap
+//                //                    .subscribe(onNext: { _ in
+//                //                        self.delegate?.registerButtonTapped()
+//                //                    }).disposed(by: disposeBag)
+//                return footerView
+//            }
             
         }
     }
     
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
-        snapshot.appendSections([.recipeNameSection, .recipeDescriptSection, .recipeIngredientSection ,.cookTimeSettingSection, .cookStepSection])
+        snapshot.appendSections([.thumbnailSection, .recipeNameSection, .recipeDescriptSection, .recipeIngredientSection ,.cookTimeSettingSection, .cookStepSection])
+        snapshot.appendItems([.thumbnailSection], toSection: .thumbnailSection)
         snapshot.appendItems([.recipeNameSection], toSection: .recipeNameSection)
         snapshot.appendItems([.recipeDiscriptSection], toSection: .recipeDescriptSection)
         snapshot.appendItems([.recipeIngredientSection], toSection: .recipeIngredientSection)

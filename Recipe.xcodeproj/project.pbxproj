@@ -45,6 +45,7 @@
 		164E52422A8B5C160058C44B /* UIImageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E52412A8B5C160058C44B /* UIImageView.swift */; };
 		164E52442A8B5EB30058C44B /* RecipeViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E52432A8B5EB30058C44B /* RecipeViewModel.swift */; };
 		164E52462A8B62C80058C44B /* Recipe.swift in Sources */ = {isa = PBXBuildFile; fileRef = 164E52452A8B62C80058C44B /* Recipe.swift */; };
+		165EE0BE2A8E8CB200DB401E /* CreateRecipeHeaderCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 165EE0BD2A8E8CB200DB401E /* CreateRecipeHeaderCell.swift */; };
 		166333632A85E982007639D9 /* MyPageView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166333622A85E982007639D9 /* MyPageView.swift */; };
 		166333652A85E9DF007639D9 /* MyPageHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166333642A85E9DF007639D9 /* MyPageHeaderView.swift */; };
 		166333672A85F69E007639D9 /* MyPageTitleHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166333662A85F69E007639D9 /* MyPageTitleHeader.swift */; };
@@ -73,6 +74,7 @@
 		16C5FFBC2A72C42A00EA599F /* Category.json in Resources */ = {isa = PBXBuildFile; fileRef = 16C5FFBB2A72C42A00EA599F /* Category.json */; };
 		16C852BC2A6C016500D67A73 /* RecipeDetailIngredientHeader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C852BB2A6C016500D67A73 /* RecipeDetailIngredientHeader.swift */; };
 		16C852C02A6C04BA00D67A73 /* IngredientCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C852BF2A6C04BA00D67A73 /* IngredientCell.swift */; };
+		16CC99972A8E274200855C06 /* CookStepCell2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CC99962A8E274200855C06 /* CookStepCell2.swift */; };
 		16CD3C342A80BB3200801F2F /* CustomPresentationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CD3C332A80BB3200801F2F /* CustomPresentationController.swift */; };
 		16CD3C362A80BDC300801F2F /* ShortFormSheetViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CD3C352A80BDC300801F2F /* ShortFormSheetViewController.swift */; };
 		16CE3E592A774C4600102F27 /* CommentFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16CE3E582A774C4600102F27 /* CommentFooterView.swift */; };
@@ -228,6 +230,7 @@
 		164E52412A8B5C160058C44B /* UIImageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIImageView.swift; sourceTree = "<group>"; };
 		164E52432A8B5EB30058C44B /* RecipeViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeViewModel.swift; sourceTree = "<group>"; };
 		164E52452A8B62C80058C44B /* Recipe.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Recipe.swift; sourceTree = "<group>"; };
+		165EE0BD2A8E8CB200DB401E /* CreateRecipeHeaderCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateRecipeHeaderCell.swift; sourceTree = "<group>"; };
 		166333622A85E982007639D9 /* MyPageView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageView.swift; sourceTree = "<group>"; };
 		166333642A85E9DF007639D9 /* MyPageHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageHeaderView.swift; sourceTree = "<group>"; };
 		166333662A85F69E007639D9 /* MyPageTitleHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyPageTitleHeader.swift; sourceTree = "<group>"; };
@@ -256,6 +259,7 @@
 		16C5FFBB2A72C42A00EA599F /* Category.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Category.json; sourceTree = "<group>"; };
 		16C852BB2A6C016500D67A73 /* RecipeDetailIngredientHeader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailIngredientHeader.swift; sourceTree = "<group>"; };
 		16C852BF2A6C04BA00D67A73 /* IngredientCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = IngredientCell.swift; sourceTree = "<group>"; };
+		16CC99962A8E274200855C06 /* CookStepCell2.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCell2.swift; sourceTree = "<group>"; };
 		16CD3C332A80BB3200801F2F /* CustomPresentationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomPresentationController.swift; sourceTree = "<group>"; };
 		16CD3C352A80BDC300801F2F /* ShortFormSheetViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormSheetViewController.swift; sourceTree = "<group>"; };
 		16CE3E582A774C4600102F27 /* CommentFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommentFooterView.swift; sourceTree = "<group>"; };
@@ -806,6 +810,8 @@
 				1699577C2A681BB100A1BF1E /* CookStepCell.swift */,
 				16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */,
 				16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */,
+				16CC99962A8E274200855C06 /* CookStepCell2.swift */,
+				165EE0BD2A8E8CB200DB401E /* CreateRecipeHeaderCell.swift */,
 			);
 			path = CreateRecipe;
 			sourceTree = "<group>";
@@ -1269,6 +1275,7 @@
 				5A914AEC2A54159B0020BA71 /* IngredientRecipeCell.swift in Sources */,
 				161EA8582A7A7E6E00F454F9 /* ShortFormTagCell.swift in Sources */,
 				169968C72A6F57960074DB43 /* ReviewHeader.swift in Sources */,
+				16CC99972A8E274200855C06 /* CookStepCell2.swift in Sources */,
 				5A0244DB2A52A74D00AA418E /* SplashCoordinator.swift in Sources */,
 				16FCB9512A82BB7200C2CD27 /* RecipeSearchView.swift in Sources */,
 				5A914AD32A54024A0020BA71 /* Home.swift in Sources */,
@@ -1302,6 +1309,7 @@
 				169968C92A6F57B50074DB43 /* ReviewCell.swift in Sources */,
 				161954322A878BD100884247 /* FavoriteRecipeViewController.swift in Sources */,
 				162C28B72A7E0C380004D771 /* ShortFormSearchView.swift in Sources */,
+				165EE0BE2A8E8CB200DB401E /* CreateRecipeHeaderCell.swift in Sources */,
 				161954412A87A65600884247 /* MyReviewCell.swift in Sources */,
 				5AB4A5DE2A55099C0095CD2B /* IngredientRegistrationViewController.swift in Sources */,
 				5A0244E22A52A7E200AA418E /* RegisterCoordinator.swift in Sources */,
