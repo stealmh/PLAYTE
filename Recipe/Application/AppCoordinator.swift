@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import RxSwift
 
 protocol AppCoordinatorProtocol: Coordinator {
     func showSplashFlow()
@@ -71,24 +72,32 @@ extension AppCoordinator: CoordinatorFinishDelegate {
         case .splash:
 //            navigationController.viewControllers.removeAll()
 //            let a = childCoordinator as! SplashCoordinator
-            LoginService.shared.appleLogin(accessToken: KeyChain.shared.read(account: .idToken)) { result in
-                switch result {
-                case .success(let data):
-                    DispatchQueue.main.async {
-                        self.navigationController.viewControllers.removeAll()
-                        if data.data.isMember {
-                            self.showMainFlow()
-                        } else {
-                            self.showLoginFlow()
-                        }
-                    }
-                case .failure(let data): ///Todo: 에러에 따른 처리추가
-                    DispatchQueue.main.async {
-                        self.navigationController.viewControllers.removeAll()
+            let _ = LoginService.shared.appleLoginRx(accessToken: KeyChain.shared.read(account: .idToken))
+                .observe(on: MainScheduler.instance)
+                .subscribe(onNext: { loginSuccess in
+                    self.navigationController.viewControllers.removeAll()
+                    if loginSuccess.data.isMember {
+                        self.showMainFlow()
+                    } else {
                         self.showLoginFlow()
                     }
-                }
-            }
+                }, onError: { error in
+                    self.navigationController.viewControllers.removeAll()
+                    self.showLoginFlow()
+                    
+                    switch error {
+                    case AppleLoginError.httpBodyError:
+                        print("httpBodyError")
+                    case AppleLoginError.networkError:
+                        print("networkError")
+                        self.navigationController.showConfirmationAlert(title: "서버가 원할하지 않습니다", message: "잠시 후 이용해주세요.")
+                    case AppleLoginError.decodingError(let decodingError):
+                        print("decodingError")
+                    default:
+                        print("default")
+                    }
+                    
+                })
             
         case .tab:
             DispatchQueue.main.async {

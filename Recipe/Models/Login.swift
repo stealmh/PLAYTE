@@ -38,3 +38,13 @@ struct LoginInfo: Codable {
     let isMember: Bool
     let jwtTokens: Token
 }
+
+
+struct MemberCheck: Codable {
+    let code: String
+    let data: Member
+}
+
+struct Member: Codable {
+    let isMember: Bool
+}

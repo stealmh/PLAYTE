@@ -164,17 +164,14 @@ extension LoginViewController: ASAuthorizationControllerDelegate {
                 let identifyTokenString = String(data: identityToken, encoding: .utf8) {
                 KeyChain.shared.create(account: .idToken, data: identifyTokenString)
                 ///Todo: 이동로직
-                LoginService.shared.appleLogin(accessToken: KeyChain.shared.read(account: .idToken)) { result in
-                    switch result {
-                    case .success(let data):
-                        if data.data.isMember {
-                            print("")
-                            self.didSendEventClosure?(.isMember)
-                        } else {
-                            self.didSendEventClosure?(.register)
-                        }
+                LoginService.shared.appleLogin(accessToken: KeyChain.shared.read(account: .idToken)) { isMember in
+                    switch isMember {
+                    case .success(let member):
+                        member ? self.didSendEventClosure?(.isMember) :               self.didSendEventClosure?(.register)
                     case .failure(let error):
-                        ///Todo: 에러처리 하기
+                        DispatchQueue.main.async {
+                            self.showConfirmationAlert(title: "서버가 원할하지 않습니다", message: "잠시 후 이용해주세요.")
+                        }
                         print(error.localizedDescription)
                     }
                 }
