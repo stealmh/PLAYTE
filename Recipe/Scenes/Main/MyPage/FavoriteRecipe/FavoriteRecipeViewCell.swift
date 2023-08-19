@@ -172,18 +172,21 @@ extension FavoriteRecipeViewCell {
         nickName.text = "규땡뿡야"
     }
     
-//    func configure(_ data: Recipe) {
-//        recipeImageView.image = data.image
-//        uploadTimeLabel.text = data.uploadTime
-//        rate.setTitle(data.rate, for: .normal)
-//        nickName.text = data.nickName
-//        recipeTitle.text = data.title
-//        favoriteButton.setImage(
-//            data.isFavorite ? UIImage(named: "bookmarkfill_svg")! : UIImage(named: "bookmark_svg")!,
-//            for: .normal)
-//        cookTimeLabel.setTitle(data.cookTime, for: .normal)
-//
-//    }
+    func configure(_ data: RecipeInfo1) {
+        recipeImageView.loadImage(from: data.image_url)
+        uploadTimeLabel.text = data.created_date
+        
+        let rateCount = data.rating
+        let commentCount = data.comment_count
+        rate.setTitle("\(rateCount)(\(commentCount))", for: .normal)
+        nickName.text = data.nickname
+        recipeTitle.text = data.recipe_name
+        favoriteButton.setImage(
+            data.is_saved ? UIImage(named: "bookmarkfill_svg")! : UIImage(named: "bookmark_svg")!,
+            for: .normal)
+        cookTimeLabel.setTitle("", for: .normal)
+
+    }
 }
 
 #if DEBUG
