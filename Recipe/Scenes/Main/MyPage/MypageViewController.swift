@@ -16,6 +16,8 @@ final class MypageViewController: BaseViewController {
     var disposeBag = DisposeBag()
     private var myPageView = MyPageView()
     var viewModel = MyPageViewModel()
+    var favoriteRecipe: Recipe1?
+    var writeRecipe: Recipe1?
 
     
     override func viewDidLoad() {
@@ -30,6 +32,10 @@ final class MypageViewController: BaseViewController {
     override func viewIsAppearing(_ animated: Bool) {
         super.viewIsAppearing(animated)
         myPageView.viewModel = viewModel
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
     }
     
     enum Event {
@@ -68,13 +74,16 @@ extension MypageViewController {
     }
 }
 
+import AVFoundation
 extension MypageViewController: MyPageViewDelegate {
-    func favoriteReceipeButtonTapped() {
+    func favoriteReceipeButtonTapped(item: Recipe1?) {
+        self.favoriteRecipe = item
         self.tabBarController?.tabBar.isHidden = true
         didSendEventClosure?(.favoriteReceipeButtonTapped)
     }
     
-    func writeRecipeButtonTapped() {
+    func writeRecipeButtonTapped(item: Recipe1?) {
+        self.writeRecipe = item
         self.tabBarController?.tabBar.isHidden = true
         didSendEventClosure?(.writeRecipeButtonTapped)
     }
@@ -84,11 +93,16 @@ extension MypageViewController: MyPageViewDelegate {
         didSendEventClosure?(.myReviewButtonTapped)
     }
     
-    func recentShortFormCellTapped() {
-        ///Todo:
+    func recentShortFormCellTapped(item: MyPageRecentWatch) {
+        let vc = ShortFormFullScreenViewController(videoURL: nil, player: AVPlayer(), playerLayer: AVPlayerLayer())
+        navigationController?.pushViewController(vc, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
-    func recentRecipeCellTapped() {
-        ///Todo:
+    func recentRecipeCellTapped(item: IngredientRecipe) {
+        print(item)
+        let vc = RecipeDetailViewController()
+        navigationController?.pushViewController(vc, animated: true)
+        self.tabBarController?.tabBar.isHidden = true
     }
 }
