@@ -42,3 +42,32 @@ struct RecipeInfo: Codable, Hashable {
         return lhs.recipe_id == rhs.recipe_id
     }
 }
+
+
+struct Recipe1: Codable, Hashable {
+    let code: String
+    let data: [RecipeInfo1]
+    
+    static func == (lhs: Recipe1, rhs: Recipe1) -> Bool {
+        return lhs.data == rhs.data
+    }
+}
+
+struct RecipeInfo1: Codable, Hashable {
+    let comment_count: Int
+    let created_date: String
+    let image_url: String
+    let is_saved: Bool
+    let nickname: String
+    let rating: Int
+    let recipe_id: Int
+    let recipe_name: String
+    let recipe_thumbnail_img: String
+    
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(recipe_id)
+    }
+    static func == (lhs: RecipeInfo1, rhs: RecipeInfo1) -> Bool {
+        return lhs.recipe_id == rhs.recipe_id
+    }
+}
