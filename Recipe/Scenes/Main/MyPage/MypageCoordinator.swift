@@ -43,11 +43,14 @@ final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
                 self?.finishDelegate?.coordinatorDidFinish(childCoordinator: self!)
                 return
             case .favoriteReceipeButtonTapped:
-                let vc = FavoriteRecipeViewController()
+                guard let favoriteRecipeInfo = goVC.favoriteRecipe else { return }
+                let vc = FavoriteRecipeViewController(data1: favoriteRecipeInfo.data)
                 self?.navigationController.pushViewController(vc, animated: true)
                 return
             case .writeRecipeButtonTapped:
-                let vc = WriteRecipeViewController()
+                guard let writeRecipeInfo = goVC.writeRecipe else { return }
+                print("Coordinator: \(writeRecipeInfo)")
+                let vc = WriteRecipeViewController(data1: writeRecipeInfo.data)
                 self?.navigationController.pushViewController(vc, animated: true)
                 return
             case .myReviewButtonTapped:

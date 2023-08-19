@@ -11,11 +11,11 @@ import RxSwift
 import RxCocoa
 
 protocol MyPageViewDelegate: AnyObject {
-    func favoriteReceipeButtonTapped()
-    func writeRecipeButtonTapped()
+    func favoriteReceipeButtonTapped(item: Recipe1?)
+    func writeRecipeButtonTapped(item: Recipe1?)
     func myReviewButtonTapped()
-    func recentShortFormCellTapped()
-    func recentRecipeCellTapped()
+    func recentShortFormCellTapped(item: MyPageRecentWatch)
+    func recentRecipeCellTapped(item: IngredientRecipe)
 }
 
 class MyPageView: UIView {
@@ -56,12 +56,16 @@ class MyPageView: UIView {
     private var mockRecentShortForm: [MyPageRecentWatch] = [MyPageRecentWatch(views: "1.4k", contents: "맛있는 바나나를 구워보았다"),MyPageRecentWatch(views: "1.4만", contents: "맛있는 바나나를 3개먹었다"),MyPageRecentWatch(views: "1.4천", contents: "맛있는 바나나를 3개먹었다"),MyPageRecentWatch(views: "1.4만", contents: "토마토 볶음밥")]
     private var mockRecentRecipe: [IngredientRecipe] = [IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목제목", cookTime: "23분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목2입니다", cookTime: "2분"), IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목목", cookTime: "100분")]
     
+    private var favoriteRecipe: Recipe1?
+    private var writeRecipe: Recipe1?
+    
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(collectionView)
         configureLayout()
         registerCell()
         configureDataSource()
+        collectionView.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -87,10 +91,24 @@ extension MyPageView {
     func setViewModel() async {
         if let viewModel {
             print("")
-            let a = try? await viewModel.getMyInfo()
-            if let a {
-                mockHeader2 = a
+            do {
+                // Fetch MyInfo1
+                let myInfo = try await viewModel.getMyInfo()
+                mockHeader2 = myInfo
                 dataSource.apply(createSnapshot(), animatingDifferences: true)
+
+                // Fetch Recipe
+                let recipe: Recipe1 = try await viewModel.get(.mySaveRecipeSearch)
+                print("RECIPE:", recipe)
+                self.favoriteRecipe = recipe
+                
+                // Fetch Written Recipe
+                let writeRecipe: Recipe1 = try await viewModel.get(.myWrittenRecipeSearch)
+                print("RECIPE:", recipe)
+                self.writeRecipe = writeRecipe
+                
+            } catch {
+                print("Error fetching data:", error)
             }
         }
     }
@@ -181,7 +199,7 @@ extension MyPageView {
             cell.configure(data)
             cell.favoriteRecipeButton.rx.tap
                 .subscribe(onNext: { _ in
-                    self.delegate?.favoriteReceipeButtonTapped()
+                    self.delegate?.favoriteReceipeButtonTapped(item: self.favoriteRecipe)
                 }).disposed(by: disposeBag)
             cell.myReviewRecipeButton.rx.tap
                 .subscribe(onNext: { _ in
@@ -189,7 +207,7 @@ extension MyPageView {
                 }).disposed(by: disposeBag)
             cell.writeRecipeButton.rx.tap
                 .subscribe(onNext: { _ in
-                    self.delegate?.writeRecipeButtonTapped()
+                    self.delegate?.writeRecipeButtonTapped(item: self.writeRecipe)
                 }).disposed(by: disposeBag)
             return cell
             
@@ -228,6 +246,21 @@ extension MyPageView {
         snapshot.appendItems(mockRecentRecipe.map({ Item.recentRecipe($0) }), toSection: .recentRecipe)
         
         return snapshot
+    }
+}
+
+extension MyPageView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        
+        switch item {
+        case .recentShortForm(let data):
+            delegate?.recentShortFormCellTapped(item: data)
+        case .recentRecipe(let data):
+            delegate?.recentRecipeCellTapped(item: data)
+        default:
+            break
+        }
     }
 }
 
