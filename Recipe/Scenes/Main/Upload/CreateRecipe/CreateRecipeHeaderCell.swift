@@ -20,21 +20,19 @@ class CreateRecipeHeaderCell: UICollectionViewCell {
         return v
     }()
     
-    private let thumbnailBackground: UIImageView = {
+    let thumbnailBackground: UIImageView = {
         let v = UIImageView()
         v.layer.borderWidth = 1.5
         v.layer.borderColor = UIColor.grayScale3?.cgColor
         v.layer.cornerRadius = 10
         v.clipsToBounds = true
-        v.image = UIImage(named: "popcat")
         return v
     }()
     
-    private let addThumbnailButton: UIButton = {
+    let addThumbnailButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(named: "addPhoto_svg"), for: .normal)
         v.contentMode = .scaleAspectFit
-        v.isHidden = true
         return v
     }()
     
@@ -45,7 +43,7 @@ class CreateRecipeHeaderCell: UICollectionViewCell {
         return v
     }()
     
-    private let modifyButton: UIButton = {
+    let modifyButton: UIButton = {
         let v = UIButton()
         v.setTitle("수정", for: .normal)
         v.setTitleColor(.white, for: .normal)
@@ -61,7 +59,7 @@ class CreateRecipeHeaderCell: UICollectionViewCell {
         addSubViews(headerTitle, thumbnailBackground, modifyButtonBackground)
         contentView.addSubViews(addThumbnailButton, modifyButton)
         configureLayout()
-        bind()
+        noImage()
     }
     
     required init?(coder: NSCoder) {
@@ -96,15 +94,14 @@ extension CreateRecipeHeaderCell {
         }
     }
     
-    func bind() {
-        addThumbnailButton.rx.tap
-            .subscribe(onNext: { _ in
-                print("addThumbnailButton tapped")
-            }).disposed(by: disposeBag)
-        modifyButton.rx.tap
-            .subscribe(onNext: { _ in
-                print("modifyButton tapped")
-            }).disposed(by: disposeBag)
+    func hasImage() {
+        addThumbnailButton.isHidden = true
+        modifyButtonBackground.isHidden = false
+    }
+    
+    func noImage() {
+        addThumbnailButton.isHidden = false
+        modifyButtonBackground.isHidden = true
     }
 }
 

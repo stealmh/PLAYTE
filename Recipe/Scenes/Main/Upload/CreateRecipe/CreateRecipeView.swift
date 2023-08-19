@@ -9,6 +9,7 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import RxKeyboard
 
 struct Dummy: Hashable {
     let id = UUID()
@@ -19,13 +20,21 @@ struct Dummy: Hashable {
 protocol CreateRecipeViewDelegate: AnyObject {
     func registerButtonTapped()
     func addPhotoButtonTapped()
+    func addIngredientCellTapped()
+    func addThumbnailButtonTapped()
+    func thumbnailModifyButtonTapped()
 }
-final class CreateRecipeView: UIView {
+final class CreateRecipeView: UIView, DefaultTextFieldCellDelegate {
+    func didTappedCell(_ name: String, type: String) {
+        delegate?.addIngredientCellTapped()
+    }
+    
     enum Section: Hashable {
         case thumbnailSection
         case recipeNameSection
         case recipeDescriptSection
         case recipeIngredientSection
+        case addIngredientSection
         case cookTimeSettingSection
         case cookStepSection
     }
@@ -35,6 +44,7 @@ final class CreateRecipeView: UIView {
         case recipeNameSection
         case recipeDiscriptSection
         case recipeIngredientSection
+        case addIngredientSection(String)
         case cookTimeSettingSection
         case cookStepSection(Dummy)
     }
@@ -68,7 +78,9 @@ final class CreateRecipeView: UIView {
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     weak var delegate: CreateRecipeViewDelegate?
+    var thumbnailImage = BehaviorRelay<UIImage?>(value:nil)
     private var mockData: [Dummy] = [Dummy(contents: "", img: UIImage())]
+    private var addIngredientMockData: [String] = ["토마토 1개", "간장2T","미림 2T"]
     let imageRelay = PublishRelay<UIImage>()
     let imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage())
     var mybool = false
@@ -145,6 +157,7 @@ extension CreateRecipeView {
         collectionView.registerCell(cellType: DefaultTextFieldCell.self)
         collectionView.registerCell(cellType: CookStepCell.self)
         collectionView.registerCell(cellType: CookStepCell2.self)
+        collectionView.registerCell(cellType: CreateIngredientTagCell.self)
         
         collectionView.registerHeaderView(viewType: DefaultHeader.self)
         collectionView.registerHeaderView(viewType: CookStepHeaderView.self)
@@ -223,6 +236,8 @@ extension CreateRecipeView {
             return createEqualSize()
         case .recipeIngredientSection:
             return createIngredientSection()
+        case .addIngredientSection:
+            return createAddIngredientSection()
         case .recipeDescriptSection:
             return createRecipeDescription()
         case .cookStepSection:
@@ -313,7 +328,7 @@ extension CreateRecipeView {
     }
     
     func calculateSectionHeight() -> CGFloat {
-        return mybool ? 100 : 50
+        return mybool ? 120 : 50
     }
     
     
@@ -343,6 +358,28 @@ extension CreateRecipeView {
             alignment: .topLeading)
         section.boundarySupplementaryItems = [header]
         section.orthogonalScrollingBehavior = .groupPaging
+        
+        // Return
+        return section
+    }
+    
+    func createAddIngredientSection() -> NSCollectionLayoutSection {
+        
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+                item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.3),
+                heightDimension: .absolute(50)),
+            subitems: [item])
+        group.interItemSpacing = .fixed(5)
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
         
         // Return
         return section
@@ -404,6 +441,24 @@ extension CreateRecipeView {
         switch item {
         case .thumbnailSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateRecipeHeaderCell.reuseIdentifier, for: indexPath) as! CreateRecipeHeaderCell
+            cell.addThumbnailButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.addThumbnailButtonTapped()
+                }).disposed(by: disposeBag)
+            cell.modifyButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.thumbnailModifyButtonTapped()
+                }).disposed(by: disposeBag)
+            thumbnailImage
+                .debug()
+                .subscribe(onNext: { img in
+                    if let img {
+                        print("???")
+                        cell.thumbnailBackground.image = img
+                        cell.hasImage()
+                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                    }
+                }).disposed(by: disposeBag)
             return cell
         case .recipeNameSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as! TextFieldCell
@@ -415,6 +470,7 @@ extension CreateRecipeView {
         case .recipeIngredientSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DefaultTextFieldCell.reuseIdentifier, for: indexPath) as! DefaultTextFieldCell
             cell.configure(text: "재료 및 양념을 입력해주세요.")
+            cell.delegate = self
             cell.recipeNametextField.rx.text.orEmpty
                 .debounce(.seconds(1), scheduler: MainScheduler.instance)
                 .subscribe(onNext: { txt in
@@ -426,6 +482,10 @@ extension CreateRecipeView {
                     self.collectionView.collectionViewLayout.invalidateLayout()
                     self.collectionView.layoutIfNeeded()
                 }).disposed(by: disposeBag)
+            return cell
+        case .addIngredientSection(let data):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateIngredientTagCell.reuseIdentifier, for: indexPath) as! CreateIngredientTagCell
+            cell.configure(with: data, tag: indexPath.row)
             return cell
         case .cookTimeSettingSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
@@ -465,6 +525,7 @@ extension CreateRecipeView {
                             collectionView.scrollToItem(at: initialIndexPath, at: .bottom, animated: true)
                         }
                     }).disposed(by: cell.disposeBag)
+                setupKeyboardForCell(cell: cell, textField: cell.stepTextfield)
                 return cell
             } else {
                 // Show the CookStepCell when the array has values
@@ -481,6 +542,7 @@ extension CreateRecipeView {
                 
                 cell.defaultCheck.accept(false)
                 cell.configure(data)
+                setupKeyboardForCell(cell: cell, textView: cell.stepTextView)
                 print(data)
                 return cell
             }
@@ -489,7 +551,7 @@ extension CreateRecipeView {
     
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath, section: Section) -> UICollectionReusableView {
         switch section {
-        case .thumbnailSection:
+        case .thumbnailSection, .addIngredientSection:
             return UICollectionReusableView()
         case .recipeNameSection:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
@@ -528,20 +590,66 @@ extension CreateRecipeView {
     
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
-        snapshot.appendSections([.thumbnailSection, .recipeNameSection, .recipeDescriptSection, .recipeIngredientSection ,.cookTimeSettingSection, .cookStepSection])
+        snapshot.appendSections([
+            .thumbnailSection,
+            .recipeNameSection,
+            .recipeDescriptSection,
+            .recipeIngredientSection,
+            .addIngredientSection,
+            .cookTimeSettingSection,
+            .cookStepSection])
         snapshot.appendItems([.thumbnailSection], toSection: .thumbnailSection)
         snapshot.appendItems([.recipeNameSection], toSection: .recipeNameSection)
         snapshot.appendItems([.recipeDiscriptSection], toSection: .recipeDescriptSection)
         snapshot.appendItems([.recipeIngredientSection], toSection: .recipeIngredientSection)
         snapshot.appendItems([.cookTimeSettingSection], toSection: .cookTimeSettingSection)
         snapshot.appendItems(mockData.map { Item.cookStepSection($0)}, toSection: .cookStepSection)
+        snapshot.appendItems(addIngredientMockData.map { Item.addIngredientSection($0)}, toSection: .addIngredientSection)
         
         return snapshot
     }
 }
 
 //MARK: - Method(Rx Bind)
-
+extension CreateRecipeView {
+    private func setupKeyboardForCell(cell: UICollectionViewCell, textField: UITextField) {
+        RxKeyboard.instance.visibleHeight
+            .skip(1)
+            .drive(onNext: { [weak self] keyboardVisibleHeight in
+                guard let self = self else { return }
+                
+                // 키보드 높이만큼 contentInset을 조정
+                let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardVisibleHeight, right: 0.0)
+                self.collectionView.contentInset = contentInsets
+                self.collectionView.scrollIndicatorInsets = contentInsets
+                
+                // 필요한 경우, 특정 텍스트 필드나 컨트롤 뷰가 키보드에 의해 가려지지 않게 스크롤 조정
+                let selectedTextField = textField
+                let rect = selectedTextField.convert(selectedTextField.bounds, to: self.collectionView)
+                    self.collectionView.scrollRectToVisible(rect, animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+    
+    private func setupKeyboardForCell(cell: UICollectionViewCell, textView: UITextView) {
+        RxKeyboard.instance.visibleHeight
+            .skip(1)
+            .drive(onNext: { [weak self] keyboardVisibleHeight in
+                guard let self = self else { return }
+                
+                // 키보드 높이만큼 contentInset을 조정
+                let contentInsets = UIEdgeInsets(top: 0.0, left: 0.0, bottom: keyboardVisibleHeight, right: 0.0)
+                self.collectionView.contentInset = contentInsets
+                self.collectionView.scrollIndicatorInsets = contentInsets
+                
+                // 필요한 경우, 특정 텍스트 필드나 컨트롤 뷰가 키보드에 의해 가려지지 않게 스크롤 조정
+                let selectedTextView = textView
+                let rect = selectedTextView.convert(selectedTextView.bounds, to: self.collectionView)
+                    self.collectionView.scrollRectToVisible(rect, animated: true)
+            })
+            .disposed(by: disposeBag)
+    }
+}
 
 extension CreateRecipeView: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, targetIndexPathForMoveFromItemAt originalIndexPath: IndexPath, toProposedIndexPath proposedIndexPath: IndexPath) -> IndexPath {

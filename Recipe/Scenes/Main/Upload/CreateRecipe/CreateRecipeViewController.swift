@@ -16,6 +16,7 @@ final class CreateRecipeViewController: BaseViewController {
     private var disposeBag = DisposeBag()
     var didSendEventClosure: ((CreateRecipeViewController.Event) -> Void)?
     let imagePicker = UIImagePickerController()
+    let imagePickerManager = ImagePickerManager()
     enum Event {
         case registerButtonTapped
         ///Todo: createShortFormButtonTapped 로직 연결하기
@@ -28,7 +29,7 @@ final class CreateRecipeViewController: BaseViewController {
         bind()
         setNavigationTitle("나의 레시피 작성")
         createRecipeView.delegate = self
-        imagePicker.delegate = self
+//        imagePicker.delegate = self
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -65,33 +66,62 @@ extension CreateRecipeViewController {
 }
 
 extension CreateRecipeViewController: CreateRecipeViewDelegate {
+    
     func addPhotoButtonTapped() {
-        print("받앗습니다")
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self //3
-        // imagePicker.allowsEditing = true
-        present(imagePicker, animated: true)
+//        print("받앗습니다")
+//        let imagePicker = UIImagePickerController()
+//        imagePicker.sourceType = .photoLibrary
+//        imagePicker.delegate = self //3
+//        // imagePicker.allowsEditing = true
+//        present(imagePicker, animated: true)
+        
+        imagePickerManager.presentImagePicker(in: self) { [weak self] img in
+            guard let self = self, let img = img else { return }
+            createRecipeView.imageRelay.accept(img)
+            createRecipeView.imageBehaviorRelay.accept(img)
+        }
     }
     
     func registerButtonTapped() {
         print(#function)
         didSendEventClosure?(.registerButtonTapped)
     }
-}
-
-//MARK: - Method(Image Picker)
-extension CreateRecipeViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
-        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
-            //            imageView.contentMode = .scaleAspectFit
-            print(pickedImage)
-            createRecipeView.imageRelay.accept(pickedImage)
-            createRecipeView.imageBehaviorRelay.accept(pickedImage)
+    
+    func addIngredientCellTapped() {
+        let vc = AddIngredientViewController()
+        vc.modalPresentationStyle = .overCurrentContext
+        vc.modalTransitionStyle = .crossDissolve
+        self.navigationController?.present(vc, animated: false)
+    }
+    
+    func addThumbnailButtonTapped() {
+        imagePickerManager.presentImagePicker(in: self) { [weak self] img in
+            guard let self = self, let img = img else { return }
+            self.createRecipeView.thumbnailImage.accept(img)
         }
-        dismiss(animated: true, completion: nil)
+    }
+    
+    func thumbnailModifyButtonTapped() {
+        print(#function)
+        imagePickerManager.presentImagePicker(in: self) { [weak self] img in
+            guard let self = self, let img = img else { return }
+            self.createRecipeView.thumbnailImage.accept(img)
+        }
     }
 }
+
+////MARK: - Method(Image Picker)
+//extension CreateRecipeViewController: UIImagePickerControllerDelegate, UINavigationControllerDelegate {
+//    func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
+//        if let pickedImage = info[UIImagePickerController.InfoKey.originalImage] as? UIImage {
+//            //            imageView.contentMode = .scaleAspectFit
+//            print(pickedImage)
+//            createRecipeView.imageRelay.accept(pickedImage)
+//            createRecipeView.imageBehaviorRelay.accept(pickedImage)
+//        }
+//        dismiss(animated: true, completion: nil)
+//    }
+//}
 
 //MARK: - Preview
 import SwiftUI
