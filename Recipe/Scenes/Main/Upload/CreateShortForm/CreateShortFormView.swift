@@ -12,12 +12,18 @@ import RxCocoa
 import RxKeyboard
 
 
+protocol CreateShortFormViewDelegate: AnyObject {
+    func addVideoButtonTapped()
+    func modifyVideoButtonTapped()
+}
+
 final class CreateShortFormView: UIView {
     enum Section: Hashable {
         case addVideoSection
         case recipeNameSection
         case recipeDescriptSection
         case recipeIngredientSection
+        case addIngredientSection
     }
     
     enum Item: Hashable {
@@ -25,6 +31,7 @@ final class CreateShortFormView: UIView {
         case recipeNameSection
         case recipeDiscriptSection
         case recipeIngredientSection
+        case addIngredientSection(String)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -47,6 +54,9 @@ final class CreateShortFormView: UIView {
     /// Properties
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
+    weak var delegate: CreateShortFormViewDelegate?
+    var videoThumbnailImage = BehaviorRelay<UIImage?>(value: nil)
+    private var addIngredientMockData: [String] = ["토마토 1개", "간장2T","미림 2T"]
     let imageRelay = PublishRelay<UIImage>()
     var mybool = false
     
@@ -85,6 +95,7 @@ extension CreateShortFormView {
         collectionView.registerCell(cellType: TextFieldCell.self)
         collectionView.registerCell(cellType: TextFieldViewCell.self)
         collectionView.registerCell(cellType: DefaultTextFieldCell.self)
+        collectionView.registerCell(cellType: CreateIngredientTagCell.self)
         
         collectionView.registerHeaderView(viewType: DefaultHeader.self)
     }
@@ -110,6 +121,8 @@ extension CreateShortFormView {
             return createRecipeIngredientSection()
         case .recipeDescriptSection:
             return createRecipeDescription()
+        case .addIngredientSection:
+            return createAddIngredientSection()
         }
     }
     
@@ -269,6 +282,28 @@ extension CreateShortFormView {
         return section
     }
     
+    func createAddIngredientSection() -> NSCollectionLayoutSection {
+        
+        let item = NSCollectionLayoutItem(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(1),
+                heightDimension: .fractionalHeight(1)))
+                item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
+        
+        let group = NSCollectionLayoutGroup.horizontal(
+            layoutSize: NSCollectionLayoutSize(
+                widthDimension: .fractionalWidth(0.3),
+                heightDimension: .absolute(50)),
+            subitems: [item])
+        group.interItemSpacing = .fixed(5)
+        let section = NSCollectionLayoutSection(group: group)
+        section.orthogonalScrollingBehavior = .continuous
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
+        
+        // Return
+        return section
+    }
+    
     
     private func configureDataSource() {
         dataSource = Datasource(collectionView: collectionView) { (collectionView, indexPath, item) -> UICollectionViewCell? in
@@ -286,6 +321,25 @@ extension CreateShortFormView {
         switch item {
         case .addVideoSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateShortFormVideoHeaderCell.reuseIdentifier, for: indexPath) as! CreateShortFormVideoHeaderCell
+            cell.addVideoButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.addVideoButtonTapped()
+                }).disposed(by: disposeBag)
+            cell.coverModifyButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.modifyVideoButtonTapped()
+                }).disposed(by: disposeBag)
+            
+            videoThumbnailImage
+                .debug()
+                .subscribe(onNext: { img in
+                    if let img {
+                        print("???")
+                        cell.thumbnailImageView.image = img
+                        cell.hasVideo()
+                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                    }
+                }).disposed(by: disposeBag)
             return cell
         case .recipeNameSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as! TextFieldCell
@@ -301,6 +355,10 @@ extension CreateShortFormView {
             cell.configure(text: "재료 및 양념을 입력해주세요.")
             setupKeyboardForCell(cell: cell, textField: cell.recipeNametextField)
             setupAdditionalBehaviorForIngredientCell(cell)
+            return cell
+        case .addIngredientSection(let data):
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateIngredientTagCell.reuseIdentifier, for: indexPath) as! CreateIngredientTagCell
+            cell.configure(with: data, tag: indexPath.row)
             return cell
         }
     }
@@ -319,18 +377,19 @@ extension CreateShortFormView {
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: DefaultHeader.identifier, for: indexPath) as! DefaultHeader
             headerView.configureTitle(text: "재료/양념")
             return headerView
-        case .addVideoSection:
+        case .addVideoSection, .addIngredientSection:
             return UICollectionReusableView()
         }
     }
     
     private func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
-        snapshot.appendSections([.addVideoSection, .recipeNameSection, .recipeDescriptSection, .recipeIngredientSection])
+        snapshot.appendSections([.addVideoSection, .recipeNameSection, .recipeDescriptSection, .recipeIngredientSection, .addIngredientSection])
         snapshot.appendItems([.addVideoSection], toSection: .addVideoSection)
         snapshot.appendItems([.recipeNameSection], toSection: .recipeNameSection)
         snapshot.appendItems([.recipeDiscriptSection], toSection: .recipeDescriptSection)
         snapshot.appendItems([.recipeIngredientSection], toSection: .recipeIngredientSection)
+        snapshot.appendItems(addIngredientMockData.map { Item.addIngredientSection($0)}, toSection: .addIngredientSection)
         
         return snapshot
     }
