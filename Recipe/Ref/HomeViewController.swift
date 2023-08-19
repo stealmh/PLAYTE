@@ -405,6 +405,6 @@ extension HomeViewController: RefrigeratorDetailDelegate {
 import SwiftUI
 struct ViewController_preview: PreviewProvider {
     static var previews: some View {
-        HomeViewController().toPreview()
+        UINavigationController(rootViewController: HomeViewController()).toPreview()
     }
 }

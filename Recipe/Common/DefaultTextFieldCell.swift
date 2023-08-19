@@ -10,6 +10,10 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
+protocol DefaultTextFieldCellDelegate: AnyObject {
+    func didTappedCell(_ name: String, type: String)
+}
+
 final class DefaultTextFieldCell: UICollectionViewCell {
     
     ///UI Properties
@@ -25,6 +29,7 @@ final class DefaultTextFieldCell: UICollectionViewCell {
     
     ///Properties
     private let disposeBag = DisposeBag()
+    weak var delegate: DefaultTextFieldCellDelegate?
     var filteredData = [String]()
     var data = [String]()
     var filetered = false
@@ -57,8 +62,8 @@ extension DefaultTextFieldCell {
         }
         
         table.snp.makeConstraints {
-            $0.top.equalTo(recipeNametextField.snp.bottom)
-            $0.left.right.equalTo(recipeNametextField)
+            $0.top.equalTo(recipeNametextField.snp.bottom).offset(5)
+            $0.left.right.equalTo(recipeNametextField).inset(10)
             $0.height.greaterThanOrEqualTo(70)
 //            $0.edges.equalTo(recipeNametextField)
         }
@@ -165,6 +170,8 @@ extension DefaultTextFieldCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("tapped")
+        let item = indexPath.row
+        delegate?.didTappedCell(filteredData[item], type: "신선")
     }
 }
 

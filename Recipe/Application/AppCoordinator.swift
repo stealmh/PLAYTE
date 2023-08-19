@@ -75,6 +75,7 @@ extension AppCoordinator: CoordinatorFinishDelegate {
             let _ = LoginService.shared.appleLoginRx(accessToken: KeyChain.shared.read(account: .idToken))
                 .observe(on: MainScheduler.instance)
                 .subscribe(onNext: { loginSuccess in
+                    print(loginSuccess)
                     self.navigationController.viewControllers.removeAll()
                     if loginSuccess.data.isMember {
                         self.showMainFlow()
@@ -93,6 +94,7 @@ extension AppCoordinator: CoordinatorFinishDelegate {
                         self.navigationController.showConfirmationAlert(title: "서버가 원할하지 않습니다", message: "잠시 후 이용해주세요.")
                     case AppleLoginError.decodingError(let decodingError):
                         print("decodingError")
+//                        self.showMainFlow()
                     default:
                         print("default")
                     }
