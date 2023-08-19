@@ -13,11 +13,21 @@ class FavoriteRecipeViewController: BaseViewController {
     
     private var tableView = UITableView()
     private let disposeBag = DisposeBag()
+    var data1: [RecipeInfo1]
     
     override func viewDidLoad() {
         super.viewDidLoad()
         configureTableView()
         configureNavigationBar()
+    }
+    
+    init(data1: [RecipeInfo1]) {
+        self.data1 = data1
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -47,7 +57,7 @@ extension FavoriteRecipeViewController {
 extension FavoriteRecipeViewController: UITableViewDelegate, UITableViewDataSource, FavoriteRecipeViewCellDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section
-        return 10
+        return data1.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -55,6 +65,7 @@ extension FavoriteRecipeViewController: UITableViewDelegate, UITableViewDataSour
         print(cell)
         cell.delegate = self
         cell.selectionStyle = .none
+        cell.configure(data1[indexPath.row])
         return cell
     }
     
