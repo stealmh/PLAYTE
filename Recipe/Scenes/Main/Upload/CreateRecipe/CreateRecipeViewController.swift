@@ -17,6 +17,7 @@ final class CreateRecipeViewController: BaseViewController {
     var didSendEventClosure: ((CreateRecipeViewController.Event) -> Void)?
     let imagePicker = UIImagePickerController()
     let imagePickerManager = ImagePickerManager()
+    private let viewModel = CreateRecipeViewModel()
     enum Event {
         case registerButtonTapped
         ///Todo: createShortFormButtonTapped 로직 연결하기
@@ -27,9 +28,12 @@ final class CreateRecipeViewController: BaseViewController {
         addView()
         configureLayout()
         bind()
-        setNavigationTitle("나의 레시피 작성")
         createRecipeView.delegate = self
-//        imagePicker.delegate = self
+        title = "나의 레시피 작성"
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(hideKeyboard))
+        tapGesture.cancelsTouchesInView = false
+        view.addGestureRecognizer(tapGesture)
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -40,9 +44,13 @@ final class CreateRecipeViewController: BaseViewController {
         self.tabBarController?.tabBar.isHidden = false
     }
     
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        self.tabBarController?.tabBar.isHidden = true
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        createRecipeView.viewModel = viewModel
+    }
+    
+    @objc func hideKeyboard() {
+        view.endEditing(true)
     }
 }
 //MARK: - Method(Normal)
@@ -68,12 +76,6 @@ extension CreateRecipeViewController {
 extension CreateRecipeViewController: CreateRecipeViewDelegate {
     
     func addPhotoButtonTapped() {
-//        print("받앗습니다")
-//        let imagePicker = UIImagePickerController()
-//        imagePicker.sourceType = .photoLibrary
-//        imagePicker.delegate = self //3
-//        // imagePicker.allowsEditing = true
-//        present(imagePicker, animated: true)
         
         imagePickerManager.presentImagePicker(in: self) { [weak self] img in
             guard let self = self, let img = img else { return }
@@ -87,8 +89,18 @@ extension CreateRecipeViewController: CreateRecipeViewDelegate {
         didSendEventClosure?(.registerButtonTapped)
     }
     
-    func addIngredientCellTapped() {
+    func addIngredientCellTapped(_ item: IngredientInfo) {
         let vc = AddIngredientViewController()
+        vc.didSendEventClosure = { [weak self] cases in
+            switch cases {
+            case .okButtonTapped:
+                self?.createRecipeView.addIngredientMockData.append(vc.forTag)
+                self?.createRecipeView.dataSource.apply((self?.createRecipeView.createSnapshot())!, animatingDifferences: true)
+            default:
+                return
+            }
+        }
+        vc.item = item
         vc.modalPresentationStyle = .overCurrentContext
         vc.modalTransitionStyle = .crossDissolve
         self.navigationController?.present(vc, animated: false)

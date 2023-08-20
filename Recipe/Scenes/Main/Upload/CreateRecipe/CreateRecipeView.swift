@@ -14,19 +14,19 @@ import RxKeyboard
 struct Dummy: Hashable {
     let id = UUID()
     let contents: String
-    let img: UIImage?
+    var img: UIImage?
 }
 
 protocol CreateRecipeViewDelegate: AnyObject {
     func registerButtonTapped()
     func addPhotoButtonTapped()
-    func addIngredientCellTapped()
+    func addIngredientCellTapped(_ item: IngredientInfo)
     func addThumbnailButtonTapped()
     func thumbnailModifyButtonTapped()
 }
 final class CreateRecipeView: UIView, DefaultTextFieldCellDelegate {
-    func didTappedCell(_ name: String, type: String) {
-        delegate?.addIngredientCellTapped()
+    func didTappedCell(_ item: IngredientInfo) {
+        delegate?.addIngredientCellTapped(item)
     }
     
     enum Section: Hashable {
@@ -75,15 +75,22 @@ final class CreateRecipeView: UIView, DefaultTextFieldCellDelegate {
     }()
     
     /// Properties
-    private var dataSource: Datasource!
+    var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     weak var delegate: CreateRecipeViewDelegate?
     var thumbnailImage = BehaviorRelay<UIImage?>(value:nil)
     private var mockData: [Dummy] = [Dummy(contents: "", img: UIImage())]
-    private var addIngredientMockData: [String] = ["토마토 1개", "간장2T","미림 2T"]
+    var addIngredientMockData: [String] = []
     let imageRelay = PublishRelay<UIImage>()
-    let imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage())
+    let imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage(named: "popcat")!)
     var mybool = false
+    var viewModel: CreateRecipeViewModel? {
+        didSet {
+            Task {
+                await setViewModel()
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -138,14 +145,7 @@ extension CreateRecipeView {
     func configureLayout() {
         collectionView.snp.makeConstraints {
             $0.top.equalTo(self.safeAreaLayoutGuide)
-            $0.left.right.equalToSuperview()
-            $0.bottom.equalTo(registerButton.snp.top)
-        }
-        
-        registerButton.snp.makeConstraints {
-            $0.left.right.equalToSuperview().inset(10)
-            $0.height.equalTo(50) // 버튼 높이 설정
-            $0.bottom.equalTo(self.safeAreaLayoutGuide).inset(10)
+            $0.left.right.bottom.equalToSuperview()
         }
     }
     
@@ -162,9 +162,15 @@ extension CreateRecipeView {
         collectionView.registerHeaderView(viewType: DefaultHeader.self)
         collectionView.registerHeaderView(viewType: CookStepHeaderView.self)
         collectionView.registerHeaderView(viewType: CookStepCountCell.self)
-        
-//        collectionView.registerFooterView(viewType: CreateRecipeFooter.self)
+
         collectionView.registerFooterView(viewType: CookStepFooterView.self)
+    }
+    
+    func setViewModel() async {
+        print(#function)
+        if let viewModel {
+            await viewModel.getData()
+        }
     }
     
     private func makeSwipeActions(for indexPath: IndexPath?) -> UISwipeActionsConfiguration? {
@@ -211,14 +217,19 @@ extension CreateRecipeView {
             case .cookStepSection:
                 var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
                 configuration.headerMode = .supplementary
-//                configuration.footerMode = .supplementary
+                configuration.footerMode = .supplementary
                 configuration.trailingSwipeActionsConfigurationProvider = makeSwipeActions
                 configuration.showsSeparators = false
                 
                 
                 let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: env)
-                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
+                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 100, trailing: 10)
                 section.interGroupSpacing = 10
+                
+                let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(50))
+                let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+                section.boundarySupplementaryItems = [footer]
+                
                 return section
             default:
                 return self.sectionFor(index: index, environment: env)
@@ -285,7 +296,7 @@ extension CreateRecipeView {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(0.25)),
+                heightDimension: .fractionalHeight(0.22)),
             subitem: item,
             count: 1)
         
@@ -339,7 +350,7 @@ extension CreateRecipeView {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .estimated(sectionHeight)))
-        //        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
@@ -411,12 +422,12 @@ extension CreateRecipeView {
             elementKind: UICollectionView.elementKindSectionHeader,
             alignment: .topLeading)
         
-//        let footer = NSCollectionLayoutBoundarySupplementaryItem(
-//            layoutSize: footerHeaderSize,
-//            elementKind: UICollectionView.elementKindSectionFooter,
-//            alignment: .bottom)
+        let footer = NSCollectionLayoutBoundarySupplementaryItem(
+            layoutSize: footerHeaderSize,
+            elementKind: UICollectionView.elementKindSectionFooter,
+            alignment: .bottom)
         
-        section.boundarySupplementaryItems = [header]
+        section.boundarySupplementaryItems = [header, footer]
         section.orthogonalScrollingBehavior = .groupPaging
         
         
@@ -469,6 +480,14 @@ extension CreateRecipeView {
             return cell
         case .recipeIngredientSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DefaultTextFieldCell.reuseIdentifier, for: indexPath) as! DefaultTextFieldCell
+            
+            if let viewModel {
+                viewModel.ingredient.subscribe(onNext: { ingredient in
+                    print(ingredient)
+                    cell.confifgure(ingredient)
+                }).disposed(by: disposeBag)
+            }
+        
             cell.configure(text: "재료 및 양념을 입력해주세요.")
             cell.delegate = self
             cell.recipeNametextField.rx.text.orEmpty
@@ -539,6 +558,16 @@ extension CreateRecipeView {
                     .subscribe(onNext: { _ in
                         self.delegate?.addPhotoButtonTapped()
                     }).disposed(by: disposeBag)
+                cell.deletePhotoButton.rx.tap
+                    .subscribe(onNext: { _ in
+                        print(indexPath.row)
+                        var data = self.mockData[indexPath.row]
+                        data.img = UIImage(named: "popcat")
+                        self.mockData[indexPath.row] = data
+                        cell.configure(data)
+                        self.dataSource.apply(self.createSnapshot(),animatingDifferences: true)
+                        print(data)
+                    }).disposed(by: disposeBag)
                 
                 cell.defaultCheck.accept(false)
                 cell.configure(data)
@@ -572,23 +601,23 @@ extension CreateRecipeView {
             //            headerView.highlightTextColor()
             return headerView
         case .cookStepSection:
-//            if kind == UICollectionView.elementKindSectionHeader {
+            if kind == UICollectionView.elementKindSectionHeader {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepCountCell.identifier, for: indexPath) as! CookStepCountCell
                 headerView.configureTitleCount(text: "조리 단계", count: mockData.count - 1)
                 return headerView
-//            } else {
-//                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepFooterView.identifier, for: indexPath) as! CookStepFooterView
-//                //                footerView.registerButton.rx.tap
-//                //                    .subscribe(onNext: { _ in
-//                //                        self.delegate?.registerButtonTapped()
-//                //                    }).disposed(by: disposeBag)
-//                return footerView
-//            }
+            } else {
+                let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepFooterView.identifier, for: indexPath) as! CookStepFooterView
+                //                footerView.registerButton.rx.tap
+                //                    .subscribe(onNext: { _ in
+                //                        self.delegate?.registerButtonTapped()
+                //                    }).disposed(by: disposeBag)
+                return footerView
+            }
             
         }
     }
     
-    private func createSnapshot() -> Snapshot{
+    func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
         snapshot.appendSections([
             .thumbnailSection,
