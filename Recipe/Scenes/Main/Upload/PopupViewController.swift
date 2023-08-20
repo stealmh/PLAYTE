@@ -18,10 +18,12 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     
     func createRecipeButtonTapped() {
         didSendEventClosure?(.showCreateRecipeView)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     func createShortFormButtonTapped() {
         didSendEventClosure?(.showCreateShortFormView)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     ///UI Properties
@@ -36,6 +38,7 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
         popupView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
+        defaultNavigationBackButton(backButtonColor: .grayScale5 ?? .black)
     }
     
     
