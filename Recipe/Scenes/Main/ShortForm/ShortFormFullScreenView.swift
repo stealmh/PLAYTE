@@ -87,8 +87,9 @@ class ShortFormFullScreenView: UIView {
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     
-    private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
-    ShopingList(title: "전남 국내산 대추 방울", price: 13000, image: UIImage(named: "popcat")!, isrocket: false)]
+//    private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
+//    ShopingList(title: "전남 국내산 대추 방울", price: 13000, image: UIImage(named: "popcat")!, isrocket: false)]
+    private var mockShopList: [ShopingList] = []
     private var mockTagList: [Tag] = [Tag(name: "도레미"),
                                       Tag(name: "당근"),
                                       Tag(name: "오레오화이트초코")]
