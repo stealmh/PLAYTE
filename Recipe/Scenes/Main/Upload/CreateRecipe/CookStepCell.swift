@@ -33,6 +33,7 @@ final class CookStepCell: UICollectionViewListCell {
         v.text = "asdas"
         v.sizeToFit()
         v.isScrollEnabled = false
+        v.isEditable = false
         return v
     }()
     
@@ -46,6 +47,7 @@ final class CookStepCell: UICollectionViewListCell {
         let v = UIButton()
         v.setImage(UIImage(systemName: "photo.fill"), for: .normal)
         v.tintColor = .gray
+        v.isEnabled = false
         return v
     }()
     
@@ -58,7 +60,7 @@ final class CookStepCell: UICollectionViewListCell {
         return v
     }()
     
-    private let deletePhotoButton: DefaultCircleButton = {
+    let deletePhotoButton: DefaultCircleButton = {
         let v = DefaultCircleButton()
         let img = v.buttonImageSize(systemImageName: "minus", size: 20)
         v.setImage(img, for: .normal)

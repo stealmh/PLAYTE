@@ -17,6 +17,7 @@ final class CookSettingCell: UICollectionViewCell {
         let v = PaddingUITextField()
         v.backgroundColor = .gray.withAlphaComponent(0.2)
         v.layer.cornerRadius = 10
+        v.keyboardType = .numberPad
         return v
     }()
     private let cookTimeTextFieldLabel: UILabel = {
@@ -58,6 +59,7 @@ final class CookSettingCell: UICollectionViewCell {
         super.init(frame: frame)
         addViews()
         configureLayout()
+        cookTimeTextField.delegate = self
     }
     
     required init?(coder: NSCoder) {
@@ -100,6 +102,19 @@ extension CookSettingCell {
             $0.width.height.equalTo(decreaseButton)
             $0.left.equalTo(cookTimeLabel.snp.right).offset(30)
         }
+    }
+}
+
+extension CookSettingCell: UITextFieldDelegate {
+    func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        let allowedCharacters = CharacterSet.decimalDigits
+        let characterSet = CharacterSet(charactersIn: string)
+        return allowedCharacters.isSuperset(of: characterSet)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        textField.resignFirstResponder()
+        return true
     }
 }
 
