@@ -69,13 +69,14 @@ class AddIngredientCountView: UIView {
         return v
     }()
     
-    private var count = 0
+    var count = 0
     private let disposeBag = DisposeBag()
     weak var delegate: AddIngredientCountViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.cornerRadius = 15
+        backgroundColor = .white
         addSubViews(ingredientTitle, increaseButton, decreaseButton, okButton, cancelButton, countLabel)
         configureLayout()
         bind()
@@ -144,6 +145,11 @@ extension AddIngredientCountView {
             .subscribe(onNext: { _ in
                 self.delegate?.didTappedCancelButton()
             }).disposed(by: disposeBag)
+    }
+    
+    func configure(_ item: IngredientInfo) {
+        ingredientTitle.text = "\(item.ingredient_name) 개"
+        ingredientTitle.asColor(targetString: "개", color: .mainColor ?? .black)
     }
 }
 
