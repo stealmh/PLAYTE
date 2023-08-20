@@ -89,6 +89,8 @@ extension RecipeViewController: RecipeViewDelegate {
     func didTappedRecipeCell(item: RecipeInfo) {
         let vc = RecipeDetailViewController()
 //        vc.configureData(item)
+        vc.recipeInfo = item
+        self.tabBarController?.tabBar.isHidden = true
         navigationController?.pushViewController(vc, animated: true)
     }
 }

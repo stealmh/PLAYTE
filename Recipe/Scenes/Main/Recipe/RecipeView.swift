@@ -129,6 +129,7 @@ extension RecipeView {
             if let a {
                 let contents = a.data.content
                 recipeList = contents
+                print(recipeList)
                 dataSource.apply(createSnapshot(), animatingDifferences: true)
             }
         }
@@ -219,7 +220,7 @@ extension RecipeView {
         var snapshot = Snapshot()
         snapshot.appendSections([.header, .recipe])
         snapshot.appendItems(mockCategoryData.map({ Item.header($0) }), toSection: .header)
-//        snapshot.appendItems(mockRecipeData1.map({ Item.recipe($0) }), toSection: .recipe)
+        snapshot.appendItems(recipeList.map({ Item.recipe($0) }), toSection: .recipe)
 
         return snapshot
     }

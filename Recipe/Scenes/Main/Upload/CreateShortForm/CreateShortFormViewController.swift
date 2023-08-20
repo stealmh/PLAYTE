@@ -29,7 +29,6 @@ final class CreateShortFormViewController: BaseViewController {
         addView()
         configureLayout()
         bind()
-        setNavigationTitle("나의 레시피 작성")
         createShortFormView.delegate = self
     }
     
