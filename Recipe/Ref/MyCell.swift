@@ -48,8 +48,9 @@ final class MyCell: UITableViewCell {
         }
     }
     
-    func setData(text: String) {
-        myLabel.text = text
+    func setData(_ item: IngredientInfo) {
+        myLabel.text = item.ingredient_name
+        ingredientSepearate.text = item.ingredient_type == "INGREDIENTS" ? "재료" : "양념"
     }
 
 }

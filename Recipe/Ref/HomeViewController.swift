@@ -77,7 +77,7 @@ private extension HomeViewController {
         navigationItem.titleView = titleView
         
         ///Test VC
-        let vc = IngredientRegistrationViewController()
+        let vc = UIViewController()
         
         navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { _ in
