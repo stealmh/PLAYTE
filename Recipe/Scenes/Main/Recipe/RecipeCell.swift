@@ -158,9 +158,12 @@ extension RecipeCell {
     }
     
     func configure(_ data: RecipeInfo) {
+        let timeString = data.created_date
+        if let result = timeString.timeAgo() {
+            uploadTimeLabel.text = result
+        }
         
         recipeImageView.loadImage(from: data.recipe_thumbnail_img)
-        uploadTimeLabel.text = data.created_date
         rate.setTitle("\(data.rating)(\(data.comment_count))", for: .normal)
         nickName.text = data.nickname
         recipeTitle.text = data.recipe_name
