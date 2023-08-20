@@ -37,19 +37,28 @@ class RecipeDetailViewController: BaseViewController {
         //        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-    private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
-                                               ShopingList(title: "전남 국내산 대추 방울", price: 13000, image: UIImage(named: "popcat")!, isrocket: false)]
+//    private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
+//                                               ShopingList(title: "전남 국내산 대추 방울", price: 13000, image: UIImage(named: "popcat")!, isrocket: false)]
+    private var mockShopList: [ShopingList] = []
     
     private var mockRecipe: [RecipeDetailStep] = [RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: false)]
     
     private var chucheonRecipeMockData = [IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분")]
     
-    var mockData: [DetailIngredient] = [DetailIngredient(ingredientTitle: "토마토", ingredientCount: "2개", seasoningTitle: "굴소스", seasoningCount: "2T"),
-                                        DetailIngredient(ingredientTitle: "밥", ingredientCount: "3공기", seasoningTitle: "", seasoningCount: ""),
-                                        DetailIngredient(ingredientTitle: "토마토", ingredientCount: "2개", seasoningTitle: "굴소스", seasoningCount: "2T"),
-                                        DetailIngredient(ingredientTitle: "토마토", ingredientCount: "2개", seasoningTitle: "굴소스", seasoningCount: "2T")]
+    var mockData: [DetailIngredient] = []
+    var mock: [RecipeDetailIngredient] = []
+    
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
+    var recipeInfo: RecipeInfo? {
+        didSet {
+            if let info = recipeInfo {
+                print("info를 보냅니다")
+                viewModel.ingredient.accept(info)
+            }
+        }
+    }
+    var viewModel = RecipeDetailViewModel()
     override func viewDidLoad() {
         super.viewDidLoad()
         self.addView()
@@ -57,6 +66,25 @@ class RecipeDetailViewController: BaseViewController {
         configureDataSource()
         registerCell()
         defaultNavigationBackButton(backButtonColor: .white)
+    }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        viewModel.recipeDetail
+            .subscribe(onNext: { data in
+                self.mockData = self.viewModel.combineIngredients(data.data.ingredients)
+                for i in data.data.ingredients {
+                    let data: ShopingList = ShopingList(title: i.coupang_product_name, price: i.coupang_product_price, image: i.coupang_product_image, isrocket: i.is_rocket_delivery, link: i.coupang_product_url)
+                    self.mockShopList.append(data)
+                }
+                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+            }).disposed(by: disposeBag)
+        
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        self.tabBarController?.tabBar.isHidden = false
+        
     }
 }
 
@@ -120,7 +148,7 @@ extension RecipeDetailViewController {
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(241)))
         item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 0)
         
-        let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.4)), subitem: item, count: 1)
+        let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(360)), subitem: item, count: 1)
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: -100, leading: 0, bottom: 10, trailing: 0)
@@ -275,6 +303,10 @@ extension RecipeDetailViewController {
                 .subscribe(onNext: { _ in
                     print("tapped")
                 }).disposed(by: disposeBag)
+            viewModel.recipeDetail.subscribe(onNext: { data in
+                cell.configure(data.data)
+                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+            }).disposed(by: disposeBag)
             return cell
         case .ingredient(let item):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientCell.reuseIdentifier, for: indexPath) as! IngredientCell
