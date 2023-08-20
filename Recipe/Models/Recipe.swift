@@ -27,7 +27,6 @@ struct Contents: Codable, Hashable {
 struct RecipeInfo: Codable, Hashable {
     let comment_count: Int
     let created_date: String
-    let image_url: String
     let is_saved: Bool
     let nickname: String
     let rating: Int
