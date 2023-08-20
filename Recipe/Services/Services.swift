@@ -35,6 +35,8 @@ enum NetworkEndpoint {
     case myInfo                             /// 내정보 조회
     case logout                             /// 로그아웃
     case withdrawal                         /// 회원탈퇴
+    case myReviewSearch                     /// 내가 작성한 리뷰 조회
+    case ingredient                         /// 재료 목록 조회
     
     var url: String {
         switch self {
@@ -64,56 +66,49 @@ enum NetworkEndpoint {
             return "https://api.rec1pe.store/api/v1/auth/logout"
         case .withdrawal:
             return "https://api.rec1pe.store/api/v1/auth/withdrawal"
+        case .myReviewSearch:
+            return "https://api.rec1pe.store/api/v1/reviews/my"
+        case .ingredient:
+            return "https://api.rec1pe.store/api/v1/ingredients"
         }
     }
     
     var httpMethod: HTTPMethod {
         switch self {
-        case .recipes:
+        case .recipes,
+             .recipeDetail,
+             .mySaveRecipeSearch,
+             .myWrittenRecipeSearch,
+             .myInfo,
+             .myReviewSearch,
+             .ingredient:
             return .get
-        case .createRecipe:
+            
+        case .createRecipe,
+             .recipeLike,
+             .recipeUnLike,
+             .recipeSave,
+             .recipeUnSave,
+             .logout,
+             .withdrawal:
             return .post
+            
         case .deleteMyRecipe:
             return .delete
-        case .recipeDetail:
-            return .get
-        case .recipeLike, .recipeUnLike:
-            return .post
-        case .recipeSave, .recipeUnSave:
-            return .post
-        case .mySaveRecipeSearch, .myWrittenRecipeSearch:
-            return .get
-        case .myInfo:
-            return .get
-        case .logout:
-            return .post
-        case .withdrawal:
-            return .post
         }
         
     }
     
     var headers: [String: String]? {
         switch self {
-        case .recipes,
-                .createRecipe,
-                .deleteMyRecipe,
-                .recipeDetail,
-                .recipeLike,
-                .recipeUnLike,
-                .recipeSave,
-                .recipeUnSave,
-                .mySaveRecipeSearch,
-                .myWrittenRecipeSearch,
-                .myInfo,
-                .withdrawal:
-            return ["Authorization": KeyChain.shared.read(account: .accessToken),
-                    "Content-Type": "application/json"]
         case .logout:
             return ["Authorization": KeyChain.shared.read(account: .accessToken),
                     "Refresh-Token": KeyChain.shared.read(account: .refreshToken),
                     "Content-Type": "application/json"]
-            
+        default:
+            return ["Authorization": KeyChain.shared.read(account: .accessToken),
+                    "Content-Type": "application/json"]
+        
         }
     }
 }
@@ -152,7 +147,6 @@ class NetworkManager {
                 completion(.failure(.requestFailed(error)))
                 return
             }
-            
             guard let data = data else {
                 completion(.failure(.invalidResponse))
                 return
@@ -178,4 +172,24 @@ class NetworkManager {
         task.resume()
     }
     
+    
+    private func fetch<T: Decodable>(_ endpoint: NetworkEndpoint) async throws -> T {
+        print(#function)
+        return try await withCheckedThrowingContinuation { continuation in
+            NetworkManager.shared.performRequest(endpoint: endpoint, responseType: T.self) { result in
+                switch result {
+                case .success(let data):
+                    continuation.resume(returning: data)
+                case .failure(let error):
+                    print(error.localizedDescription)
+                    continuation.resume(throwing: error)
+                }
+            }
+        }
+    }
+
+    func get<T: Decodable>(_ endpoint: NetworkEndpoint) async throws -> T {
+        print(#function)
+        return try await fetch(endpoint)
+    }
 }
