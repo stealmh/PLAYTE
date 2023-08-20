@@ -113,6 +113,9 @@ class MyReviewCell: UITableViewCell, UICollectionViewDataSource, UICollectionVie
     /// Properties
     let disposeBag = DisposeBag()
     weak var delegate: MyReviewCellDelegate?
+    private var imgArray = [String]()
+    
+    private lazy var stars: [UIImageView] = [self.rate1, self.rate2, self.rate3, self.rate4, self.rate5]
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -141,12 +144,16 @@ class MyReviewCell: UITableViewCell, UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return photos.count
-        return 23
+        return imgArray.count
     }
     
     // UICollectionViewDataSource and UICollectionViewDelegateFlowLayout methods...
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyReviewPhotoCell.reuseIdentifier, for: indexPath) as! MyReviewPhotoCell
+        cell.configure(imgArray[indexPath.row])
+        DispatchQueue.main.sync {
+            self.collectionView.reloadData()
+        }
         return cell
     }
     
@@ -225,6 +232,21 @@ extension MyReviewCell {
         uploadTimeLabel.text = "2023/02/12"
         titleLabel.text = "토마토 계란 볶음밥"
         reviewContents.text = "리뷰띠"
+    }
+    
+    func configure(_ item: MyReviewList) {
+        uploadTimeLabel.text = item.written_date
+        titleLabel.text = item.recipe_name
+        reviewContents.text = item.review_content
+        self.imgArray = item.img_list
+        
+        for star in stars {
+            star.image = UIImage(named: "star_empty_svg")
+        }
+
+        for index in 0..<Int(item.review_rating) {
+            stars[index].image = UIImage(named: "star_fill_svg")
+        }
     }
 }
 

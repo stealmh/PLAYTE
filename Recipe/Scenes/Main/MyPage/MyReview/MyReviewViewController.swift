@@ -13,6 +13,7 @@ class MyReviewViewController: BaseViewController {
     
     private var tableView = UITableView()
     private let disposeBag = DisposeBag()
+    private let viewModel = MyReviewViewModel()
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -23,6 +24,13 @@ class MyReviewViewController: BaseViewController {
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
         self.tabBarController?.tabBar.isHidden = false
+    }
+    
+    override func viewIsAppearing(_ animated: Bool) {
+        super.viewIsAppearing(animated)
+        Task {
+            await viewModel.getData()
+        }
     }
 }
 
@@ -48,13 +56,19 @@ extension MyReviewViewController: UITableViewDelegate, UITableViewDataSource, My
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section
-        return 10
+        return viewModel.myReview?.data.count ?? 0
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: MyReviewCell.reuseIdentifier, for: indexPath) as! MyReviewCell
         cell.delegate = self
         cell.selectionStyle = .none
+        if let myReview = viewModel.myReview {
+            cell.configure(myReview.data[indexPath.row])
+            DispatchQueue.main.async {
+                self.tableView.reloadData()
+            }
+        }
         return cell
     }
     

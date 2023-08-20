@@ -31,4 +31,8 @@ class MyReviewPhotoCell: UICollectionViewCell {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func configure(_ item: String) {
+        photo.loadImage(from: item)
+    }
+    
 }
