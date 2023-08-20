@@ -12,8 +12,9 @@ struct ShopingList: Hashable {
     let id = UUID()
     let title: String
     let price: Int
-    let image: UIImage
+    let image: String
     let isrocket: Bool
+    let link: String
 }
 
 final class ShopingListCell: UICollectionViewCell {
@@ -99,11 +100,13 @@ extension ShopingListCell {
     
     //for data inject
     func configure(_ item: ShopingList) {
-        shopingTitleLabel.text = item.title
-        shopingPriceLabel.text = "₩\(item.price)원 ~"
-        shopingPhotoImageView.image = item.image
-        deliveryImageView.image = UIImage(named: "rocket")
-        deliveryImageView.isHidden = !item.isrocket
+        DispatchQueue.main.async {
+            self.shopingTitleLabel.text = item.title
+            self.shopingPriceLabel.text = "₩\(item.price)원 ~"
+            self.shopingPhotoImageView.loadImage(from: item.image)
+            self.deliveryImageView.image = UIImage(named: "rocket")
+            self.deliveryImageView.isHidden = !item.isrocket
+        }
     }
     
     func mockConfigure() {
