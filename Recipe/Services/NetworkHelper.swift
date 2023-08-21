@@ -1,8 +1,8 @@
 //
-//  Services.swift
+//  NetworkHelper.swift
 //  Recipe
 //
-//  Created by 김민호 on 2023/07/03.
+//  Created by 김민호 on 2023/08/21.
 //
 
 import Foundation
@@ -22,7 +22,7 @@ enum HTTPMethod: String {
 }
 
 enum NetworkEndpoint {
-    case recipes(_ sortedOption: String)    /// 레시피 목록 조회
+    case recipes(_ sortedOption: Sort)      /// 레시피 목록 조회
     case createRecipe                       /// 레시피 생성
     case deleteMyRecipe(_ recipeId: String) /// 나의 레시피 삭제
     case recipeDetail(_ recipeId: String)   /// 레시피 상세 조회
@@ -41,7 +41,7 @@ enum NetworkEndpoint {
     var url: String {
         switch self {
         case .recipes(let sortedOption):
-            return "https://api.rec1pe.store/api/v1/recipes?sort=\(sortedOption)"
+            return "https://api.rec1pe.store/api/v1/recipes?sort=\(sortedOption.sort)"
         case .createRecipe:
             return "https://api.rec1pe.store/api/v1/recipes"
         case .deleteMyRecipe(let recipeId):
@@ -113,83 +113,19 @@ enum NetworkEndpoint {
     }
 }
 
-class NetworkManager {
-    static let shared = NetworkManager()
+enum Sort {
+    case latest     /// 최신순
+    case popular    /// 인기순
+    case minium     /// 최소시간순
     
-    func performRequest<T: Decodable>(endpoint: NetworkEndpoint,
-                                      parameters: [String: Any]? = nil, responseType: T.Type,
-                                      completion: @escaping (Result<T, NetworkError>) -> Void) {
-        guard let url = URL(string: endpoint.url) else {
-            completion(.failure(.invalidURL))
-            return
+    var sort: String {
+        switch self {
+        case .latest:
+            return "latest"
+        case .popular:
+            return "popular"
+        case .minium:
+            return "minium"
         }
-        
-        var request = URLRequest(url: url)
-        request.httpMethod = endpoint.httpMethod.rawValue
-        
-        if let parameters = parameters {
-            do {
-                request.httpBody = try JSONSerialization.data(withJSONObject: parameters)
-            } catch {
-                completion(.failure(.requestFailed(error)))
-                return
-            }
-        }
-        
-        if let headers = endpoint.headers {
-            for (field, value) in headers {
-                request.setValue(value, forHTTPHeaderField: field)
-            }
-        }
-        
-        let task = URLSession.shared.dataTask(with: request) { data, response, error in
-            if let error = error {
-                completion(.failure(.requestFailed(error)))
-                return
-            }
-            guard let data = data else {
-                completion(.failure(.invalidResponse))
-                return
-            }
-            
-            do {
-                let decoder = JSONDecoder()
-                let decodedData = try decoder.decode(T.self, from: data)
-                
-                completion(.success(decodedData))
-            } catch {
-                print("JSON Decoding Error:", error)
-                if let response = response as? HTTPURLResponse {
-                    print("HTTP Status Code:", response.statusCode)
-                }
-                if let responseDataString = String(data: data, encoding: .utf8) {
-                    print("Response Data:", responseDataString)
-                }
-                completion(.failure(.responseDataConversionFailed(error)))
-            }
-        }
-        
-        task.resume()
-    }
-    
-    
-    private func fetch<T: Decodable>(_ endpoint: NetworkEndpoint) async throws -> T {
-        print(#function)
-        return try await withCheckedThrowingContinuation { continuation in
-            NetworkManager.shared.performRequest(endpoint: endpoint, responseType: T.self) { result in
-                switch result {
-                case .success(let data):
-                    continuation.resume(returning: data)
-                case .failure(let error):
-                    print(error.localizedDescription)
-                    continuation.resume(throwing: error)
-                }
-            }
-        }
-    }
-
-    func get<T: Decodable>(_ endpoint: NetworkEndpoint) async throws -> T {
-        print(#function)
-        return try await fetch(endpoint)
     }
 }
