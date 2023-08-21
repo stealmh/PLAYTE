@@ -68,6 +68,7 @@
 		169FE66E2A78A22E00593041 /* UITabBarController+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FE66D2A78A22E00593041 /* UITabBarController+util.swift */; };
 		169FE6712A78A45D00593041 /* ShortFormCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */; };
 		169FE6732A78A50300593041 /* ShortFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FE6722A78A50300593041 /* ShortFormViewController.swift */; };
+		16B400B42A930617005CC788 /* AddIngredientDefaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B400B32A930617005CC788 /* AddIngredientDefaultView.swift */; };
 		16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */; };
 		16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */; };
 		16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */; };
@@ -92,7 +93,6 @@
 		16D809E72A8A2B25005C791E /* Login.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16D809E62A8A2B25005C791E /* Login.swift */; };
 		16DAB5A72A5E5ACD00CB969D /* UIStackView+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */; };
 		16DE65E72A82D05F008100DE /* DefaultRecipeCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DE65E62A82D05F008100DE /* DefaultRecipeCategoryView.swift */; };
-		16DE65E92A82D52A008100DE /* RecipeCategoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16DE65E82A82D52A008100DE /* RecipeCategoryView.swift */; };
 		16E615B12A6CA639002C1AE9 /* ShopingListCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E615B02A6CA639002C1AE9 /* ShopingListCell.swift */; };
 		16E615B32A6CE0C8002C1AE9 /* RecipeDetailDefaultHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E615B22A6CE0C8002C1AE9 /* RecipeDetailDefaultHeaderView.swift */; };
 		16E615B52A6CE124002C1AE9 /* LineFooter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16E615B42A6CE124002C1AE9 /* LineFooter.swift */; };
@@ -264,6 +264,7 @@
 		169FE66D2A78A22E00593041 /* UITabBarController+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+util.swift"; sourceTree = "<group>"; };
 		169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormCoordinator.swift; sourceTree = "<group>"; };
 		169FE6722A78A50300593041 /* ShortFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormViewController.swift; sourceTree = "<group>"; };
+		16B400B32A930617005CC788 /* AddIngredientDefaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientDefaultView.swift; sourceTree = "<group>"; };
 		16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCountCell.swift; sourceTree = "<group>"; };
 		16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepFooterView.swift; sourceTree = "<group>"; };
 		16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepHeaderView.swift; sourceTree = "<group>"; };
@@ -288,7 +289,6 @@
 		16D809E62A8A2B25005C791E /* Login.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Login.swift; sourceTree = "<group>"; };
 		16DAB5A62A5E5ACD00CB969D /* UIStackView+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIStackView+util.swift"; sourceTree = "<group>"; };
 		16DE65E62A82D05F008100DE /* DefaultRecipeCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DefaultRecipeCategoryView.swift; sourceTree = "<group>"; };
-		16DE65E82A82D52A008100DE /* RecipeCategoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeCategoryView.swift; sourceTree = "<group>"; };
 		16E615B02A6CA639002C1AE9 /* ShopingListCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShopingListCell.swift; sourceTree = "<group>"; };
 		16E615B22A6CE0C8002C1AE9 /* RecipeDetailDefaultHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailDefaultHeaderView.swift; sourceTree = "<group>"; };
 		16E615B42A6CE124002C1AE9 /* LineFooter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LineFooter.swift; sourceTree = "<group>"; };
@@ -751,6 +751,7 @@
 				162C28B42A7DDF8C0004D771 /* RecipeDefaultTagButton.swift */,
 				162BA1592A8F9A710063AF57 /* AddIngredientViewController.swift */,
 				162BA15B2A8F9DE40063AF57 /* AddIngredientCountView.swift */,
+				16B400B32A930617005CC788 /* AddIngredientDefaultView.swift */,
 			);
 			path = Common;
 			sourceTree = "<group>";
@@ -890,7 +891,6 @@
 				5AAEC5562A5D439F00E9877C /* RecipeCategoryCell.swift */,
 				5AAEC5582A5D511300E9877C /* RecipeHeaderCell.swift */,
 				16DE65E62A82D05F008100DE /* DefaultRecipeCategoryView.swift */,
-				16DE65E82A82D52A008100DE /* RecipeCategoryView.swift */,
 				164E52432A8B5EB30058C44B /* RecipeViewModel.swift */,
 				16900CF82A6B9AAF00B06D8C /* RecipeDetail */,
 				169968BF2A6F54110074DB43 /* Review */,
@@ -1241,6 +1241,7 @@
 				5AB4A5E42A554BDF0095CD2B /* TagCell.swift in Sources */,
 				5AF00F672A56762A00587BF9 /* PriceTrendDetailCell.swift in Sources */,
 				5ACD7BC32A57DC4C00571259 /* RecipeCoordinator.swift in Sources */,
+				16B400B42A930617005CC788 /* AddIngredientDefaultView.swift in Sources */,
 				1614941C2A7CFE3900395AA4 /* PopularCell.swift in Sources */,
 				162DFEB22A6FDF0D00338A18 /* ReviewPhotoViewController.swift in Sources */,
 				163076D32A8293CE0007B6BE /* CreateShortFormView.swift in Sources */,
@@ -1344,7 +1345,6 @@
 				5A5B90512A653BA60049E853 /* CookSettingCell.swift in Sources */,
 				161954342A878BDE00884247 /* WriteRecipeViewController.swift in Sources */,
 				161954462A87BA3F00884247 /* SettingViewController.swift in Sources */,
-				16DE65E92A82D52A008100DE /* RecipeCategoryView.swift in Sources */,
 				5A4970832A662DCC005725F8 /* CreateRecipeFooter.swift in Sources */,
 				5ACD7BBD2A57DADD00571259 /* CommunityViewController.swift in Sources */,
 				16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */,

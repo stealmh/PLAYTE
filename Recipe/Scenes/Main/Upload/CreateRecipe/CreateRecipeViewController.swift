@@ -90,7 +90,7 @@ extension CreateRecipeViewController: CreateRecipeViewDelegate {
     }
     
     func addIngredientCellTapped(_ item: IngredientInfo) {
-        let vc = AddIngredientViewController()
+        let vc = AddIngredientViewController(item: item)
         vc.didSendEventClosure = { [weak self] cases in
             switch cases {
             case .okButtonTapped:

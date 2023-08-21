@@ -36,11 +36,12 @@ final class CookSettingCell: UICollectionViewCell {
         return v
     }()
     
-    private let cookTimeLabel: UILabel = {
+    private let serviceCountLabel: UILabel = {
         let v = UILabel()
         v.text = "0"
         v.font = .boldSystemFont(ofSize: 20)
         v.textColor = .mainColor
+        v.textAlignment = .center
         return v
     }()
     
@@ -54,12 +55,15 @@ final class CookSettingCell: UICollectionViewCell {
     }()
     ///Properties
     private let disposeBag = DisposeBag()
+    var serviceCountRx = BehaviorRelay(value: 0)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
         configureLayout()
         cookTimeTextField.delegate = self
+        serviceCountLabel.text = "\(serviceCountRx.value)"
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -71,7 +75,7 @@ final class CookSettingCell: UICollectionViewCell {
 extension CookSettingCell {
     
     private func addViews() {
-        addSubViews(cookTimeTextField, cookTimeTextFieldLabel, decreaseButton, cookTimeLabel, increaseButton)
+        addSubViews(cookTimeTextField, cookTimeTextFieldLabel, decreaseButton, serviceCountLabel, increaseButton)
     }
     
     private func configureLayout() {
@@ -92,16 +96,41 @@ extension CookSettingCell {
             $0.width.height.equalTo(44)
         }
         
-        cookTimeLabel.snp.makeConstraints {
+        serviceCountLabel.snp.makeConstraints {
             $0.top.equalTo(decreaseButton.snp.centerY).offset(-10)
-            $0.right.equalTo(increaseButton.snp.left).inset(-30)
+            $0.left.equalTo(decreaseButton.snp.right).offset(20)
+            $0.right.equalTo(increaseButton.snp.left).inset(-20)
         }
         
         increaseButton.snp.makeConstraints {
             $0.top.right.equalToSuperview()
             $0.width.height.equalTo(decreaseButton)
-            $0.left.equalTo(cookTimeLabel.snp.right).offset(30)
+            $0.left.equalTo(serviceCountLabel.snp.right).offset(30)
         }
+    }
+}
+
+extension CookSettingCell {
+    func bind() {
+        increaseButton.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                let newValue = (self?.serviceCountRx.value ?? 0) + 1
+                self?.serviceCountRx.accept(newValue)
+            }).disposed(by: disposeBag)
+        
+        decreaseButton.rx.tap
+            .subscribe(onNext: { [weak self] _ in
+                let newValue = (self?.serviceCountRx.value ?? 0) - 1
+                if newValue >= 0 {
+                    self?.serviceCountRx.accept(newValue)
+                }
+            }).disposed(by: disposeBag)
+        
+        serviceCountRx
+            .debug()
+            .map { String($0) }
+            .bind(to: serviceCountLabel.rx.text)
+            .disposed(by: disposeBag)
     }
 }
 
