@@ -16,7 +16,6 @@ protocol RecipeViewDelegate {
 struct MockCategoryData: Hashable {
     let id = UUID()
     let text: String
-    let color: UIColor
     let img: UIImage
 }
 
@@ -71,14 +70,14 @@ final class RecipeView: UIView {
             }
         }
     }
-//    private let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
     private let mockCategoryData: [MockCategoryData] = [
-        MockCategoryData(text: "자취생 필수!", color: .mainColor ?? .white, img: UIImage(named: "homealone_svg")!),
-        MockCategoryData(text: "다이어터를\n위한 레시피", color: .sub3 ?? .white, img: UIImage(named: "diet_svg")!),
-        MockCategoryData(text: "알뜰살뜰\n만원의 행복", color: .sub2 ?? .white, img: UIImage(named: "manwon_svg")!),
-        MockCategoryData(text: "집들이용\n레시피", color: .sub4 ?? .white, img: UIImage(named: "homeparty_svg")!)]
+        MockCategoryData(text: "자취생 필수!",img: UIImage(named: "homealone_svg")!),
+        MockCategoryData(text: "다이어터를\n위한 레시피",img: UIImage(named: "diet_svg")!),
+        MockCategoryData(text: "알뜰살뜰\n만원의 행복",img: UIImage(named: "manwon_svg")!),
+        MockCategoryData(text: "집들이용\n레시피",img: UIImage(named: "homeparty_svg")!)]
     
     private var recipeList = [RecipeInfo]()
     
@@ -117,7 +116,7 @@ extension RecipeView {
     }
     
     private func registerCell() {
-        collectionView.register(RecipeCategoryCell.self, forCellWithReuseIdentifier: RecipeCategoryCell.reuseIdentifier)
+        collectionView.register(DefaultRecipeCategoryView.self, forCellWithReuseIdentifier: DefaultRecipeCategoryView.reuseIdentifier)
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: RecipeCell.reuseIdentifier)
         collectionView.register(RecipeHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecipeHeaderCell.reuseIdentifier)
     }
@@ -200,8 +199,12 @@ extension RecipeView {
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell{
         switch item {
         case .header(let data):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCategoryCell.reuseIdentifier, for: indexPath) as! RecipeCategoryCell
-            cell.configureData(text: data.text, color: data.color)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DefaultRecipeCategoryView.reuseIdentifier, for: indexPath) as! DefaultRecipeCategoryView
+            let item =
+            cell.configureData(data)
+            cell.backgroundButton.rx.tap
+                .subscribe(onNext: { _ in
+                }).disposed(by: disposeBag)
             return cell
             
         case .recipe(let data):
