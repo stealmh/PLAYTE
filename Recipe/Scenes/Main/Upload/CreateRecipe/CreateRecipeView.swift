@@ -176,12 +176,23 @@ extension CreateRecipeView {
     private func makeSwipeActions(for indexPath: IndexPath?) -> UISwipeActionsConfiguration? {
         guard let indexPath = indexPath, let id = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let deleteActionTitle = NSLocalizedString("Delete", comment: "Delete action title")
-        let deleteAction = UIContextualAction(style: .destructive, title: deleteActionTitle) { [weak self] a, b, completion in
-            print("id:", id)
-            self?.deleteItem(id, idx: indexPath)
-            completion(false)
+
+        if let originalImage = UIImage(named: "delete_svg"),
+           let resizedImage = originalImage.resized(to: CGSize(width: 30, height: 30)) {
+
+            let deleteAction = UIContextualAction(style: .destructive, title: deleteActionTitle) { [weak self] _, _, completion in
+                print("id:", id)
+                self?.deleteItem(id, idx: indexPath)
+                completion(false)
+            }
+
+            deleteAction.image = resizedImage
+            deleteAction.backgroundColor = .white
+
+            return UISwipeActionsConfiguration(actions: [deleteAction])
         }
-        return UISwipeActionsConfiguration(actions: [deleteAction])
+
+        return nil
     }
     
     private func deleteItem(_ item: Item, idx: IndexPath) {
@@ -226,9 +237,11 @@ extension CreateRecipeView {
                 section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 100, trailing: 10)
                 section.interGroupSpacing = 10
                 
-                let footerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(50))
-                let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: footerSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
-                section.boundarySupplementaryItems = [footer]
+                
+                let headerFooterSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(0.95), heightDimension: .absolute(50))
+                let header = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize, elementKind: UICollectionView.elementKindSectionHeader, alignment: .topLeading)
+                let footer = NSCollectionLayoutBoundarySupplementaryItem(layoutSize: headerFooterSize, elementKind: UICollectionView.elementKindSectionFooter, alignment: .bottom)
+                section.boundarySupplementaryItems = [header,footer]
                 
                 return section
             default:
