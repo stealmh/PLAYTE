@@ -85,11 +85,13 @@ extension RecipeSearchViewController {
 }
 
 extension RecipeSearchViewController: RecipeViewDelegate {
+    
     func didTappedRecipeCell(item: RecipeInfo) {
         print("")
     }
-    
-    
+    func didTappedSortButton(_ tag: Int) {
+        
+    }
 }
 
 //MARK: - VC Preview

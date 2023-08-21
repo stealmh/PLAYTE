@@ -86,6 +86,10 @@ extension RecipeViewController {
 
 //MARK: - Method(레시피 셀 Delegate)
 extension RecipeViewController: RecipeViewDelegate {
+    func didTappedSortButton(_ tag: Int) {
+        
+    }
+    
     func didTappedRecipeCell(item: RecipeInfo) {
         let vc = RecipeDetailViewController()
 //        vc.configureData(item)

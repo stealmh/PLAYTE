@@ -69,6 +69,7 @@
 		169FE6712A78A45D00593041 /* ShortFormCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */; };
 		169FE6732A78A50300593041 /* ShortFormViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 169FE6722A78A50300593041 /* ShortFormViewController.swift */; };
 		16B400B42A930617005CC788 /* AddIngredientDefaultView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B400B32A930617005CC788 /* AddIngredientDefaultView.swift */; };
+		16B400B82A933C47005CC788 /* NetworkHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16B400B72A933C47005CC788 /* NetworkHelper.swift */; };
 		16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */; };
 		16C19E462A6A30E5007F5F0C /* CookStepFooterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */; };
 		16C19E482A6A33F9007F5F0C /* CookStepHeaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */; };
@@ -120,7 +121,7 @@
 		5A0244B52A529AA400AA418E /* RecipeUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244B42A529AA400AA418E /* RecipeUITestsLaunchTests.swift */; };
 		5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244C92A52A35800AA418E /* UIViewController+util.swift */; };
 		5A0244CC2A52A36C00AA418E /* Protocols.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CB2A52A36C00AA418E /* Protocols.swift */; };
-		5A0244CE2A52A37500AA418E /* Services.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CD2A52A37500AA418E /* Services.swift */; };
+		5A0244CE2A52A37500AA418E /* NetworkManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CD2A52A37500AA418E /* NetworkManager.swift */; };
 		5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244CF2A52A58500AA418E /* AppCoordinator.swift */; };
 		5A0244D22A52A59000AA418E /* Coordinator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244D12A52A59000AA418E /* Coordinator.swift */; };
 		5A0244D52A52A6DC00AA418E /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5A0244D42A52A6DC00AA418E /* SplashViewController.swift */; };
@@ -265,6 +266,7 @@
 		169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormCoordinator.swift; sourceTree = "<group>"; };
 		169FE6722A78A50300593041 /* ShortFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormViewController.swift; sourceTree = "<group>"; };
 		16B400B32A930617005CC788 /* AddIngredientDefaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientDefaultView.swift; sourceTree = "<group>"; };
+		16B400B72A933C47005CC788 /* NetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
 		16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCountCell.swift; sourceTree = "<group>"; };
 		16C19E452A6A30E5007F5F0C /* CookStepFooterView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepFooterView.swift; sourceTree = "<group>"; };
 		16C19E472A6A33F9007F5F0C /* CookStepHeaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepHeaderView.swift; sourceTree = "<group>"; };
@@ -322,7 +324,7 @@
 		5A0244B42A529AA400AA418E /* RecipeUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		5A0244C92A52A35800AA418E /* UIViewController+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UIViewController+util.swift"; sourceTree = "<group>"; };
 		5A0244CB2A52A36C00AA418E /* Protocols.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Protocols.swift; sourceTree = "<group>"; };
-		5A0244CD2A52A37500AA418E /* Services.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Services.swift; sourceTree = "<group>"; };
+		5A0244CD2A52A37500AA418E /* NetworkManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkManager.swift; sourceTree = "<group>"; };
 		5A0244CF2A52A58500AA418E /* AppCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppCoordinator.swift; sourceTree = "<group>"; };
 		5A0244D12A52A59000AA418E /* Coordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Coordinator.swift; sourceTree = "<group>"; };
 		5A0244D42A52A6DC00AA418E /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
@@ -717,7 +719,8 @@
 		5A0244C82A52A33600AA418E /* Services */ = {
 			isa = PBXGroup;
 			children = (
-				5A0244CD2A52A37500AA418E /* Services.swift */,
+				16B400B72A933C47005CC788 /* NetworkHelper.swift */,
+				5A0244CD2A52A37500AA418E /* NetworkManager.swift */,
 				5A4970802A661CD7005725F8 /* LoginService.swift */,
 				162BA15D2A8FA7B90063AF57 /* ImagePickerManager.swift */,
 				162BA15F2A8FB71A0063AF57 /* VideoPickerManager.swift */,
@@ -1247,7 +1250,7 @@
 				163076D32A8293CE0007B6BE /* CreateShortFormView.swift in Sources */,
 				163076D72A8299900007B6BE /* CreateShortFormViewController.swift in Sources */,
 				164E523E2A8B42210058C44B /* MyPage.swift in Sources */,
-				5A0244CE2A52A37500AA418E /* Services.swift in Sources */,
+				5A0244CE2A52A37500AA418E /* NetworkManager.swift in Sources */,
 				5A0244D02A52A58500AA418E /* AppCoordinator.swift in Sources */,
 				16C19E442A6A1DC6007F5F0C /* CookStepCountCell.swift in Sources */,
 				161954382A878E4500884247 /* FavoriteRecipeViewCell.swift in Sources */,
@@ -1302,6 +1305,7 @@
 				169FE6712A78A45D00593041 /* ShortFormCoordinator.swift in Sources */,
 				161EA8542A7A74C100F454F9 /* ShortFormFullScreenViewController.swift in Sources */,
 				16CD3C342A80BB3200801F2F /* CustomPresentationController.swift in Sources */,
+				16B400B82A933C47005CC788 /* NetworkHelper.swift in Sources */,
 				5A0244CA2A52A35800AA418E /* UIViewController+util.swift in Sources */,
 				169968C12A6F54250074DB43 /* SegmentViewController.swift in Sources */,
 				162C28B52A7DDF8C0004D771 /* RecipeDefaultTagButton.swift in Sources */,

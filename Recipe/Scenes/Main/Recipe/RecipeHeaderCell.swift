@@ -26,7 +26,7 @@ final class RecipeHeaderCell: UICollectionReusableView {
     }
     /// Properties
     private let disposeBag = DisposeBag()
-    private let buttonTappedSubject = BehaviorRelay<Int>(value: 0)
+    let buttonTappedSubject = BehaviorRelay<Int>(value: 0)
     private lazy var tagBackgrounds = [recentBackground, popularBackground, minimumBackground]
     private lazy var tagButtons = [recentButton, popularButton, minimumButton]
 

@@ -9,8 +9,9 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-protocol RecipeViewDelegate {
+protocol RecipeViewDelegate: AnyObject {
     func didTappedRecipeCell(item: RecipeInfo)
+    func didTappedSortButton(_ tag: Int)
 }
 
 struct MockCategoryData: Hashable {
@@ -71,7 +72,7 @@ final class RecipeView: UIView {
         }
     }
     private let disposeBag = DisposeBag()
-    var delegate: RecipeViewDelegate?
+    weak var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
     private let mockCategoryData: [MockCategoryData] = [
         MockCategoryData(text: "자취생 필수!",img: UIImage(named: "homealone_svg")!),
@@ -216,6 +217,12 @@ extension RecipeView {
     
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeHeaderCell.reuseIdentifier, for: indexPath) as! RecipeHeaderCell
+        
+        headerView
+            .buttonTappedSubject
+            .subscribe(onNext: { tagNumber in
+                self.delegate?.didTappedSortButton(tagNumber)
+        }).disposed(by: disposeBag)
         return headerView
     }
     
