@@ -650,7 +650,7 @@ extension CreateRecipeView {
                         .subscribe(onNext: { _ in
                             print(indexPath.row)
                             var data = self.mockData[indexPath.row]
-                            data.img = UIImage(named: "popcat")
+                            data.img = nil
                             self.mockData[indexPath.row] = data
                             cell.configure(data)
                             self.dataSource.apply(self.createSnapshot(),animatingDifferences: true)

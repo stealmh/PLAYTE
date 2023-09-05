@@ -30,6 +30,7 @@ final class CookStepCell: UICollectionViewListCell {
         let v = UITextView()
 //        v.font = .systemFont(ofSize: 15)
 //        v.textColor = .mainColor
+        v.backgroundColor = .clear
         v.text = "asdas"
         v.sizeToFit()
         v.isScrollEnabled = false
@@ -140,7 +141,7 @@ extension CookStepCell {
         stepTextView.text = item.contents
         self.selectImageView.image = item.img
         
-        if item.img == UIImage(named: "popcat") {
+        if item.img == nil {
             addPhotoButton.isHidden = false
             deletePhotoButton.isHidden = true
             selectImageView.isHidden = true
