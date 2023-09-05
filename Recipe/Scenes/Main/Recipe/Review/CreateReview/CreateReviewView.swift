@@ -9,19 +9,22 @@ import UIKit
 import SnapKit
 import RxSwift
 import RxCocoa
+import PhotosUI
 
 protocol CreateReviewViewDelegate: AnyObject {
-    func didTapRegisterButton()
+    func didTapRegisterButton(_ rating: Int, _ contents: String, _ img: [UIImage])
+    func didTapAddImageButton()
 }
 
 class CreateReviewView: UIView {
+    
     
     enum Section: Hashable {
         case photo
     }
     
     enum Item: Hashable {
-        case photo(Photo)
+        case photo(UIImage)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -33,10 +36,12 @@ class CreateReviewView: UIView {
         return v
     }()
     
-    private let recipeImageView: UIImageView = {
+    let recipeImageView: UIImageView = {
         let v = UIImageView()
         v.layer.cornerRadius = 5
-        v.image = UIImage(named: "popcat")
+//        v.image = UIImage(named: "popcat")
+        v.backgroundColor = .grayScale3
+        v.clipsToBounds = true
         return v
     }()
     
@@ -130,12 +135,9 @@ class CreateReviewView: UIView {
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     weak var delegate: CreateReviewViewDelegate?
-    private var mockData: [Photo] = [
-        Photo(image: UIImage(systemName: "photo")!),
-        Photo(image: UIImage(named: "popcat")!),
-        Photo(image: UIImage(named: "StarFill")!),
-        Photo(image: UIImage(named: "StarEmpty")!),
-        Photo(image: UIImage(named: "like")!)]
+    private var mockData: [UIImage] = [UIImage(named: "popcat")!]
+    var getImageRelay = PublishRelay<UIImage>()
+    var sliderValueRelay = BehaviorRelay<Int>(value: 0)
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -146,6 +148,17 @@ class CreateReviewView: UIView {
         bind()
         configureDataSource()
         registerCell()
+        
+        getImageRelay.subscribe(onNext : { img in
+            print("get Image")
+            self.mockData.append(img)
+            DispatchQueue.main.async {
+                self.photoTitle.text = "사진 후기 \(self.mockData.count - 1)"
+                self.photoTitle.asColor(targetString: "사진 후기", color: .black)
+            }
+
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+        }).disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -156,15 +169,16 @@ class CreateReviewView: UIView {
         print(#function)
         // 슬라이더의 값을 올림 하여 받아옴 (사이에서 멈출 때는 더 큰 수에 반응)
         var intValue = Int(ceil(sender.value))
+        sliderValueRelay.accept(intValue)
         ratingLabel.text = intValue < 1 ? "레시피는 어떠셨나요?" : "\(intValue).0"
         for index in 0..<5 {
             if intValue == 1 {
                 intValue -= 1 // index에 맞추기 위해 -1
-                starImageViews[index].image = UIImage(named: "StarFill")
+                starImageViews[index].image = UIImage(named: "star_fill_svg")
             } else if index < intValue { // intValue 보다 작은 건 칠하기
-                starImageViews[index].image = UIImage(named: "StarFill")
+                starImageViews[index].image = UIImage(named: "star_fill_svg")
             } else { // intValue 보다 크면 빈 별 처리
-                starImageViews[index].image = UIImage(named: "StarEmpty")
+                starImageViews[index].image = UIImage(named: "star_empty_svg")
             }
         }
     }
@@ -245,7 +259,7 @@ extension CreateReviewView {
     func setRatingImageView() {
         for index in 0..<5 {
             let imageView = UIImageView()
-            imageView.image = UIImage(named: "StarEmpty")
+            imageView.image = UIImage(named: "star_empty_svg")
             imageView.tag = index
             ratingStarStackView.addArrangedSubview(imageView)
             starImageViews.append(ratingStarStackView.subviews[index] as? UIImageView ?? UIImageView())
@@ -254,6 +268,7 @@ extension CreateReviewView {
     
     func registerCell() {
         collectionView.register(PhotoReviewCell.self, forCellWithReuseIdentifier: PhotoReviewCell.reuseIdentifier)
+        collectionView.register(PhotoReviewDefaultCell.self, forCellWithReuseIdentifier: PhotoReviewDefaultCell.reuseIdentifier)
     }
 }
 
@@ -291,10 +306,24 @@ extension CreateReviewView {
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell{
         switch item {
         case .photo(let data):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoReviewCell.reuseIdentifier, for: indexPath) as! PhotoReviewCell
-            cell.configure(data)
-            cell.delegate = self
-            return cell
+            if data == UIImage(named: "popcat") {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoReviewDefaultCell.reuseIdentifier, for: indexPath) as! PhotoReviewDefaultCell
+                cell.addPhotoButton.rx.tap
+                    .subscribe(onNext: { _ in
+                        self.mockData.removeAll()
+                        self.mockData.append(UIImage(named: "popcat")!)
+                        self.photoTitle.text = "사진 후기 \(self.mockData.count - 1)"
+                        self.photoTitle.asColor(targetString: "사진 후기", color: .black)
+                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: false)
+                        self.delegate?.didTapAddImageButton()
+                    }).disposed(by: disposeBag)
+                return cell
+            } else {
+                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: PhotoReviewCell.reuseIdentifier, for: indexPath) as! PhotoReviewCell
+                cell.configure(data)
+                cell.delegate = self
+                return cell
+            }
         }
         
     }
@@ -322,13 +351,21 @@ extension CreateReviewView {
                 self.placeholderLabel.isHidden = data.isEmpty ? false : true
                 self.textCountLabel.text = "\(data.count)/1000"
                 self.textView.text = data
+                
+                if data.hasSuffix("\n") {  // Return 키가 눌렸을 경우
+                    self.textView.text = data.trimmingCharacters(in: .whitespacesAndNewlines)
+                    self.textView.resignFirstResponder()  // 키보드를 내립니다.
+                }
             })
             .disposed(by: disposeBag)
         
         registerButton.rx.tap
             .subscribe(onNext: { _ in
                 /// Todo: 등록하고 뒤로가기 추가
-                self.delegate?.didTapRegisterButton()
+                var array = self.mockData
+                array.removeFirst()
+                let ratingValue = self.sliderValueRelay.value
+                self.delegate?.didTapRegisterButton((ratingValue), self.textView.text, array)
             }).disposed(by: disposeBag)
     }
 }

@@ -70,37 +70,11 @@ extension AppCoordinator: CoordinatorFinishDelegate {
 
         switch childCoordinator.type {
         case .splash:
-//            navigationController.viewControllers.removeAll()
-//            let a = childCoordinator as! SplashCoordinator
-            let _ = LoginService.shared.appleLoginRx(accessToken: KeyChain.shared.read(account: .idToken))
-                .observe(on: MainScheduler.instance)
-                .subscribe(onNext: { loginSuccess in
-                    print(loginSuccess)
-                    self.navigationController.viewControllers.removeAll()
-                    if loginSuccess.data.isMember {
-                        self.showMainFlow()
-                    } else {
-                        self.showLoginFlow()
-                    }
-                }, onError: { error in
-                    self.navigationController.viewControllers.removeAll()
-                    self.showLoginFlow()
-                    
-                    switch error {
-                    case AppleLoginError.httpBodyError:
-                        print("httpBodyError")
-                    case AppleLoginError.networkError:
-                        print("networkError")
-                        self.navigationController.showConfirmationAlert(title: "서버가 원할하지 않습니다", message: "잠시 후 이용해주세요.")
-                    case AppleLoginError.decodingError(let decodingError):
-                        print("decodingError")
-//                        self.showMainFlow()
-                    default:
-                        print("default")
-                    }
-                    
-                })
-            
+            if KeyChain.shared.read(account: .loginType) == "apple" {
+                self.appleLogin()
+            } else {
+                self.googleLogin()
+            }
         case .tab:
             DispatchQueue.main.async {
                 self.navigationController.viewControllers.removeAll()
@@ -132,6 +106,64 @@ extension AppCoordinator: UINavigationControllerDelegate {
         // child coordinator 가 일을 끝냈다고 알림.
         if let leftVC = fromViewController as? RegisterFirstViewController {
             leftVC.delegate?.registerFail()
+        }
+    }
+}
+
+/// 로그인 관련 함수
+extension AppCoordinator {
+    func appleLogin() {
+        let appleLoginObservable = LoginService.shared.appleLoginRx(accessToken: KeyChain.shared.read(account: .idToken))
+        
+        let _ = appleLoginObservable
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loginSuccess in
+                print(loginSuccess)
+                print(KeyChain.shared.read(account: .accessToken))
+                self.handleLoginSuccess(isMember: loginSuccess.data.isMember)
+            }, onError: { error in
+                self.handleLoginError(error)
+            })
+    }
+
+    func googleLogin() {
+        let googleLoginObservable = LoginService.shared.googleLoginRx(accessToken: KeyChain.shared.read(account: .idToken))
+        
+        let _ = googleLoginObservable
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { loginSuccess in
+                print(loginSuccess)
+                print(KeyChain.shared.read(account: .accessToken))
+                self.handleLoginSuccess(isMember: loginSuccess.data.isMember)
+            }, onError: { error in
+                self.handleLoginError(error)
+            })
+    }
+
+    func handleLoginSuccess(isMember: Bool) {
+        self.navigationController.viewControllers.removeAll()
+        if isMember {
+            self.showMainFlow()
+        } else {
+            self.showLoginFlow()
+        }
+    }
+
+    func handleLoginError(_ error: Error) {
+        self.navigationController.viewControllers.removeAll()
+        self.showLoginFlow()
+        
+        switch error {
+        case AppleLoginError.httpBodyError:
+            print("httpBodyError")
+        case AppleLoginError.networkError:
+            print("networkError")
+            self.navigationController.showConfirmationAlert(title: "서버가 원할하지 않습니다", message: "잠시 후 이용해주세요.")
+        case AppleLoginError.decodingError(let decodingError):
+            print("decodingError")
+            // self.showMainFlow()
+        default:
+            print("default")
         }
     }
 }

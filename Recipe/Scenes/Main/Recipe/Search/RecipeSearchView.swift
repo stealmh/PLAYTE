@@ -26,7 +26,7 @@ final class RecipeSearchView: UIView {
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()
         v.textPadding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        v.backgroundColor = .gray.withAlphaComponent(0.1)
+        v.backgroundColor = UIColor.hexStringToUIColor(hex: "F8F8F8")
         v.placeholder = "레시피 및 재료를 검색해보세요."
         v.layer.cornerRadius = 10
         v.clipsToBounds = true
@@ -51,13 +51,15 @@ final class RecipeSearchView: UIView {
     }()
     
     ///Properties
-//    private let disposeBag = DisposeBag()
+    private let disposeBag = DisposeBag()
     var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
 //    recipeDetail
 
     
-    private let mockRecipeData1: [RecipeInfo] = []
+    private var mockRecipeData1: [RecipeInfo] = []
+    var recipeInfo = PublishRelay<Recipe>()
+    var recipeRecentInfo: [RecipeInfo]?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -66,6 +68,28 @@ final class RecipeSearchView: UIView {
         registerCell()
         configureDataSource()
         collectionView.delegate = self
+        
+        recipeInfo
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {data in
+            print("== recipeInfo 호출 ==")
+            self.mockRecipeData1 = []
+            self.recipeRecentInfo = data.data.content
+            var recipeInfo: [RecipeInfo] = []
+
+                for i in data.data.content {
+                    if UserReportHelper.shared.isUserIdInUserReports(userId: Int64(i.writtenid)) {
+                        print("차단자 있음")
+                    } else {
+                        recipeInfo.append(i)
+                    }
+                }
+            
+            
+            let unique = Array(NSOrderedSet(array: recipeInfo)) as! [RecipeInfo]
+            self.mockRecipeData1 = unique
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+        }).disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -108,12 +132,12 @@ extension RecipeSearchView {
     }
     func createRecipeSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100)))
-        item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
+//        item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 10, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 0, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(50))
@@ -141,12 +165,67 @@ extension RecipeSearchView {
         case .recipe(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCell.reuseIdentifier, for: indexPath) as! RecipeCell
             cell.configure(data)
+            cell.favoriteButton.rx.tap
+                .subscribe(onNext: { _ in
+                    Task {
+                        if data.is_saved {
+                            let a: DeleteRecipeReuslt = try await NetworkManager.shared.get(.recipeUnSave("\(data.recipe_id)"), parameters: ["recipe-id": data.recipe_id])
+                            if a.code == "SUCCESS" {
+                                DispatchQueue.main.async {
+                                    cell.favoriteButton.setImage(UIImage(named: "bookmark_svg")!, for: .normal)
+                                }
+                            }
+                        } else {
+                            let a: DeleteRecipeReuslt = try await NetworkManager.shared.get(.recipeSave("\(data.recipe_id)"), parameters: ["recipe-id": data.recipe_id])
+                            
+                            if a.code == "SUCCESS" {
+                                DispatchQueue.main.async {
+                                    cell.favoriteButton.setImage(UIImage(named: "bookmarkfill_svg")!, for: .normal)
+                                }
+                            }
+                        }
+                    }
+                }).disposed(by: disposeBag)
             return cell
         }
     }
     
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeHeaderCell.reuseIdentifier, for: indexPath) as! RecipeHeaderCell
+        
+        headerView.recentButton.rx.tap
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: { _ in
+                if let recent = self.recipeRecentInfo {
+                    var recentArray: [RecipeInfo] = []
+                    for i in recent {
+                        if UserReportHelper.shared.isUserIdInUserReports(userId: Int64(i.writtenid)) {
+                            print("차단자 있음")
+                        } else {
+                            recentArray.append(i)
+                        }
+                    }
+
+                    self.mockRecipeData1 = recentArray
+                    self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                }
+                
+            }).disposed(by: disposeBag)
+        
+        headerView.popularButton.rx.tap
+            .subscribe(onNext: { _ in
+                let data = self.mockRecipeData1.sorted { $0.comment_count > $1.comment_count }
+                self.mockRecipeData1 = data
+                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+            }).disposed(by: disposeBag)
+        
+        headerView.minimumButton.rx.tap
+            .subscribe(onNext: { _ in
+                let data = self.mockRecipeData1.sorted { $0.cook_time < $1.cook_time }
+                self.mockRecipeData1 = data
+                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+            }).disposed(by: disposeBag)
+        
         return headerView
     }
     
@@ -164,6 +243,7 @@ extension RecipeSearchView: UICollectionViewDelegate {
         guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
         switch item {
         case .recipe(let data):
+            print("tapped")
             delegate?.didTappedRecipeCell(item: data)
         }
     }

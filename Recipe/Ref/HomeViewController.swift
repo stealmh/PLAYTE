@@ -76,7 +76,6 @@ private extension HomeViewController {
         navigationController?.navigationBar.barTintColor = .white
         navigationItem.titleView = titleView
         
-        ///Test VC
         let vc = UIViewController()
         
         navigationItem.rightBarButtonItem?.rx.tap
@@ -308,7 +307,7 @@ extension HomeViewController {
             return cell
         case .ingredientRecipe(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientRecipeCell.reuseIdentifier, for: indexPath) as! IngredientRecipeCell
-            cell.configure(data)
+//            cell.configure(data)
             return cell
         case .ingredientsHandle(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientsHandleCell.reuseIdentifier, for: indexPath) as! IngredientsHandleCell

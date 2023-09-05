@@ -10,7 +10,17 @@ import SnapKit
 import RxCocoa
 import RxSwift
 
-class RecipeDetailViewController: BaseViewController {
+class RecipeDetailViewController: BaseViewController, RecipeDetailErrorDelegate {
+    
+    func noRecipe() {
+        DispatchQueue.main.async {
+            if let info = self.recipeInfo {
+                RecipeCoreDataHelper.shared.deleteRecipe(byID: info.recipe_id)
+            }
+            self.showAlert(title: "확인", message: "삭제된 레시피입니다.")
+        }
+    }
+    
     
     enum Section: Hashable {
         case info
@@ -24,8 +34,8 @@ class RecipeDetailViewController: BaseViewController {
         case info
         case ingredient(DetailIngredient)
         case shopingList(ShopingList)
-        case recipe(RecipeDetailStep)
-        case ingredientchucheon(IngredientRecipe)
+        case recipe(RecipeDetailStages)
+        case ingredientchucheon(Recommendation)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -37,23 +47,32 @@ class RecipeDetailViewController: BaseViewController {
         //        v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
-//    private var mockShopList: [ShopingList] = [ShopingList(title: "대홍단 감자", price: 20000, image: UIImage(named: "popcat")!, isrocket: true),
-//                                               ShopingList(title: "전남 국내산 대추 방울", price: 13000, image: UIImage(named: "popcat")!, isrocket: false)]
+    
+    let registerButton: UIButton = {
+        let v = UIButton()
+        v.setTitle("리뷰 작성", for: .normal)
+        v.setTitleColor(.white, for: .normal)
+        v.layer.cornerRadius = 5
+        v.backgroundColor = .mainColor
+        return v
+    }()
+    
+    
     private var mockShopList: [ShopingList] = []
-    
-    private var mockRecipe: [RecipeDetailStep] = [RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: true),RecipeDetailStep(image: UIImage(named: "popcat")!, title: "양파를 채 썰어서 준비해주세요", contents: "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요", point: false)]
-    
-    private var chucheonRecipeMockData = [IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "토마토 계란볶음밥", cookTime: "조리 시간 10분")]
-    
+    private var mockStage: [RecipeDetailStages] = []
     var mockData: [DetailIngredient] = []
     var mock: [RecipeDetailIngredient] = []
+    var recommendationRecipe: [Recommendation] = []
     
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
+    private var checkDataAccept = PublishRelay<Bool>()
+    var recipeComment: RecipeComment?
     var recipeInfo: RecipeInfo? {
         didSet {
             if let info = recipeInfo {
                 print("info를 보냅니다")
+                print("info:", info)
                 viewModel.ingredient.accept(info)
             }
         }
@@ -66,36 +85,132 @@ class RecipeDetailViewController: BaseViewController {
         configureDataSource()
         registerCell()
         defaultNavigationBackButton(backButtonColor: .white)
-    }
-    
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
+        collectionView.delegate = self
+        viewModel.delegate = self
+        
+        let moreButton = UIBarButtonItem(image: UIImage(named: "more_svg"), style: .plain, target: self, action: #selector(moreButtonTapped))
+        moreButton.tintColor = .white
+        
+        let rightBarButtonItems = [moreButton]
+        
+        // 바 버튼 아이템들을 화면의 navigationItem에 설정합니다.
+        navigationItem.rightBarButtonItems = rightBarButtonItems
+        
+        registerButton.rx.tap
+            .take(1)
+            .subscribe(onNext: { _ in
+                ///Todo: 분리
+                if let thumbnail = self.recipeInfo {
+                    let vc = CreateReviewController(recipeID: thumbnail.recipe_id)
+                    DispatchQueue.main.async {
+                        vc.createReviewView.recipeImageView.loadImage(from: thumbnail.recipe_thumbnail_img)
+                    }
+                    vc.delegate = self
+                    self.navigationController?.pushViewController(vc, animated: true)
+                }
+
+            }).disposed(by: disposeBag)
+        
         viewModel.recipeDetail
             .subscribe(onNext: { data in
+                print("===")
+                print(data)
+                print("===")
+                self.viewModel.recipeID = data.data.recipe_id
+                self.viewModel.writtenID = data.data.writtenid
+                print("RecipeDetailVC 의 recipeID는 :: \(self.viewModel.recipeID)")
+                Task {
+                    let a: RecipeComment = try await NetworkManager.shared.get(.recipeComment("\(self.viewModel.recipeID)"))
+                    self.recipeComment = a
+                }
                 self.mockData = self.viewModel.combineIngredients(data.data.ingredients)
                 for i in data.data.ingredients {
                     let data: ShopingList = ShopingList(title: i.coupang_product_name, price: i.coupang_product_price, image: i.coupang_product_image, isrocket: i.is_rocket_delivery, link: i.coupang_product_url)
                     self.mockShopList.append(data)
                 }
+                for i in data.data.stages {
+                    self.mockStage.append(i)
+                }
+                
+                for i in data.data.recommendation_recipes {
+                    self.recommendationRecipe.append(i)
+                }
+                
+                self.checkDataAccept.accept(true)
+                print("==  mockStage ==")
+                print(self.mockStage)
+                print("==  mockStage ==")
                 self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
             }).disposed(by: disposeBag)
+    }
+    
+//    override func viewIsAppearing(_ animated: Bool) {
+//        super.viewIsAppearing(animated)
+//        viewModel.recipeDetail
+//            .subscribe(onNext: { data in
+//                print("===")
+//                print(data)
+//                print("===")
+//                self.viewModel.recipeID = data.data.recipe_id
+//                print("RecipeDetailVC 의 recipeID는 :: \(self.viewModel.recipeID)")
+//                Task {
+//                    let a: RecipeComment = try await NetworkManager.shared.get(.recipeComment("\(self.viewModel.recipeID)"))
+//                    self.recipeComment = a
+//                }
+//                self.mockData = self.viewModel.combineIngredients(data.data.ingredients)
+//                for i in data.data.ingredients {
+//                    let data: ShopingList = ShopingList(title: i.coupang_product_name, price: i.coupang_product_price, image: i.coupang_product_image, isrocket: i.is_rocket_delivery, link: i.coupang_product_url)
+//                    self.mockShopList.append(data)
+//                }
+//                for i in data.data.stages {
+//                    self.mockStage.append(i)
+//                }
+//                
+//                for i in data.data.recommendation_recipes {
+//                    self.recommendationRecipe.append(i)
+//                }
+//                
+//                self.checkDataAccept.accept(true)
+//                print("==  mockStage ==")
+//                print(self.mockStage)
+//                print("==  mockStage ==")
+//                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+//            }).disposed(by: disposeBag)
+//    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+//        self.tabBarController?.tabBar.isHidden = false
         
     }
     
-    override func viewWillDisappear(_ animated: Bool) {
-        self.tabBarController?.tabBar.isHidden = false
+    @objc func moreButtonTapped(sender: UIBarButtonItem) {
+        
+        let customViewController = ShortFormSheetViewController()
+        customViewController.modalPresentationStyle = .custom
+        customViewController.transitioningDelegate = self
+        customViewController.delegate = self
+
+        present(customViewController, animated: true, completion: nil)
         
     }
+    
 }
 
 //MARK: - Method(Normal)
 extension RecipeDetailViewController {
     func addView() {
-        view.addSubview(collectionView)
+        view.addSubViews(collectionView)
+        view.addSubview(registerButton)
     }
     func configureLayout() {
         collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
+        }
+        
+        registerButton.snp.makeConstraints {
+            $0.left.right.equalToSuperview().inset(10)
+            $0.bottom.equalTo(view.safeAreaLayoutGuide)
+            $0.height.equalTo(50)
         }
     }
     func registerCell() {
@@ -152,7 +267,7 @@ extension RecipeDetailViewController {
         
         let section = NSCollectionLayoutSection(group: group)
         section.contentInsets = NSDirectionalEdgeInsets(top: -100, leading: 0, bottom: 10, trailing: 0)
-        section.orthogonalScrollingBehavior = .continuous
+        section.orthogonalScrollingBehavior = .none
         return section
     }
     
@@ -211,13 +326,13 @@ extension RecipeDetailViewController {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(360)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
+                heightDimension: .estimated(170)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 10)
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(360)),
+                heightDimension: .estimated(300)),
             subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
@@ -335,6 +450,10 @@ extension RecipeDetailViewController {
         case .recipe:
             if kind == UICollectionView.elementKindSectionHeader {
                 let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeDetailDefaultHeaderView.identifier, for: indexPath) as! RecipeDetailDefaultHeaderView
+                
+                checkDataAccept.subscribe(onNext: { isTrue in
+                    headerView.configure(self.mockStage.count)
+                }).disposed(by: disposeBag)
                 return headerView
             } else {
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: LineFooter.identifier, for: indexPath) as! LineFooter
@@ -349,11 +468,18 @@ extension RecipeDetailViewController {
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CreateRecipeFooter.identifier, for: indexPath) as! CreateRecipeFooter
                 footerView.configure("리뷰 작성하기")
                 footerView.registerButton.rx.tap
+                    .take(1)
                     .subscribe(onNext: { _ in
                         ///Todo: 분리
-                        let vc = CreateReviewController()
-                        vc.delegate = self
-                        self.navigationController?.pushViewController(vc, animated: true)
+                        if let thumbnail = self.recipeInfo {
+                            let vc = CreateReviewController(recipeID: thumbnail.recipe_id)
+                            DispatchQueue.main.async {
+                                vc.createReviewView.recipeImageView.loadImage(from: thumbnail.recipe_thumbnail_img)
+                            }
+                            vc.delegate = self
+                            self.navigationController?.pushViewController(vc, animated: true)
+                        }
+
                     }).disposed(by: disposeBag)
                 return footerView
             }
@@ -367,16 +493,116 @@ extension RecipeDetailViewController {
         snapshot.appendItems([.info], toSection: .info)
         snapshot.appendItems(mockData.map({ Item.ingredient($0) }), toSection: .ingredient)
         snapshot.appendItems(mockShopList.map({ Item.shopingList($0) }), toSection: .shopingList)
-        snapshot.appendItems(mockRecipe.map({ Item.recipe($0) }), toSection: .recipe)
-        snapshot.appendItems(chucheonRecipeMockData.map { Item.ingredientchucheon($0) }, toSection: .ingredientchucheon)
+        snapshot.appendItems(mockStage.map({ Item.recipe($0) }), toSection: .recipe)
+        snapshot.appendItems(recommendationRecipe.map { Item.ingredientchucheon($0) }, toSection: .ingredientchucheon)
         return snapshot
     }
 }
 
 extension RecipeDetailViewController: RecipeDetailInfoDelegate {
+    func favoriteButtonTapped(_ recipeId: Int) {
+//        Task {
+//            let data: DefaultReturnBool = try await NetworkManager.shared.get(.recipeSave("\(recipeId)"))
+//            if
+//        }
+    }
+    
     func showReview() {
-        let vc = SegmentViewController()
-        navigationController?.pushViewController(vc, animated: true)
+        print(#function)
+        let recipeID = viewModel.recipeID
+        if let comment = recipeComment, let info = recipeInfo {
+            Task {
+                let data3: ReviewList = try await NetworkManager.shared.get(.recipeReview("\(recipeID)", .popular))
+                let a = data3.data.content.count
+                let vc = SegmentViewController(recipeID: recipeID, shortFormId: 0, comment: comment, reviewCount: a)
+                
+                self.navigationController?.pushViewController(vc, animated: true)
+            }
+        }
+    }
+}
+
+extension RecipeDetailViewController: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let section = dataSource.snapshot().sectionIdentifiers[indexPath.section]
+        let item = dataSource.snapshot().itemIdentifiers(inSection: section)[indexPath.item]
+        
+        switch item {
+        case .info:
+            break
+        case .ingredient(let ingredient):
+            break
+        case .shopingList(let shopingList):
+            openShopingListURL(shopingList.link)
+            break
+        case .recipe(let recipeDetailStage):
+            break
+        case .ingredientchucheon(let recommendation):
+            break
+        }
+        
+        collectionView.deselectItem(at: indexPath, animated: true)
+    }
+    
+    // 쇼핑 리스트 아이템의 링크를 열기 위한 메서드
+    private func openShopingListURL(_ link: String) {
+        guard let url = URL(string: link) else { return }
+        if UIApplication.shared.canOpenURL(url) {
+            UIApplication.shared.open(url, options: [:], completionHandler: nil)
+        } else {
+            print("Cannot open URL: \(url)")
+        }
+    }
+}
+
+extension RecipeDetailViewController: SheetActionDelegate, UIViewControllerTransitioningDelegate{
+    func didTappedUserReport() {
+//        print("writtenID:", viewModel.writtenID)
+        if let info = recipeInfo, !UserReportHelper.shared.isUserIdInUserReports(userId: Int64(info.writtenid)) {
+            print("writtenid는 ->", info.writtenid)
+            if UserReportHelper.shared.createUserReport(userId: Int64(viewModel.writtenID)) {
+                Task {
+                    let data: DefaultReturnBool = try await NetworkManager.shared.get(.recipeUnSave("\(info.recipe_id)"))
+                }
+                RecipeCoreDataHelper.shared.deleteRecipe(byID: info.recipe_id)
+                self.dismiss(animated:true) {
+                    self.navigationController?.popViewController(animated: true)
+                    self.navigationController?.showToastSuccess(message: "사용자가 차단되었습니다.")
+                }
+            }
+        }
+    }
+    
+    func didTappedNoInterest() {
+        if let info = recipeInfo {
+            Task {
+                if let data = await viewModel.notInterest(info.recipe_id), data.data {
+                    self.dismiss(animated:true) {
+                        self.navigationController?.popViewController(animated: true)
+                        self.navigationController?.showToastSuccess(message: "관심없는 동영상으로 설정하였습니다.")
+                    }
+                }
+            }
+        }
+    }
+    
+    func didTappedReport() {
+        if let info = recipeInfo {
+            Task {
+                if let data = await viewModel.report(info.recipe_id), data.data {
+                    RecipeCoreDataHelper.shared.deleteRecipe(byID: info.recipe_id)
+                    self.dismiss(animated:true) {
+                        self.navigationController?.popViewController(animated: true)
+                        self.navigationController?.showToastSuccess(message: "신고가 접수되었습니다.")
+                    }
+                }
+            }
+        }
+    }
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+//        PresentationController(presentedViewController: presented, presenting: presenting)
+        return CustomPresentationController(presentedViewController: presented, presenting: presenting, presentedHeight: 205)
     }
 }
 

@@ -71,12 +71,11 @@ extension PhotoReviewCell {
             $0.right.equalTo(imgView)
         }
     }
-    func configure(_ item: Photo) {
-        imgView.image = item.image
-        if item.image == UIImage(systemName: "photo") {
-            print("as")
-            deleteButton.isHidden = true
+    func configure(_ item: UIImage) {
+        DispatchQueue.main.async {
+            self.imgView.image = item
         }
+
     } //for data inject
 }
 

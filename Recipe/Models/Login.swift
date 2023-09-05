@@ -47,4 +47,10 @@ struct MemberCheck: Codable {
 
 struct Member: Codable {
     let isMember: Bool
+    let jwtTokens: AppleToken
+}
+
+struct AppleToken: Codable {
+    let accessToken: String
+    let refreshToken: String?
 }

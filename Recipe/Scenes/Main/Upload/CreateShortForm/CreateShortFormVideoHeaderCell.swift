@@ -20,6 +20,7 @@ class CreateShortFormVideoHeaderCell: UICollectionViewCell {
         v.layer.cornerRadius = 10
         v.layer.borderColor = UIColor.grayScale3?.cgColor
         v.layer.borderWidth = 1
+        v.clipsToBounds = true
         return v
     }()
     private let coverModifyBackground: UIView = {
@@ -57,9 +58,10 @@ class CreateShortFormVideoHeaderCell: UICollectionViewCell {
     /// Life Cycle
     override init(frame: CGRect) {
         super.init(frame: frame)
-        coverModifyBackground.addSubview(coverModifyButton)
-        addSubViews(coverModifyBackground, addVideoGuideLabel, thumbnailImageView)
+        addSubViews(addVideoGuideLabel, thumbnailImageView)
         contentView.addSubview(addVideoButton)
+        contentView.addSubview(coverModifyBackground)
+        coverModifyBackground.addSubview(coverModifyButton)
         configureLayout()
         layer.cornerRadius = 10
         layer.borderColor = UIColor.grayScale3?.cgColor

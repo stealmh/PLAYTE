@@ -18,7 +18,7 @@ struct Dummy: Hashable {
 }
 
 protocol CreateRecipeViewDelegate: AnyObject {
-    func registerButtonTapped()
+    func registerButtonTapped( _ item: UploadRecipe) async
     func addPhotoButtonTapped()
     func addIngredientCellTapped(_ item: IngredientInfo)
     func addThumbnailButtonTapped()
@@ -66,11 +66,12 @@ final class CreateRecipeView: UIView, DefaultTextFieldCellDelegate {
     
     private let registerButton: UIButton = {
         let v = UIButton()
-        v.setTitle("등록", for: .normal)
+        v.setTitle("등록dla", for: .normal)
         v.setTitleColor(.white, for: .normal)
         v.backgroundColor = .grayScale3
         v.layer.cornerRadius = 10
         v.clipsToBounds = true
+        //        v.isEnabled = false
         return v
     }()
     
@@ -78,11 +79,14 @@ final class CreateRecipeView: UIView, DefaultTextFieldCellDelegate {
     var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     weak var delegate: CreateRecipeViewDelegate?
-    var thumbnailImage = BehaviorRelay<UIImage?>(value:nil)
     private var mockData: [Dummy] = [Dummy(contents: "", img: UIImage())]
-    var addIngredientMockData: [String] = []
-    let imageRelay = PublishRelay<UIImage>()
-    let imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage(named: "popcat")!)
+    //    var addIngredientMockData: [String] = []
+    //    var addIngredientMockData = BehaviorRelay<[String]>(value: [])
+    
+    //    var thumbnailImage = BehaviorRelay<UIImage?>(value:nil)
+    //    let imageRelay = PublishRelay<UIImage>()
+    //    let imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage(named: "popcat")!)
+    var mymy: UploadRecipe?
     var mybool = false
     var viewModel: CreateRecipeViewModel? {
         didSet {
@@ -162,7 +166,7 @@ extension CreateRecipeView {
         collectionView.registerHeaderView(viewType: DefaultHeader.self)
         collectionView.registerHeaderView(viewType: CookStepHeaderView.self)
         collectionView.registerHeaderView(viewType: CookStepCountCell.self)
-
+        
         collectionView.registerFooterView(viewType: CookStepFooterView.self)
     }
     
@@ -176,22 +180,22 @@ extension CreateRecipeView {
     private func makeSwipeActions(for indexPath: IndexPath?) -> UISwipeActionsConfiguration? {
         guard let indexPath = indexPath, let id = dataSource.itemIdentifier(for: indexPath) else { return nil }
         let deleteActionTitle = NSLocalizedString("Delete", comment: "Delete action title")
-
+        
         if let originalImage = UIImage(named: "delete_svg"),
            let resizedImage = originalImage.resized(to: CGSize(width: 30, height: 30)) {
-
+            
             let deleteAction = UIContextualAction(style: .destructive, title: deleteActionTitle) { [weak self] _, _, completion in
                 print("id:", id)
                 self?.deleteItem(id, idx: indexPath)
                 completion(false)
             }
-
+            
             deleteAction.image = resizedImage
             deleteAction.backgroundColor = .white
-
+            
             return UISwipeActionsConfiguration(actions: [deleteAction])
         }
-
+        
         return nil
     }
     
@@ -373,7 +377,7 @@ extension CreateRecipeView {
             count: 1)
         group.interItemSpacing = .fixed(10)
         let section = NSCollectionLayoutSection(group: group)
-        
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
         let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                       heightDimension: .absolute(50.0))
         let header = NSCollectionLayoutBoundarySupplementaryItem(
@@ -393,7 +397,7 @@ extension CreateRecipeView {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .fractionalHeight(1)))
-                item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
@@ -473,23 +477,44 @@ extension CreateRecipeView {
                 .subscribe(onNext: { _ in
                     self.delegate?.thumbnailModifyButtonTapped()
                 }).disposed(by: disposeBag)
-            thumbnailImage
-                .debug()
-                .subscribe(onNext: { img in
-                    if let img {
-                        print("???")
-                        cell.thumbnailBackground.image = img
-                        cell.hasImage()
-                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
-                    }
-                }).disposed(by: disposeBag)
+            if let viewModel {
+                viewModel.thumbnailImage
+                    .debug()
+                    .subscribe(onNext: { img in
+                        if let img {
+                            print("???")
+                            DispatchQueue.main.async {
+                                cell.thumbnailBackground.image = img
+                                cell.hasImage()
+                                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                            }
+                        }
+                    }).disposed(by: disposeBag)
+            }
             return cell
         case .recipeNameSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as! TextFieldCell
             cell.configure(text: "레시피 이름을 입력해주세요", needSearchButton: false)
+            if let viewModel {
+                cell.recipeNametextField.rx.text.orEmpty
+                    .subscribe(onNext: { txt in
+                        if !txt.isEmpty {
+                            viewModel.createRecipeTitle.accept(txt)
+                        }
+                    }).disposed(by: disposeBag)
+            }
             return cell
         case .recipeDiscriptSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldViewCell.reuseIdentifier, for: indexPath) as! TextFieldViewCell
+            if let viewModel {
+                cell.textView.rx.text.orEmpty
+                    .skip(1)
+                    .subscribe(onNext: { txt in
+                        if !txt.isEmpty {
+                            viewModel.createRecipeDescription.accept(txt)
+                        }
+                    }).disposed(by: disposeBag)
+            }
             return cell
         case .recipeIngredientSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DefaultTextFieldCell.reuseIdentifier, for: indexPath) as! DefaultTextFieldCell
@@ -500,7 +525,7 @@ extension CreateRecipeView {
                     cell.confifgure(ingredient)
                 }).disposed(by: disposeBag)
             }
-        
+            
             cell.configure(text: "재료 및 양념을 입력해주세요.")
             cell.delegate = self
             cell.recipeNametextField.rx.text.orEmpty
@@ -521,73 +546,96 @@ extension CreateRecipeView {
             return cell
         case .cookTimeSettingSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
-            return cell
-        case .cookStepSection(let data):
-            if data.contents == "" {
-                // Show a different cell when the array is empty
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell2.reuseIdentifier, for: indexPath) as! CookStepCell2
-                imageRelay.subscribe(onNext: { data in
-                    cell.imageSelectSubject.accept(data)
+            if let viewModel {
+                cell.cookTimeTextField.rx.text.orEmpty
+                    .subscribe(onNext: { txt in
+                        if let intValue = Int(txt) {
+                            viewModel.createRecipeCookTime.accept(intValue)
+                        }
+                    }).disposed(by: disposeBag)
+                
+                cell.serviceCountRx.subscribe(onNext: { value in
+                    viewModel.createRecipeServiceCount.accept(value)
                 }).disposed(by: disposeBag)
                 
-                cell.addPhotoButton.rx.tap
-                    .subscribe(onNext: { _ in
-                        self.delegate?.addPhotoButtonTapped()
+                viewModel.allValuesSubject
+                    .subscribe(onNext: { (_,_,_,data,service,_) in
+                        print("cooTime 추적: \(data)")
+                        cell.cookTimeTextField.text = "\(data)"
+                        cell.serviceCountLabel.text = "\(service)"
                     }).disposed(by: disposeBag)
-                
-                cell.stepTextfield.rx.controlEvent(.editingDidEndOnExit)
-                    .subscribe(onNext: { [weak self, weak cell] _ in
-                        guard let self = self, let cell = cell, let newText = cell.stepTextfield.text else { return }
-                        if newText.isEmpty {
-                            // Skip empty text
-                            return
-                        }
-                        let defaultImage = UIImage(named: "popcat")
-                        let newStep = Dummy(contents: newText, img: self.imageBehaviorRelay.value)
-                        if !mockData.contains(newStep) {
-                            self.mockData.insert(newStep, at: 0)
-                            print(self.mockData)
-                        }
-                        //                        self.mockData.insert(newStep, at: 0)
-                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
-                        self.applyNewSnapshot()
-                        cell.stepTextfield.text = ""
-                        self.imageBehaviorRelay.accept(defaultImage!)
-                        if let initialIndexPath = dataSource.indexPath(for: .cookStepSection(mockData.last!)) {
-                            collectionView.scrollToItem(at: initialIndexPath, at: .bottom, animated: true)
-                        }
-                    }).disposed(by: cell.disposeBag)
-                setupKeyboardForCell(cell: cell, textField: cell.stepTextfield)
-                return cell
-            } else {
-                // Show the CookStepCell when the array has values
-                let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell.reuseIdentifier, for: indexPath) as! CookStepCell
-                cell.accessories = [.reorder(displayed: .always), .delete()]
-//                imageBehaviorRelay.subscribe(onNext: { data in
-//                    cell.imageSelectSubject.accept(data)
-//                }).disposed(by: disposeBag)
-                
-                cell.addPhotoButton.rx.tap
-                    .subscribe(onNext: { _ in
-                        self.delegate?.addPhotoButtonTapped()
-                    }).disposed(by: disposeBag)
-                cell.deletePhotoButton.rx.tap
-                    .subscribe(onNext: { _ in
-                        print(indexPath.row)
-                        var data = self.mockData[indexPath.row]
-                        data.img = UIImage(named: "popcat")
-                        self.mockData[indexPath.row] = data
-                        cell.configure(data)
-                        self.dataSource.apply(self.createSnapshot(),animatingDifferences: true)
-                        print(data)
-                    }).disposed(by: disposeBag)
-                
-                cell.defaultCheck.accept(false)
-                cell.configure(data)
-                setupKeyboardForCell(cell: cell, textView: cell.stepTextView)
-                print(data)
-                return cell
             }
+            return cell
+        case .cookStepSection(let data):
+            if let viewModel {
+                if data.contents == "" {
+                    // Show a different cell when the array is empty
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell2.reuseIdentifier, for: indexPath) as! CookStepCell2
+                    setupKeyboardForCell(cell: cell, textField: cell.stepTextfield)
+                    viewModel.imageRelay.subscribe(onNext: { data in
+                        cell.imageSelectSubject.accept(data)
+                    }).disposed(by: cell.disposeBag)
+                    
+                    cell.addPhotoButton.rx.tap
+                        .subscribe(onNext: { _ in
+                            self.delegate?.addPhotoButtonTapped()
+                        }).disposed(by: cell.disposeBag)
+                    
+                    cell.stepTextfield.rx.controlEvent(.editingDidEndOnExit)
+                        .subscribe(onNext: { [weak self, weak cell] _ in
+                            guard let self = self, let cell = cell, let newText = cell.stepTextfield.text else { return }
+                            if newText.isEmpty {
+                                // Skip empty text
+                                return
+                            }
+                            let defaultImage = UIImage(named: "popcat")
+                            let newStep = Dummy(contents: newText, img: viewModel.imageBehaviorRelay.value)
+                            if !self.mockData.contains(newStep) {
+                                self.mockData.insert(newStep, at: 0)
+                                print(self.mockData)
+                            }
+                            //                        self.mockData.insert(newStep, at: 0)
+                            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                            self.applyNewSnapshot()
+                            cell.stepTextfield.text = ""
+                            viewModel.imageBehaviorRelay.accept(defaultImage!)
+                            if let initialIndexPath = self.dataSource.indexPath(for: .cookStepSection(self.mockData.last!)) {
+                                collectionView.scrollToItem(at: initialIndexPath, at: .bottom, animated: true)
+                            }
+                        }).disposed(by: cell.disposeBag)
+                    
+                    return cell
+                } else {
+                    // Show the CookStepCell when the array has values
+                    let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell.reuseIdentifier, for: indexPath) as! CookStepCell
+                    cell.accessories = [.reorder(displayed: .always), .delete()]
+                    //                imageBehaviorRelay.subscribe(onNext: { data in
+                    //                    cell.imageSelectSubject.accept(data)
+                    //                }).disposed(by: disposeBag)
+                    
+                    cell.addPhotoButton.rx.tap
+                        .subscribe(onNext: { _ in
+                            self.delegate?.addPhotoButtonTapped()
+                        }).disposed(by: disposeBag)
+                    cell.deletePhotoButton.rx.tap
+                        .subscribe(onNext: { _ in
+                            print(indexPath.row)
+                            var data = self.mockData[indexPath.row]
+                            data.img = UIImage(named: "popcat")
+                            self.mockData[indexPath.row] = data
+                            cell.configure(data)
+                            self.dataSource.apply(self.createSnapshot(),animatingDifferences: true)
+                            print(data)
+                        }).disposed(by: disposeBag)
+                    
+                    cell.defaultCheck.accept(false)
+                    cell.configure(data)
+                    setupKeyboardForCell(cell: cell, textView: cell.stepTextView)
+                    print(data)
+                    return cell
+                }
+            }
+            return UICollectionViewCell()
         }
     }
     
@@ -620,10 +668,58 @@ extension CreateRecipeView {
                 return headerView
             } else {
                 let footerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: CookStepFooterView.identifier, for: indexPath) as! CookStepFooterView
-                //                footerView.registerButton.rx.tap
-                //                    .subscribe(onNext: { _ in
-                //                        self.delegate?.registerButtonTapped()
-                //                    }).disposed(by: disposeBag)
+                footerView.delegate = self
+                if let viewModel {
+                    viewModel.uploadCheck
+                        .distinctUntilChanged()
+                        .subscribe(onNext: { isSuccess in
+                        print(isSuccess)
+                        if isSuccess {
+                            footerView.registerButton.isEnabled = true
+                            footerView.registerButton.backgroundColor = .mainColor
+                        } else {
+                            footerView.registerButton.isEnabled = false
+                            footerView.registerButton.backgroundColor = .grayScale3
+                        }
+                    }).disposed(by: disposeBag)
+                    
+                    viewModel.allValuesSubject.subscribe(onNext: { values in
+                        print("value:", values)
+                        Task {
+                            let (image, title, description, cookTime, serviceCount, ingredients) = values
+                            // Handle the values here
+                            if self.mockData.count > 1 {
+                                var array = self.mockData.dropLast()
+                                var step: [RecipeUploadForStep] = []
+                                
+                                // This loop also seems to have potential for heavy operations due to the image-to-base64 conversion
+                                for value in array {
+                                    let contents = value.contents
+                                    if let img = value.img?.toBase64() {
+                                        let stepData = RecipeUploadForStep(image_url: img, stage_description: contents)
+                                        step.append(stepData)
+                                    }
+                                }
+                                if let img = image?.toBase64()  {
+                                    
+                                    // Continue processing on main thread
+                                    let data = UploadRecipe(cook_time: cookTime,
+                                                            ingredients: ingredients,
+                                                            recipe_description: description,
+                                                            recipe_name: title,
+                                                            recipe_stages: step,
+                                                            recipe_thumbnail_img: img,
+                                                            serving_size: serviceCount)
+                                    viewModel.upload.accept(data)
+                                    viewModel.uploadCheck.accept(true)
+                                    self.mymy = data
+                                    
+                                }
+                                
+                            }
+                        }
+                    }).disposed(by: disposeBag)
+                }
                 return footerView
             }
             
@@ -646,9 +742,21 @@ extension CreateRecipeView {
         snapshot.appendItems([.recipeIngredientSection], toSection: .recipeIngredientSection)
         snapshot.appendItems([.cookTimeSettingSection], toSection: .cookTimeSettingSection)
         snapshot.appendItems(mockData.map { Item.cookStepSection($0)}, toSection: .cookStepSection)
-        snapshot.appendItems(addIngredientMockData.map { Item.addIngredientSection($0)}, toSection: .addIngredientSection)
+        if let viewModel {
+            snapshot.appendItems(viewModel.createRecipeIngredient.value.map { Item.addIngredientSection($0)}, toSection: .addIngredientSection)
+        }
         
         return snapshot
+    }
+}
+
+extension CreateRecipeView: CookStepRegisterDelegate {
+    func didTappedRegisterButton() {
+        print(#function)
+        guard let a = self.mymy else { return }
+        Task {
+            await self.delegate?.registerButtonTapped(a)
+        }
     }
 }
 
@@ -668,7 +776,7 @@ extension CreateRecipeView {
                 // 필요한 경우, 특정 텍스트 필드나 컨트롤 뷰가 키보드에 의해 가려지지 않게 스크롤 조정
                 let selectedTextField = textField
                 let rect = selectedTextField.convert(selectedTextField.bounds, to: self.collectionView)
-                    self.collectionView.scrollRectToVisible(rect, animated: true)
+                self.collectionView.scrollRectToVisible(rect, animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -687,7 +795,7 @@ extension CreateRecipeView {
                 // 필요한 경우, 특정 텍스트 필드나 컨트롤 뷰가 키보드에 의해 가려지지 않게 스크롤 조정
                 let selectedTextView = textView
                 let rect = selectedTextView.convert(selectedTextView.bounds, to: self.collectionView)
-                    self.collectionView.scrollRectToVisible(rect, animated: true)
+                self.collectionView.scrollRectToVisible(rect, animated: true)
             })
             .disposed(by: disposeBag)
     }

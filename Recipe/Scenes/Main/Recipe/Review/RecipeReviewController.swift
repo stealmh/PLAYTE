@@ -23,10 +23,22 @@ struct Review: Hashable {
 }
 
 protocol RecipeReviewControllerDelegate: AnyObject {
-    func didTapMorePhotoButton()
+    func didTapMorePhotoButton(_ item: [String])
 }
 
-class RecipeReviewController: BaseViewController {
+class RecipeReviewController: BaseViewController, ReviewCellPhotoDelegate {
+    func likeButtonTapped() {
+        print("")
+    }
+    
+    func singoButtonTapped() {
+        print("")
+    }
+    
+    func reviewPhotoSend(_ item: [String]) {
+        self.delegate?.didTapMorePhotoButton(item)
+    }
+    
     var didSendEventClosure: ((RecipeReviewController.Event) -> Void)?
     
     enum Event {
@@ -40,7 +52,7 @@ class RecipeReviewController: BaseViewController {
     
     enum Item: Hashable {
         case header
-        case review(Review)
+        case review(ReviewInfo)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -58,27 +70,45 @@ class RecipeReviewController: BaseViewController {
     weak var delegate: RecipeReviewControllerDelegate?
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
-    private var mockData: [Review] = [Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: []),Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: []),Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: [])]
+    private let viewModel = ReviewViewModel()
+    var recipeId: Int
+    private var mockData: [ReviewInfo] = []
+    var counting = PublishRelay<Int>()
+    
+    init(recipeId: Int) {
+        self.recipeId = recipeId
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubview(collectionView)
         collectionView.snp.makeConstraints {
-//            $0.top.equalTo(view.safeAreaLayoutGuide)
-//            $0.left.right.bottom.equalToSuperview()
+            //            $0.top.equalTo(view.safeAreaLayoutGuide)
+            //            $0.left.right.bottom.equalToSuperview()
             $0.edges.equalToSuperview()
         }
         registerCell()
         configureDataSource()
-        mockDataConfigure()
+        
+        Task {
+            await viewModel.setData(recipeId)
+        }
+        
+        viewModel.review.subscribe(onNext: { value in
+            self.mockData = value.data.content
+            self.counting.accept(self.mockData.count)
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+        }).disposed(by: disposeBag)
     }
 }
 
 //MARK: - Method(Normal)
 extension RecipeReviewController {
-    func mockDataConfigure() {
-        mockData.append(Review(nickName: "도레미", rate: 3.6, date: "2023-05-12", title: "맛있게 잘 먹었죠", contents: "국물이 아주그냥 끝내줘요", like: 6, dislike: 3, photos: []))
-    }
     
     func registerCell() {
         collectionView.register(ReviewCell.self, forCellWithReuseIdentifier: ReviewCell.reuseIdentifier)
@@ -91,19 +121,7 @@ extension RecipeReviewController {
 extension RecipeReviewController {
     func createLayout() -> UICollectionViewLayout {
         return UICollectionViewCompositionalLayout { [unowned self] index, env in
-//            let section = dataSource.snapshot().sectionIdentifiers[index]
-//            switch section {
-//            case .review:
-//                var configuration = UICollectionLayoutListConfiguration(appearance: .plain)
-//                configuration.headerMode = .supplementary
-//                
-//                let section = NSCollectionLayoutSection.list(using: configuration, layoutEnvironment: env)
-//                section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 10, trailing: 10)
-//                section.interGroupSpacing = 10
-//                return section
-//            default:
-                return self.sectionFor(index: index, environment: env)
-//            }
+            return self.sectionFor(index: index, environment: env)
         }
     }
     
@@ -119,9 +137,9 @@ extension RecipeReviewController {
     }
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1.0)))
+        let headerItem = NSCollectionLayoutItem(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(261)))
         headerItem.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 20, bottom: 10, trailing: 20)
-        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.45)), subitems: [headerItem])
+        let headerGroup = NSCollectionLayoutGroup.horizontal(layoutSize: NSCollectionLayoutSize(widthDimension: .fractionalWidth(1), heightDimension: .absolute(261)), subitems: [headerItem])
         return NSCollectionLayoutSection(group: headerGroup)
     }
     
@@ -129,15 +147,16 @@ extension RecipeReviewController {
         let item = NSCollectionLayoutItem(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(10)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 3, trailing: 10)
+                heightDimension: .estimated(250)))
+        //        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 3, trailing: 10)
+        
+        item.edgeSpacing = NSCollectionLayoutEdgeSpacing(leading: nil, top: nil, trailing: .fixed(10), bottom: .fixed(3))
         
         let group = NSCollectionLayoutGroup.vertical(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .estimated(10)),
+                heightDimension: .estimated(250)),
             subitems: [item])
-        
         let section = NSCollectionLayoutSection(group: group)
         let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
                                                       heightDimension: .absolute(50.0))
@@ -171,12 +190,67 @@ extension RecipeReviewController {
         switch item {
         case .header:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeDetailReviewHeader.reuseIdentifier, for: indexPath) as! RecipeDetailReviewHeader
+            viewModel.reviewStar.subscribe(onNext: {reviewData in
+                print("reviewData::", reviewData)
+                cell.configure(reviewData)
+            }).disposed(by: disposeBag)
+            viewModel.photos.subscribe(onNext: {photos in
+                print("photos::", photos)
+                cell.configurePhoto(photos)
+            }).disposed(by: disposeBag)
+            
             cell.delegate = self
             return cell
         case .review(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: ReviewCell.reuseIdentifier, for: indexPath) as! ReviewCell
+            cell.photoDelegate = self
             cell.configure(data)
-//            cell.configure(data)
+            
+            cell.likeButton.rx.tap
+                .subscribe(onNext: { _ in
+                    print("reviewID : \(data.review_id)")
+                    if !cell.likeCheck {
+                        Task {
+                            let result: ReviewResult = try await NetworkManager.shared.get(.likeReview("\(data.review_id)"))
+                            if result.code == "SUCCESS" {
+                                cell.likeCheck = true
+                                DispatchQueue.main.async {
+                                    cell.likeButton.setImage(UIImage(named: "heart_review_fill_svg"), for: .normal)
+                                    cell.likeButton.setTitle("\(data.like_count + 1)", for: .normal)
+                                    cell.likeButton.setTitleColor(.mainColor, for: .normal)
+                                }
+                            }
+                        }
+                    } else {
+                        Task {
+                            let result: ReviewResult = try await NetworkManager.shared.get(.unlikeReview("\(data.review_id)"))
+                            if result.code == "SUCCESS" {
+                                cell.likeCheck = false
+                                DispatchQueue.main.async {
+                                    cell.likeButton.setImage(UIImage(named: "heart_review_svg"), for: .normal)
+                                    if let count = cell.likeButton.titleLabel?.text {
+                                        cell.likeButton.setTitle("\(Int(count)! - 1)", for: .normal)
+                                        cell.likeButton.setTitleColor(.grayScale3, for: .normal)
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }).disposed(by: disposeBag)
+            
+            cell.singoButton.rx.tap
+                .subscribe(onNext: { _ in
+                    Task {
+                        let result: ReviewResult = try await NetworkManager.shared.get(.banReview("\(data.review_id)"))
+                        if result.code == "SUCCESS" {
+                            if let index = self.mockData.firstIndex(where: { $0.review_id == data.review_id }) {
+                                self.mockData.remove(at: index)
+                                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                                self.showToastSuccess(message: "신고가 접수되었습니다")
+                            }
+                        }
+                    }
+                }).disposed(by: disposeBag)
             return cell
         }
     }
@@ -186,8 +260,18 @@ extension RecipeReviewController {
         case .header:
             return UICollectionReusableView()
         case .review:
-                let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ReviewHeader.identifier, for: indexPath) as! ReviewHeader
-                return headerView   
+            let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ReviewHeader.identifier, for: indexPath) as! ReviewHeader
+//            viewModel.review.subscribe(onNext: { value in
+//                self.mockData = value.data.content
+//                headerView.configure(self.mockData.count)
+//                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+//            }).disposed(by: disposeBag)
+//            headerView.configure(mockData.count)
+            
+            counting.subscribe(onNext: {count in
+                headerView.configure(self.mockData.count)
+            }).disposed(by: disposeBag)
+            return headerView
         }
     }
     
@@ -196,17 +280,17 @@ extension RecipeReviewController {
         snapshot.appendSections([.header, .review])
         snapshot.appendItems([.header], toSection: .header)
         snapshot.appendItems(mockData.map { Item.review($0) }, toSection: .review)
-
+        
         
         return snapshot
     }
 }
 
 extension RecipeReviewController: RecipeDetailReviewHeaderDelegate {
-    func didTappedMorePhotoButton() {
-//        didSendEventClosure?(.go)
+    func didTappedMorePhotoButton(_ item: [String]) {
+        //        didSendEventClosure?(.go)
         print(#function)
-        delegate?.didTapMorePhotoButton()
+        delegate?.didTapMorePhotoButton(item)
     }
 }
 
@@ -214,6 +298,6 @@ extension RecipeReviewController: RecipeDetailReviewHeaderDelegate {
 import SwiftUI
 struct RecipeReviewController_preview: PreviewProvider {
     static var previews: some View {
-        UINavigationController(rootViewController: RecipeReviewController()).toPreview()
+        UINavigationController(rootViewController: RecipeReviewController(recipeId: 0)).toPreview()
     }
 }

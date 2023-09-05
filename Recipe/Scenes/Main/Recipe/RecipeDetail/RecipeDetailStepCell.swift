@@ -28,24 +28,16 @@ final class RecipeDetailStepCell: UICollectionViewCell {
     private let stepTitleLabel: UILabel = {
         let v = UILabel()
         v.font = .boldSystemFont(ofSize: 16)
-        v.numberOfLines = 3
+        v.numberOfLines = 1
         return v
     }()
     
     private let stepContentsLabel: UILabel = {
         let v = UILabel()
-        v.font = .systemFont(ofSize: 14)
-        v.numberOfLines = 99
-        v.textColor = .gray
-        
-        return v
-    }()
-    
-    private let pointLabel: UILabel = {
-        let v = UILabel()
-        v.text = "Point!"
-        v.font = .boldSystemFont(ofSize: 12)
-        v.textColor = .mainColor
+        v.font = .boldSystemFont(ofSize: 16)
+        v.numberOfLines = 0
+        v.setContentHuggingPriority(.defaultHigh, for: .vertical)
+        v.setContentCompressionResistancePriority(.defaultHigh, for: .vertical)
         return v
     }()
     
@@ -54,7 +46,7 @@ final class RecipeDetailStepCell: UICollectionViewCell {
         backgroundColor = .white
         addView()
         configureLayout()
-        mockData()
+//        mockData()
     }
     
     required init?(coder: NSCoder) {
@@ -65,7 +57,7 @@ final class RecipeDetailStepCell: UICollectionViewCell {
 //MARK: - Method(Normal)
 extension RecipeDetailStepCell {
     func addView() {
-        self.addSubViews(stepImageView, stepTitleLabel, stepContentsLabel, pointLabel)
+        self.addSubViews(stepImageView, stepTitleLabel, stepContentsLabel)
     }
     func configureLayout() {
         stepImageView.snp.makeConstraints {
@@ -76,35 +68,40 @@ extension RecipeDetailStepCell {
         }
 //        stepTitleLabel.backgroundColor = .red
         stepTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(stepImageView).offset(25)
+            $0.top.equalTo(stepImageView).offset(10)
             $0.left.equalTo(stepImageView.snp.right).offset(20)
             $0.right.equalToSuperview().inset(10)
             $0.height.greaterThanOrEqualTo(35)
         }
         
-        pointLabel.snp.makeConstraints {
-            $0.top.equalTo(stepImageView).offset(10)
-            $0.left.right.equalTo(stepTitleLabel)
-            $0.height.equalTo(14)
-        }
-        
         stepContentsLabel.snp.makeConstraints {
             $0.left.right.equalTo(stepTitleLabel)
-            $0.top.equalTo(stepTitleLabel.snp.bottom).offset(5)
-            $0.height.greaterThanOrEqualToSuperview().dividedBy(4)
+            $0.top.equalTo(stepTitleLabel.snp.bottom)
+//            $0.height.greaterThanOrEqualToSuperview().dividedBy(4)
+//            $0.height.equalTo(35)
+            $0.height.greaterThanOrEqualTo(35)
         }
     }
     //for data inject
-    func configure(_ item: RecipeDetailStep, idx: Int) {
-        stepImageView.image = item.image
-        stepTitleLabel.text = "\(idx). " + item.title
-        stepContentsLabel.text = item.contents
-        pointLabel.isHidden = !item.point
+    func configure(_ item: RecipeDetailStages, idx: Int) {
+        DispatchQueue.main.async {
+            if let imageURL = item.stage_image_url {
+                self.stepImageView.loadImage(from: imageURL)
+            } else {
+                self.stepImageView.image = UIImage(named: "noImage_svg")
+            }
+            self.stepTitleLabel.text = self.formatNumber(idx)
+            self.stepContentsLabel.text = item.stage_description
+        }
     }
     func mockData() {
         stepImageView.image = UIImage(named: "popcat")
         stepTitleLabel.text = "01 양파를 채 썰어서 준비해주세요"
         stepContentsLabel.text = "당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요당근이 노릇노릇하게 익으면 다 익은 당근을 그릇에 옮겨 20분정도 냉장고에서 식혀주세요"
+    }
+    
+    func formatNumber(_ number: Int) -> String {
+        return String(format: "%02d", number)
     }
 }
 

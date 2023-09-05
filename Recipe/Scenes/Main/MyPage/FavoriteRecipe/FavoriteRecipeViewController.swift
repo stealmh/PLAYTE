@@ -76,8 +76,48 @@ extension FavoriteRecipeViewController: UITableViewDelegate, UITableViewDataSour
     func favoriteButtonTapped(_ cell: FavoriteRecipeViewCell) {
         print(#function)
         if let indexPath = tableView.indexPath(for: cell) {
-            print("tapped!")
-            ///Todo: 삭제 로직 서버연결
+            let recipeId = data1[indexPath.row].recipe_id
+            
+            Task {
+                let data: DeleteRecipeReuslt = try await NetworkManager.shared.fetch(.recipeUnSave("\(recipeId)"), parameters: ["recipe-id": recipeId])
+                if data.data {
+                    data1.remove(at: indexPath.row)
+                    showToastSuccess(message: "저장이 해제됐습니다!")
+                    self.tableView.reloadData()
+                }
+            }
         }
+    }
+}
+
+/// Modal Sheet
+extension FavoriteRecipeViewController: UIViewControllerTransitioningDelegate {
+    
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return CustomPresentationController(presentedViewController: presented, presenting: presenting, presentedHeight: 184)
+    }
+}
+
+extension FavoriteRecipeViewController: SheetDelegate {
+    func forLogout() {
+        print("")
+    }
+    
+    func withdrawal() {
+        print("")
+    }
+    
+    func dismissSheetForDeleteReview(_ idx: Int) {
+        print("")
+    }
+    
+    func dismissSheetForUnSaveRecipe(_ idx: Int) {
+        data1.remove(at: idx)
+        showToastSuccess(message: "저장이 해제됐습니다!")
+        self.tableView.reloadData()
+    }
+    
+    func dismissSheetForDeleteRecipe(_ idx: Int) {
+        print("")
     }
 }

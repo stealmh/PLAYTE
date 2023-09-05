@@ -49,7 +49,7 @@ extension WriteRecipeViewController {
     }
     
     func configureNavigationBar() {
-        title = "저장 레시피"
+        title = "작성 레시피"
         defaultNavigationBackButton(backButtonColor: .grayScale5 ?? .white)
     }
 }
@@ -76,9 +76,11 @@ extension WriteRecipeViewController: UITableViewDelegate, UITableViewDataSource,
     func deleteButtonTapped(_ cell: WriteRecipeViewCell) {
         print(#function)
         if let indexPath = tableView.indexPath(for: cell) {
-            print("tapped!")
+            let recipeId = data1[indexPath.row].recipe_id
+            print(recipeId)
             ///Todo: 삭제 로직 서버연결
-            let customViewController = WriteRecipeSheetViewController()
+            let customViewController = WriteRecipeSheetViewController(recipeId: recipeId, idx: indexPath.row, startPoint: .writeRecipe)
+            customViewController.delegate = self
             customViewController.modalPresentationStyle = .custom
             customViewController.transitioningDelegate = self
 
@@ -92,5 +94,28 @@ extension WriteRecipeViewController: UIViewControllerTransitioningDelegate {
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
         return CustomPresentationController(presentedViewController: presented, presenting: presenting, presentedHeight: 184)
+    }
+}
+
+extension WriteRecipeViewController: SheetDelegate {
+    func forLogout() {
+        print("")
+    }
+    
+    func withdrawal() {
+        print("")
+    }
+    
+    func dismissSheetForDeleteReview(_ idx: Int) {
+        print("")
+    }
+    
+    func dismissSheetForUnSaveRecipe(_ idx: Int) {
+        print("")
+    }
+    
+    func dismissSheetForDeleteRecipe(_ idx: Int) {
+        data1.remove(at: idx)
+        self.tableView.reloadData()
     }
 }

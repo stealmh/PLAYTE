@@ -12,7 +12,8 @@ import SnapKit
 
 struct Photo: Hashable {
     let id = UUID()
-    let image: UIImage
+//    let image: UIImage
+    let image: String
 }
 
 class ReviewPhotoViewController: BaseViewController {
@@ -38,26 +39,7 @@ class ReviewPhotoViewController: BaseViewController {
     
     /// Properties
     private var dataSource: Datasource!
-    private var mockData: [Photo] = [Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!),
-                                     Photo(image: UIImage(named: "popcat")!)]
+    var mockData: [Photo] = []
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -112,7 +94,7 @@ extension ReviewPhotoViewController {
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
-                heightDimension: .absolute(100)),
+                heightDimension: .absolute(110)),
             subitem: item, count: 3)
         
         let section = NSCollectionLayoutSection(group: group)

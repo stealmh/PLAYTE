@@ -15,9 +15,14 @@ import RxKeyboard
 protocol CreateShortFormViewDelegate: AnyObject {
     func addVideoButtonTapped()
     func modifyVideoButtonTapped()
+    func addIngredientCellTapped(_ item: IngredientInfo)
 }
 
-final class CreateShortFormView: UIView {
+final class CreateShortFormView: UIView, DefaultTextFieldCellDelegate {
+    func didTappedCell(_ item: IngredientInfo) {
+        self.delegate?.addIngredientCellTapped(item)
+    }
+    
     enum Section: Hashable {
         case addVideoSection
         case recipeNameSection
@@ -52,13 +57,20 @@ final class CreateShortFormView: UIView {
     }()
     
     /// Properties
-    private var dataSource: Datasource!
+    var dataSource: Datasource!
     private let disposeBag = DisposeBag()
     weak var delegate: CreateShortFormViewDelegate?
-    var videoThumbnailImage = BehaviorRelay<UIImage?>(value: nil)
-    private var addIngredientMockData: [String] = ["토마토 1개", "간장2T","미림 2T"]
+    var addIngredientMockData: [String] = []
     let imageRelay = PublishRelay<UIImage>()
     var mybool = false
+    
+    var viewModel: CreateShortFormViewModel? {
+        didSet {
+            Task {
+                await setViewModel()
+            }
+        }
+    }
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -99,6 +111,28 @@ extension CreateShortFormView {
         
         collectionView.registerHeaderView(viewType: DefaultHeader.self)
     }
+    
+    func setViewModel() async {
+        print(#function)
+        if let viewModel {
+            await viewModel.getData()
+            
+            viewModel.allValuesReceived
+                .subscribe(onNext: { result in
+                    print(result.isValid)
+                    if result.isValid {
+                        print("제목:", result.title ?? "")
+                        print("설명:", result.description ?? "")
+                        print("썸네일:", result.image ?? UIImage())
+                        print("비디오 주소:", result.videoURL ?? "")
+                        print("재료 아이디:", result.id)
+                    } else {
+                        print("Some values are missing!")
+                    }
+                })
+                .disposed(by: disposeBag)
+        }
+    }
 }
 //MARK: Comp + Diff
 extension CreateShortFormView {
@@ -117,10 +151,10 @@ extension CreateShortFormView {
             return createVideoSection()
         case .recipeNameSection:
             return createRecipeNameSection()
-        case .recipeIngredientSection:
-            return createRecipeIngredientSection()
         case .recipeDescriptSection:
             return createRecipeDescription()
+        case .recipeIngredientSection:
+            return createRecipeIngredientSection()
         case .addIngredientSection:
             return createAddIngredientSection()
         }
@@ -209,7 +243,7 @@ extension CreateShortFormView {
     }
     
     func calculateSectionHeight() -> CGFloat {
-        return mybool ? 100 : 50
+        return mybool ? 120 : 90
     }
     
     
@@ -220,7 +254,7 @@ extension CreateShortFormView {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .estimated(sectionHeight)))
-        //        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
@@ -239,45 +273,7 @@ extension CreateShortFormView {
             alignment: .topLeading)
         section.boundarySupplementaryItems = [header]
         section.orthogonalScrollingBehavior = .groupPaging
-        
-        // Return
-        return section
-    }
-    
-    func createCookStepSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(0.1)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 10, bottom: 3, trailing: 10)
-        
-        let group = NSCollectionLayoutGroup.vertical(
-            layoutSize: NSCollectionLayoutSize(
-                widthDimension: .fractionalWidth(1),
-                heightDimension: .fractionalHeight(0.7)),
-            subitems: [item])
-        
-        //        let grups = NSCollectionLayoutGroup.
-        //        ,
-        //            count: mockData.count)
-        
-        let section = NSCollectionLayoutSection(group: group)
-        let footerHeaderSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0),
-                                                      heightDimension: .absolute(50.0))
-        let header = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: footerHeaderSize,
-            elementKind: UICollectionView.elementKindSectionHeader,
-            alignment: .topLeading)
-        
-        let footer = NSCollectionLayoutBoundarySupplementaryItem(
-            layoutSize: footerHeaderSize,
-            elementKind: UICollectionView.elementKindSectionFooter,
-            alignment: .bottom)
-        
-        section.boundarySupplementaryItems = [header, footer]
-        section.orthogonalScrollingBehavior = .groupPaging
-        
-        
+        section.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 0, trailing: 0)
         // Return
         return section
     }
@@ -288,7 +284,7 @@ extension CreateShortFormView {
             layoutSize: NSCollectionLayoutSize(
                 widthDimension: .fractionalWidth(1),
                 heightDimension: .fractionalHeight(1)))
-                item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 0, bottom: 3, trailing: 10)
         
         let group = NSCollectionLayoutGroup.horizontal(
             layoutSize: NSCollectionLayoutSize(
@@ -329,30 +325,63 @@ extension CreateShortFormView {
                 .subscribe(onNext: { _ in
                     self.delegate?.modifyVideoButtonTapped()
                 }).disposed(by: disposeBag)
-            
-            videoThumbnailImage
-                .debug()
-                .subscribe(onNext: { img in
-                    if let img {
-                        print("???")
-                        cell.thumbnailImageView.image = img
-                        cell.hasVideo()
-                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
-                    }
-                }).disposed(by: disposeBag)
+            if let viewModel {
+                viewModel.videoThumbnailImage
+                    .debug()
+                    .subscribe(onNext: { img in
+                        if let img {
+                            print("???")
+                            cell.thumbnailImageView.image = img
+                            cell.hasVideo()
+                            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                        }
+                    }).disposed(by: disposeBag)
+            }
             return cell
         case .recipeNameSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldCell.reuseIdentifier, for: indexPath) as! TextFieldCell
             cell.configure(text: "레시피 이름을 입력해주세요", needSearchButton: false)
             setupKeyboardForCell(cell: cell, textField: cell.recipeNametextField)
+            if let viewModel {
+                cell.recipeNametextField.rx.text.orEmpty
+                    .subscribe(onNext: { txt in
+                        if !txt.isEmpty {
+                            viewModel.recipeTitleRelay.accept(txt)
+                        }
+                    }).disposed(by: disposeBag)
+                viewModel.recipeTitleRelay
+                    .subscribe(onNext: { txt in
+                        print(txt)
+                    }).disposed(by: disposeBag)
+            }
             return cell
         case .recipeDiscriptSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TextFieldViewCell.reuseIdentifier, for: indexPath) as! TextFieldViewCell
             setupKeyboardForCell(cell: cell, textView: cell.textView)
+            if let viewModel {
+                cell.textView.rx.text.orEmpty
+                    .skip(1)
+                    .subscribe(onNext: { txt in
+                        if !txt.isEmpty {
+                            viewModel.recipeDescriptionRelay.accept(txt)
+                        }
+                    }).disposed(by: disposeBag)
+                viewModel.recipeDescriptionRelay
+                    .subscribe(onNext: { txt in
+                        print(txt)
+                    }).disposed(by: disposeBag)
+            }
             return cell
         case .recipeIngredientSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DefaultTextFieldCell.reuseIdentifier, for: indexPath) as! DefaultTextFieldCell
+            if let viewModel {
+                viewModel.ingredient.subscribe(onNext: { ingredient in
+                    print(ingredient)
+                    cell.confifgure(ingredient)
+                }).disposed(by: disposeBag)
+            }
             cell.configure(text: "재료 및 양념을 입력해주세요.")
+            cell.delegate = self
             setupKeyboardForCell(cell: cell, textField: cell.recipeNametextField)
             setupAdditionalBehaviorForIngredientCell(cell)
             return cell
@@ -382,7 +411,7 @@ extension CreateShortFormView {
         }
     }
     
-    private func createSnapshot() -> Snapshot{
+    func createSnapshot() -> Snapshot{
         var snapshot = Snapshot()
         snapshot.appendSections([.addVideoSection, .recipeNameSection, .recipeDescriptSection, .recipeIngredientSection, .addIngredientSection])
         snapshot.appendItems([.addVideoSection], toSection: .addVideoSection)
@@ -411,7 +440,7 @@ extension CreateShortFormView {
                 // 필요한 경우, 특정 텍스트 필드나 컨트롤 뷰가 키보드에 의해 가려지지 않게 스크롤 조정
                 let selectedTextField = textField
                 let rect = selectedTextField.convert(selectedTextField.bounds, to: self.collectionView)
-                    self.collectionView.scrollRectToVisible(rect, animated: true)
+                self.collectionView.scrollRectToVisible(rect, animated: true)
             })
             .disposed(by: disposeBag)
     }
@@ -430,7 +459,7 @@ extension CreateShortFormView {
                 // 필요한 경우, 특정 텍스트 필드나 컨트롤 뷰가 키보드에 의해 가려지지 않게 스크롤 조정
                 let selectedTextView = textView
                 let rect = selectedTextView.convert(selectedTextView.bounds, to: self.collectionView)
-                    self.collectionView.scrollRectToVisible(rect, animated: true)
+                self.collectionView.scrollRectToVisible(rect, animated: true)
             })
             .disposed(by: disposeBag)
     }

@@ -20,6 +20,7 @@ class AddIngredientViewController: BaseViewController {
     private let defaultView = AddIngredientDefaultView()
     
     var forTag: String = ""
+    var ingredient: UploadRecipeIngredient = UploadRecipeIngredient(ingredient_id: 0, ingredient_size: 0)
     
     init(item: IngredientInfo) {
         self.item = item
@@ -32,8 +33,7 @@ class AddIngredientViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        if item.ingredient_type == "PIECES" {
+        if item.ingredient_type == "INGREDIENTS" {
             view.addSubview(gramView)
             view.backgroundColor = .grayScale6?.withAlphaComponent(0.5)
             gramView.delegate = self
@@ -54,16 +54,21 @@ class AddIngredientViewController: BaseViewController {
                 $0.height.equalTo(205)
             }
         }
-    }
-    
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
-        if item.ingredient_type == "PIECES" {
+        if item.ingredient_type == "INGREDIENTS" {
             gramView.configure(item)
         } else {
             defaultView.configure(item)
         }
     }
+    
+//    override func viewIsAppearing(_ animated: Bool) {
+//        super.viewIsAppearing(animated)
+//        if item.ingredient_type == "INGREDIENTS" {
+//            gramView.configure(item)
+//        } else {
+//            defaultView.configure(item)
+//        }
+//    }
 }
 
 extension AddIngredientViewController: AddIngredientCountViewDelegate {
@@ -72,10 +77,24 @@ extension AddIngredientViewController: AddIngredientCountViewDelegate {
     }
     
     func didTappedOkButton(_ count: Int) {
-        if item.ingredient_type == "PIECES" {
+        print(item)
+        if item.ingredient_type == "INGREDIENTS" {
             self.forTag = "\(item.ingredient_name) \(gramView.count)개"
+            self.ingredient = UploadRecipeIngredient(ingredient_id: item.ingredient_id, ingredient_size: defaultView.count)
         } else {
-            self.forTag = "\(item.ingredient_name) \(defaultView.count)\(item.ingredient_unit)"
+            var type: String = ""
+            switch item.ingredient_unit {
+            case "ML":
+                type = "mL"
+            case "G":
+                type = "g"
+            case "T":
+                type = "T"
+            default: return
+                
+            }
+            self.forTag = "\(item.ingredient_name) \(defaultView.count)\(type)"
+            self.ingredient = UploadRecipeIngredient(ingredient_id: item.ingredient_id, ingredient_size: defaultView.count)
         }
         didSendEventClosure?(.okButtonTapped)
         dismiss(animated: true)

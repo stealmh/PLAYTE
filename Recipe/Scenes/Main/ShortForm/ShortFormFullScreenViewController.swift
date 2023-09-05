@@ -12,12 +12,12 @@ import RxCocoa
 import AVFoundation
 
 class ShortFormFullScreenViewController: BaseViewController {
-    var videoURL: URL?
+    var item: ShortFormInfo
     var player: AVPlayer
     var playerLayer: AVPlayerLayer
     
     /// UI Properties
-    private let background = ShortFormFullScreenView()
+    private lazy var background = ShortFormFullScreenView(item: item)
     private var slider: UISlider = {
         let v = UISlider()
         v.thumbTintColor = .mainColor
@@ -59,8 +59,10 @@ class ShortFormFullScreenViewController: BaseViewController {
     }()
     
     /// Properties
+    var viewModel = ShortFormFullScreenViewModel()
     private let disposeBag = DisposeBag()
     private var soundToggle = true
+    private var gestureRecognizer: UITapGestureRecognizer!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -72,7 +74,9 @@ class ShortFormFullScreenViewController: BaseViewController {
         configureLayout()
         defaultNavigationBackButton(backButtonColor: .white)
         setupUI()
-        self.bind()
+        Task {
+            await self.bind()
+        }
         view.backgroundColor = .gray
         
         //        let moreButton = UIBarButtonItem.menuButtonTap(imageName: "more_svg", size: CGSize(width: 40, height: 40))
@@ -86,6 +90,7 @@ class ShortFormFullScreenViewController: BaseViewController {
         /*
          asdas asdasdasd asdasda sd asda das das das
          */
+        background.getItemRelay.accept(item)
     }
     
     @objc func moreButtonTapped(sender: UIBarButtonItem) {
@@ -93,7 +98,8 @@ class ShortFormFullScreenViewController: BaseViewController {
         let customViewController = ShortFormSheetViewController()
         customViewController.modalPresentationStyle = .custom
         customViewController.transitioningDelegate = self
-
+        customViewController.delegate = self
+        
         present(customViewController, animated: true, completion: nil)
         
     }
@@ -110,11 +116,11 @@ class ShortFormFullScreenViewController: BaseViewController {
         }
     }
     
-    init(videoURL: URL?, player: AVPlayer, playerLayer: AVPlayerLayer) {
+    init(item: ShortFormInfo, player: AVPlayer, playerLayer: AVPlayerLayer) {
         // 초기화 코드 추가
-        self.videoURL = videoURL
         self.player = player
         self.playerLayer = playerLayer
+        self.item = item
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -130,7 +136,7 @@ class ShortFormFullScreenViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
+        //        self.tabBarController?.tabBar.isHidden = false
         player.replaceCurrentItem(with: nil)
     }
     
@@ -152,7 +158,7 @@ extension ShortFormFullScreenViewController {
         
         background.snp.makeConstraints {
             $0.top.left.right.equalToSuperview()
-            $0.height.equalToSuperview().inset(40)
+            $0.height.equalToSuperview().inset(30)
         }
         
         slider.snp.makeConstraints {
@@ -189,8 +195,8 @@ extension ShortFormFullScreenViewController {
 //MARK: Method(Player)
 extension ShortFormFullScreenViewController {
     func setupPlayer() {
-        guard let videoURL else { return }
-        player = AVPlayer(url: videoURL)
+        guard let url = URL(string: item.video_url) else { return }
+        player = AVPlayer(url: url)
         player.volume = 30
         playerLayer = AVPlayerLayer(player: player)
         playerLayer.videoGravity = .resize
@@ -204,21 +210,32 @@ extension ShortFormFullScreenViewController {
             let currentTime = CMTimeGetSeconds(time)
             self?.slider.value = Float(currentTime / duration)
             
-            // 현재 시청한 시간
-            let currentSeconds = Int(currentTime)
-            // 남은 전체 시간
-            let remainingSeconds = Int(duration)
-            print(self?.timeString(from: currentSeconds))
-            print("-" + (self?.timeString(from: remainingSeconds) ?? ""))
-            self?.currentPlayTimeLabel.text = self?.timeString(from: currentSeconds)
-            self?.totalPlayTimeLabel.text = " / " + (self?.timeString(from: remainingSeconds) ?? "")
+            if duration.isNaN || duration.isInfinite {
+                print("Duration is not a valid number: \(duration)")
+            }
+            
+            if currentTime.isNaN || currentTime.isInfinite {
+                print("Current time is not a valid number: \(currentTime)")
+            }
+            
+            if player.currentItem?.status == .readyToPlay {
+                // 현재 시청한 시간
+                let currentSeconds = Int(currentTime)
+                // 남은 전체 시간
+                let remainingSeconds = Int(duration)
+                
+                self?.currentPlayTimeLabel.text = self?.timeString(from: currentSeconds)
+                self?.totalPlayTimeLabel.text = " / " + (self?.timeString(from: remainingSeconds) ?? "")
+            }
+            
         }
         
         // 비디오가 끝났을 때 재생 시점을 처음으로 돌려주는 옵저버를 추가합니다.
         NotificationCenter.default.addObserver(self, selector: #selector(playerItemDidReachEnd), name: .AVPlayerItemDidPlayToEndTime, object: player.currentItem)
         
-        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
-        view.addGestureRecognizer(tapGesture)
+        let gestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTap(_:)))
+        gestureRecognizer.cancelsTouchesInView = false
+        view.addGestureRecognizer(gestureRecognizer)
     }
     
     func setupUI() {
@@ -233,29 +250,99 @@ extension ShortFormFullScreenViewController {
     }
 }
 
-extension ShortFormFullScreenViewController: UIViewControllerTransitioningDelegate {
+//extension ShortFormFullScreenViewController: UIScrollViewDelegate {
+//    func scrollViewWillBeginDragging(_ scrollView: UIScrollView) {
+//        // Disable gesture recognizer when scrolling starts
+//        gestureRecognizer.isEnabled = false
+//    }
+//    
+//    func scrollViewDidEndDecelerating(_ scrollView: UIScrollView) {
+//        // Enable gesture recognizer when scrolling ends
+//        gestureRecognizer.isEnabled = true
+//    }
+//    
+//    @objc func handleTapGesture(_ sender: UITapGestureRecognizer) {
+//        // Handle tap gesture action here
+//        if sender.state == .ended {
+//            // Handle tap action when gesture recognizer is active
+//        }
+//    }
+//}
+
+extension ShortFormFullScreenViewController: UIViewControllerTransitioningDelegate, SheetActionDelegate {
+    func didTappedUserReport() {
+        print("id는->", item.writtenid)
+        if !UserReportHelper.shared.isUserIdInUserReports(userId: Int64(item.writtenid)) {
+            if UserReportHelper.shared.createUserReport(userId: Int64(item.writtenid)) {
+                Task {
+                    let data: DefaultReturnBool = try await NetworkManager.shared.get(.unsaveShortForm("\(item.shortform_id)"))
+                }
+                ShortFormCoreDataHelper.shared.deleteShortForm(byCode: item.shortform_id)
+                self.dismiss(animated:true) {
+                    self.navigationController?.popViewController(animated: true)
+                    self.navigationController?.showToastSuccess(message: "사용자가 차단되었습니다.")
+                }
+            }
+        }
+    }
+    
+    func didTappedNoInterest() {
+        Task {
+            if let data = await viewModel.notInterest(item.shortform_id), data.data {
+                self.dismiss(animated: true) {
+                    self.navigationController?.popViewController(animated: false)
+                }
+                self.navigationController?.showToastSuccess(message: "관심없는 동영상으로 설정하였습니다.")
+            }
+            
+        }
+    }
+    
+    func didTappedReport() {
+        
+        Task {
+            if let data = await viewModel.report(item.shortform_id), data.data {
+                ShortFormCoreDataHelper.shared.deleteShortForm(byCode: item.shortform_id)
+                self.dismiss(animated: true) {
+                    self.navigationController?.popViewController(animated: false)
+                }
+                self.navigationController?.showToastSuccess(message: "게시물을 신고하였습니다.")
+            }
+            
+        }
+        
+    }
+    
     
     func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
-//        PresentationController(presentedViewController: presented, presenting: presenting)
+        //        PresentationController(presentedViewController: presented, presenting: presenting)
         return CustomPresentationController(presentedViewController: presented, presenting: presenting, presentedHeight: 205)
     }
     
-    func bind() {
-        let vc = CommentTestViewController()
+    
+    
+    func bind() async {
+        do {
+            let a: RecipeComment = try await NetworkManager.shared.get(.shortformComment("\(item.shortform_id)"))
+            let vc = CommentViewController(comment: a, divideId: item.shortform_id)
+            
+            background.commentButton.rx.tap
+                .subscribe(onNext: { _ in
+                    if #available(iOS 15.0, *) {
+                        guard let sheet = vc.sheetPresentationController else { return }
+                        sheet.detents = [.medium(), .large()]
+                        sheet.preferredCornerRadius = 20
+                        sheet.prefersGrabberVisible = true
+                    } else {
+                        vc.modalPresentationStyle = .automatic
+                        vc.transitioningDelegate = self
+                    }
+                    self.present(vc, animated: true)
+                }).disposed(by: disposeBag)
+        } catch {
+            print("error")
+        }
         
-        background.commentButton.rx.tap
-            .subscribe(onNext: { _ in
-                if #available(iOS 15.0, *) {
-                    guard let sheet = vc.sheetPresentationController else { return }
-                    sheet.detents = [.medium(), .large()]
-                    sheet.preferredCornerRadius = 20
-                    sheet.prefersGrabberVisible = true
-                } else {
-                    vc.modalPresentationStyle = .automatic
-                    vc.transitioningDelegate = self
-                }
-                self.present(vc, animated: true)
-            }).disposed(by: disposeBag)
     }
 }
 
@@ -293,11 +380,38 @@ import SwiftUI
 import AVKit
 struct ShortFormViewController1_preview: PreviewProvider {
     static var previews: some View {
-        //        UINavigationController(rootViewController: ShortFormFullScreenViewController(videoURL: nil, player: AVPlayer(), playerLayer: AVPlayerLayer()))
-        //            .toPreview()
-        //            .ignoresSafeArea()
-        UINavigationController(rootViewController: ShortFormViewController())
-            .toPreview()
+        Group {
+            // SE 미리보기
+            UIViewControllerPreview {
+                UINavigationController(rootViewController: ShortFormViewController())
+            }
             .ignoresSafeArea()
+            .previewDevice("iPhone SE (2nd generation)")
+            .previewDisplayName("iPhone SE")
+            
+            // 14 Pro 미리보기
+            UIViewControllerPreview {
+                UINavigationController(rootViewController: ShortFormViewController())
+            }
+            .ignoresSafeArea()
+            .previewDevice("iPhone 14 Pro")
+            .previewDisplayName("iPhone 14 Pro")
+        }
+    }
+}
+
+struct UIViewControllerPreview<View: UIViewController>: UIViewControllerRepresentable {
+    let viewController: View
+    
+    init(_ builder: @escaping () -> View) {
+        viewController = builder()
+    }
+    
+    func makeUIViewController(context: Context) -> View {
+        viewController
+    }
+    
+    func updateUIViewController(_ uiViewController: View, context: Context) {
+        // 업데이트 로직 추가 (선택 사항)
     }
 }

@@ -12,7 +12,7 @@ class MyReviewPhotoCell: UICollectionViewCell {
     
     private let photo: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "popcat")
+        v.backgroundColor = .grayScale3
         return v
     }()
     
@@ -32,7 +32,9 @@ class MyReviewPhotoCell: UICollectionViewCell {
     }
     
     func configure(_ item: String) {
-        photo.loadImage(from: item)
+        DispatchQueue.main.async {
+            self.photo.loadImage(from: item)
+        }
     }
     
 }

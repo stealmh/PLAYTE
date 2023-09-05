@@ -13,7 +13,7 @@ import SnapKit
 final class CookSettingCell: UICollectionViewCell {
     
     ///UI Properties
-    private let cookTimeTextField: PaddingUITextField = {
+    let cookTimeTextField: PaddingUITextField = {
         let v = PaddingUITextField()
         v.backgroundColor = .gray.withAlphaComponent(0.2)
         v.layer.cornerRadius = 10
@@ -36,7 +36,7 @@ final class CookSettingCell: UICollectionViewCell {
         return v
     }()
     
-    private let serviceCountLabel: UILabel = {
+    let serviceCountLabel: UILabel = {
         let v = UILabel()
         v.text = "0"
         v.font = .boldSystemFont(ofSize: 20)

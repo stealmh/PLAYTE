@@ -7,6 +7,9 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+import CoreData
 
 struct SearchTag: Hashable {
     let id = UUID()
@@ -26,7 +29,6 @@ class SearchDefaultView: UIView {
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
     typealias Snapshot = NSDiffableDataSourceSnapshot<Section, Item>
-    
     lazy var collectionView: UICollectionView = {
         let v = UICollectionView(frame: .zero, collectionViewLayout: createLayout())
         v.showsVerticalScrollIndicator = false
@@ -34,24 +36,14 @@ class SearchDefaultView: UIView {
         v.isScrollEnabled = false
         return v
     }()
-    
+    let context = (UIApplication.shared.delegate as! AppDelegate).persistentContainer.viewContext
+        
     private var dataSource: Datasource!
-    private var tagMockData: [SearchTag] = [SearchTag(tag: "오일 파스타"),
-                                            SearchTag(tag: "파티용 요리"),
-                                            SearchTag(tag: "오레오화이트초코"),
-                                            SearchTag(tag: "네글자임"),
-                                            SearchTag(tag: "파티에서즐기기좋은음식모음베스트파이브")]
-    private var rankMockData: [PopularRank] = [
-        PopularRank(rank: 1, keyword: "김치볶음밥"),
-        PopularRank(rank: 2, keyword: "김치볶음밥쥬아"),
-        PopularRank(rank: 3, keyword: "파스타"),
-        PopularRank(rank: 4, keyword: "집에서 해먹을"),
-        PopularRank(rank: 5, keyword: "간단"),
-        PopularRank(rank: 6, keyword: "자취생"),
-        PopularRank(rank: 7, keyword: "스팸"),
-        PopularRank(rank: 8, keyword: "크리스마스 파티"),
-        PopularRank(rank: 9, keyword: "부처님오신날 파티"),
-        PopularRank(rank: 10, keyword: "핑거푸드"),]
+    private var tagMockData: [SearchTag] = [SearchTag(tag: "dkssu")]
+    private var rankMockData: [PopularRank] = []
+    
+    var rankMockDataRelay = PublishRelay<Search>()
+    private let disposeBag = DisposeBag()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -59,6 +51,20 @@ class SearchDefaultView: UIView {
         configureLayout()
         registerCell()
         configureDataSource()
+        if let tagEntities = fetchTagsFromCoreData() {
+            self.tagMockData = tagEntities.map { SearchTag(from: $0) }
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+        }
+        
+        rankMockDataRelay.subscribe(onNext: { value in
+            let convert = value.data
+            for (idx, data) in convert.enumerated() {
+                let popularRank = PopularRank(rank: idx + 1, keyword: data)
+                self.rankMockData.append(popularRank)
+            }
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: false)
+            
+        }).disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -67,6 +73,33 @@ class SearchDefaultView: UIView {
 }
 
 extension SearchDefaultView {
+    
+    func fetch() {
+        if let tagEntities = fetchTagsFromCoreData() {
+            self.tagMockData = tagEntities.map { SearchTag(from: $0) }
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+        }
+    }
+    
+    func fetchTagsFromCoreData() -> [TagEntity]? {
+        // 1. TagEntity에 대한 fetch request 생성
+        let fetchRequest: NSFetchRequest<TagEntity> = TagEntity.fetchRequest()
+        
+        // 2. 필요하다면 정렬 조건 추가
+        let sortDescriptor = NSSortDescriptor(key: "tag", ascending: true)
+        fetchRequest.sortDescriptors = [sortDescriptor]
+        
+        // 3. fetch request 실행
+        do {
+            let tags = try context.fetch(fetchRequest)
+            print("tags:", tags)
+            return tags
+        } catch {
+            print("Error fetching tags: \(error)")
+            return nil
+        }
+    }
+    
     func configureLayout() {
         collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -79,6 +112,8 @@ extension SearchDefaultView {
         collectionView.register(PopularHeader.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: PopularHeader.reuseIdentifier)
     }
 }
+
+
 
 extension SearchDefaultView {
     /// UICollectionView(frame: .zero, collectionViewLayout: _ 에 들어가는 함수)
@@ -194,6 +229,7 @@ extension SearchDefaultView {
         switch section {
         case .recent:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecentSearchHeader.reuseIdentifier, for: indexPath) as! RecentSearchHeader
+            headerView.delegate = self
             return headerView
         case .popular:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: PopularHeader.reuseIdentifier, for: indexPath) as! PopularHeader
@@ -209,6 +245,37 @@ extension SearchDefaultView {
         snapshot.appendItems(tagMockData.map({ Item.recent($0) }), toSection: .recent)
         snapshot.appendItems(rankMockData.map({ Item.popular($0) }), toSection: .popular)
         return snapshot
+    }
+}
+
+extension SearchDefaultView: RecentSearchDelegate {
+    func didTappedDeleteKeyword() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "TagEntity")
+
+        do {
+            // 모든 TagEntity 객체 검색
+            let fetchedResults = try context.fetch(fetchRequest) as? [NSManagedObject]
+            
+            for object in fetchedResults! {
+                context.delete(object) // 객체 삭제
+            }
+            
+            // 변경사항 저장
+            try context.save()
+            if let tagEntities = fetchTagsFromCoreData() {
+                self.tagMockData = tagEntities.map { SearchTag(from: $0) }
+                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+            }
+            
+        } catch {
+            print("Error fetching or deleting objects: \(error)")
+        }
+    }
+}
+
+extension SearchTag {
+    init(from entity: TagEntity) {
+        self.tag = entity.tag ?? ""
     }
 }
 
@@ -230,7 +297,7 @@ struct SearchDefaultView_Preview: PreviewProvider {
     static var previews: some View {
         ForSearchDefaultView()
         //            .previewLayout(.fixed(width: 350, height: 261))
-            .ignoresSafeArea()
+//            .ignoresSafeArea()
     }
 }
 #endif

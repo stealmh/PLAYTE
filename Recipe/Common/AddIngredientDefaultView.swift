@@ -161,9 +161,20 @@ extension AddIngredientDefaultView {
     }
     
     func configure(_ item: IngredientInfo) {
-        ingredientTitle.text = "\(item.ingredient_name) \(item.ingredient_unit)"
-        ingredientTitle.asColor(targetString: "type", color: .mainColor ?? .black)
-        countTextField.placeholder = "필요한 양(\(item.ingredient_unit))을 입력해주세요"
+        var type: String = ""
+        switch item.ingredient_unit {
+        case "ML":
+            type = "mL"
+        case "G":
+            type = "g"
+        case "T":
+            type = "T"
+        default: return
+        }
+        
+        ingredientTitle.text = "\(item.ingredient_name) \(type)"
+        ingredientTitle.asColor(targetString: type, color: .mainColor ?? .black)
+        countTextField.placeholder = "필요한 양(\(type))을 입력해주세요"
     }
 }
 

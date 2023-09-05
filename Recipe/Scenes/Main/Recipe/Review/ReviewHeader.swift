@@ -15,7 +15,7 @@ final class ReviewHeader: UICollectionReusableView {
     
     private let headerTitle: UILabel = {
         let v = UILabel()
-        v.text = "리뷰 104개"
+        v.text = "리뷰 0개"
         v.textColor = .mainColor
         v.asColor(targetString: "리뷰", color: .black)
         v.font = .boldSystemFont(ofSize: 18)
@@ -83,6 +83,13 @@ extension ReviewHeader {
         recentButton.snp.makeConstraints {
             $0.centerY.equalTo(headerTitle)
             $0.right.equalToSuperview().inset(20)
+        }
+    }
+    
+    func configure(_ count: Int) {
+        DispatchQueue.main.async {
+            self.headerTitle.text = "리뷰 \(count)개"
+            self.headerTitle.asColor(targetString: "리뷰", color: .black)
         }
     }
 }

@@ -10,6 +10,11 @@ import RxSwift
 import RxCocoa
 import SnapKit
 
+protocol ReviewCellPhotoDelegate: AnyObject {
+    func reviewPhotoSend(_ item: [String])
+    func likeButtonTapped()
+    func singoButtonTapped()
+}
 
 final class ReviewCell: UICollectionViewCell {
     
@@ -37,34 +42,33 @@ final class ReviewCell: UICollectionViewCell {
     private let reviewContentsLabel: UILabel = {
         let v = UILabel()
         v.font = .systemFont(ofSize: 14)
-        v.numberOfLines = 4
+        v.numberOfLines = 0
         return v
     }()
     
-    private let likeButton: UIButton = {
+    let likeButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "like"), for: .normal)// 이미지 넣기
-        v.setTitleColor(.mainColor, for: .normal)
+        v.setImage(UIImage(named: "heart_review_svg"), for: .normal)// 이미지 넣기
+        v.setTitleColor(.grayScale3, for: .normal)
         v.tintColor = .gray
         v.imageView?.contentMode = .scaleAspectFit
         v.titleLabel?.font = .systemFont(ofSize: 14)
         v.contentHorizontalAlignment = .center
         v.semanticContentAttribute = .forceLeftToRight //<- 중v
-        v.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15) //<- 중요
+        v.imageEdgeInsets = .init(top: 2, left: -5, bottom: 0, right: 0) //<- 중요
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
     
-    private let dislikeButton: UIButton = {
+    let singoButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "dislike"), for: .normal)// 이미지 넣기
-        v.setTitleColor(.gray, for: .normal)
+        v.setImage(UIImage(named: "ban_empty_svg"), for: .normal)// 이미지 넣기
         v.tintColor = .gray
         v.imageView?.contentMode = .scaleAspectFit
         v.titleLabel?.font = .systemFont(ofSize: 14)
         v.contentHorizontalAlignment = .center
         v.semanticContentAttribute = .forceLeftToRight //<- 중v
-        v.imageEdgeInsets = .init(top: 0, left: 0, bottom: 0, right: 15) //<- 중요
+        v.imageEdgeInsets = .init(top: 0, left: -5, bottom: 0, right: 15) //<- 중요
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
     }()
@@ -73,40 +77,46 @@ final class ReviewCell: UICollectionViewCell {
         let v = UIStackView()
         v.axis = .horizontal
         v.distribution = .fillEqually
+        v.spacing = 0
         return v
     }()
     private let star1: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "StarEmpty")
-        v.contentMode = .scaleAspectFit
+        v.image = UIImage(named: "star_empty_svg")
+        v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
         return v
     }()
     
     private let star2: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "StarEmpty")
-        v.contentMode = .scaleAspectFit
+        v.image = UIImage(named: "star_empty_svg")
+        v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
         return v
     }()
     
     private let star3: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "StarEmpty")
-        v.contentMode = .scaleAspectFit
+        v.image = UIImage(named: "star_empty_svg")
+        v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
         return v
     }()
     
     private let star4: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "StarEmpty")
-        v.contentMode = .scaleAspectFit
+        v.image = UIImage(named: "star_empty_svg")
+        v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
         return v
     }()
     
     private let star5: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "StarEmpty")
-        v.contentMode = .scaleAspectFit
+        v.image = UIImage(named: "star_empty_svg")
+        v.contentMode = .scaleAspectFill
+        v.clipsToBounds = true
         return v
     }()
     
@@ -114,6 +124,7 @@ final class ReviewCell: UICollectionViewCell {
         let v = UIImageView()
         v.layer.cornerRadius = 6.13
         v.clipsToBounds = true
+        v.backgroundColor = .grayScale3
         return v
     }()
     
@@ -121,12 +132,14 @@ final class ReviewCell: UICollectionViewCell {
         let v = UIImageView()
         v.layer.cornerRadius = 6.13
         v.clipsToBounds = true
+        v.backgroundColor = .grayScale3
         return v
     }()
     
     private let thumbnailThirdImageView: UIImageView = {
         let v = UIImageView()
         v.layer.cornerRadius = 6.13
+        v.backgroundColor = .grayScale3
         v.clipsToBounds = true
         return v
     }()
@@ -135,7 +148,7 @@ final class ReviewCell: UICollectionViewCell {
         let v = UIImageView()
         v.layer.cornerRadius = 6.13
         v.clipsToBounds = true
-        v.image = UIImage(named: "popcat")
+        v.backgroundColor = .grayScale3
         return v
     }()
     
@@ -169,21 +182,54 @@ final class ReviewCell: UICollectionViewCell {
     }()
     
     /// Properties
-    private let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
     var delegate: RecipeDetailInfoDelegate?
+    var photoDelegate: ReviewCellPhotoDelegate?
     lazy var starImages = [star1, star2, star3, star4 ,star5]
-    var testrating: Double = 0.0
+    var imgURL: [String] = []
+    var myrating: Double = 0.0
+    var likeCheck = false
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
         addView()
-        bind()
         configureLayout()
-//        configure()
-        mockConfigure()
         moreBackground.addoverlay()
-//        contentView.autoresizingMask = .flexibleHeight
-//        backgroundColor = .green
+        
+        moreButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("moreButton Tapped")
+                self.photoDelegate?.reviewPhotoSend(self.imgURL)
+            }).disposed(by: disposeBag)
+        
+        
+        for i in 0..<5 {
+            if myrating >= 1 {
+                myrating -= 1
+                DispatchQueue.main.async {
+                    self.starImages[i].image = UIImage(named: "star_fill_svg")
+                }
+            }
+            else {
+                DispatchQueue.main.async {
+                    self.starImages[i].image = UIImage(named: "star_empty_svg")
+                }
+            }
+        }
+    }
+    
+    override func prepareForReuse() {
+        super.prepareForReuse()
+        
+        self.thumbnailFirstImageView.isHidden = true
+        self.thumbnailSecondImageView.isHidden = true
+        self.thumbnailThirdImageView.isHidden = true
+        self.moreBackground.isHidden = true
+        
+        self.thumbnailFirstImageView.image = nil
+        self.thumbnailSecondImageView.image = nil
+        self.thumbnailThirdImageView.image = nil
+        self.moreBackground.image = nil
     }
     
     required init?(coder: NSCoder) {
@@ -200,10 +246,12 @@ extension ReviewCell {
         starStack.addArrangedSubview(star3)
         starStack.addArrangedSubview(star4)
         starStack.addArrangedSubview(star5)
-        addSubViews(starStack, nickNameLabel, dateLabel, reviewTitleLabel, reviewContentsLabel, thumbnailFirstImageView, thumbnailSecondImageView, thumbnailThirdImageView, moreBackground, moreTitle, moreButton, likeButton, dislikeButton, divideLine)
+        addSubViews(starStack, nickNameLabel, dateLabel, reviewTitleLabel, reviewContentsLabel, thumbnailFirstImageView, thumbnailSecondImageView, thumbnailThirdImageView, moreBackground, moreTitle, divideLine)
+        contentView.addSubViews(moreButton, likeButton, singoButton)
     }
     
     private func configureLayout() {
+//        nickNameLabel.backgroundColor = .blue
         nickNameLabel.snp.makeConstraints {
             $0.top.left.equalToSuperview().inset(20)
 //            $0.height.equalTo(14)
@@ -215,49 +263,54 @@ extension ReviewCell {
             $0.right.equalToSuperview().inset(20)
         }
         
+//        reviewTitleLabel.backgroundColor = .blue
         reviewTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(nickNameLabel).inset(30)
+            $0.top.equalTo(nickNameLabel.snp.bottom)
             $0.left.equalTo(nickNameLabel)
-//            $0.height.equalTo(16)
-            $0.height.greaterThanOrEqualTo(16)
+            $0.height.equalTo(25)
+//            $0.height.greaterThanOrEqualTo(16)
         }
-        
+//        reviewContentsLabel.backgroundColor = .red
         reviewContentsLabel.snp.makeConstraints {
-            $0.top.equalTo(reviewTitleLabel.snp.bottom).offset(15)
-            $0.bottom.equalTo(thumbnailFirstImageView.snp.top).offset(-10)
+            $0.top.equalTo(reviewTitleLabel.snp.bottom)
+//            $0.bottom.equalTo(thumbnailFirstImageView.snp.top).offset(-10)
             $0.left.equalTo(nickNameLabel)
-            $0.right.equalToSuperview()
-//            $0.height.equalTo(34)
-            $0.height.greaterThanOrEqualTo(1)
+            $0.right.equalToSuperview().inset(10)
+            $0.height.greaterThanOrEqualTo(50)
+//            $0.height.greaterThanOrEqualTo(1)
         }
 
+//        likeButton.backgroundColor = .red
         likeButton.snp.makeConstraints {
-            $0.left.equalTo(dateLabel)
+            $0.left.equalTo(dateLabel).inset(5)
             $0.top.equalTo(dateLabel.snp.bottom)
             $0.width.equalTo(dateLabel).dividedBy(2)
             $0.height.equalTo(dateLabel)
         }
 
-        dislikeButton.snp.makeConstraints {
+//        singoButton.backgroundColor = .red
+        singoButton.snp.makeConstraints {
             $0.top.equalTo(likeButton)
-            $0.right.equalTo(dateLabel)
+//            $0.right.equalTo(dateLabel)
+            $0.right.equalToSuperview().inset(0)
             $0.width.equalTo(likeButton)
             $0.height.equalTo(dateLabel)
         }
-        
+//        starStack.backgroundColor = .red
         starStack.snp.makeConstraints {
-            $0.top.equalTo(nickNameLabel)
+            $0.top.bottom.equalTo(nickNameLabel)
             $0.left.equalTo(nickNameLabel.snp.right).offset(10)
 //            $0.height.equalTo(15)
-            $0.height.greaterThanOrEqualTo(15)
+            $0.width.equalTo(80)
+            $0.height.equalTo(20)
         }
         
         thumbnailFirstImageView.snp.makeConstraints {
+            $0.top.equalTo(reviewContentsLabel.snp.bottom).offset(10)
             $0.left.equalToSuperview().inset(20)
-//            $0.width.height.equalTo(80)
             $0.width.equalToSuperview().dividedBy(4)
             $0.height.lessThanOrEqualTo(80)
-            $0.bottom.equalTo(divideLine).inset(10)
+//            $0.bottom.equalTo(divideLine).inset(10)
         }
         
         thumbnailSecondImageView.snp.makeConstraints {
@@ -271,11 +324,11 @@ extension ReviewCell {
         }
         
         moreBackground.snp.makeConstraints {
+            $0.top.equalTo(reviewContentsLabel.snp.bottom).offset(10)
             $0.left.equalTo(thumbnailThirdImageView.snp.right).offset(10)
-//            $0.height.equalTo(79)
             $0.height.lessThanOrEqualTo(79)
             $0.right.equalToSuperview().inset(10)
-            $0.bottom.equalTo(divideLine).inset(10)
+//            $0.bottom.equalTo(divideLine).inset(10)
         }
         moreTitle.snp.makeConstraints {
             $0.top.equalTo(moreBackground).offset(20)
@@ -287,53 +340,93 @@ extension ReviewCell {
             $0.centerX.equalTo(moreBackground)
         }
         divideLine.snp.makeConstraints {
+            $0.top.equalTo(thumbnailFirstImageView.snp.bottom).offset(15)
             $0.left.equalTo(thumbnailFirstImageView)
             $0.right.equalTo(moreBackground)
-            $0.bottom.equalToSuperview()
-            $0.height.greaterThanOrEqualTo(1)
+//            $0.bottom.equalToSuperview()
+            $0.height.equalTo(1)
         }
     }
-    private func mockConfigure() {
-        nickNameLabel.text = "냉파 CMC"
-        dateLabel.text = "2023.05.11"
-        reviewTitleLabel.text = "기름이 너무 많아서"
-        reviewContentsLabel.text = "기름이 너무 많아서 망했습니다. 맛은 있는데 약간 짜고 느끼한 감이 좀 있어요. 그래도 다들 한번씩 해보길"
-        self.testrating = 4.7
-        thumbnailFirstImageView.image = UIImage(named: "popcat")
-        thumbnailSecondImageView.image = UIImage(named: "popcat")
-        thumbnailThirdImageView.image = UIImage(named: "popcat")
-        moreTitle.text = "57개"
-        likeButton.setTitle("9", for: .normal)
-        dislikeButton.setTitle("3", for: .normal)
-        bind()
-    } //for data inject
     
-    func configure(_ item: Review) {
-        
-        nickNameLabel.text = item.nickName
-        dateLabel.text = item.date
-        reviewTitleLabel.text = item.title
-        reviewContentsLabel.text = item.contents
-        self.testrating = item.rate
-        thumbnailFirstImageView.image = UIImage(named: "popcat")
-        thumbnailSecondImageView.image = UIImage(named: "popcat")
-        thumbnailThirdImageView.image = UIImage(named: "popcat")
-        moreTitle.text = "\(item.photos.count)개"
-        likeButton.setTitle("\(item.like)", for: .normal)
-        dislikeButton.setTitle("\(item.dislike)", for: .normal)
-    }
-}
+    func configure(_ item: ReviewInfo) {
+        print(#function)
+        print(item)
+        self.myrating = item.rating
+        self.likeCheck = item.liked
+        let dateString = item.modified_at
+        if let formattedDate = dateString.toDateFormatted() {
+            DispatchQueue.main.async {
+                self.dateLabel.text = formattedDate
+            }
+        } else {
+            DispatchQueue.main.async {
+                self.dateLabel.text = dateString
+            }
+        }
+        DispatchQueue.main.async {
+            
+            self.nickNameLabel.text = item.writtenby
+            self.reviewTitleLabel.text = item.review_title
+            self.reviewContentsLabel.text = item.review_content
+            
+            print("imageCount::", item.review_images.count)
+            switch item.review_images.count {
+            case 0:
+                self.thumbnailFirstImageView.isHidden = true
+                self.thumbnailSecondImageView.isHidden = true
+                self.thumbnailThirdImageView.isHidden = true
+                self.moreBackground.isHidden = true
+                self.moreButton.isHidden = true
+            case 1:
+                self.thumbnailFirstImageView.loadImage(from: item.review_images[0])
+                self.thumbnailSecondImageView.isHidden = true
+                self.thumbnailThirdImageView.isHidden = true
+                self.moreBackground.isHidden = true
+                self.moreButton.isHidden = true
+            case 2:
+                self.thumbnailFirstImageView.loadImage(from: item.review_images[0])
+                self.thumbnailSecondImageView.loadImage(from: item.review_images[1])
+                self.thumbnailThirdImageView.isHidden = true
+                self.moreBackground.isHidden = true
+                self.moreButton.isHidden = true
+            case 3:
+                self.thumbnailFirstImageView.loadImage(from: item.review_images[0])
+                self.thumbnailSecondImageView.loadImage(from: item.review_images[1])
+                self.thumbnailThirdImageView.loadImage(from: item.review_images[2])
+                self.moreBackground.isHidden = true
+                self.moreButton.isHidden = true
+            default:
+                self.imgURL = item.review_images
+                self.thumbnailFirstImageView.loadImage(from: item.review_images[0])
+                self.thumbnailSecondImageView.loadImage(from: item.review_images[1])
+                self.thumbnailThirdImageView.loadImage(from: item.review_images[2])
+                self.moreBackground.loadImage(from: item.review_images[3])
+            }
 
-//MARK: - Method(Rx bind)
-extension ReviewCell {
-    private func bind() {
+
+            self.moreTitle.text = "\(item.review_images.count)개"
+            self.likeButton.setTitle("\(item.like_count)", for: .normal)
+            
+            if item.liked {
+                self.likeButton.setImage(UIImage(named: "heart_review_fill_svg"), for: .normal)
+                self.likeButton.setTitleColor(.mainColor, for: .normal)
+            } else {
+                self.likeButton.setImage(UIImage(named: "heart_review_svg"), for: .normal)
+                self.likeButton.setTitleColor(.grayScale3, for: .normal)
+            }
+        }
+        
         for i in 0..<5 {
-            if testrating > 1 {
-                testrating -= 1
-                starImages[i].image = UIImage(named: "StarFill")
+            if myrating >= 1 {
+                myrating -= 1
+                DispatchQueue.main.async {
+                    self.starImages[i].image = UIImage(named: "star_fill_svg")
+                }
             }
             else {
-                starImages[i].image = UIImage(named: "StarEmpty")
+                DispatchQueue.main.async {
+                    self.starImages[i].image = UIImage(named: "star_empty_svg")
+                }
             }
         }
     }

@@ -40,4 +40,10 @@ extension UIButton {
         titleEdgeInsets = UIEdgeInsets(top: spacing, left: -image.size.width, bottom: -image.size.height, right: 0)
         imageEdgeInsets = UIEdgeInsets(top: -(titleSize.height + spacing), left: 0, bottom: 0, right: -titleSize.width)
     }
+    
+    func setUnderlineForText(text: String) {
+        let attributedString = NSMutableAttributedString(string: text)
+        attributedString.addAttribute(.underlineStyle, value: NSUnderlineStyle.single.rawValue, range: NSRange(location: 0, length: text.count))
+        setAttributedTitle(attributedString, for: .normal)
+    }
 }

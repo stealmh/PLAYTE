@@ -13,6 +13,7 @@ enum KeyChainAccount {
     case refreshToken
     case accesstokenExpiredTime
     case refreshTokenExpiredTime
+    case loginType
     
     var description: String {
         return String(describing: self)

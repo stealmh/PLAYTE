@@ -18,13 +18,21 @@ final class IngredientRecipeCell: UICollectionViewCell {
     }()
     private let recipeTitle: UILabel = {
         let v = UILabel()
-        v.font = .systemFont(ofSize: 16)
+        v.font = .boldSystemFont(ofSize: 14)
+        v.textColor = .grayScale6
+        return v
+    }()
+    
+    private let timeImageVIew: UIImageView = {
+        let v = UIImageView()
+        v.image = UIImage(named: "time_svg")
+        v.contentMode = .scaleAspectFit
         return v
     }()
     private let cookTimeLabel: UILabel = {
         let v = UILabel()
         v.font = .systemFont(ofSize: 14)
-        v.textColor = .gray.withAlphaComponent(0.6)
+        v.textColor = .grayScale4
         return v
     }()
     
@@ -34,22 +42,32 @@ final class IngredientRecipeCell: UICollectionViewCell {
         
         addSubViews(recipeImageView,
                     recipeTitle,
-                    cookTimeLabel)
+                    cookTimeLabel,timeImageVIew)
         
         self.setUI()
-        self.configure(IngredientRecipe(image: UIImage(named: "popcat")!,
-                                     title: "토마토 계란볶음밥",
-                                     cookTime: "조리 시간 10분"))
         layer.cornerRadius = 10
         layer.borderWidth = 1
         layer.borderColor = UIColor.gray.withAlphaComponent(0.4).cgColor
         clipsToBounds = true
+        mock()
     }
     
-    func configure(_ data: IngredientRecipe) {
-        recipeImageView.image = data.image
-        recipeTitle.text = data.title
-        cookTimeLabel.text = data.cookTime
+    func configure(_ data: Recommendation) {
+        DispatchQueue.main.async {
+            self.recipeImageView.loadImage(from: data.img_url)
+            self.recipeTitle.text = data.recipe_name
+            self.cookTimeLabel.text = "조리시간 \(data.cooking_time)분"
+        }
+    }
+    
+    func configureForMyPage(_ data: RecipeInfo) {
+        DispatchQueue.main.async {
+            self.recipeImageView.backgroundColor = .grayScale3
+            self.recipeImageView.loadImage(from: data.recipe_thumbnail_img)
+            self.recipeTitle.text = data.recipe_name
+            self.cookTimeLabel.text = "조리시간 \(data.cook_time)분"
+            self.recipeImageView.backgroundColor = .white
+        }
     }
     
     func setUI() {
@@ -60,16 +78,27 @@ final class IngredientRecipeCell: UICollectionViewCell {
         }
         
         recipeTitle.snp.makeConstraints {
-            $0.top.equalTo(recipeImageView.snp.bottom).offset(5)
-            $0.left.equalToSuperview().inset(10)
-            $0.width.equalToSuperview()
+            $0.top.equalTo(recipeImageView.snp.bottom).offset(15)
+            $0.left.equalToSuperview().inset(15)
+            $0.right.equalToSuperview()
+        }
+
+        timeImageVIew.snp.makeConstraints {
+            $0.top.equalTo(recipeTitle.snp.bottom).offset(3)
+            $0.left.equalTo(recipeTitle)
         }
         
         cookTimeLabel.snp.makeConstraints {
             $0.top.equalTo(recipeTitle.snp.bottom).offset(5)
-            $0.left.equalTo(recipeTitle)
+            $0.left.equalTo(timeImageVIew.snp.right)
             $0.width.equalToSuperview()
         }
+    }
+    
+    func mock() {
+        recipeImageView.loadImage(from: "https://d1jg55wkcrciwu.cloudfront.net/images/a5838556-94f1-4602-aa83-3035fa340b94.jpeg")
+        recipeTitle.text = "한번만 맛본사람이 없는 맛돌이"
+        cookTimeLabel.text = "조리시간 10분"
     }
     
     required init?(coder: NSCoder) {
@@ -94,7 +123,7 @@ struct ForIngredientRecipeCell: UIViewRepresentable {
 struct ForIngredientRecipeCellPreview: PreviewProvider {
     static var previews: some View {
         ForIngredientRecipeCell()
-            .previewLayout(.fixed(width: 173, height: 180))
+            .previewLayout(.fixed(width: 173, height: 200))
     }
 }
 #endif

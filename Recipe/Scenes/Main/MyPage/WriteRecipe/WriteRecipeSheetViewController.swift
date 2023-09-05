@@ -10,7 +10,31 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+
+struct DeleteRecipeReuslt: Codable {
+    let code: String
+    let data: Bool
+    let message: String
+    
+}
+
+protocol SheetDelegate: AnyObject {
+    func dismissSheetForDeleteRecipe(_ idx: Int)
+    func dismissSheetForUnSaveRecipe(_ idx: Int)
+    func dismissSheetForDeleteReview(_ idx: Int)
+    func forLogout()
+    func withdrawal()
+}
+
 class WriteRecipeSheetViewController: BaseViewController {
+    
+    enum SheetStartPoint {
+        case saveRecipe
+        case writeRecipe
+        case myReview
+        case logout
+        case withdraw
+    }
     
     /// UI Properties
     private let sheetLine: UIImageView = {
@@ -19,7 +43,7 @@ class WriteRecipeSheetViewController: BaseViewController {
         return v
     }()
     
-    private let sheetTitle: UILabel = {
+    let sheetTitle: UILabel = {
         let v = UILabel()
         v.font = .systemFont(ofSize: 20)
         v.textColor = .grayScale5
@@ -47,12 +71,67 @@ class WriteRecipeSheetViewController: BaseViewController {
     
     /// Properties
     private let disposeBag = DisposeBag()
-
+    weak var delegate: SheetDelegate?
+    var recipeId: Int
+    var idx: Int
+    var startPoint: SheetStartPoint
+    
+    init(recipeId: Int, idx: Int, startPoint: SheetStartPoint) {
+        self.recipeId = recipeId
+        self.idx = idx
+        self.startPoint = startPoint
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubViews(sheetLine, sheetTitle, deleteButton, cancelButton)
         view.layer.cornerRadius = 15
         configureLayout()
+        
+        deleteButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("startPoint::", self.startPoint)
+                Task {
+                    switch self.startPoint {
+                    case .myReview:
+                        let data: DeleteRecipeReuslt = try await NetworkManager.shared.get(.deleteReview("\(self.recipeId)"))
+                        
+                        if data.data {
+                            self.delegate?.dismissSheetForDeleteReview(self.idx)
+                            self.dismiss(animated: true)
+                        }
+                    case .saveRecipe:
+                        let data: DeleteRecipeReuslt = try await NetworkManager.shared.fetch(.recipeUnSave("\(self.recipeId)"), parameters: ["recipe-id": self.recipeId])
+                        if data.data {
+                            self.delegate?.dismissSheetForUnSaveRecipe(self.idx)
+                            self.dismiss(animated: true)
+                        }
+                    case .writeRecipe:
+                        let data: DeleteRecipeReuslt = try await NetworkManager.shared.fetch(.deleteMyRecipe("\(self.recipeId)"), parameters: ["shortform-recipe-id": self.recipeId])
+                        if data.data {
+                            self.delegate?.dismissSheetForDeleteRecipe(self.idx)
+                            self.dismiss(animated: true)
+                        }
+                    case .logout:
+                        self.delegate?.forLogout()
+                        self.dismiss(animated: true)
+                    case .withdraw:
+                        self.delegate?.withdrawal()
+                        self.dismiss(animated: true)
+                    default: return
+                    }
+                }
+            }).disposed(by: disposeBag)
+        
+        cancelButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.dismiss(animated: true)
+            }).disposed(by: disposeBag)
     }
 }
 
@@ -91,7 +170,7 @@ import SwiftUI
 import AVKit
 struct WriteRecipeSheetViewController_preview: PreviewProvider {
     static var previews: some View {
-        UINavigationController(rootViewController: WriteRecipeSheetViewController())
+        UINavigationController(rootViewController: WriteRecipeSheetViewController(recipeId: 0, idx: 0, startPoint: .writeRecipe))
             .toPreview()
             .previewLayout(.fixed(width: 393, height: 300))
             .ignoresSafeArea()

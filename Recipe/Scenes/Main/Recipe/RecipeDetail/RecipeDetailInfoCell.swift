@@ -12,6 +12,7 @@ import SnapKit
 
 protocol RecipeDetailInfoDelegate {
     func showReview()
+    func favoriteButtonTapped(_ recipeId: Int)
 }
 
 final class RecipeDetailInfoCell: UICollectionViewCell {
@@ -140,6 +141,7 @@ final class RecipeDetailInfoCell: UICollectionViewCell {
     /// Properties
     private let disposeBag = DisposeBag()
     var delegate: RecipeDetailInfoDelegate?
+    var recipeID: Int?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -239,10 +241,11 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
             $0.top.width.height.equalTo(reviewImage)
             $0.right.equalTo(lineBackground).inset(15)
         }
-        
+
         reviewButton.snp.makeConstraints {
             $0.top.equalTo(reviewImage.snp.bottom).offset(10)
-            $0.centerX.equalTo(reviewImage)
+            $0.left.right.equalTo(reviewImage)
+//            $0.centerX.equalTo(reviewImage)
         }
         
         personLabel.snp.makeConstraints {
@@ -261,12 +264,13 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
         uploadDateLabel.text = "2023.02.12"
         titleLabel.text = "내가 만든 극강의 JMT 간장 계란밥"
         contentsLabel.text = "안 먹어본 사람은 있지만, 한 번 먹어본 사람은 없는 궁극의 초간단 간장 계란밥 레시피!"
-        reviewButton.setTitle("4.38", for: .normal)
+        reviewButton.setTitle("3.6", for: .normal)
         personLabel.text = "2인분"
         timeLabel.text = "10분"
     } //for data inject
     
     func configure(_ item: Detail) {
+        recipeID = item.recipe_id
         DispatchQueue.main.async {
             self.nickNameLabel.text = item.writtenby
             self.titleLabel.text = item.recipe_name
@@ -290,11 +294,36 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
 extension RecipeDetailInfoCell {
     private func bind() {
         reviewButton.rx.tap
+            .debounce(.milliseconds(250), scheduler: MainScheduler.instance)
             .subscribe(onNext: { _ in
                 print("tapped")
                 self.delegate?.showReview()
             }
         ).disposed(by: disposeBag)
+        
+        favoriteButton.rx.tap
+            .subscribe(onNext: { _ in
+                if let id = self.recipeID {
+                    Task {
+                        let data: DefaultOnlyCodeMessage = try await NetworkManager.shared.get(.recipeSave("\(id)"))
+                        if data.code == "SUCCESS" {
+                            DispatchQueue.main.async {
+                                self.favoriteButton.setImage(UIImage(named: "bookmarkfill_svg"), for: .normal)
+                            }
+                        } else if data.code == "4005" {
+                            let data: DefaultOnlyCodeMessage = try await NetworkManager.shared.get(.recipeUnSave("\(id)"))
+                            if data.code == "SUCCESS" {
+                                DispatchQueue.main.async {
+                                    self.favoriteButton.setImage(UIImage(named: "bookmark_svg"), for: .normal)
+                                }
+                            }
+                        }
+                    }
+                    
+                    
+//                    self.delegate?.favoriteButtonTapped(id)
+                }
+            }).disposed(by: disposeBag)
     }
 }
 

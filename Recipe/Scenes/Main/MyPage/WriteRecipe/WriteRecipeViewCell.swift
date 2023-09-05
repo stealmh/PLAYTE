@@ -167,13 +167,20 @@ extension WriteRecipeViewCell {
     }
     
     func configure(_ data: RecipeInfo1) {
-        recipeImageView.loadImage(from: data.image_url)
-        uploadTimeLabel.text = data.created_date
-        let rateScore = data.rating
-        let commentCount = data.comment_count
-        rate.setTitle("\(rateScore)(\(commentCount))", for: .normal)
-        recipeTitle.text = data.recipe_name
-        cookTimeLabel.setTitle("10", for: .normal)
+        DispatchQueue.main.async {
+            self.recipeImageView.loadImage(from: data.recipe_thumbnail_img)
+            
+            if let formattedDate = data.created_date.toDateFormatted() {
+                self.uploadTimeLabel.text = formattedDate
+            } else {
+                self.uploadTimeLabel.text = data.created_date
+            }
+            let rateScore = data.rating
+            let commentCount = data.comment_count
+            self.rate.setTitle("\(rateScore)(\(commentCount))", for: .normal)
+            self.recipeTitle.text = data.recipe_name
+            self.cookTimeLabel.setTitle("\(data.cook_time)분", for: .normal)
+        }
 
     }
 }

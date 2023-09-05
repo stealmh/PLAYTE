@@ -40,4 +40,24 @@ extension UIView {
         v.alpha = alpha
         addSubview(v)
     }
+    
+    func roundCorners(tl: CGFloat, tr: CGFloat, bl: CGFloat, br: CGFloat) {
+        let path = UIBezierPath()
+        let size = self.bounds.size
+        
+        // Start at top-left
+        path.move(to: CGPoint(x: 0.0 + tl, y: 0.0))
+        path.addLine(to: CGPoint(x: size.width - tr, y: 0.0))
+        path.addArc(withCenter: CGPoint(x: size.width - tr, y: 0.0 + tr), radius: tr, startAngle: -CGFloat.pi/2, endAngle: 0, clockwise: true)
+        path.addLine(to: CGPoint(x: size.width, y: size.height - br))
+        path.addArc(withCenter: CGPoint(x: size.width - br, y: size.height - br), radius: br, startAngle: 0, endAngle: CGFloat.pi/2, clockwise: true)
+        path.addLine(to: CGPoint(x: 0.0 + bl, y: size.height))
+        path.addArc(withCenter: CGPoint(x: 0.0 + bl, y: size.height - bl), radius: bl, startAngle: CGFloat.pi/2, endAngle: CGFloat.pi, clockwise: true)
+        path.addLine(to: CGPoint(x: 0.0, y: 0.0 + tl))
+        path.addArc(withCenter: CGPoint(x: 0.0 + tl, y: 0.0 + tl), radius: tl, startAngle: CGFloat.pi, endAngle: -CGFloat.pi/2, clockwise: true)
+        
+        let maskLayer = CAShapeLayer()
+        maskLayer.path = path.cgPath
+        self.layer.mask = maskLayer
+    }
 }

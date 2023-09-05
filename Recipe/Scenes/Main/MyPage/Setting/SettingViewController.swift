@@ -8,6 +8,7 @@
 import UIKit
 import RxCocoa
 import RxSwift
+import PDFKit
 
 class SettingViewController: BaseViewController {
     
@@ -26,7 +27,6 @@ class SettingViewController: BaseViewController {
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        self.tabBarController?.tabBar.isHidden = false
     }
 }
 
@@ -53,7 +53,7 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // Return the number of rows in the section
-        return 6
+        return 5
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,18 +61,18 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
         cell.selectionStyle = .none
         
         guard let itemType = SettingItemType(rawValue: indexPath.row) else {
-             return UITableViewCell()
-         }
-
-         cell.configure(itemType.title, itemType.nickname)
-         
-         if itemType.isLogout {
-             cell.configureLogout()
-         } else if itemType.isWithdrawal {
-             cell.configureWithdrawal()
-         }
-         
-         return cell
+            return UITableViewCell()
+        }
+        
+        cell.configure(itemType.title, itemType.nickname)
+        
+        if itemType.isLogout {
+            cell.configureLogout()
+        } else if itemType.isWithdrawal {
+            cell.configureWithdrawal()
+        }
+        
+        return cell
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -82,38 +82,128 @@ extension SettingViewController: UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         guard let itemType = SettingItemType(rawValue: indexPath.row) else { return }
         switch itemType {
+        case .nickname:
+            let vc = NickNameChangeViewController()
+            self.tabBarController?.tabBar.isHidden = true
+            navigationController?.pushViewController(vc, animated: true)
+            //        case .notice:
+            //            let vc = AnnouncementViewController()
+            //            self.tabBarController?.tabBar.isHidden = true
+            //            navigationController?.pushViewController(vc, animated: true)
+        case .qna:
+            let vc = QAViewController()
+            self.tabBarController?.tabBar.isHidden = true
+            navigationController?.pushViewController(vc, animated: true)
+        case .terms:
+            let vc = TermsViewController()
+            self.tabBarController?.tabBar.isHidden = true
+            navigationController?.pushViewController(vc, animated: true)
         case .withdrawal:
-            NetworkManager.shared.performRequest(endpoint: .withdrawal, responseType: Withdrawal.self) { result in
-                switch result {
-                case .success(let data):
-                    print("==  data ==: ", data)
-                    if data.code == "SUCCESS" || data.message == "성공" {
-                        self.didSendEventClosure?(.withdrawal)
-                    } else {
-                        print("error")
-                    }
-                case .failure(let error):
-                    print("error")
-                }
-            }
+            let customViewController = WriteRecipeSheetViewController(recipeId: 0, idx: 0, startPoint: .withdraw)
+            customViewController.sheetTitle.text = "정말 탈퇴하시겠습니까?"
+            customViewController.delegate = self
+            customViewController.modalPresentationStyle = .custom
+            customViewController.transitioningDelegate = self
+            
+            present(customViewController, animated: true, completion: nil)
+            
+            
+            //            NetworkManager.shared.performRequest(endpoint: .withdrawal, responseType: Withdrawal.self) { result in
+            //                switch result {
+            //                case .success(let data):
+            //                    print("==  data ==: ", data)
+            //                    if data.code == "SUCCESS" || data.message == "성공" {
+            //                        self.didSendEventClosure?(.withdrawal)
+            //                    } else {
+            //                        print("error")
+            //                    }
+            //                case .failure(let error):
+            //                    print("error")
+            //                }
+            //            }
         case .logout:
-            NetworkManager.shared.performRequest(endpoint: .logout, responseType: Withdrawal.self) { result in
-                switch result {
-                case .success(let data):
-                    print("==  data ==: ", data)
-                    if data.code == "SUCCESS" || data.message == "성공" {
-                        self.didSendEventClosure?(.withdrawal)
-                    } else {
-                        print("error")
-                    }
-                case .failure(let error):
-                    print("error")
-                }
-            }
+            let customViewController = WriteRecipeSheetViewController(recipeId: 0, idx: 0, startPoint: .logout)
+            customViewController.sheetTitle.text = "로그아웃 하시겠습니까?"
+            customViewController.delegate = self
+            customViewController.modalPresentationStyle = .custom
+            customViewController.transitioningDelegate = self
+            
+            present(customViewController, animated: true, completion: nil)
+            //            NetworkManager.shared.performRequest(endpoint: .logout, responseType: Withdrawal.self) { result in
+            //                switch result {
+            //                case .success(let data):
+            //                    print("==  data ==: ", data)
+            //                    if data.code == "SUCCESS" || data.message == "성공" {
+            //                        self.didSendEventClosure?(.withdrawal)
+            //                    } else {
+            //                        print("error")
+            //                    }
+            //                case .failure(let error):
+            //                    print("error")
+            //                }
+            //            }
         default: return
         }
     }
+    
+}
 
+extension SettingViewController: UIViewControllerTransitioningDelegate {
+    func presentationController(forPresented presented: UIViewController, presenting: UIViewController?, source: UIViewController) -> UIPresentationController? {
+        return CustomPresentationController(presentedViewController: presented, presenting: presenting, presentedHeight: 184)
+    }
+}
+
+extension SettingViewController: SheetDelegate {
+    func dismissSheetForDeleteRecipe(_ idx: Int) {
+        print("")
+    }
+    
+    func dismissSheetForUnSaveRecipe(_ idx: Int) {
+        print("")
+    }
+    
+    func dismissSheetForDeleteReview(_ idx: Int) {
+        print("")
+    }
+    
+    func forLogout() {
+        NetworkManager.shared.performRequest(endpoint: .logout, responseType: Withdrawal.self) { result in
+            switch result {
+            case .success(let data):
+                print("==  data ==: ", data)
+                if data.code == "SUCCESS" || data.message == "성공" {
+                    KeyChain.shared.delete(account: .accessToken)
+                    KeyChain.shared.delete(account: .refreshToken)
+                    KeyChain.shared.delete(account: .idToken)
+                    KeyChain.shared.delete(account: .loginType)
+                    self.didSendEventClosure?(.withdrawal)
+                } else {
+                    print("error")
+                }
+            case .failure(let error):
+                print("error")
+            }
+        }
+    }
+    
+    func withdrawal() {
+        NetworkManager.shared.performRequest(endpoint: .withdrawal, responseType: Withdrawal.self) { result in
+            switch result {
+            case .success(let data):
+                print("==  data ==: ", data)
+                if data.code == "SUCCESS" || data.message == "성공" {
+                    self.didSendEventClosure?(.withdrawal)
+                } else {
+                    print("error")
+                }
+            case .failure(let error):
+                print("error")
+            }
+        }
+    }
+    
+    
 }
 
 
@@ -129,18 +219,18 @@ struct SettingViewController_Preview: PreviewProvider {
 
 enum SettingItemType: Int {
     case nickname
-    case notice
+    //    case notice
     case qna
     case terms
     case logout
     case withdrawal
-
+    
     var title: String {
         switch self {
         case .nickname:
             return "닉네임 관리"
-        case .notice:
-            return "공지사항"
+            //        case .notice:
+            //            return "공지사항"
         case .qna:
             return "Q&A"
         case .terms:
@@ -151,7 +241,7 @@ enum SettingItemType: Int {
             return "회원탈퇴"
         }
     }
-
+    
     var isLogout: Bool {
         return self == .logout
     }
@@ -159,8 +249,8 @@ enum SettingItemType: Int {
     var isWithdrawal: Bool {
         return self == .withdrawal
     }
-
+    
     var nickname: String? {
-        return self == .nickname ? "냉파쿵야" : nil
+        return self == .nickname ? "" : nil
     }
 }

@@ -1,5 +1,5 @@
 //
-//  TestCell.swift
+//  Cell.swift
 //  Recipe
 //
 //  Created by 김민호 on 2023/07/19.

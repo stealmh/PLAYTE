@@ -9,10 +9,17 @@ import Foundation
 import RxSwift
 import RxCocoa
 
+protocol RecipeDetailErrorDelegate: AnyObject {
+    func noRecipe()
+}
+
 class RecipeDetailViewModel {
     
     var ingredient = PublishRelay<RecipeInfo>()
     var recipeDetail = PublishRelay<RecipeDetail>()
+    var recipeID: Int = 0
+    var writtenID: Int = 0
+    weak var delegate: RecipeDetailErrorDelegate?
     private var disposeBag = DisposeBag()
 
     init() {
@@ -42,9 +49,21 @@ class RecipeDetailViewModel {
                 // Handle the recipeInfo data here
                 self.recipeDetail.accept(recipeDetail)
             }, onError: { error in
+                print("외 에러")
                 print(error)
+                self.delegate?.noRecipe()
             })
             .disposed(by: disposeBag)
+        
+        NetworkManager.shared.performRequest(endpoint: .recipeDetail("1"), responseType: RecipeDetail.self) { result in
+            switch result {
+            case .success(let data):
+                print("")
+            case .failure(let error):
+                print("실행은 되니?")
+                          
+            }
+        }
     }
     
     func getIngredient() {
@@ -112,6 +131,27 @@ class RecipeDetailViewModel {
             }
         }
         return result
+    }
+    
+    
+    func report(_ recipeId: Int) async -> DefaultReturnBool? {
+        do {
+            let data1: DefaultReturnBool = try await NetworkManager.shared.get(.recipeReport("\(recipeId)"))
+            return data1
+        } catch {
+            print("\(#function) error")
+            return nil
+        }
+    }
+    
+    func notInterest(_ recipeId: Int) async -> DefaultReturnBool? {
+        do {
+            let data1: DefaultReturnBool = try await NetworkManager.shared.get(.recipeNotInterest("\(recipeId)"))
+            return data1
+        } catch {
+            print("\(#function) error")
+            return nil
+        }
     }
 
 }

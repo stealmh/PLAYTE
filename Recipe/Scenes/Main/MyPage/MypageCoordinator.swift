@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PDFKit
 
 final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDelegate {
     weak var finishDelegate: CoordinatorFinishDelegate?

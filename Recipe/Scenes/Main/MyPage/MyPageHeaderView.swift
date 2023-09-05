@@ -40,7 +40,7 @@ final class MyPageHeaderView: UICollectionViewCell {
     
     private let buttonActionBackground: UIView = {
         let v = UIView()
-        v.backgroundColor = .grayScale1
+        v.backgroundColor = .sub1
         v.layer.maskedCorners = [.layerMaxXMaxYCorner, .layerMinXMaxYCorner]
         v.clipsToBounds = true
         v.layer.cornerRadius = 20
@@ -270,7 +270,7 @@ extension MyPageHeaderView {
         if item.data.nickname.isEmpty { return }
         nickNameLabel.text = item.data.nickname
         emailLabel.text = item.data.email
-        loginTypeImageView.image = item.data.provider == "APPLE" ? UIImage(named: "loginType_apple_svg") : UIImage(named: "loginType_apple_svg")
+        loginTypeImageView.image = item.data.provider == "APPLE" ? UIImage(named: "loginType_apple_svg") : UIImage()
         hideSkeletonViews()
     }
     

@@ -32,13 +32,12 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     /// Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black.withAlphaComponent(0.2)
+        view.backgroundColor = .white
         view.addSubview(popupView)
         popupView.delegate = self
         popupView.snp.makeConstraints {
             $0.edges.equalToSuperview()
         }
-        defaultNavigationBackButton(backButtonColor: .grayScale5 ?? .black)
     }
     
     
@@ -46,9 +45,9 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
         popupView.delegate = nil
     }
     
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
-        popupView.delegate = self
-    }
+//    override func viewIsAppearing(_ animated: Bool) {
+//        super.viewIsAppearing(animated)
+//        popupView.delegate = self
+//    }
 
 }

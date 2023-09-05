@@ -21,7 +21,7 @@ final class ShopingListCell: UICollectionViewCell {
     
     private let shopingTitleLabel: UILabel = {
         let v = UILabel()
-        v.font = .boldSystemFont(ofSize: 13.76)
+        v.font = .systemFont(ofSize: 13.76)
         return v
     }()
     
@@ -35,6 +35,7 @@ final class ShopingListCell: UICollectionViewCell {
         let v = UIImageView()
         v.layer.cornerRadius = 7
         v.clipsToBounds = true
+        v.backgroundColor = .grayScale3
         return v
     }()
     
@@ -48,7 +49,7 @@ final class ShopingListCell: UICollectionViewCell {
         backgroundColor = .white
         addView()
         configureLayout()
-        mockConfigure()
+//        mockConfigure()
         backgroundConfigure()
     }
     
@@ -60,7 +61,8 @@ final class ShopingListCell: UICollectionViewCell {
 //MARK: - Method(Normal)
 extension ShopingListCell {
     func addView() {
-        addSubViews(shopingTitleLabel, shopingPriceLabel, shopingPhotoImageView, deliveryImageView)
+//        addSubViews(shopingTitleLabel, shopingPriceLabel, shopingPhotoImageView, deliveryImageView)
+        contentView.addSubViews(shopingTitleLabel, shopingPriceLabel, shopingPhotoImageView, deliveryImageView)
     }
     func configureLayout() {
         shopingPhotoImageView.snp.makeConstraints {
@@ -70,26 +72,26 @@ extension ShopingListCell {
         }
         
         shopingTitleLabel.snp.makeConstraints {
-            $0.top.equalTo(shopingPhotoImageView).inset(5)
-            $0.left.equalTo(shopingPhotoImageView.snp.right).offset(10)
+            $0.top.equalTo(shopingPhotoImageView).inset(10)
+            $0.left.equalTo(shopingPhotoImageView.snp.right).offset(20)
             $0.right.equalToSuperview().inset(20)
             $0.height.equalTo(14)
         }
         
         shopingPriceLabel.snp.makeConstraints {
             $0.left.equalTo(shopingTitleLabel)
-            $0.top.equalTo(shopingTitleLabel.snp.bottom).offset(10)
+            $0.top.equalTo(shopingTitleLabel.snp.bottom).offset(5)
             $0.right.equalToSuperview().inset(20)
             $0.height.equalTo(14)
         }
         deliveryImageView.snp.makeConstraints {
-            $0.left.equalTo(shopingTitleLabel).offset(-5)
-            $0.top.equalTo(shopingPriceLabel.snp.bottom).offset(10)
+            $0.left.equalTo(shopingTitleLabel).offset(-10)
+            $0.top.equalTo(shopingPriceLabel.snp.bottom).offset(5)
         }
     }
     
     private func backgroundConfigure() {
-        layer.cornerRadius = 20
+        layer.cornerRadius = 10
         layer.shadowColor = UIColor.black.cgColor
         clipsToBounds = true
         layer.masksToBounds = false
@@ -102,9 +104,9 @@ extension ShopingListCell {
     func configure(_ item: ShopingList) {
         DispatchQueue.main.async {
             self.shopingTitleLabel.text = item.title
-            self.shopingPriceLabel.text = "₩\(item.price)원 ~"
+            self.shopingPriceLabel.text = "₩\(item.price.formattedWithSeparator)원 ~"
             self.shopingPhotoImageView.loadImage(from: item.image)
-            self.deliveryImageView.image = UIImage(named: "rocket")
+            self.deliveryImageView.image = UIImage(named: "rocket_svg")
             self.deliveryImageView.isHidden = !item.isrocket
         }
     }
@@ -113,7 +115,7 @@ extension ShopingListCell {
         shopingTitleLabel.text = "전남 국내산 대추방울 토마토"
         shopingPriceLabel.text = "₩18,000원 ~"
         shopingPhotoImageView.image = UIImage(named: "popcat")
-        deliveryImageView.image = UIImage(named: "rocket")
+        deliveryImageView.image = UIImage(named: "rocket_svg")
     }
 }
 

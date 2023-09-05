@@ -14,8 +14,9 @@ protocol MyPageViewDelegate: AnyObject {
     func favoriteReceipeButtonTapped(item: Recipe1?)
     func writeRecipeButtonTapped(item: Recipe1?)
     func myReviewButtonTapped()
-    func recentShortFormCellTapped(item: MyPageRecentWatch)
-    func recentRecipeCellTapped(item: IngredientRecipe)
+    func recentShortFormCellTapped(item: ShortFormInfo)
+    func recentRecipeCellTapped(item: RecipeInfo)
+    func sendMyInfo(_ item: MyInfo1)
 }
 
 class MyPageView: UIView {
@@ -28,8 +29,8 @@ class MyPageView: UIView {
     
     enum Item: Hashable {
         case header(MyInfo1)
-        case recentShortForm(MyPageRecentWatch)
-        case recentRecipe(IngredientRecipe)
+        case recentShortForm(ShortFormInfo)
+        case recentRecipe(RecipeInfo)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -40,6 +41,13 @@ class MyPageView: UIView {
         v.showsVerticalScrollIndicator = false
         v.translatesAutoresizingMaskIntoConstraints = false
         return v
+    }()
+    
+    private let loadingIndicator: UIActivityIndicatorView = {
+        let indicator = UIActivityIndicatorView(style: .large)
+        indicator.color = .gray  // 로딩 인디케이터의 색상 설정
+        indicator.hidesWhenStopped = true
+        return indicator
     }()
     
     weak var delegate: MyPageViewDelegate?
@@ -53,19 +61,40 @@ class MyPageView: UIView {
     private let disposeBag = DisposeBag()
     private var dataSource: Datasource!
     private var mockHeader2: MyInfo1 = MyInfo1(data: MyDetailInfo(memberId: 0, email: "", nickname: "", provider: "apple"))
-    private var mockRecentShortForm: [MyPageRecentWatch] = [MyPageRecentWatch(views: "1.4k", contents: "맛있는 바나나를 구워보았다"),MyPageRecentWatch(views: "1.4만", contents: "맛있는 바나나를 3개먹었다"),MyPageRecentWatch(views: "1.4천", contents: "맛있는 바나나를 3개먹었다"),MyPageRecentWatch(views: "1.4만", contents: "토마토 볶음밥")]
-    private var mockRecentRecipe: [IngredientRecipe] = [IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목제목", cookTime: "23분"),IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목2입니다", cookTime: "2분"), IngredientRecipe(image: UIImage(named: "popcat")!, title: "제목목", cookTime: "100분")]
+    private var mockRecentShortForm: [ShortFormInfo] = []
+    private var mockRecentRecipe: [RecipeInfo] = []
     
     private var favoriteRecipe: Recipe1?
     private var writeRecipe: Recipe1?
+    var recentShortFormRelay = PublishRelay<[ShortFormInfoEntity]>()
+    var recentRecipeForRelay = PublishRelay<[NewRecipeInfoEntity]>()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(collectionView)
+        addSubview(loadingIndicator)  // 로딩 인디케이터 추가
+        loadingIndicator.snp.makeConstraints {
+            $0.center.equalToSuperview()
+        }
+        showLoadingIndicator()
         configureLayout()
         registerCell()
         configureDataSource()
         collectionView.delegate = self
+        
+        recentShortFormRelay.subscribe(onNext: { value in
+            
+            self.mockRecentShortForm = value.map { ShortFormInfo(from: $0) }
+            self.hideLoadingIndicator()
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+        }).disposed(by: disposeBag)
+        
+        recentRecipeForRelay.subscribe(onNext: { value in
+            self.showLoadingIndicator()
+            self.mockRecentRecipe = value.map { RecipeInfo(from: $0) }
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+            self.hideLoadingIndicator()
+        }).disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -75,6 +104,15 @@ class MyPageView: UIView {
 
 //MARK: - Method(Normal)
 extension MyPageView {
+    
+    func showLoadingIndicator() {
+        loadingIndicator.startAnimating()
+    }
+
+    func hideLoadingIndicator() {
+        loadingIndicator.stopAnimating()
+    }
+    
     func configureLayout() {
         collectionView.snp.makeConstraints {
             $0.edges.equalToSuperview()
@@ -94,6 +132,7 @@ extension MyPageView {
             do {
                 // Fetch MyInfo1
                 let myInfo = try await viewModel.getMyInfo()
+                self.delegate?.sendMyInfo(myInfo)
                 mockHeader2 = myInfo
                 dataSource.apply(createSnapshot(), animatingDifferences: true)
 
@@ -166,10 +205,10 @@ extension MyPageView {
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .fractionalHeight(1)))
         item.contentInsets = .init(top: 0, leading: 0, bottom: 0, trailing: 20)
         
-        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .fractionalHeight(0.25)), subitem: item, count: 2)
-        
+        let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(200)), subitem: item, count: 2)
+        // 183 109
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 0, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 20, bottom: 50, trailing: 0)
         section.orthogonalScrollingBehavior = .continuous
         
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(35))
@@ -218,7 +257,7 @@ extension MyPageView {
             
         case .recentRecipe(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientRecipeCell.reuseIdentifier, for: indexPath) as! IngredientRecipeCell
-            cell.configure(data)
+            cell.configureForMyPage(data)
             return cell
             
         }

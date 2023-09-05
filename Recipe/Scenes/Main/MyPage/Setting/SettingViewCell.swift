@@ -30,7 +30,7 @@ class SettingViewCell: UITableViewCell {
         addSubview(cellTitleLabel)
         addSubview(nickNameLabel)
         cellTitleLabel.snp.makeConstraints {
-            $0.top.left.equalToSuperview().inset(10)
+            $0.top.left.equalToSuperview().inset(20)
             $0.height.equalTo(19)
             $0.width.equalTo(100)
         }

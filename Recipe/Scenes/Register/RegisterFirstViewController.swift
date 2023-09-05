@@ -55,8 +55,18 @@ extension RegisterFirstViewController: RegisterViewDelegate {
     func didTapNextButton(_ txt: String) async {
         let data = try? await LoginService.shared.appleRegister(
             idToken: KeyChain.shared.read(account: .idToken), nickName: txt)
+
         if (data != nil), data?.message == "성공" {
             self.delegate?.endFlow()
+        }
+        
+        if data == nil {
+            let data2 = try? await LoginService.shared.googleRegister(
+                idToken: KeyChain.shared.read(account: .idToken), nickName: txt)
+            print(data2!)
+            if (data2 != nil), data2?.message == "성공" {
+                self.delegate?.endFlow()
+            }
         }
 
     }

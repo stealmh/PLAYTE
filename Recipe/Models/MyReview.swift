@@ -14,6 +14,7 @@ struct MyReview: Decodable {
 
 struct MyReviewList: Decodable {
     let img_list: [String]
+    let review_id: Int
     let recipe_name: String
     let review_content: String
     let review_rating: Int

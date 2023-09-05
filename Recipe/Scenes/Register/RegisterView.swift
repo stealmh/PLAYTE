@@ -158,7 +158,8 @@ extension RegisterView {
                             if !txt.isValidNickname() {
                                 self.inValidNickNameCheck()
                             } else {
-                                self.nickNameCheckUI(!data)
+//                                self.nickNameCheckUI(!data)
+                                self.teamNickNameCheck(!data, txt)
                             }
                         }
                     })
@@ -178,6 +179,36 @@ extension RegisterView {
             validationLabel.text = "사용 가능한 닉네임 입니다"
             nextButton.backgroundColor = .mainColor
             nextButton.isEnabled = true
+        } else {
+            searchImageButton.isHidden = false
+            searchImageButton.setImage(UIImage(named: "nickNameError")!, for: .normal)
+            validationLabel.text = "중복된 닉네임입니다"
+            validationLabel.isHidden = false
+            nextButton.backgroundColor = .grayScale3
+            nextButton.isEnabled = false
+        }
+    }
+    
+    func teamNickNameCheck(_ valid: Bool, _ txt: String) {
+        searchTextField.layer.borderColor = UIColor.mainColor?.cgColor
+        searchTextField.textColor = .mainColor
+        searchTextField.backgroundColor = .sub1
+        if valid {
+            searchImageButton.isHidden = false
+            searchImageButton.setImage(UIImage(named: "nickNameCheck")!, for: .normal)
+            validationLabel.isHidden = false
+            nextButton.backgroundColor = .mainColor
+            nextButton.isEnabled = true
+            switch txt {
+            case "초코칩":
+                validationLabel.text = "(민트)초코칩 반가워요 꺄르륵^^"
+            case "채채":
+                validationLabel.text = "디자인 너무 머쉿따.. 채채 반가워요!"
+            case "제제":
+                validationLabel.text = "멋진 기획자 제제 반가워요!"
+            default:
+                validationLabel.text = "사용 가능한 닉네임 입니다"
+            }
         } else {
             searchImageButton.isHidden = false
             searchImageButton.setImage(UIImage(named: "nickNameError")!, for: .normal)
