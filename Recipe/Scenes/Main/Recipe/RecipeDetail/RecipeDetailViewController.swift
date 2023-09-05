@@ -61,7 +61,7 @@ class RecipeDetailViewController: BaseViewController, RecipeDetailErrorDelegate 
     private var mockShopList: [ShopingList] = []
     private var mockStage: [RecipeDetailStages] = []
     var mockData: [DetailIngredient] = []
-    var mock: [RecipeDetailIngredient] = []
+    var mock: [RecipeDetailIngredient] = [RecipeDetailIngredient(ingredient_id: 0, ingredient_name: "토마토", ingredient_type: "ㄴ", ingredient_size: 4, ingredient_unit: "개", coupang_product_image: "", coupang_product_name: "", coupang_product_price: 3, coupang_product_url: "", is_rocket_delivery: false)]
     var recommendationRecipe: [Recommendation] = []
     
     private var dataSource: Datasource!
