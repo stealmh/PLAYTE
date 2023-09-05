@@ -22,7 +22,7 @@ struct UploadRecipe: Hashable, Encodable {
 }
 
 struct RecipeUploadForStep: Hashable, Encodable {
-    let image_url: String
+    let image_url: String?
     let stage_description: String
 }
 
@@ -34,7 +34,7 @@ struct UploadRecipeIngredient: Hashable, Encodable {
 class CreateRecipeViewModel {
     //    var addIngredientMockData: [String] = []
     var imageRelay = PublishRelay<UIImage>()
-    var imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage(named: "popcat")!)
+    var imageBehaviorRelay = BehaviorRelay<UIImage?>(value: nil)
     var thumbnailImage = BehaviorRelay<UIImage?>(value:nil)
     var createRecipeTitle = PublishRelay<String>()
     var createRecipeDescription = PublishRelay<String>()

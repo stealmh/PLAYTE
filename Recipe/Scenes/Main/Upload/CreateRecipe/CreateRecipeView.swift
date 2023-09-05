@@ -554,16 +554,32 @@ extension CreateRecipeView {
                         }
                     }).disposed(by: disposeBag)
                 
-                cell.serviceCountRx.subscribe(onNext: { value in
-                    viewModel.createRecipeServiceCount.accept(value)
-                }).disposed(by: disposeBag)
+                cell.serviceCountRx
+                    .debug()
+                    .subscribe(onNext: { count in
+                        DispatchQueue.main.async {
+                            cell.serviceCountLabel.text = "\(count)"
+                        }
+                        viewModel.createRecipeServiceCount.accept(count)
+                    })
+                    .disposed(by: disposeBag)
                 
-                viewModel.allValuesSubject
-                    .subscribe(onNext: { (_,_,_,data,service,_) in
-                        print("cooTime 추적: \(data)")
-                        cell.cookTimeTextField.text = "\(data)"
-                        cell.serviceCountLabel.text = "\(service)"
-                    }).disposed(by: disposeBag)
+//                cell.serviceCountRx
+//                    .skip(1)
+//                    .subscribe(onNext: { value in
+//                    viewModel.createRecipeServiceCount.accept(value)
+//                }).disposed(by: disposeBag)
+                
+//                viewModel.allValuesSubject
+//                    .distinctUntilChanged()
+//                    .subscribe(onNext: { (_,_,_,data,service,_) in
+//                        print("cooTime 추적: \(data)")
+//                        DispatchQueue.main.async {
+//                            cell.cookTimeTextField.text = "\(data)"
+//                            cell.serviceCountLabel.text = "\(service)"
+//                            cell.serviceCountRx.accept(service)
+//                        }
+//                    }).disposed(by: disposeBag)
             }
             return cell
         case .cookStepSection(let data):
@@ -588,17 +604,29 @@ extension CreateRecipeView {
                                 // Skip empty text
                                 return
                             }
-                            let defaultImage = UIImage(named: "popcat")
                             let newStep = Dummy(contents: newText, img: viewModel.imageBehaviorRelay.value)
                             if !self.mockData.contains(newStep) {
-                                self.mockData.insert(newStep, at: 0)
-                                print(self.mockData)
+                                self.mockData.insert(newStep, at: self.mockData.count)
+//                                self.mockData.append(newStep)
+                            }
+                            let data = Dummy(contents: "")
+                            for (idx,item) in self.mockData.enumerated() {
+                                if item.contents.isEmpty {
+                                    self.mockData.remove(at: idx)
+                                }
+                            }
+                            print("첫번째를 제거했을 때:::", self.mockData)
+                            if let dataiExist = self.mockData.last, dataiExist.contents.isEmpty {
+                                print("이미 존재함")
+                            } else {
+                                self.mockData.append(data)
+                                print("마지막으로 추가했을 때:::", self.mockData)
                             }
                             //                        self.mockData.insert(newStep, at: 0)
                             self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
                             self.applyNewSnapshot()
                             cell.stepTextfield.text = ""
-                            viewModel.imageBehaviorRelay.accept(defaultImage!)
+                            viewModel.imageBehaviorRelay.accept(nil)
                             if let initialIndexPath = self.dataSource.indexPath(for: .cookStepSection(self.mockData.last!)) {
                                 collectionView.scrollToItem(at: initialIndexPath, at: .bottom, animated: true)
                             }
@@ -683,8 +711,8 @@ extension CreateRecipeView {
                         }
                     }).disposed(by: disposeBag)
                     
-                    viewModel.allValuesSubject.subscribe(onNext: { values in
-                        print("value:", values)
+                    viewModel.allValuesSubject
+                        .subscribe(onNext: { values in
                         Task {
                             let (image, title, description, cookTime, serviceCount, ingredients) = values
                             // Handle the values here
@@ -697,6 +725,9 @@ extension CreateRecipeView {
                                     let contents = value.contents
                                     if let img = value.img?.toBase64() {
                                         let stepData = RecipeUploadForStep(image_url: img, stage_description: contents)
+                                        step.append(stepData)
+                                    } else {
+                                        let stepData = RecipeUploadForStep(image_url: nil, stage_description: contents)
                                         step.append(stepData)
                                     }
                                 }

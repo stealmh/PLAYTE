@@ -54,15 +54,16 @@ final class CookSettingCell: UICollectionViewCell {
         return v
     }()
     ///Properties
-    private let disposeBag = DisposeBag()
+    let disposeBag = DisposeBag()
     var serviceCountRx = BehaviorRelay(value: 0)
+    
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
         configureLayout()
         cookTimeTextField.delegate = self
-        serviceCountLabel.text = "\(serviceCountRx.value)"
+//        serviceCountLabel.text = "\(serviceCountRx.value)"
         bind()
     }
     
@@ -113,24 +114,18 @@ extension CookSettingCell {
 extension CookSettingCell {
     func bind() {
         increaseButton.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                let newValue = (self?.serviceCountRx.value ?? 0) + 1
-                self?.serviceCountRx.accept(newValue)
+            .subscribe(onNext: {  _ in
+                let newValue = (self.serviceCountRx.value) + 1
+                self.serviceCountRx.accept(newValue)
             }).disposed(by: disposeBag)
         
         decreaseButton.rx.tap
-            .subscribe(onNext: { [weak self] _ in
-                let newValue = (self?.serviceCountRx.value ?? 0) - 1
+            .subscribe(onNext: { _ in
+                let newValue = (self.serviceCountRx.value) - 1
                 if newValue >= 0 {
-                    self?.serviceCountRx.accept(newValue)
+                    self.serviceCountRx.accept(newValue)
                 }
             }).disposed(by: disposeBag)
-        
-        serviceCountRx
-            .debug()
-            .map { String($0) }
-            .bind(to: serviceCountLabel.rx.text)
-            .disposed(by: disposeBag)
     }
 }
 

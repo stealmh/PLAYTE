@@ -79,9 +79,13 @@ extension AddIngredientViewController: AddIngredientCountViewDelegate {
     func didTappedOkButton(_ count: Int) {
         print(item)
         if item.ingredient_type == "INGREDIENTS" {
-            self.forTag = "\(item.ingredient_name) \(gramView.count)개"
-            self.ingredient = UploadRecipeIngredient(ingredient_id: item.ingredient_id, ingredient_size: defaultView.count)
+            print("== if 문입니다 ==")
+            self.forTag = "\(item.ingredient_name) \(count)개"
+            self.ingredient = UploadRecipeIngredient(ingredient_id: item.ingredient_id, ingredient_size: count)
+            print(self.forTag)
+            print(self.ingredient)
         } else {
+            print("== else 문입니다 ==")
             var type: String = ""
             switch item.ingredient_unit {
             case "ML":

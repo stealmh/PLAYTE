@@ -98,9 +98,14 @@ extension CreateRecipeViewController: CreateRecipeViewDelegate {
         guard let thumbnailURL = await viewModel.addImage(img: thumbnail) else { return }
         
         for value in beforeConvertData.recipe_stages {
-            if let stage = value.image_url.base64ToImage() {
+
+            /// image_url이  nil 이라면...
+            if let stage = value.image_url?.base64ToImage() {
                 guard let stage = await viewModel.addImage(img: stage) else { return }
                 let data = RecipeUploadForStep(image_url: stage.data, stage_description: value.stage_description)
+                newStage.append(data)
+            } else {
+                let data = RecipeUploadForStep(image_url: nil, stage_description: value.stage_description)
                 newStage.append(data)
             }
         }
@@ -115,6 +120,7 @@ extension CreateRecipeViewController: CreateRecipeViewDelegate {
                                    recipe_thumbnail_img: thumbnailURL.data,
                                    serving_size: beforeConvertData.serving_size)
         
+        print(newData)
         do {
             let encoder = JSONEncoder()
             let jsonData = try encoder.encode(newData)
