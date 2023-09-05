@@ -27,7 +27,7 @@ final class CookSettingCell: UICollectionViewCell {
         return v
     }()
     
-    private let decreaseButton: DefaultCircleButton = {
+     let decreaseButton: DefaultCircleButton = {
         let v = DefaultCircleButton()
         let img = v.buttonImageSize(systemImageName: "minus", size: 20)
         v.setImage(img, for: .normal)
@@ -45,7 +45,7 @@ final class CookSettingCell: UICollectionViewCell {
         return v
     }()
     
-    private let increaseButton: UIButton = {
+     let increaseButton: UIButton = {
         let v = DefaultCircleButton()
         let img = v.buttonImageSize(systemImageName: "plus", size: 20)
         v.setImage(img, for: .normal)
@@ -55,7 +55,6 @@ final class CookSettingCell: UICollectionViewCell {
     }()
     ///Properties
     let disposeBag = DisposeBag()
-    var serviceCountRx = BehaviorRelay(value: 0)
     
     
     override init(frame: CGRect) {
@@ -109,23 +108,34 @@ extension CookSettingCell {
             $0.left.equalTo(serviceCountLabel.snp.right).offset(30)
         }
     }
+    
+    func reset() {
+        serviceCountLabel.text = "0"
+    }
+    
+    func configure(count: Int, cookTime: Int) {
+        DispatchQueue.main.async {
+            self.serviceCountLabel.text = "\(count)"
+            self.cookTimeTextField.text = "\(cookTime)"
+        }
+    }
 }
 
 extension CookSettingCell {
     func bind() {
-        increaseButton.rx.tap
-            .subscribe(onNext: {  _ in
-                let newValue = (self.serviceCountRx.value) + 1
-                self.serviceCountRx.accept(newValue)
-            }).disposed(by: disposeBag)
-        
-        decreaseButton.rx.tap
-            .subscribe(onNext: { _ in
-                let newValue = (self.serviceCountRx.value) - 1
-                if newValue >= 0 {
-                    self.serviceCountRx.accept(newValue)
-                }
-            }).disposed(by: disposeBag)
+//        increaseButton.rx.tap
+//            .subscribe(onNext: {  _ in
+//                if let currentCount = Int(self.serviceCountLabel.text ?? "0") {
+//                    self.serviceCountLabel.text = "\(currentCount + 1)"
+//                }
+//            }).disposed(by: disposeBag)
+//        
+//        decreaseButton.rx.tap
+//            .subscribe(onNext: { _ in
+//                if let currentCount = Int(self.serviceCountLabel.text ?? "0"), currentCount > 0 {
+//                    self.serviceCountLabel.text = "\(currentCount - 1)"
+//                }
+//            }).disposed(by: disposeBag)
     }
 }
 

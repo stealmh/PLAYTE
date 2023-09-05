@@ -88,6 +88,8 @@ final class CreateRecipeView: UIView, DefaultTextFieldCellDelegate {
     //    let imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage(named: "popcat")!)
     var mymy: UploadRecipe?
     var mybool = false
+    var count = 0
+    var cookTime = 0
     var viewModel: CreateRecipeViewModel? {
         didSet {
             Task {
@@ -479,7 +481,6 @@ extension CreateRecipeView {
                 }).disposed(by: disposeBag)
             if let viewModel {
                 viewModel.thumbnailImage
-                    .debug()
                     .subscribe(onNext: { img in
                         if let img {
                             print("???")
@@ -546,24 +547,35 @@ extension CreateRecipeView {
             return cell
         case .cookTimeSettingSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
+            cell.configure(count: self.count, cookTime: self.cookTime)
             if let viewModel {
                 cell.cookTimeTextField.rx.text.orEmpty
                     .subscribe(onNext: { txt in
                         if let intValue = Int(txt) {
-                            viewModel.createRecipeCookTime.accept(intValue)
+                            self.cookTime = intValue
+                            viewModel.createRecipeCookTime.accept(self.cookTime)
                         }
                     }).disposed(by: disposeBag)
                 
-                cell.serviceCountRx
-                    .debug()
-                    .subscribe(onNext: { count in
-                        DispatchQueue.main.async {
-                            cell.serviceCountLabel.text = "\(count)"
+                cell.increaseButton.rx.tap
+                    .subscribe(onNext: {  _ in
+                        if let currentCount = Int(cell.serviceCountLabel.text ?? "0") {
+                            cell.serviceCountLabel.text = "\(currentCount + 1)"
+                            self.count += 1
+                            viewModel.createRecipeServiceCount.accept(self.count)
                         }
-                        viewModel.createRecipeServiceCount.accept(count)
-                    })
-                    .disposed(by: disposeBag)
+                    }).disposed(by: disposeBag)
                 
+                cell.decreaseButton.rx.tap
+                    .subscribe(onNext: { _ in
+                        if let currentCount = Int(cell.serviceCountLabel.text ?? "0"), currentCount > 0 {
+                            cell.serviceCountLabel.text = "\(currentCount - 1)"
+                            self.count -= 1
+                            viewModel.createRecipeServiceCount.accept(self.count)
+                        }
+                    }).disposed(by: cell.disposeBag)
+                
+//                cell.reset()
 //                cell.serviceCountRx
 //                    .skip(1)
 //                    .subscribe(onNext: { value in
@@ -580,6 +592,8 @@ extension CreateRecipeView {
 //                            cell.serviceCountRx.accept(service)
 //                        }
 //                    }).disposed(by: disposeBag)
+            } else {
+                print("===== viewModel이 없기 때문에 else로 오게됩니다 =====")
             }
             return cell
         case .cookStepSection(let data):
