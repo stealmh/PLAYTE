@@ -51,6 +51,7 @@ final class UploadCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
             switch event {
             case .registerButtonTapped:
                 self?.navigationController.popViewController(animated: true)
+                self?.navigationController.showToastSuccess(message: "레시피가 등록됐습니다!")
                 return
             }
         }
@@ -65,6 +66,8 @@ final class UploadCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
             switch event {
             case .registerButtonTapped:
                 self?.navigationController.popViewController(animated: true)
+                /// Todo: 작동안됨- > 해결하기
+                self?.navigationController.showToastSuccess(message: "레시피가 등록됐습니다!")
                 return
             }
         }

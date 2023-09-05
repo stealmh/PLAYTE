@@ -10,6 +10,12 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol SheetActionDelegate: AnyObject {
+    func didTappedNoInterest()
+    func didTappedReport()
+    func didTappedUserReport()
+}
+
 class ShortFormSheetViewController: BaseViewController {
     
     /// UI Properties
@@ -49,12 +55,13 @@ class ShortFormSheetViewController: BaseViewController {
     private let sendButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(named: "send_svg"), for: .normal)
-        v.setTitle("의견 보내기", for: .normal)
+        v.setTitle("사용자 차단하기", for: .normal)
         v.titleLabel?.font = .systemFont(ofSize: 16)
         v.setTitleColor(.grayScale5, for: .normal)
         let spacing: CGFloat = 10
         v.imageEdgeInsets = UIEdgeInsets(top: 0, left: -spacing/2, bottom: 0, right: spacing/2)
         v.titleEdgeInsets = UIEdgeInsets(top: 0, left: spacing/2, bottom: 0, right: -spacing/2)
+//        v.isHidden = true
         return v
     }()
     
@@ -65,6 +72,7 @@ class ShortFormSheetViewController: BaseViewController {
     }()
     /// Properties
     private let disposeBag = DisposeBag()
+    weak var delegate: SheetActionDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -74,6 +82,7 @@ class ShortFormSheetViewController: BaseViewController {
         view.addSubViews(sheetLine, stackView)
         view.layer.cornerRadius = 15
         configureLayout()
+        bind()
     }
 }
 
@@ -92,6 +101,23 @@ extension ShortFormSheetViewController {
             $0.left.equalToSuperview().inset(30)
             $0.bottom.equalTo(view.safeAreaLayoutGuide)
         }
+    }
+    
+    func bind() {
+        noInterestButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.delegate?.didTappedNoInterest()
+            }).disposed(by: disposeBag)
+        
+        banButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.delegate?.didTappedReport()
+            }).disposed(by: disposeBag)
+        
+        sendButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.delegate?.didTappedUserReport()
+            }).disposed(by: disposeBag)
     }
 }
 

@@ -76,8 +76,7 @@ private extension HomeViewController {
         navigationController?.navigationBar.barTintColor = .white
         navigationItem.titleView = titleView
         
-        ///Test VC
-        let vc = IngredientRegistrationViewController()
+        let vc = UIViewController()
         
         navigationItem.rightBarButtonItem?.rx.tap
             .subscribe(onNext: { _ in
@@ -308,7 +307,7 @@ extension HomeViewController {
             return cell
         case .ingredientRecipe(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientRecipeCell.reuseIdentifier, for: indexPath) as! IngredientRecipeCell
-            cell.configure(data)
+//            cell.configure(data)
             return cell
         case .ingredientsHandle(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: IngredientsHandleCell.reuseIdentifier, for: indexPath) as! IngredientsHandleCell
@@ -405,6 +404,6 @@ extension HomeViewController: RefrigeratorDetailDelegate {
 import SwiftUI
 struct ViewController_preview: PreviewProvider {
     static var previews: some View {
-        HomeViewController().toPreview()
+        UINavigationController(rootViewController: HomeViewController()).toPreview()
     }
 }

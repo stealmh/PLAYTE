@@ -12,7 +12,7 @@ class MyReviewPhotoCell: UICollectionViewCell {
     
     private let photo: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "popcat")
+        v.backgroundColor = .grayScale3
         return v
     }()
     
@@ -29,6 +29,12 @@ class MyReviewPhotoCell: UICollectionViewCell {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    func configure(_ item: String) {
+        DispatchQueue.main.async {
+            self.photo.loadImage(from: item)
+        }
     }
     
 }

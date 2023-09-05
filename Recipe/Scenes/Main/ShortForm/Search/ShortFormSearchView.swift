@@ -10,6 +10,10 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
+protocol ShortformReusltDelegate: AnyObject {
+    func didTappedShortform(_ item: ShortFormInfo)
+}
+
 class ShortFormSearchView: UIView {
     
     enum Section: Hashable {
@@ -17,7 +21,7 @@ class ShortFormSearchView: UIView {
     }
     
     enum Item: Hashable {
-        case result(ShortFormSearch)
+        case result(ShortFormInfo)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -34,20 +38,39 @@ class ShortFormSearchView: UIView {
     /// Properties
     private var dataSource: Datasource!
     private let disposeBag = DisposeBag()
-    
-    private var mockShopList: [ShortFormSearch] = [ShortFormSearch(nickName: "abcd123", video: "naver.com", contents: "토마토계란볶음밥", playTime: "02:12", thumnail: UIImage(named: "popcat")!),
-                                                   ShortFormSearch(nickName: "하하호12", video: "naver.com", contents: "토마토계란볶음밥 심화", playTime: "01:23", thumnail: UIImage(named: "popcat")!),
-                                                   ShortFormSearch(nickName: "happy66", video: "naver.com", contents: "토마토계란볶음밥", playTime: "02:12", thumnail: UIImage(named: "popcat")!),
-                                                   ShortFormSearch(nickName: "abcd123", video: "naver.com", contents: "토마토계란볶음밥", playTime: "02:12", thumnail: UIImage(named: "popcat")!),
-                                                   ShortFormSearch(nickName: "abcd123", video: "naver.com", contents: "토마토계란볶음밥", playTime: "02:12", thumnail: UIImage(named: "popcat")!),
-                                                   ShortFormSearch(nickName: "abcd123", video: "naver.com", contents: "토마토계란볶음밥", playTime: "02:12", thumnail: UIImage(named: "popcat")!),]
+    private var mockShopList: [ShortFormInfo] = []
+    var shortformInfo = PublishRelay<ShortForm>()
+    var shortformRecentInfo: [ShortFormInfo]?
+    weak var delegate: ShortformReusltDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(collectionView)
+        collectionView.delegate = self
         configureLayout()
         registerCell()
         configureDataSource()
+        
+        shortformInfo
+            .observe(on: MainScheduler.instance)
+            .subscribe(onNext: {data in
+            print("== recipeInfo 호출 ==")
+            self.mockShopList = []
+            var shortformInfo: [ShortFormInfo] = []
+            
+            for i in data.data.content {
+                if UserReportHelper.shared.isUserIdInUserReports(userId: Int64(i.writtenid)) {
+                    print("차단자 있음")
+                } else {
+                    shortformInfo.append(i)
+                }
+            }
+            
+            let unique = Array(NSOrderedSet(array: shortformInfo)) as! [ShortFormInfo]
+            self.mockShopList = unique
+            
+            self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+        }).disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -138,6 +161,39 @@ extension ShortFormSearchView {
         switch section {
         case .result:
             let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: ShortFormSearchHeader.reuseIdentifier, for: indexPath) as! ShortFormSearchHeader
+            
+            headerView.recentButton.rx.tap
+                .observe(on: MainScheduler.instance)
+                .subscribe(onNext: { _ in
+                    if let recent = self.shortformRecentInfo {
+                        var recentArray: [ShortFormInfo] = []
+                        for i in recent {
+                            if UserReportHelper.shared.isUserIdInUserReports(userId: Int64(i.writtenid)) {
+                                print("차단자 있음")
+                            } else {
+                                recentArray.append(i)
+                            }
+                        }
+                        
+                        self.mockShopList = recentArray
+                        self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                    }
+                    
+                }).disposed(by: disposeBag)
+            
+            headerView.popularButton.rx.tap
+                .subscribe(onNext: { _ in
+                    let data = self.mockShopList.sorted { $0.comments_count > $1.comments_count }
+                    self.mockShopList = data
+                    self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                }).disposed(by: disposeBag)
+            
+            headerView.minimumButton.rx.tap
+                .subscribe(onNext: { _ in
+                    let data = self.mockShopList.sorted { $0.video_time < $1.video_time }
+                    self.mockShopList = data
+                    self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                }).disposed(by: disposeBag)
             return headerView
         }
     }
@@ -147,6 +203,17 @@ extension ShortFormSearchView {
         snapshot.appendSections([.result])
         snapshot.appendItems(mockShopList.map({ Item.result($0) }), toSection: .result)
         return snapshot
+    }
+}
+
+extension ShortFormSearchView: UICollectionViewDelegate {
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        guard let item = dataSource.itemIdentifier(for: indexPath) else { return }
+        switch item {
+        case .result(let data):
+            print(data)
+            delegate?.didTappedShortform(data)
+        }
     }
 }
 

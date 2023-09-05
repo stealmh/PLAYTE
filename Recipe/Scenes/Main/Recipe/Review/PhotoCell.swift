@@ -33,6 +33,9 @@ class PhotoCell: UICollectionViewCell {
     }
     
     func configure(_ item: Photo) {
-        self.photoImageView.image = item.image
+        DispatchQueue.main.async {
+            self.photoImageView.backgroundColor = .grayScale3
+            self.photoImageView.loadImage(from: item.image)
+        }
     }
 }

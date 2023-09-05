@@ -42,18 +42,9 @@ final class RegisterCoordinator: RegisterCoordinatorProtocol {
 }
 
 extension RegisterCoordinator: RegisterFlowDelegate {
-    
-    func moveToSecondView() {
-        let vc = RegisterSecondViewController()
-        vc.delegate = self
-        navigationController.pushViewController(vc, animated: true)
-    }
-    
+
     func registerFail() {
         print(#function)
-//        finishDelegate?.coordinatorDidFinish(childCoordinator: self)
-//        navigationController.popToRootViewController(animated: true)
-//        finish()
         delegate?.failRegister(self)
     }
     

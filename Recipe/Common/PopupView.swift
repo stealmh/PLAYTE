@@ -21,19 +21,23 @@ final class PopupView: UIView {
     /// UI Properties
     private let addRecipeButton: UIButton = {
         let v = UIButton()
-        v.backgroundColor = .white
-        v.setTitle("나의 레시피 작성", for: .normal)
-        v.setTitleColor(.black, for: .normal)
+        v.backgroundColor = .sub1
+        v.setTitle("글로 게시", for: .normal)
+        v.setTitleColor(.mainColor, for: .normal)
         v.layer.cornerRadius = 10
+        v.layer.borderWidth = 1
+        v.layer.borderColor = UIColor.mainColor?.cgColor
         return v
     }()
     
     private let makeShortFormButton: UIButton = {
         let v = UIButton()
-        v.backgroundColor = .white
+        v.backgroundColor = .sub1
         v.layer.cornerRadius = 10
-        v.setTitle("숏폼 게시", for: .normal)
-        v.setTitleColor(.black, for: .normal)
+        v.setTitle("숏폼으로 게시", for: .normal)
+        v.setTitleColor(.mainColor, for: .normal)
+        v.layer.borderWidth = 1
+        v.layer.borderColor = UIColor.mainColor?.cgColor
         return v
     }()
     /// Properites
@@ -42,7 +46,7 @@ final class PopupView: UIView {
     
     override init(frame: CGRect) {
         super.init(frame: frame)
-        backgroundColor = .black.withAlphaComponent(0.2)
+        backgroundColor = .white
         addSubViews(addRecipeButton,makeShortFormButton)
         configureLayout()
         bind()
@@ -58,14 +62,14 @@ final class PopupView: UIView {
 extension PopupView {
     func configureLayout() {
         addRecipeButton.snp.makeConstraints {
-            $0.bottom.equalTo(self.snp.centerY).offset(-15)
-            $0.left.right.equalToSuperview().inset(10)
+            $0.bottom.equalTo(self.snp.centerY).offset(-13)
+            $0.left.right.equalToSuperview().inset(21)
             $0.height.equalTo(50)
         }
         
         makeShortFormButton.snp.makeConstraints {
             $0.top.equalTo(self.snp.centerY)
-            $0.left.right.equalToSuperview().inset(10)
+            $0.left.right.equalToSuperview().inset(21)
             $0.height.equalTo(50)
         }
     }

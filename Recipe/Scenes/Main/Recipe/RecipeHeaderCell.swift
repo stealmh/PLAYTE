@@ -16,9 +16,9 @@ final class RecipeHeaderCell: UICollectionReusableView {
     private let recentBackground = RecipeDefaultTagView()
     private let popularBackground = RecipeDefaultTagView()
     private let minimumBackground = RecipeDefaultTagView()
-    private let recentButton = RecipeDefaultTagButton(tagName:"최신순", tag: 0)
-    private let popularButton = RecipeDefaultTagButton(tagName:"인기순", tag: 1)
-    private let minimumButton = RecipeDefaultTagButton(tagName:"최소 시간순", tag: 2)
+    let recentButton = RecipeDefaultTagButton(tagName:"최신순", tag: 0)
+    let popularButton = RecipeDefaultTagButton(tagName:"인기순", tag: 1)
+    let minimumButton = RecipeDefaultTagButton(tagName:"최소 시간순", tag: 2)
     /// Constatns Size
     private enum Constants {
         static let tagWidth: Int = 64
@@ -26,7 +26,7 @@ final class RecipeHeaderCell: UICollectionReusableView {
     }
     /// Properties
     private let disposeBag = DisposeBag()
-    private let buttonTappedSubject = BehaviorRelay<Int>(value: 0)
+    let buttonTappedSubject = BehaviorRelay<Int>(value: 0)
     private lazy var tagBackgrounds = [recentBackground, popularBackground, minimumBackground]
     private lazy var tagButtons = [recentButton, popularButton, minimumButton]
 
@@ -54,7 +54,7 @@ extension RecipeHeaderCell {
     private func configureLayout() {
         recentBackground.snp.makeConstraints {
             $0.top.equalToSuperview()
-            $0.left.equalToSuperview().inset(10)
+            $0.left.equalToSuperview()
             $0.width.equalTo(Constants.tagWidth)
             $0.height.equalTo(Constants.tagHeight)
         }
@@ -67,7 +67,7 @@ extension RecipeHeaderCell {
         minimumBackground.snp.makeConstraints {
             $0.top.equalToSuperview()
             $0.left.equalTo(popularBackground.snp.right).offset(10)
-            $0.width.equalTo(Constants.tagWidth)
+            $0.width.equalTo(Constants.tagWidth + 10)
             $0.height.equalTo(Constants.tagHeight)
         }
         tagButtons.enumerated().forEach { idx, btn in
@@ -94,21 +94,23 @@ extension RecipeHeaderCell {
                         .filter { $0 == self.tagBackgrounds[tagNumber]}
                         .forEach { $0.backgroundColor = .mainColor }
                     $0.setTitleColor(.white, for: .normal)
+                    $0.titleLabel?.font = .boldSystemFont(ofSize: 14)
                 } else {
                     self.tagBackgrounds
                         .filter { $0 != self.tagBackgrounds[tagNumber]}
                         .forEach { $0.backgroundColor = .sub1 }
                     $0.setTitleColor(.mainColor, for: .normal)
+                    $0.titleLabel?.font = .systemFont(ofSize: 12)
                 }
             }
         }).disposed(by: disposeBag)
     }
 }
 
-import SwiftUI
-@available(iOS 13.0, *)
-struct RecipeView1_Preview: PreviewProvider {
-    static var previews: some View {
-        ForRecipeView()
-    }
-}
+//import SwiftUI
+//@available(iOS 13.0, *)
+//struct RecipeView1_Preview: PreviewProvider {
+//    static var previews: some View {
+//        ForRecipeView()
+//    }
+//}

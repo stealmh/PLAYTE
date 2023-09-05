@@ -9,16 +9,26 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-protocol RecipeViewDelegate {
-    func didTappedRecipeCell(item: Recipe)
+protocol RecipeViewDelegate: AnyObject {
+    func didTappedRecipeCell(item: RecipeInfo)
+    func didTappedSortButton(_ tag: Int)
+    func didTappedThemeButton(_ theme: Theme)
 }
 
 struct MockCategoryData: Hashable {
     let id = UUID()
     let text: String
-    let color: UIColor
     let img: UIImage
+    let theme: Theme
 }
+
+enum Theme: String {
+    case budgetHappiness = "BudgetHappiness"
+    case forDieting = "ForDieting"
+    case houseWarming = "Housewarming"
+    case livingAlone = "LivingAlone"
+}
+
 
 final class RecipeView: UIView {
     enum Section: Hashable {
@@ -28,7 +38,7 @@ final class RecipeView: UIView {
     
     enum Item: Hashable {
         case header(MockCategoryData)
-        case recipe(Recipe)
+        case recipe(RecipeInfo)
     }
     
     typealias Datasource = UICollectionViewDiffableDataSource<Section, Item>
@@ -38,7 +48,7 @@ final class RecipeView: UIView {
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()
         v.textPadding = UIEdgeInsets(top: 20, left: 20, bottom: 20, right: 20)
-        v.backgroundColor = .gray.withAlphaComponent(0.1)
+        v.backgroundColor = UIColor.hexStringToUIColor(hex: "F8F8F8")
         v.placeholder = "레시피 및 재료를 검색해보세요."
         v.layer.cornerRadius = 10
         v.clipsToBounds = true
@@ -64,25 +74,27 @@ final class RecipeView: UIView {
     }()
     
     ///Properties
-//    private let disposeBag = DisposeBag()
-    var delegate: RecipeViewDelegate?
+    var viewModel: RecipeViewModel? {
+        didSet {
+            Task {
+                await setViewModel()
+            }
+        }
+    }
+    
+    var myData = PublishRelay<[RecipeInfo]>()
+    private let disposeBag = DisposeBag()
+    weak var delegate: RecipeViewDelegate?
     private var dataSource: Datasource!
     private let mockCategoryData: [MockCategoryData] = [
-        MockCategoryData(text: "자취생 필수!", color: .mainColor ?? .white, img: UIImage(named: "homealone_svg")!),
-        MockCategoryData(text: "다이어터를\n위한 레시피", color: .sub3 ?? .white, img: UIImage(named: "diet_svg")!),
-        MockCategoryData(text: "알뜰살뜰\n만원의 행복", color: .sub2 ?? .white, img: UIImage(named: "manwon_svg")!),
-        MockCategoryData(text: "집들이용\n레시피", color: .sub4 ?? .white, img: UIImage(named: "homeparty_svg")!)]
+        MockCategoryData(text: "자취생 필수!",img: UIImage(named: "homealone_svg")!,theme: .livingAlone),
+        MockCategoryData(text: "다이어터를\n위한 레시피",img: UIImage(named: "diet_svg")!, theme: .forDieting),
+        MockCategoryData(text: "알뜰살뜰\n만원의 행복",img: UIImage(named: "manwon_svg")!, theme: .budgetHappiness),
+        MockCategoryData(text: "집들이용\n레시피",img: UIImage(named: "homeparty_svg")!, theme: .houseWarming)]
     
-    private let mockRecipeData: [Recipe] = [
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥을 먹어요", cookTime: "10분", rate: "4.7(104)", isFavorite: false),
-        Recipe(image: UIImage(named: "recipeDetail")!, uploadTime: "3분전", nickName: "규땡뿡야", title: "토마토 계란 볶음밥좋아", cookTime: "10분", rate: "4.7(104)", isFavorite: true),
-    ]
-    
+//    private var recipeList = [RecipeInfo]()
+    private var recipeList = [RecipeInfo]()
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubViews(searchTextField, searchImageButton, collectionView)
@@ -118,9 +130,38 @@ extension RecipeView {
     }
     
     private func registerCell() {
-        collectionView.register(RecipeCategoryCell.self, forCellWithReuseIdentifier: RecipeCategoryCell.reuseIdentifier)
+        collectionView.register(DefaultRecipeCategoryView.self, forCellWithReuseIdentifier: DefaultRecipeCategoryView.reuseIdentifier)
         collectionView.register(RecipeCell.self, forCellWithReuseIdentifier: RecipeCell.reuseIdentifier)
         collectionView.register(RecipeHeaderCell.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: RecipeHeaderCell.reuseIdentifier)
+    }
+    
+    func setViewModel() async {
+        if let viewModel {
+            let a = try? await viewModel.getMyInfo(.latest)
+            if let a {
+                self.recipeList = []
+                let contents = a.data.content
+                var infoList: [RecipeInfo] = []
+                for i in contents {
+//                    i.recipe_id
+                    do {
+                        let data: RecipeDetail = try await NetworkManager.shared.get(.recipeDetail("\(i.recipe_id)"))
+                        let writtenId = data.data.writtenid
+//                        if data.data.writtenid
+                        if UserReportHelper.shared.isUserIdInUserReports(userId: Int64(writtenId)) {
+                            print("yes")
+                        } else {
+                            print("no..")
+                            infoList.append(i)
+                        }
+                    } catch {
+                        print("")
+                    }
+                }
+                recipeList = infoList
+                dataSource.apply(createSnapshot(), animatingDifferences: true)
+            }
+        }
     }
 }
 
@@ -144,25 +185,25 @@ extension RecipeView {
     }
     
     func createHeaderSection() -> NSCollectionLayoutSection {
-        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(85)))
-        item.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 5, bottom: 10, trailing: 10)
+        let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(95)))
+        item.contentInsets = NSDirectionalEdgeInsets(top: 10, leading: 14, bottom: 10, trailing: 14)
         
         let group = NSCollectionLayoutGroup.horizontal(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .absolute(85)), subitem: item, count: 2)
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 10, bottom: 5, trailing: 5)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 0, bottom: 15, trailing: 0)
 //        section.orthogonalScrollingBehavior = .continuous
         return section
     }
     
     func createRecipeSection() -> NSCollectionLayoutSection {
         let item = NSCollectionLayoutItem(layoutSize: .init(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(100)))
-        item.contentInsets = .init(top: 0, leading: 10, bottom: 10, trailing: 10)
+        item.contentInsets = .init(top: 0, leading: 0, bottom: 10, trailing: 0)
         
         let group = NSCollectionLayoutGroup.vertical(layoutSize: .init(widthDimension: .fractionalWidth(1), heightDimension: .estimated(100)), subitems: [item])
         
         let section = NSCollectionLayoutSection(group: group)
-        section.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 5, bottom: 10, trailing: 0)
+        section.contentInsets = NSDirectionalEdgeInsets(top: 15, leading: 21, bottom: 10, trailing: 14)
         section.orthogonalScrollingBehavior = .continuous
         
         let headerSize = NSCollectionLayoutSize(widthDimension: .fractionalWidth(1.0), heightDimension: .absolute(30))
@@ -188,19 +229,111 @@ extension RecipeView {
     private func cell(collectionView: UICollectionView, indexPath: IndexPath, item: Item) -> UICollectionViewCell{
         switch item {
         case .header(let data):
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCategoryCell.reuseIdentifier, for: indexPath) as! RecipeCategoryCell
-            cell.configureData(text: data.text, color: data.color)
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: DefaultRecipeCategoryView.reuseIdentifier, for: indexPath) as! DefaultRecipeCategoryView
+            cell.configureData(data)
+            cell.backgroundButton.rx.tap
+                .subscribe(onNext: { _ in
+                    self.delegate?.didTappedThemeButton(data.theme)
+                }).disposed(by: disposeBag)
             return cell
             
         case .recipe(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: RecipeCell.reuseIdentifier, for: indexPath) as! RecipeCell
             cell.configure(data)
+            cell.favoriteButton.rx.tap
+                .subscribe(onNext: { _ in
+//                    indexPath.row
+                    Task {
+                        if data.is_saved {
+                            let a: DeleteRecipeReuslt = try await NetworkManager.shared.get(.recipeUnSave("\(data.recipe_id)"), parameters: ["recipe-id": data.recipe_id])
+                            if a.code == "SUCCESS" {
+                                DispatchQueue.main.async {
+                                    cell.favoriteButton.setImage(UIImage(named: "bookmark_svg")!, for: .normal)
+                                }
+                            }
+                        } else {
+                            let a: DeleteRecipeReuslt = try await NetworkManager.shared.get(.recipeSave("\(data.recipe_id)"), parameters: ["recipe-id": data.recipe_id])
+                            
+                            if a.code == "SUCCESS" {
+                                DispatchQueue.main.async {
+                                    cell.favoriteButton.setImage(UIImage(named: "bookmarkfill_svg")!, for: .normal)
+                                }
+                            }
+                        }
+                    }
+                }).disposed(by: disposeBag)
             return cell
         }
     }
     
     private func supplementary(collectionView: UICollectionView, kind: String, indexPath: IndexPath) -> UICollectionReusableView {
         let headerView = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: RecipeHeaderCell.reuseIdentifier, for: indexPath) as! RecipeHeaderCell
+        
+        headerView
+            .buttonTappedSubject
+            .subscribe(onNext: { tagNumber in
+                Task {
+                    switch tagNumber {
+                    case 0:
+                        if let viewModel = self.viewModel {
+                            let a = try? await viewModel.getMyInfo(.latest)
+                            if let a {
+                                self.recipeList = []
+                                let contents = a.data.content
+                                var infoList: [RecipeInfo] = []
+                                for i in contents {
+                                    if UserReportHelper.shared.isUserIdInUserReports(userId: Int64(i.writtenid)) {
+                                        print("차단자 있음")
+                                    } else {
+                                        infoList.append(i)
+                                    }
+                                }
+                                self.recipeList = infoList
+                                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                            }
+                        }
+                    case 1:
+                        if let viewModel = self.viewModel {
+                            let a = try? await viewModel.getMyInfo(.popular)
+                            if let a {
+                                self.recipeList = []
+                                let contents = a.data.content
+                                var infoList: [RecipeInfo] = []
+                                for i in contents {
+                                    if UserReportHelper.shared.isUserIdInUserReports(userId: Int64(i.writtenid)) {
+                                        print("차단자 있음")
+                                    } else {
+                                        infoList.append(i)
+                                    }
+                                }
+                                self.recipeList = infoList
+                                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                            }
+                        }
+                    case 2:
+                        if let viewModel = self.viewModel {
+                            let a = try? await viewModel.getMyInfo(.minium)
+                            if let a {
+                                self.recipeList = []
+                                let contents = a.data.content
+                                var infoList: [RecipeInfo] = []
+                                for i in contents {
+                                    if UserReportHelper.shared.isUserIdInUserReports(userId: Int64(i.writtenid)) {
+                                        print("차단자 있음")
+                                    } else {
+                                        infoList.append(i)
+                                    }
+                                }
+                                self.recipeList = infoList
+                                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
+                            }
+                        }
+                    default:
+                        return
+                    }
+                }
+                self.delegate?.didTappedSortButton(tagNumber)
+        }).disposed(by: disposeBag)
         return headerView
     }
     
@@ -208,7 +341,7 @@ extension RecipeView {
         var snapshot = Snapshot()
         snapshot.appendSections([.header, .recipe])
         snapshot.appendItems(mockCategoryData.map({ Item.header($0) }), toSection: .header)
-        snapshot.appendItems(mockRecipeData.map({ Item.recipe($0) }), toSection: .recipe)
+        snapshot.appendItems(recipeList.map({ Item.recipe($0) }), toSection: .recipe)
 
         return snapshot
     }

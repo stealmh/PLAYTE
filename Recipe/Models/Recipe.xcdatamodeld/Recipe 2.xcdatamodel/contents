@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="21512" systemVersion="22F82" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
+    <entity name="NewRecipeInfoEntity" representedClassName="NewRecipeInfoEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="comment_count" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="cook_time" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="created_date" attributeType="String"/>
+        <attribute name="is_saved" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="nickname" attributeType="String"/>
+        <attribute name="rating" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="recipe_id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="recipe_name" attributeType="String"/>
+        <attribute name="recipe_thumbnail_img" attributeType="String"/>
+    </entity>
+    <entity name="RecipeInfoEntity" representedClassName="RecipeInfoEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="comment_count" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="created_date" attributeType="String"/>
+        <attribute name="is_saved" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="nickname" attributeType="String"/>
+        <attribute name="rating" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="recipe_id" attributeType="Integer 32" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="recipe_name" attributeType="String"/>
+        <attribute name="recipe_thumnail_img" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="ShortFormContentEntity" representedClassName="ShortFormContentEntity" syncable="YES" codeGenerationType="class">
+        <relationship name="content" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ShortFormInfoEntity"/>
+    </entity>
+    <entity name="ShortFormEntity" representedClassName="ShortFormEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="code" optional="YES" attributeType="String"/>
+        <relationship name="data" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="ShortFormContentEntity"/>
+    </entity>
+    <entity name="ShortFormInfoEntity" representedClassName="ShortFormInfoEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="comments_count" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="created_date" optional="YES" attributeType="String"/>
+        <attribute name="is_liked" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="is_saved" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+        <attribute name="likes_count" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="saved_count" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="shortform_d" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="shortform_description" optional="YES" attributeType="String"/>
+        <attribute name="shortform_name" optional="YES" attributeType="String"/>
+        <attribute name="video_time" optional="YES" attributeType="String"/>
+        <attribute name="video_url" optional="YES" attributeType="String"/>
+        <attribute name="writtenBy" optional="YES" attributeType="String"/>
+        <attribute name="writtenid" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <relationship name="ingredients" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="ShortFormIngredientEntity"/>
+    </entity>
+    <entity name="ShortFormIngredientEntity" representedClassName="ShortFormIngredientEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="coupang_product_image" optional="YES" attributeType="String"/>
+        <attribute name="coupang_product_name" optional="YES" attributeType="String"/>
+        <attribute name="coupang_product_price" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="coupang_product_url" optional="YES" attributeType="String"/>
+        <attribute name="ingredient_id" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+        <attribute name="ingredient_name" optional="YES" attributeType="String"/>
+        <attribute name="ingredient_size" optional="YES" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
+        <attribute name="ingredient_type" optional="YES" attributeType="String"/>
+        <attribute name="ingredient_unit" optional="YES" attributeType="String"/>
+        <attribute name="is_rocket_delivery" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
+    </entity>
+    <entity name="TagEntity" representedClassName="TagEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="tag" optional="YES" attributeType="String"/>
+    </entity>
+    <entity name="UserReportEntity" representedClassName="UserReportEntity" syncable="YES" codeGenerationType="class">
+        <attribute name="userId" optional="YES" attributeType="Integer 64" defaultValueString="0" usesScalarValueType="YES"/>
+    </entity>
+</model>

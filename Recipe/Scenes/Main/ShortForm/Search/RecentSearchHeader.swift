@@ -7,6 +7,12 @@
 
 import UIKit
 import SnapKit
+import RxSwift
+import RxCocoa
+
+protocol RecentSearchDelegate: AnyObject {
+    func didTappedDeleteKeyword()
+}
 
 class RecentSearchHeader: UICollectionReusableView {
     
@@ -23,13 +29,19 @@ class RecentSearchHeader: UICollectionReusableView {
         v.setTitle("모두 지우기", for: .normal)
         v.titleLabel?.font = .systemFont(ofSize: 14)
         v.setTitleColor(.grayScale4, for: .normal)
+        v.isEnabled = true
         return v
     }()
+    
+    private var disposeBag = DisposeBag()
+    weak var delegate: RecentSearchDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubViews(recentSearchTitle, clearButton)
         configureLayout()
+        bind()
+
     }
     
     required init?(coder: NSCoder) {
@@ -50,6 +62,13 @@ extension RecentSearchHeader {
             $0.centerY.height.equalTo(recentSearchTitle)
             $0.right.equalToSuperview().inset(10)
         }
+    }
+    
+    func bind() {
+        clearButton.rx.tap
+            .subscribe(onNext: { _ in
+                self.delegate?.didTappedDeleteKeyword()
+            }).disposed(by: disposeBag)
     }
 }
 

@@ -10,6 +10,10 @@ import RxCocoa
 import RxSwift
 import SnapKit
 
+protocol DefaultTextFieldCellDelegate: AnyObject {
+    func didTappedCell(_ item: IngredientInfo)
+}
+
 final class DefaultTextFieldCell: UICollectionViewCell {
     
     ///UI Properties
@@ -25,8 +29,9 @@ final class DefaultTextFieldCell: UICollectionViewCell {
     
     ///Properties
     private let disposeBag = DisposeBag()
-    var filteredData = [String]()
-    var data = [String]()
+    weak var delegate: DefaultTextFieldCellDelegate?
+    var filteredData = [IngredientInfo]()
+    var data = [IngredientInfo]()
     var filetered = false
     
     override init(frame: CGRect) {
@@ -35,7 +40,6 @@ final class DefaultTextFieldCell: UICollectionViewCell {
         setupView()
         bind()
         configureTableView()
-        setupData()
         table.isHidden = true
     }
     
@@ -57,8 +61,8 @@ extension DefaultTextFieldCell {
         }
         
         table.snp.makeConstraints {
-            $0.top.equalTo(recipeNametextField.snp.bottom)
-            $0.left.right.equalTo(recipeNametextField)
+            $0.top.equalTo(recipeNametextField.snp.bottom).offset(5)
+            $0.left.right.equalTo(recipeNametextField).inset(10)
             $0.height.greaterThanOrEqualTo(70)
 //            $0.edges.equalTo(recipeNametextField)
         }
@@ -75,7 +79,7 @@ extension DefaultTextFieldCell {
         
         // data 배열 내 원소 순회
         for string in data {
-            if string.contains(query) {
+            if string.ingredient_name.contains(query) {
                 filteredData.append(string)
             }
         }
@@ -89,6 +93,11 @@ extension DefaultTextFieldCell {
         self.recipeNametextField.text = ""
         self.table.isHidden = true
 //        self.searchImageButton.setImage(UIImage(systemName: "magnifyingglass")!, for: .normal)
+    }
+    
+    func confifgure(_ item: Ingredient) {
+        print(#function)
+        self.data = item.data
     }
 }
 
@@ -128,14 +137,6 @@ extension DefaultTextFieldCell: UITableViewDelegate, UITableViewDataSource {
         table.clipsToBounds = true
     }
     
-    private func setupData() {
-        data.append("가지")
-        data.append("가지볶음")
-        data.append("가지볶음밥")
-        data.append("김치찌개")
-        data.append("두유")
-    }
-    
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // 필터링 된 데이터가 존재할 경우
         if !filteredData.isEmpty {
@@ -151,10 +152,10 @@ extension DefaultTextFieldCell: UITableViewDelegate, UITableViewDataSource {
         let cell = tableView.dequeueReusableCell(withIdentifier: "MyCell", for: indexPath) as! MyCell
         if !filteredData.isEmpty {
             let filterData = filteredData[indexPath.row]
-            cell.setData(text: filterData)
+            cell.setData(filterData)
         } else {
             let data = data[indexPath.row]
-            cell.setData(text: data)
+            cell.setData(data)
         }
         
         return cell
@@ -165,6 +166,8 @@ extension DefaultTextFieldCell: UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         print("tapped")
+        let item = indexPath.row
+        delegate?.didTappedCell(filteredData[item])
     }
 }
 

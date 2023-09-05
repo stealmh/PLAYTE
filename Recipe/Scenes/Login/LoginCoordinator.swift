@@ -41,14 +41,18 @@ final class LoginCoordinator: LoginCoordinatorProtocol {
         let loginVC: LoginViewController = .init()
         loginVC.didSendEventClosure = { [weak self] event in
             switch event {
-            case .login:
-                self?.finish()
             case .register:
                 self?.showRegisterFlow()
+            case .isMember:
+                self?.endFlow()
             }
         }
         
         navigationController.pushViewController(loginVC, animated: true)
+    }
+    
+    func endFlow() {
+        finishDelegate?.coordinatorDidFinish(childCoordinator: self)
     }
     
     func deleteChild(_ child: Coordinator) {

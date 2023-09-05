@@ -21,7 +21,7 @@ class ShortFormSearchCell: UICollectionViewCell {
     
     private let thumnailImageView: UIImageView = {
         let v = UIImageView()
-        v.image = UIImage(named: "popcat")
+        v.backgroundColor = .grayScale3
         return v
     }()
     
@@ -107,10 +107,19 @@ extension ShortFormSearchCell {
         contentsLabel.text = "토마토를 더 맛있게 먹는법"
     }
     
-    func configure(_ item: ShortFormSearch) {
-        timeLabel.text = item.playTime
-        nickNameLabel.text = item.nickName
-        contentsLabel.text = item.contents
+    func configure(_ item: ShortFormInfo) {
+        DispatchQueue.main.async {
+            self.timeLabel.text = item.video_time
+            self.nickNameLabel.text = item.writtenBy
+            self.contentsLabel.text = item.shortform_description
+        }
+        
+        if let videoURL = URL(string: item.video_url) {
+            let thumbnail = videoURL.generateThumbnail()
+            DispatchQueue.main.async {
+                self.thumnailImageView.image = thumbnail
+            }
+        }
     }
 }
 

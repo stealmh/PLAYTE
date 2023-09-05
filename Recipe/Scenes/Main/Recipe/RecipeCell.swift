@@ -8,22 +8,13 @@
 import UIKit
 import SnapKit
 
-struct Recipe: Hashable {
-    let image: UIImage
-    let uploadTime: String
-    let nickName: String
-    let title: String
-    let cookTime: String
-    let rate: String
-    let isFavorite: Bool
-}
-
 final class RecipeCell: UICollectionViewCell {
     
     private let recipeImageView: UIImageView = {
         let v = UIImageView()
         v.layer.cornerRadius = 5
         v.clipsToBounds = true
+        v.backgroundColor = .grayScale3
         return v
     }()
     private let recipeTitle: UILabel = {
@@ -34,7 +25,7 @@ final class RecipeCell: UICollectionViewCell {
         return v
     }()
     
-    private let favoriteButton: UIButton = {
+    let favoriteButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(named: "bookmarkfill_svg"), for: .normal)
         return v
@@ -94,7 +85,7 @@ final class RecipeCell: UICollectionViewCell {
                     tagLabel,favoriteButton,cookTimeLabel, uploadTimeLabel, divideLine, nickName, rate, circleBackground)
         
         self.configureLayout()
-        mockData()
+//        mockData()
     }
     
     required init?(coder: NSCoder) {
@@ -167,16 +158,27 @@ extension RecipeCell {
         nickName.text = "규땡뿡야"
     }
     
-    func configure(_ data: Recipe) {
-        recipeImageView.image = data.image
-        uploadTimeLabel.text = data.uploadTime
-        rate.setTitle(data.rate, for: .normal)
-        nickName.text = data.nickName
-        recipeTitle.text = data.title
-        favoriteButton.setImage(
-            data.isFavorite ? UIImage(named: "bookmarkfill_svg")! : UIImage(named: "bookmark_svg")!,
-            for: .normal)
-        cookTimeLabel.setTitle(data.cookTime, for: .normal)
+    func configure(_ data: RecipeInfo) {
+        Task {
+            let review: ReviewList = try await NetworkManager.shared.get(.recipeReview("\(data.recipe_id)", .latest))
+            
+            DispatchQueue.main.async {
+                let timeString = data.created_date
+                let formattedRating = String(format: "%.2f", data.rating)
+                if let result = timeString.timeAgo() {
+                    self.uploadTimeLabel.text = result
+                }
+                
+                self.recipeImageView.loadImage(from: data.recipe_thumbnail_img)
+                self.rate.setTitle("\(formattedRating)(\(review.data.content.count))", for: .normal)
+                self.nickName.text = data.nickname
+                self.recipeTitle.text = data.recipe_name
+                self.favoriteButton.setImage(
+                    data.is_saved ? UIImage(named: "bookmarkfill_svg")! : UIImage(named: "bookmark_svg")!,
+                    for: .normal)
+                self.cookTimeLabel.setTitle("\(data.cook_time)분", for: .normal)
+            }
+        }
 
     }
 }

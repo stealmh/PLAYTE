@@ -18,10 +18,12 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     
     func createRecipeButtonTapped() {
         didSendEventClosure?(.showCreateRecipeView)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     func createShortFormButtonTapped() {
         didSendEventClosure?(.showCreateShortFormView)
+        self.tabBarController?.tabBar.isHidden = true
     }
     
     ///UI Properties
@@ -30,7 +32,7 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     /// Life Cycle
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black.withAlphaComponent(0.2)
+        view.backgroundColor = .white
         view.addSubview(popupView)
         popupView.delegate = self
         popupView.snp.makeConstraints {
@@ -43,9 +45,9 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
         popupView.delegate = nil
     }
     
-    override func viewIsAppearing(_ animated: Bool) {
-        super.viewIsAppearing(animated)
-        popupView.delegate = self
-    }
+//    override func viewIsAppearing(_ animated: Bool) {
+//        super.viewIsAppearing(animated)
+//        popupView.delegate = self
+//    }
 
 }

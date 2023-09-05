@@ -9,7 +9,6 @@ import UIKit
 import SnapKit
 
 protocol RegisterFlowDelegate {
-    func moveToSecondView()
     func endFlow()
     func registerFail()
 }
@@ -20,11 +19,10 @@ final class RegisterFirstViewController: BaseViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .black
         view.addSubview(registerView)
         registerView.delegate = self
         configureLayout()
-        defaultNavigationBackButton(backButtonColor: .white)
+        defaultNavigationBackButton(backButtonColor: .grayScale5 ?? .gray)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -54,7 +52,22 @@ extension RegisterFirstViewController {
 
 //MARK: - RegisterView Delegate
 extension RegisterFirstViewController: RegisterViewDelegate {
-    func didTapNextButton() {
-        delegate?.moveToSecondView()
+    func didTapNextButton(_ txt: String) async {
+        let data = try? await LoginService.shared.appleRegister(
+            idToken: KeyChain.shared.read(account: .idToken), nickName: txt)
+
+        if (data != nil), data?.message == "성공" {
+            self.delegate?.endFlow()
+        }
+        
+        if data == nil {
+            let data2 = try? await LoginService.shared.googleRegister(
+                idToken: KeyChain.shared.read(account: .idToken), nickName: txt)
+            print(data2!)
+            if (data2 != nil), data2?.message == "성공" {
+                self.delegate?.endFlow()
+            }
+        }
+
     }
 }

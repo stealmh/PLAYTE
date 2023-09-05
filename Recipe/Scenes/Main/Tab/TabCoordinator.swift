@@ -131,7 +131,9 @@ final class TabCoordinator: NSObject, TabCoordinatorProtocol, CoordinatorFinishD
     }
     
     func coordinatorDidFinish(childCoordinator: Coordinator) {
-        finishDelegate?.coordinatorDidFinish(childCoordinator: self)
+        DispatchQueue.main.async {
+            self.finishDelegate?.coordinatorDidFinish(childCoordinator: self)
+        }
     }
     
     private func changeRadius(cornerRadius: CGFloat) {

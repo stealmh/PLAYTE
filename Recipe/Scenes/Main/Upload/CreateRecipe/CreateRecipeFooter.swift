@@ -19,6 +19,7 @@ final class CreateRecipeFooter: UICollectionReusableView {
         v.setTitleColor(.white, for: .normal)
         v.layer.cornerRadius = 5
         v.backgroundColor = .mainColor
+        v.isHidden = true
         return v
     }()
 

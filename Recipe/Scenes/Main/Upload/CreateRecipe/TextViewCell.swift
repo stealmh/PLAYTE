@@ -81,9 +81,11 @@ extension TextFieldViewCell {
         textView.rx.text.orEmpty
             .scan("") { previous, new in   (new.count > 100) ? previous : new  }
             .subscribe(onNext: { data in
-                self.placeholderLabel.isHidden = data.isEmpty ? false : true
-                self.textCountLabel.text = "\(data.count)/100"
-                self.textView.text = data
+                DispatchQueue.main.async {
+                    self.placeholderLabel.isHidden = data.isEmpty ? false : true
+                    self.textCountLabel.text = "\(data.count)/100"
+                    self.textView.text = data
+                }
             })
             .disposed(by: disposeBag)
     }

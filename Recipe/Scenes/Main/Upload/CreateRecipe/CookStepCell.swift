@@ -1,5 +1,5 @@
 //
-//  TestCell.swift
+//  Cell.swift
 //  Recipe
 //
 //  Created by 김민호 on 2023/07/19.
@@ -33,13 +33,7 @@ final class CookStepCell: UICollectionViewListCell {
         v.text = "asdas"
         v.sizeToFit()
         v.isScrollEnabled = false
-        return v
-    }()
-    
-    let stepTextfield: PaddingUITextField = {
-        let v = PaddingUITextField()
-//        v.text = "레시피를 입력해주세요."
-        v.placeholder = "레시피를 입력해주세요."
+        v.isEditable = false
         return v
     }()
     
@@ -53,6 +47,7 @@ final class CookStepCell: UICollectionViewListCell {
         let v = UIButton()
         v.setImage(UIImage(systemName: "photo.fill"), for: .normal)
         v.tintColor = .gray
+        v.isEnabled = false
         return v
     }()
     
@@ -65,7 +60,7 @@ final class CookStepCell: UICollectionViewListCell {
         return v
     }()
     
-    private let deletePhotoButton: DefaultCircleButton = {
+    let deletePhotoButton: DefaultCircleButton = {
         let v = DefaultCircleButton()
         let img = v.buttonImageSize(systemImageName: "minus", size: 20)
         v.setImage(img, for: .normal)
@@ -82,7 +77,7 @@ final class CookStepCell: UICollectionViewListCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
-        bind()
+//        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -121,7 +116,7 @@ extension CookStepCell {
             $0.centerY.equalTo(stepBackground)
             $0.left.equalTo(stepTextView.snp.right).offset(20)
         }
-        
+
         selectImageView.snp.makeConstraints {
             $0.top.bottom.equalTo(stepBackground).inset(5)
             $0.left.equalTo(stepTextView.snp.right)
@@ -134,34 +129,47 @@ extension CookStepCell {
             $0.centerY.equalTo(stepBackground)
             $0.right.equalTo(stepBackground).inset(10)
         }
-        didPhotoExist()
-    }
-
-    
-    func didPhotoExist() {
-        addPhotoButton.isHidden = true
+        
         deletePhotoButton.snp.makeConstraints {
             $0.top.equalTo(selectImageView).offset(-3)
             $0.right.equalTo(selectImageView).offset(10)
         }
     }
-    
-    func configure(text: String) {
-        stepTextView.text = text
+    func configure(_ item: Dummy) {
+        stepTextView.text = item.contents
+        self.selectImageView.image = item.img
+        
+        if item.img == UIImage(named: "popcat") {
+            addPhotoButton.isHidden = false
+            deletePhotoButton.isHidden = true
+            selectImageView.isHidden = true
+        } else {
+            selectImageView.isHidden = false
+            addPhotoButton.isHidden = true
+            deletePhotoButton.isHidden = false
+        }
+        
+//        if let img = self.selectImageView.image {
+//            addPhotoButton.isHidden = true
+//            deletePhotoButton.isHidden = false
+//        } else {
+//            addPhotoButton.isHidden = false
+//            deletePhotoButton.isHidden = true
+//        }
     }
 }
 
 extension CookStepCell {
-    func bind() {
-        imageSelectSubject.subscribe(onNext: { img in
-            self.selectImageView.image = img
-        }).disposed(by: disposeBag)
-        
-//        stepTextfield.rx.controlEvent(.editingDidEndOnExit)
-//            .subscribe(onNext: { _ in
-//
-//            }).disposed(by: disposeBag)
-    }
+//    func bind() {
+//        imageSelectSubject.subscribe(onNext: { img in
+//            self.selectImageView.image = img
+//        }).disposed(by: disposeBag)
+//        
+////        stepTextfield.rx.controlEvent(.editingDidEndOnExit)
+////            .subscribe(onNext: { _ in
+////
+////            }).disposed(by: disposeBag)
+//    }
 }
 
 //MARK: - Cell Preview

@@ -12,6 +12,7 @@ import SnapKit
 
 protocol RecipeDetailInfoDelegate {
     func showReview()
+    func favoriteButtonTapped(_ recipeId: Int)
 }
 
 final class RecipeDetailInfoCell: UICollectionViewCell {
@@ -63,13 +64,13 @@ final class RecipeDetailInfoCell: UICollectionViewCell {
     private let titleLabel: UILabel = {
         let v = UILabel()
         v.font = .boldSystemFont(ofSize: 18)
+        v.numberOfLines = 2
         return v
     }()
     
     let favoriteButton: UIButton = {
         let v = UIButton()
-        let img = v.buttonImageSize(systemImageName: "bookmark.fill", size: 23)
-        v.setImage(img, for: .normal)
+        v.setImage(UIImage(named: "bookmark_svg"), for: .normal)
         v.tintColor = .mainColor
         return v
     }()
@@ -91,29 +92,29 @@ final class RecipeDetailInfoCell: UICollectionViewCell {
     private let reviewImage: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFit
-        v.image = UIImage(named: "recipeDetail_reviewStar")
+        v.image = UIImage(named: "recipeDetail_star_svg")
         return v
     }()
     
     private let personImage: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFit
-        v.image = UIImage(named: "recipeDetail_person")
+        v.image = UIImage(named: "person_svg")
         return v
     }()
     
     private let timeImage: UIImageView = {
         let v = UIImageView()
         v.contentMode = .scaleAspectFit
-        v.image = UIImage(named: "recipeDetail_time")
+        v.image = UIImage(named: "recipeDetail_time_svg")
         return v
     }()
     
     let reviewButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(systemName: "chevron.right"), for: .normal)// 이미지 넣기
-        v.setTitleColor(.black, for: .normal)
-        v.tintColor = .gray
+        v.setTitleColor(.mainColor, for: .normal)
+        v.tintColor = .mainColor
         v.imageView?.contentMode = .scaleAspectFit
         v.titleLabel?.font = .systemFont(ofSize: 14)
         v.contentHorizontalAlignment = .center
@@ -126,18 +127,21 @@ final class RecipeDetailInfoCell: UICollectionViewCell {
     private let personLabel: UILabel = {
         let v = UILabel()
         v.font = .systemFont(ofSize: 14)
+        v.textColor = .mainColor
         return v
     }()
     
     private let timeLabel: UILabel = {
         let v = UILabel()
         v.font = .systemFont(ofSize: 14)
+        v.textColor = .mainColor
         return v
     }()
     
     /// Properties
     private let disposeBag = DisposeBag()
     var delegate: RecipeDetailInfoDelegate?
+    var recipeID: Int?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -196,11 +200,10 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
             $0.top.height.equalTo(nickNameLabel)
             $0.right.equalTo(cellBackground).inset(35)
         }
-
         titleLabel.snp.makeConstraints {
             $0.left.equalTo(nickNameLabel)
-            $0.top.equalTo(nickNameLabel.snp.bottom).offset(20)
-            $0.height.equalTo(18)
+            $0.top.equalTo(nickNameLabel.snp.bottom).offset(10)
+            $0.height.lessThanOrEqualTo(44)
             $0.width.equalToSuperview().dividedBy(1.7)
         }
         
@@ -211,7 +214,7 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
         
         contentsLabel.snp.makeConstraints {
             $0.left.equalTo(titleLabel)
-            $0.top.equalTo(titleLabel.snp.bottom).offset(20)
+            $0.top.equalTo(titleLabel.snp.bottom).offset(10)
             $0.height.equalTo(38)
             $0.width.equalTo(198)
         }
@@ -219,7 +222,7 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
         lineBackground.snp.makeConstraints {
             $0.left.equalTo(contentsLabel).offset(-3)
             $0.height.equalTo(0.5)
-            $0.top.equalTo(contentsLabel.snp.bottom).offset(20)
+            $0.top.equalTo(contentsLabel.snp.bottom).offset(10)
             $0.right.equalTo(favoriteButton.snp.right).offset(3)
         }
         
@@ -238,10 +241,11 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
             $0.top.width.height.equalTo(reviewImage)
             $0.right.equalTo(lineBackground).inset(15)
         }
-        
+
         reviewButton.snp.makeConstraints {
             $0.top.equalTo(reviewImage.snp.bottom).offset(10)
-            $0.centerX.equalTo(reviewImage)
+            $0.left.right.equalTo(reviewImage)
+//            $0.centerX.equalTo(reviewImage)
         }
         
         personLabel.snp.makeConstraints {
@@ -258,25 +262,68 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
     private func mockConfigure() {
         nickNameLabel.text = "규땡뿡야"
         uploadDateLabel.text = "2023.02.12"
-        titleLabel.text = "토마토 계란 볶음밥"
-        contentsLabel.text = "토마토가 많아서 볶아먹고 삶아먹고 \n이젠 밥에도 넣어봤어요"
-        reviewButton.setTitle("4.38", for: .normal)
+        titleLabel.text = "내가 만든 극강의 JMT 간장 계란밥"
+        contentsLabel.text = "안 먹어본 사람은 있지만, 한 번 먹어본 사람은 없는 궁극의 초간단 간장 계란밥 레시피!"
+        reviewButton.setTitle("3.6", for: .normal)
         personLabel.text = "2인분"
         timeLabel.text = "10분"
     } //for data inject
     
-    func configure() {}
+    func configure(_ item: Detail) {
+        recipeID = item.recipe_id
+        DispatchQueue.main.async {
+            self.nickNameLabel.text = item.writtenby
+            self.titleLabel.text = item.recipe_name
+            self.contentsLabel.text = item.recipe_description
+            self.reviewButton.setTitle("\(item.rating)", for: .normal)
+            self.personLabel.text = "\(item.serving_size)인분"
+            self.timeLabel.text = "\(item.cook_time)분"
+            self.backgroundImage.loadImage(from: item.recipe_thumbnail_img)
+            self.favoriteButton.setImage(UIImage(named: item.is_saved ? "bookmarkfill_svg" : "bookmark_svg")!,for: .normal)
+            let dateString = item.created_date
+            if let formattedDate = dateString.toDateFormatted() {
+                self.uploadDateLabel.text = formattedDate
+            } else {
+                self.uploadDateLabel.text = dateString
+            }
+        }
+    }
 }
 
 //MARK: - Method(Rx bind)
 extension RecipeDetailInfoCell {
     private func bind() {
         reviewButton.rx.tap
+            .debounce(.milliseconds(250), scheduler: MainScheduler.instance)
             .subscribe(onNext: { _ in
                 print("tapped")
                 self.delegate?.showReview()
             }
         ).disposed(by: disposeBag)
+        
+        favoriteButton.rx.tap
+            .subscribe(onNext: { _ in
+                if let id = self.recipeID {
+                    Task {
+                        let data: DefaultOnlyCodeMessage = try await NetworkManager.shared.get(.recipeSave("\(id)"))
+                        if data.code == "SUCCESS" {
+                            DispatchQueue.main.async {
+                                self.favoriteButton.setImage(UIImage(named: "bookmarkfill_svg"), for: .normal)
+                            }
+                        } else if data.code == "4005" {
+                            let data: DefaultOnlyCodeMessage = try await NetworkManager.shared.get(.recipeUnSave("\(id)"))
+                            if data.code == "SUCCESS" {
+                                DispatchQueue.main.async {
+                                    self.favoriteButton.setImage(UIImage(named: "bookmark_svg"), for: .normal)
+                                }
+                            }
+                        }
+                    }
+                    
+                    
+//                    self.delegate?.favoriteButtonTapped(id)
+                }
+            }).disposed(by: disposeBag)
     }
 }
 

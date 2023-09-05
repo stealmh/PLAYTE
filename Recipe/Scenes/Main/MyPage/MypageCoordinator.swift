@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import PDFKit
 
 final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDelegate {
     weak var finishDelegate: CoordinatorFinishDelegate?
@@ -43,11 +44,14 @@ final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
                 self?.finishDelegate?.coordinatorDidFinish(childCoordinator: self!)
                 return
             case .favoriteReceipeButtonTapped:
-                let vc = FavoriteRecipeViewController()
+                guard let favoriteRecipeInfo = goVC.favoriteRecipe else { return }
+                let vc = FavoriteRecipeViewController(data1: favoriteRecipeInfo.data)
                 self?.navigationController.pushViewController(vc, animated: true)
                 return
             case .writeRecipeButtonTapped:
-                let vc = WriteRecipeViewController()
+                guard let writeRecipeInfo = goVC.writeRecipe else { return }
+                print("Coordinator: \(writeRecipeInfo)")
+                let vc = WriteRecipeViewController(data1: writeRecipeInfo.data)
                 self?.navigationController.pushViewController(vc, animated: true)
                 return
             case .myReviewButtonTapped:
@@ -62,6 +66,13 @@ final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
                 return
             case .settingButtonTapped:
                 let vc = SettingViewController()
+                vc.didSendEventClosure = { [weak self] event in
+                    switch event {
+                    case .withdrawal:
+                        self?.finishDelegate?.coordinatorDidFinish(childCoordinator: self!)
+                        return
+                    }
+                }
                 self?.navigationController.pushViewController(vc, animated: true)
                 return
             }

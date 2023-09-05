@@ -35,6 +35,7 @@ class MyReviewCell: UITableViewCell, UICollectionViewDataSource, UICollectionVie
     private let moveReviewButton: UIButton = {
         let v = UIButton()
         v.setImage(UIImage(named: "moveReview_svg"), for: .normal)
+        v.isHidden = true
         return v
     }()
     private let rateStack: UIStackView = {
@@ -83,8 +84,7 @@ class MyReviewCell: UITableViewCell, UICollectionViewDataSource, UICollectionVie
         v.setImage(UIImage(named: "delete_svg"), for: .normal)
         return v
     }()
-    private let photos: [UIImage] = [UIImage(named: "popcat")!,
-                                     UIImage(named: "popcat")!]
+    private let photos: [UIImage] = []
     
     private let reviewContents: UILabel = {
         let v = UILabel()
@@ -113,6 +113,10 @@ class MyReviewCell: UITableViewCell, UICollectionViewDataSource, UICollectionVie
     /// Properties
     let disposeBag = DisposeBag()
     weak var delegate: MyReviewCellDelegate?
+    private var imgArray = [String]()
+    var imgArrayForRelay = BehaviorRelay<[String]>(value: [])
+    
+    private lazy var stars: [UIImageView] = [self.rate1, self.rate2, self.rate3, self.rate4, self.rate5]
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -133,6 +137,10 @@ class MyReviewCell: UITableViewCell, UICollectionViewDataSource, UICollectionVie
             .subscribe(onNext: { _ in
                 self.delegate?.deleteButtonTapped(self)
             }).disposed(by: disposeBag)
+        
+        imgArrayForRelay.subscribe(onNext: { data in
+            self.imgArray = data
+        }).disposed(by: disposeBag)
     }
     
     required init?(coder: NSCoder) {
@@ -141,12 +149,18 @@ class MyReviewCell: UITableViewCell, UICollectionViewDataSource, UICollectionVie
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
 //        return photos.count
-        return 23
+        return imgArray.count
+//        return imgArrayForRelay.value.count
     }
     
     // UICollectionViewDataSource and UICollectionViewDelegateFlowLayout methods...
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MyReviewPhotoCell.reuseIdentifier, for: indexPath) as! MyReviewPhotoCell
+//        cell.configure(imgArrayForRelay.value[indexPath.row])
+        cell.configure(imgArray[indexPath.row])
+        DispatchQueue.main.async {
+            self.collectionView.reloadData()
+        }
         return cell
     }
     
@@ -225,6 +239,30 @@ extension MyReviewCell {
         uploadTimeLabel.text = "2023/02/12"
         titleLabel.text = "토마토 계란 볶음밥"
         reviewContents.text = "리뷰띠"
+    }
+    
+    func configure(_ item: MyReviewList) {
+        print("item을 받앆ㅆ어요!!", item)
+        self.imgArrayForRelay.accept(item.img_list)
+        DispatchQueue.main.async {
+            if let formattedDate = item.written_date.toDateFormatted() {
+                self.uploadTimeLabel.text = formattedDate
+            } else {
+                self.uploadTimeLabel.text = item.written_date
+            }
+
+            self.titleLabel.text = item.recipe_name
+            self.reviewContents.text = item.review_content
+            self.imgArray = item.img_list
+            for star in self.stars {
+                star.image = UIImage(named: "star_empty_svg")
+            }
+
+            for index in 0..<Int(item.review_rating) {
+                self.stars[index].image = UIImage(named: "star_fill_svg")
+            }
+        }
+
     }
 }
 

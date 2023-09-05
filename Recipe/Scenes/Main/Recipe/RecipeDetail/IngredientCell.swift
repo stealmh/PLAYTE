@@ -14,7 +14,6 @@ struct DetailIngredient: Hashable {
     let ingredientCount: String
     let seasoningTitle: String
     let seasoningCount: String
-    
 }
 
 final class IngredientCell: UICollectionViewCell {
@@ -93,7 +92,7 @@ extension IngredientCell {
         seasoningCount.snp.makeConstraints {
             $0.top.equalTo(seasoningLabel)
             $0.right.equalToSuperview()
-            $0.width.equalToSuperview().multipliedBy(0.1)
+            $0.width.equalToSuperview().multipliedBy(0.2)
             $0.height.equalTo(seasoningLabel)
         }
     }
@@ -111,7 +110,7 @@ extension IngredientCell {
         ingredientCount.text = "2개"
         
         seasoningLabel.text = "굴소스"
-        seasoningCount.text = "2T"
+        seasoningCount.text = "100 ML"
     }
 }
 

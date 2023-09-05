@@ -30,12 +30,6 @@ class MyPageRecentWatchCell: UICollectionViewCell {
         return v
     }()
     
-    private let viewsCountButton: UIButton = {
-        let v = UIButton()
-        v.setImage(UIImage(named: "recentWatchPlay_svg"), for: .normal)
-        return v
-    }()
-    
     override init(frame: CGRect) {
         super.init(frame: frame)
         layer.masksToBounds = true
@@ -53,19 +47,15 @@ class MyPageRecentWatchCell: UICollectionViewCell {
 
 extension MyPageRecentWatchCell {
     func addView() {
-        thumnailImageView.addSubViews(contentsLabel, viewsCountButton)
+        thumnailImageView.addSubViews(contentsLabel)
         addSubview(thumnailImageView)
     }
     
     func configureLayout() {
-        backgroundColor = .blue.withAlphaComponent(0.5)
+        backgroundColor = .grayScale3
         
         thumnailImageView.snp.makeConstraints {
             $0.edges.equalToSuperview()
-        }
-        
-        viewsCountButton.snp.makeConstraints {
-            $0.top.left.equalToSuperview().inset(10)
         }
     
         contentsLabel.snp.makeConstraints {
@@ -75,12 +65,16 @@ extension MyPageRecentWatchCell {
     
     func mockData() {
         contentsLabel.text = "토마토를 더 맛있게 먹는법"
-        viewsCountButton.setTitle("1.4천", for: .normal)
     }
     
-    func configure(_ item: MyPageRecentWatch) {
-        contentsLabel.text = item.contents
-        viewsCountButton.setTitle(item.views, for: .normal)
+    func configure(_ item: ShortFormInfo) {
+        contentsLabel.text = item.shortform_description
+        if let videoURL = URL(string: item.video_url) {
+            let thumbnail = videoURL.generateThumbnail()
+            DispatchQueue.main.async {
+                self.thumnailImageView.image = thumbnail
+            }
+        }
     }
 }
 
