@@ -87,19 +87,27 @@ class CreateRecipeViewModel {
         getIngredient.accept(currentValues)
     }
     
-    func removeIngredient(_ step: UploadRecipeIngredient) {
+    func removeIngredient(_ idx: Int) {
         var currentValues = getIngredient.value
-        if let index = currentValues.firstIndex(of: step) {
-            currentValues.remove(at: index)
-            getIngredient.accept(currentValues)
+    
+        for (i,item) in currentValues.enumerated() {
+            if item.ingredient_id == idx {
+                currentValues.remove(at: i)
+                getIngredient.accept(currentValues)
+                return
+            }
         }
     }
     
-    func removeString(_ targetString: String) {
+    func removeString(_ name: String) {
         var currentValues = createRecipeIngredient.value
-        if let index = currentValues.firstIndex(of: targetString) {
-            currentValues.remove(at: index)
-            createRecipeIngredient.accept(currentValues)
+        
+        for (i, item) in currentValues.enumerated() {
+            if item == name {
+                currentValues.remove(at: i)
+                createRecipeIngredient.accept(currentValues)
+                return
+            }
         }
     }
     

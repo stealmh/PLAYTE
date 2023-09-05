@@ -81,7 +81,9 @@ final class CreateIngredientTagCell: UICollectionViewCell {
     func bind() {
         deleteButton.rx.tap
             .subscribe(onNext: { _ in
-                self.delegate?.deleteButtonTapped(sender: self.deleteButton.tag)
+                if let name = self.tagLabel.text {
+                    self.delegate?.deleteButtonTapped(name: name, sender: self.deleteButton.tag)
+                }
             }).disposed(by: disposeBag)
     }
 }

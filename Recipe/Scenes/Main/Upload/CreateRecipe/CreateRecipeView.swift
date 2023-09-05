@@ -543,7 +543,10 @@ extension CreateRecipeView {
             return cell
         case .addIngredientSection(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateIngredientTagCell.reuseIdentifier, for: indexPath) as! CreateIngredientTagCell
-            cell.configure(with: data, tag: indexPath.row)
+            if let viewModel = viewModel {
+                cell.configure(with: data, tag: viewModel.getIngredient.value[indexPath.row].ingredient_id)
+                cell.delegate = self
+            }
             return cell
         case .cookTimeSettingSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
@@ -727,7 +730,9 @@ extension CreateRecipeView {
                     }).disposed(by: disposeBag)
                     
                     viewModel.allValuesSubject
+                        .take(1)
                         .subscribe(onNext: { values in
+                            print("values: \(values)")
                         Task {
                             let (image, title, description, cookTime, serviceCount, ingredients) = values
                             // Handle the values here
@@ -844,6 +849,16 @@ extension CreateRecipeView {
                 self.collectionView.scrollRectToVisible(rect, animated: true)
             })
             .disposed(by: disposeBag)
+    }
+}
+
+extension CreateRecipeView: TagCellDelegate {
+    func deleteButtonTapped(name: String, sender: Int) {
+        if let viewModel = viewModel {
+            viewModel.removeString(name)
+            viewModel.removeIngredient(sender)
+            self.dataSource.apply(createSnapshot(), animatingDifferences: true)
+        }
     }
 }
 
