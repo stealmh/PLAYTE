@@ -77,6 +77,7 @@ final class CookStepCell: UICollectionViewListCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
+        configureLayout()
 //        bind()
     }
     
@@ -84,11 +85,11 @@ final class CookStepCell: UICollectionViewListCell {
         super.init(coder: coder)
     }
     
-    override func layoutSubviews() {
-        defaultCheck.subscribe(onNext: { isNewData in
-            self.configureLayout()
-        }).disposed(by: disposeBag)
-    }
+//    override func layoutSubviews() {
+//        defaultCheck.subscribe(onNext: { isNewData in
+//            self.configureLayout()
+//        }).disposed(by: disposeBag)
+//    }
 }
 
 //MARK: - Method(Normal)

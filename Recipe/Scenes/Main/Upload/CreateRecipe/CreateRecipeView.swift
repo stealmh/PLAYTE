@@ -587,6 +587,7 @@ extension CreateRecipeView {
                 if data.contents == "" {
                     // Show a different cell when the array is empty
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell2.reuseIdentifier, for: indexPath) as! CookStepCell2
+                    cell.selectImageView.image = nil
                     setupKeyboardForCell(cell: cell, textField: cell.stepTextfield)
                     viewModel.imageRelay.subscribe(onNext: { data in
                         cell.imageSelectSubject.accept(data)
@@ -640,7 +641,7 @@ extension CreateRecipeView {
                     //                imageBehaviorRelay.subscribe(onNext: { data in
                     //                    cell.imageSelectSubject.accept(data)
                     //                }).disposed(by: disposeBag)
-                    
+                    cell.selectImageView.image = nil
                     cell.addPhotoButton.rx.tap
                         .subscribe(onNext: { _ in
                             self.delegate?.addPhotoButtonTapped()
