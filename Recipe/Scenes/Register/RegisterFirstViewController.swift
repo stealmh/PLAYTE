@@ -26,6 +26,7 @@ final class RegisterFirstViewController: BaseViewController {
     }
     
     override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
         registerView.delegate = nil
     }
     override var preferredStatusBarStyle: UIStatusBarStyle {
