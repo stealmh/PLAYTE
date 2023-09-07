@@ -79,7 +79,7 @@ final class MyPageHeaderView: UICollectionViewCell {
     
     let myReviewRecipeButton: UIButton = {
         let v = UIButton()
-        v.setImage(UIImage(named: "myReview_svg"), for: .normal)
+        v.setImage(UIImage(named: "myReview_svg5"), for: .normal)
         return v
     }()
     
@@ -270,7 +270,7 @@ extension MyPageHeaderView {
         if item.data.nickname.isEmpty { return }
         nickNameLabel.text = item.data.nickname
         emailLabel.text = item.data.email
-        loginTypeImageView.image = item.data.provider == "APPLE" ? UIImage(named: "loginType_apple_svg") : UIImage()
+        loginTypeImageView.image = item.data.provider == "APPLE" ? UIImage(named: "loginType_apple_svg") : UIImage(named: "loginType_google_svg")
         hideSkeletonViews()
     }
     
