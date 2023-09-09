@@ -152,14 +152,17 @@ extension RegisterView {
             }).disposed(by: disposeBag)
         
         searchTextField.rx.text.orEmpty
-            .skip(1)
+            .filter { !$0.isEmpty }
             .bind(to: viewModel.nickNameInput)
             .disposed(by: disposeBag)
         
         viewModel.isNickNameValid
             .drive(onNext: { [weak self] (isValid, nickName) in
-                !nickName.isValidNickname() ?
-                self?.inValidNickNameCheck() : self?.teamNickNameCheck(!isValid, nickName)
+                self?.defaultUISetting()
+                if !nickName.isEmpty {
+                    !nickName.isValidNickname() ?
+                    self?.inValidNickNameCheck() : self?.teamNickNameCheck(!isValid, nickName)
+                }
             }).disposed(by: disposeBag)
         
     }
@@ -192,18 +195,29 @@ extension RegisterView {
             searchImageButton.setImage(UIImage(named: "nickNameError")!, for: .normal)
             validationLabel.text = "중복된 닉네임입니다"
             validationLabel.isHidden = false
-            nextButton.backgroundColor = .grayScale3
+            nextButton.backgroundColor = .grayScale1
             nextButton.isEnabled = false
         }
     }
     
     private func inValidNickNameCheck() {
+        searchTextField.layer.borderColor = UIColor.mainColor?.cgColor
+        searchTextField.backgroundColor = .sub1
         searchImageButton.isHidden = false
         searchImageButton.setImage(UIImage(named: "nickNameError")!, for: .normal)
         validationLabel.text = "잘못된 닉네임 형식입니다"
         validationLabel.isHidden = false
         nextButton.backgroundColor = .grayScale3
         nextButton.isEnabled = false
+    }
+    
+    private func defaultUISetting() {
+        searchTextField.layer.borderColor = UIColor.white.cgColor
+        searchTextField.backgroundColor = .grayScale1
+        nextButton.isEnabled = false
+        validationLabel.text = ""
+        validationLabel.isHidden = true
+        searchImageButton.isHidden = true
     }
 }
 

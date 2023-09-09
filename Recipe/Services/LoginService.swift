@@ -389,6 +389,7 @@ struct LoginService{
             case .success(let res):
                 do {
                     let decoder = JSONDecoder()
+                    print(String(data: res, encoding: .utf8))
                     guard let decodedData = try? decoder.decode(Welcome.self, from: res) else {
                         print("catch")
                         return

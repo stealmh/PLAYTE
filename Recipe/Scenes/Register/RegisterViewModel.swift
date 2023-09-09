@@ -22,13 +22,16 @@ class RegisterViewModel {
             .debounce(.seconds(1), scheduler: MainScheduler.instance)
             .flatMapLatest { nickName -> Observable<(Bool, String)> in
                 return Observable.create { observer in
+                    if !nickName.isValidNickname() {
+                        observer.onNext((false, nickName))
+                    }
                     LoginService.shared.nickNameCheck(nickName: nickName, completion: { data in
                         observer.onNext((data, nickName))
                     })
                     return Disposables.create()
                 }
             }
-            .share(replay: 1)
+//            .share(replay: 1)
         
         isNickNameValid = nickNameResult
             .asDriver(onErrorJustReturn: (false, ""))
