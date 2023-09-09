@@ -612,6 +612,7 @@ extension CreateRecipeView {
                     
                     cell.addPhotoButton.rx.tap
                         .subscribe(onNext: { _ in
+                            print("add Photo Button")
                             self.delegate?.addPhotoButtonTapped()
                         }).disposed(by: cell.disposeBag)
                     
@@ -814,6 +815,7 @@ extension CreateRecipeView: CookStepRegisterDelegate {
 //MARK: - Method(Rx Bind)
 extension CreateRecipeView {
     private func setupKeyboardForCell(cell: UICollectionViewCell, textField: UITextField) {
+        print(#function)
         RxKeyboard.instance.visibleHeight
             .skip(1)
             .drive(onNext: { [weak self] keyboardVisibleHeight in
