@@ -78,6 +78,8 @@
 		166DCD812A938D860005617B /* TermsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166DCD802A938D860005617B /* TermsViewController.swift */; };
 		166DCD832A938DA20005617B /* NickNameChangeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166DCD822A938DA20005617B /* NickNameChangeViewController.swift */; };
 		166DCD852A938DB70005617B /* QAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166DCD842A938DB70005617B /* QAViewController.swift */; };
+		1677AFCD2AACA49900E6A2FE /* PDFViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1677AFCC2AACA49900E6A2FE /* PDFViewController.swift */; };
+		1677AFCF2AACA72400E6A2FE /* term.pdf in Resources */ = {isa = PBXBuildFile; fileRef = 1677AFCE2AACA72400E6A2FE /* term.pdf */; };
 		167FABCD2A94844200F14D99 /* CommonToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167FABCC2A94844200F14D99 /* CommonToastView.swift */; };
 		167FABCF2A948DE400F14D99 /* CreateShortFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167FABCE2A948DE400F14D99 /* CreateShortFormViewModel.swift */; };
 		168A0AB62AA9FDAB00FA5256 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168A0AB52AA9FDAB00FA5256 /* RegisterViewModel.swift */; };
@@ -308,6 +310,8 @@
 		166DCD802A938D860005617B /* TermsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TermsViewController.swift; sourceTree = "<group>"; };
 		166DCD822A938DA20005617B /* NickNameChangeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NickNameChangeViewController.swift; sourceTree = "<group>"; };
 		166DCD842A938DB70005617B /* QAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAViewController.swift; sourceTree = "<group>"; };
+		1677AFCC2AACA49900E6A2FE /* PDFViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFViewController.swift; sourceTree = "<group>"; };
+		1677AFCE2AACA72400E6A2FE /* term.pdf */ = {isa = PBXFileReference; lastKnownFileType = image.pdf; name = term.pdf; path = Recipe/Resources/Assets.xcassets/term.pdf.imageset/term.pdf; sourceTree = "<group>"; };
 		167FABCC2A94844200F14D99 /* CommonToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonToastView.swift; sourceTree = "<group>"; };
 		167FABCE2A948DE400F14D99 /* CreateShortFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortFormViewModel.swift; sourceTree = "<group>"; };
 		168A0AB52AA9FDAB00FA5256 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
@@ -666,6 +670,7 @@
 		5A0244822A529AA300AA418E = {
 			isa = PBXGroup;
 			children = (
+				1677AFCE2AACA72400E6A2FE /* term.pdf */,
 				5A02448D2A529AA300AA418E /* Recipe */,
 				5A0244A72A529AA400AA418E /* RecipeTests */,
 				5A0244B12A529AA400AA418E /* RecipeUITests */,
@@ -870,6 +875,7 @@
 			children = (
 				5A0244DD2A52A7B600AA418E /* LoginViewController.swift */,
 				5A0244DF2A52A7C900AA418E /* LoginCoordinator.swift */,
+				1677AFCC2AACA49900E6A2FE /* PDFViewController.swift */,
 			);
 			path = Login;
 			sourceTree = "<group>";
@@ -1171,6 +1177,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				1677AFCF2AACA72400E6A2FE /* term.pdf in Resources */,
 				5A02449E2A529AA400AA418E /* LaunchScreen.storyboard in Resources */,
 				5A02449B2A529AA400AA418E /* Assets.xcassets in Resources */,
 				16C5FFBC2A72C42A00EA599F /* Category.json in Resources */,
@@ -1364,6 +1371,7 @@
 				167FABCD2A94844200F14D99 /* CommonToastView.swift in Sources */,
 				5AF00F672A56762A00587BF9 /* PriceTrendDetailCell.swift in Sources */,
 				5ACD7BC32A57DC4C00571259 /* RecipeCoordinator.swift in Sources */,
+				1677AFCD2AACA49900E6A2FE /* PDFViewController.swift in Sources */,
 				16B400B42A930617005CC788 /* AddIngredientDefaultView.swift in Sources */,
 				1614941C2A7CFE3900395AA4 /* PopularCell.swift in Sources */,
 				162DFEB22A6FDF0D00338A18 /* ReviewPhotoViewController.swift in Sources */,
@@ -1694,8 +1702,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cmc.recipe;
 				PRODUCT_NAME = PLAYTE;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1732,7 +1739,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.2;
+				MARKETING_VERSION = 1.0.3;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cmc.recipe;
 				PRODUCT_NAME = PLAYTE;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
