@@ -78,6 +78,8 @@ class RecipeDetailViewModel {
     
     func combineIngredients(_ recipeIngredients: [RecipeDetailIngredient]) -> [DetailIngredient] {
         var result: [DetailIngredient] = []
+        print(#function)
+        print(recipeIngredients[0])
         
         var index = 0
         var ingredientType: String = ""
@@ -97,6 +99,8 @@ class RecipeDetailViewModel {
                 if let sauce = sauceFound {
                     if currentIngredient.ingredient_unit == "PIECE"{
                         ingredientType = "개"
+                    } else if currentIngredient.ingredient_unit == "G" {
+                        ingredientType = "g"
                     }
                     let detailIngredient = DetailIngredient(
                         ingredientTitle: currentIngredient.ingredient_name,
@@ -109,6 +113,8 @@ class RecipeDetailViewModel {
                 } else {
                     if currentIngredient.ingredient_unit == "PIECE"{
                         ingredientType = "개"
+                    } else if currentIngredient.ingredient_unit == "G" {
+                        ingredientType = "g"
                     }
                     let detailIngredient = DetailIngredient(
                         ingredientTitle: currentIngredient.ingredient_name,
@@ -120,11 +126,16 @@ class RecipeDetailViewModel {
                     index += 1
                 }
             } else if currentIngredient.ingredient_type == "SAUCE" {
+                if currentIngredient.ingredient_unit == "ML"{
+                    ingredientType = "ml"
+                } else if currentIngredient.ingredient_unit == "T"{
+                    ingredientType = "T"
+                }
                 let detailIngredient = DetailIngredient(
                     ingredientTitle: "",
                     ingredientCount: "",
                     seasoningTitle: currentIngredient.ingredient_name,
-                    seasoningCount: "\(currentIngredient.ingredient_size) \(currentIngredient.ingredient_unit)"
+                    seasoningCount: "\(currentIngredient.ingredient_size) \(ingredientType)"
                 )
                 result.append(detailIngredient)
                 index += 1
