@@ -80,6 +80,7 @@
 		166DCD852A938DB70005617B /* QAViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 166DCD842A938DB70005617B /* QAViewController.swift */; };
 		167FABCD2A94844200F14D99 /* CommonToastView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167FABCC2A94844200F14D99 /* CommonToastView.swift */; };
 		167FABCF2A948DE400F14D99 /* CreateShortFormViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 167FABCE2A948DE400F14D99 /* CreateShortFormViewModel.swift */; };
+		168A0AB62AA9FDAB00FA5256 /* RegisterViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168A0AB52AA9FDAB00FA5256 /* RegisterViewModel.swift */; };
 		168F6DA82AA395A40043E59D /* UserReportHelper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 168F6DA72AA395A40043E59D /* UserReportHelper.swift */; };
 		16900CFA2A6B9ACC00B06D8C /* RecipeDetailViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16900CF92A6B9ACC00B06D8C /* RecipeDetailViewController.swift */; };
 		16900CFC2A6BA06900B06D8C /* RecipeDetailInfoCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 16900CFB2A6BA06900B06D8C /* RecipeDetailInfoCell.swift */; };
@@ -309,6 +310,7 @@
 		166DCD842A938DB70005617B /* QAViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QAViewController.swift; sourceTree = "<group>"; };
 		167FABCC2A94844200F14D99 /* CommonToastView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommonToastView.swift; sourceTree = "<group>"; };
 		167FABCE2A948DE400F14D99 /* CreateShortFormViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CreateShortFormViewModel.swift; sourceTree = "<group>"; };
+		168A0AB52AA9FDAB00FA5256 /* RegisterViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RegisterViewModel.swift; sourceTree = "<group>"; };
 		168F6DA72AA395A40043E59D /* UserReportHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserReportHelper.swift; sourceTree = "<group>"; };
 		168F6DA92AA39FBD0043E59D /* Recipe 2.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "Recipe 2.xcdatamodel"; sourceTree = "<group>"; };
 		16900CF92A6B9ACC00B06D8C /* RecipeDetailViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecipeDetailViewController.swift; sourceTree = "<group>"; };
@@ -876,6 +878,7 @@
 			isa = PBXGroup;
 			children = (
 				5A0941952A5CEB01005AEECF /* RegisterView.swift */,
+				168A0AB52AA9FDAB00FA5256 /* RegisterViewModel.swift */,
 				5A0244E12A52A7E200AA418E /* RegisterCoordinator.swift */,
 				5A0244E32A52A7F400AA418E /* RegisterFirstViewController.swift */,
 			);
@@ -1349,6 +1352,7 @@
 				164E52442A8B5EB30058C44B /* RecipeViewModel.swift in Sources */,
 				163076D52A8295D70007B6BE /* CreateShortFormVideoHeaderCell.swift in Sources */,
 				16C5FFB42A72BE1300EA599F /* CommentHeaderView.swift in Sources */,
+				168A0AB62AA9FDAB00FA5256 /* RegisterViewModel.swift in Sources */,
 				165575552A9DDBF70039ECAE /* ShortFormCoreDataHelper.swift in Sources */,
 				5A914AD12A53FD7E0020BA71 /* UIView+util.swift in Sources */,
 				1614941A2A7CFE1300395AA4 /* PopularHeader.swift in Sources */,
@@ -1690,7 +1694,8 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cmc.recipe;
 				PRODUCT_NAME = PLAYTE;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1727,7 +1732,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0.1;
+				MARKETING_VERSION = 1.0.2;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cmc.recipe;
 				PRODUCT_NAME = PLAYTE;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

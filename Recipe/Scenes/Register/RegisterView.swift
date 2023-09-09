@@ -10,7 +10,7 @@ import SnapKit
 import RxSwift
 import RxCocoa
 
-protocol RegisterViewDelegate {
+protocol RegisterViewDelegate: AnyObject {
     func didTapNextButton(_ txt: String) async
 }
 
@@ -74,39 +74,44 @@ final class RegisterView: UIView {
     }()
     
     ///Properties
-    private let disposeBag = DisposeBag()
-    var delegate: RegisterViewDelegate?
+    private var viewModel = RegisterViewModel()
+    private var disposeBag = DisposeBag()
+    weak var delegate: RegisterViewDelegate?
     
     override init(frame: CGRect) {
         super.init(frame: frame)
         backgroundColor = .white
+        setupAddView()
+        setupLayout()
+        setupRxBindings()
+    }
+    
+    required init?(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+    
+    deinit {
+        print("RegisterView deinit")
+    }
+}
+
+//MARK: - Method
+extension RegisterView {
+    private func setupAddView() {
         addSubViews(registerImageView,
                     titleLabel,
                     searchTextField,
                     searchImageButton,
                     nextButton,
                     validationLabel)
-        
-        configureLayout()
-        bind()
     }
     
-    required init?(coder: NSCoder) {
-        super.init(coder: coder)
-    }
-}
-
-//MARK: - Method
-extension RegisterView {
-    private func configureLayout() {
-        
-//        registerImageView.backgroundColor = .red
+    private func setupLayout() {
         registerImageView.snp.makeConstraints {
             $0.top.equalTo(safeAreaLayoutGuide).inset(40)
             $0.centerX.equalToSuperview()
         }
         
-//        titleLabel.backgroundColor = .red
         titleLabel.snp.makeConstraints {
             $0.height.equalTo(54)
             $0.width.equalToSuperview().inset(50)
@@ -140,56 +145,29 @@ extension RegisterView {
         }
     }
     
-    private func bind() {
+    private func setupRxBindings() {
         nextButton.rx.tap
             .subscribe(onNext: { _ in
-                Task {
-                    await self.delegate?.didTapNextButton(self.searchTextField.text!)
-                }
-            }
-        ).disposed(by: disposeBag)
+                Task { await self.delegate?.didTapNextButton(self.searchTextField.text!) }
+            }).disposed(by: disposeBag)
         
         searchTextField.rx.text.orEmpty
-            .debounce(.seconds(1), scheduler: MainScheduler.instance)
-            .subscribe(onNext: { txt in
-                if !txt.isEmpty {
-                    LoginService.shared.nickNameCheck(nickName: txt, completion: { data in
-                        DispatchQueue.main.async {
-                            if !txt.isValidNickname() {
-                                self.inValidNickNameCheck()
-                            } else {
-//                                self.nickNameCheckUI(!data)
-                                self.teamNickNameCheck(!data, txt)
-                            }
-                        }
-                    })
-                }
-            }
-        ).disposed(by: disposeBag)
+            .skip(1)
+            .bind(to: viewModel.nickNameInput)
+            .disposed(by: disposeBag)
+        
+        viewModel.isNickNameValid
+            .drive(onNext: { [weak self] (isValid, nickName) in
+                !nickName.isValidNickname() ?
+                self?.inValidNickNameCheck() : self?.teamNickNameCheck(!isValid, nickName)
+            }).disposed(by: disposeBag)
+        
     }
-    
-    func nickNameCheckUI(_ valid: Bool) {
-        searchTextField.layer.borderColor = UIColor.mainColor?.cgColor
-        searchTextField.textColor = .mainColor
-        searchTextField.backgroundColor = .sub1
-        if valid {
-            searchImageButton.isHidden = false
-            searchImageButton.setImage(UIImage(named: "nickNameCheck")!, for: .normal)
-            validationLabel.isHidden = false
-            validationLabel.text = "사용 가능한 닉네임 입니다"
-            nextButton.backgroundColor = .mainColor
-            nextButton.isEnabled = true
-        } else {
-            searchImageButton.isHidden = false
-            searchImageButton.setImage(UIImage(named: "nickNameError")!, for: .normal)
-            validationLabel.text = "중복된 닉네임입니다"
-            validationLabel.isHidden = false
-            nextButton.backgroundColor = .grayScale3
-            nextButton.isEnabled = false
-        }
-    }
-    
-    func teamNickNameCheck(_ valid: Bool, _ txt: String) {
+}
+
+//MARK: Method(Normal)
+extension RegisterView {
+    private func teamNickNameCheck(_ valid: Bool, _ txt: String) {
         searchTextField.layer.borderColor = UIColor.mainColor?.cgColor
         searchTextField.textColor = .mainColor
         searchTextField.backgroundColor = .sub1
@@ -219,7 +197,7 @@ extension RegisterView {
         }
     }
     
-    func inValidNickNameCheck() {
+    private func inValidNickNameCheck() {
         searchImageButton.isHidden = false
         searchImageButton.setImage(UIImage(named: "nickNameError")!, for: .normal)
         validationLabel.text = "잘못된 닉네임 형식입니다"
@@ -229,28 +207,6 @@ extension RegisterView {
     }
 }
 
-//#if DEBUG
-//import SwiftUI
-//struct ForRegisterView: UIViewRepresentable {
-//    typealias UIViewType = UIView
-//    
-//    func makeUIView(context: Context) -> UIView {
-//        RegisterView()
-//    }
-//    
-//    func updateUIView(_ uiView: UIView, context: Context) {
-//    }
-//}
-//
-//@available(iOS 13.0, *)
-//struct RegisterView_Preview: PreviewProvider {
-//    static var previews: some View {
-//        ForRegisterView()
-//    }
-//}
-//#endif
-
-
 //MARK: - VC Preview
 import SwiftUI
 struct ShortFormViewControll1er1_preview: PreviewProvider {
@@ -258,6 +214,5 @@ struct ShortFormViewControll1er1_preview: PreviewProvider {
         
         UINavigationController(rootViewController: RegisterFirstViewController())
             .toPreview()
-//            .ignoresSafeArea()
     }
 }
