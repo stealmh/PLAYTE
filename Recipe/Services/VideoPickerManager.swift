@@ -34,11 +34,13 @@ class VideoPickerManager: NSObject, UIImagePickerControllerDelegate, UINavigatio
     }
     
     private func showVideoPicker(in viewController: UIViewController) {
-        let videoPicker = UIImagePickerController()
-        videoPicker.sourceType = .photoLibrary
-        videoPicker.mediaTypes = ["public.movie"] // Only allows video selection
-        videoPicker.delegate = self
-        viewController.present(videoPicker, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            let videoPicker = UIImagePickerController()
+            videoPicker.sourceType = .photoLibrary
+            videoPicker.mediaTypes = ["public.movie"] // Only allows video selection
+            videoPicker.delegate = self
+            viewController.present(videoPicker, animated: true, completion: nil)
+        }
     }
     
     private func showAppSettings() {

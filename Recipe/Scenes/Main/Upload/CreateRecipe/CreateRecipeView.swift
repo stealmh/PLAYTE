@@ -88,6 +88,8 @@ final class CreateRecipeView: UIView, DefaultTextFieldCellDelegate {
     //    let imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage(named: "popcat")!)
     var mymy: UploadRecipe?
     var mybool = false
+    var count = 0
+    var cookTime = 0
     var viewModel: CreateRecipeViewModel? {
         didSet {
             Task {
@@ -479,7 +481,6 @@ extension CreateRecipeView {
                 }).disposed(by: disposeBag)
             if let viewModel {
                 viewModel.thumbnailImage
-                    .debug()
                     .subscribe(onNext: { img in
                         if let img {
                             print("???")
@@ -542,28 +543,60 @@ extension CreateRecipeView {
             return cell
         case .addIngredientSection(let data):
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CreateIngredientTagCell.reuseIdentifier, for: indexPath) as! CreateIngredientTagCell
-            cell.configure(with: data, tag: indexPath.row)
+            if let viewModel = viewModel {
+                cell.configure(with: data, tag: viewModel.getIngredient.value[indexPath.row].ingredient_id)
+                cell.delegate = self
+            }
             return cell
         case .cookTimeSettingSection:
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookSettingCell.reuseIdentifier, for: indexPath) as! CookSettingCell
+            cell.configure(count: self.count, cookTime: self.cookTime)
             if let viewModel {
                 cell.cookTimeTextField.rx.text.orEmpty
                     .subscribe(onNext: { txt in
                         if let intValue = Int(txt) {
-                            viewModel.createRecipeCookTime.accept(intValue)
+                            self.cookTime = intValue
+                            viewModel.createRecipeCookTime.accept(self.cookTime)
                         }
                     }).disposed(by: disposeBag)
                 
-                cell.serviceCountRx.subscribe(onNext: { value in
-                    viewModel.createRecipeServiceCount.accept(value)
-                }).disposed(by: disposeBag)
-                
-                viewModel.allValuesSubject
-                    .subscribe(onNext: { (_,_,_,data,service,_) in
-                        print("cooTime 추적: \(data)")
-                        cell.cookTimeTextField.text = "\(data)"
-                        cell.serviceCountLabel.text = "\(service)"
+                cell.increaseButton.rx.tap
+                    .subscribe(onNext: {  _ in
+                        if let currentCount = Int(cell.serviceCountLabel.text ?? "0") {
+                            cell.serviceCountLabel.text = "\(currentCount + 1)"
+                            self.count += 1
+                            viewModel.createRecipeServiceCount.accept(self.count)
+                        }
                     }).disposed(by: disposeBag)
+                
+                cell.decreaseButton.rx.tap
+                    .subscribe(onNext: { _ in
+                        if let currentCount = Int(cell.serviceCountLabel.text ?? "0"), currentCount > 0 {
+                            cell.serviceCountLabel.text = "\(currentCount - 1)"
+                            self.count -= 1
+                            viewModel.createRecipeServiceCount.accept(self.count)
+                        }
+                    }).disposed(by: cell.disposeBag)
+                
+//                cell.reset()
+//                cell.serviceCountRx
+//                    .skip(1)
+//                    .subscribe(onNext: { value in
+//                    viewModel.createRecipeServiceCount.accept(value)
+//                }).disposed(by: disposeBag)
+                
+//                viewModel.allValuesSubject
+//                    .distinctUntilChanged()
+//                    .subscribe(onNext: { (_,_,_,data,service,_) in
+//                        print("cooTime 추적: \(data)")
+//                        DispatchQueue.main.async {
+//                            cell.cookTimeTextField.text = "\(data)"
+//                            cell.serviceCountLabel.text = "\(service)"
+//                            cell.serviceCountRx.accept(service)
+//                        }
+//                    }).disposed(by: disposeBag)
+            } else {
+                print("===== viewModel이 없기 때문에 else로 오게됩니다 =====")
             }
             return cell
         case .cookStepSection(let data):
@@ -571,6 +604,7 @@ extension CreateRecipeView {
                 if data.contents == "" {
                     // Show a different cell when the array is empty
                     let cell = collectionView.dequeueReusableCell(withReuseIdentifier: CookStepCell2.reuseIdentifier, for: indexPath) as! CookStepCell2
+                    cell.selectImageView.image = nil
                     setupKeyboardForCell(cell: cell, textField: cell.stepTextfield)
                     viewModel.imageRelay.subscribe(onNext: { data in
                         cell.imageSelectSubject.accept(data)
@@ -578,6 +612,7 @@ extension CreateRecipeView {
                     
                     cell.addPhotoButton.rx.tap
                         .subscribe(onNext: { _ in
+                            print("add Photo Button")
                             self.delegate?.addPhotoButtonTapped()
                         }).disposed(by: cell.disposeBag)
                     
@@ -588,17 +623,29 @@ extension CreateRecipeView {
                                 // Skip empty text
                                 return
                             }
-                            let defaultImage = UIImage(named: "popcat")
                             let newStep = Dummy(contents: newText, img: viewModel.imageBehaviorRelay.value)
                             if !self.mockData.contains(newStep) {
-                                self.mockData.insert(newStep, at: 0)
-                                print(self.mockData)
+                                self.mockData.insert(newStep, at: self.mockData.count)
+//                                self.mockData.append(newStep)
+                            }
+                            let data = Dummy(contents: "")
+                            for (idx,item) in self.mockData.enumerated() {
+                                if item.contents.isEmpty {
+                                    self.mockData.remove(at: idx)
+                                }
+                            }
+                            print("첫번째를 제거했을 때:::", self.mockData)
+                            if let dataiExist = self.mockData.last, dataiExist.contents.isEmpty {
+                                print("이미 존재함")
+                            } else {
+                                self.mockData.append(data)
+                                print("마지막으로 추가했을 때:::", self.mockData)
                             }
                             //                        self.mockData.insert(newStep, at: 0)
                             self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
                             self.applyNewSnapshot()
                             cell.stepTextfield.text = ""
-                            viewModel.imageBehaviorRelay.accept(defaultImage!)
+                            viewModel.imageBehaviorRelay.accept(nil)
                             if let initialIndexPath = self.dataSource.indexPath(for: .cookStepSection(self.mockData.last!)) {
                                 collectionView.scrollToItem(at: initialIndexPath, at: .bottom, animated: true)
                             }
@@ -612,7 +659,7 @@ extension CreateRecipeView {
                     //                imageBehaviorRelay.subscribe(onNext: { data in
                     //                    cell.imageSelectSubject.accept(data)
                     //                }).disposed(by: disposeBag)
-                    
+                    cell.selectImageView.image = nil
                     cell.addPhotoButton.rx.tap
                         .subscribe(onNext: { _ in
                             self.delegate?.addPhotoButtonTapped()
@@ -621,7 +668,7 @@ extension CreateRecipeView {
                         .subscribe(onNext: { _ in
                             print(indexPath.row)
                             var data = self.mockData[indexPath.row]
-                            data.img = UIImage(named: "popcat")
+                            data.img = nil
                             self.mockData[indexPath.row] = data
                             cell.configure(data)
                             self.dataSource.apply(self.createSnapshot(),animatingDifferences: true)
@@ -683,8 +730,10 @@ extension CreateRecipeView {
                         }
                     }).disposed(by: disposeBag)
                     
-                    viewModel.allValuesSubject.subscribe(onNext: { values in
-                        print("value:", values)
+                    viewModel.allValuesSubject
+                        .take(1)
+                        .subscribe(onNext: { values in
+                            print("values: \(values)")
                         Task {
                             let (image, title, description, cookTime, serviceCount, ingredients) = values
                             // Handle the values here
@@ -697,6 +746,9 @@ extension CreateRecipeView {
                                     let contents = value.contents
                                     if let img = value.img?.toBase64() {
                                         let stepData = RecipeUploadForStep(image_url: img, stage_description: contents)
+                                        step.append(stepData)
+                                    } else {
+                                        let stepData = RecipeUploadForStep(image_url: nil, stage_description: contents)
                                         step.append(stepData)
                                     }
                                 }
@@ -763,6 +815,7 @@ extension CreateRecipeView: CookStepRegisterDelegate {
 //MARK: - Method(Rx Bind)
 extension CreateRecipeView {
     private func setupKeyboardForCell(cell: UICollectionViewCell, textField: UITextField) {
+        print(#function)
         RxKeyboard.instance.visibleHeight
             .skip(1)
             .drive(onNext: { [weak self] keyboardVisibleHeight in
@@ -798,6 +851,16 @@ extension CreateRecipeView {
                 self.collectionView.scrollRectToVisible(rect, animated: true)
             })
             .disposed(by: disposeBag)
+    }
+}
+
+extension CreateRecipeView: TagCellDelegate {
+    func deleteButtonTapped(name: String, sender: Int) {
+        if let viewModel = viewModel {
+            viewModel.removeString(name)
+            viewModel.removeIngredient(sender)
+            self.dataSource.apply(createSnapshot(), animatingDifferences: true)
+        }
     }
 }
 

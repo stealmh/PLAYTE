@@ -38,6 +38,6 @@ protocol PriceTrendHeaderDelegate {
 }
 
 protocol TagCellDelegate {
-    func deleteButtonTapped(sender: Int)
+    func deleteButtonTapped(name: String, sender: Int)
 }
 

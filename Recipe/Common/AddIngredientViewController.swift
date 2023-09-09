@@ -33,7 +33,7 @@ class AddIngredientViewController: BaseViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        if item.ingredient_type == "INGREDIENTS" {
+        if item.ingredient_unit == "PIECE" {
             view.addSubview(gramView)
             view.backgroundColor = .grayScale6?.withAlphaComponent(0.5)
             gramView.delegate = self
@@ -54,7 +54,7 @@ class AddIngredientViewController: BaseViewController {
                 $0.height.equalTo(205)
             }
         }
-        if item.ingredient_type == "INGREDIENTS" {
+        if item.ingredient_unit == "PIECE" {
             gramView.configure(item)
         } else {
             defaultView.configure(item)
@@ -78,10 +78,14 @@ extension AddIngredientViewController: AddIngredientCountViewDelegate {
     
     func didTappedOkButton(_ count: Int) {
         print(item)
-        if item.ingredient_type == "INGREDIENTS" {
-            self.forTag = "\(item.ingredient_name) \(gramView.count)개"
-            self.ingredient = UploadRecipeIngredient(ingredient_id: item.ingredient_id, ingredient_size: defaultView.count)
+        if item.ingredient_unit == "PIECE" {
+            print("== if 문입니다 ==")
+            self.forTag = "\(item.ingredient_name) \(count)개"
+            self.ingredient = UploadRecipeIngredient(ingredient_id: item.ingredient_id, ingredient_size: count)
+            print(self.forTag)
+            print(self.ingredient)
         } else {
+            print("== else 문입니다 ==")
             var type: String = ""
             switch item.ingredient_unit {
             case "ML":

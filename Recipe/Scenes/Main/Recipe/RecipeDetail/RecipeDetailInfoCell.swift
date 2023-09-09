@@ -294,7 +294,7 @@ addSubViews(cellBackground,nickNameLabel,uploadDateLabel,titleLabel,favoriteButt
 extension RecipeDetailInfoCell {
     private func bind() {
         reviewButton.rx.tap
-            .debounce(.milliseconds(250), scheduler: MainScheduler.instance)
+            .debounce(.milliseconds(500), scheduler: MainScheduler.instance)
             .subscribe(onNext: { _ in
                 print("tapped")
                 self.delegate?.showReview()

@@ -42,7 +42,7 @@ class PopupViewController: BaseViewController, PopupViewDelegate {
     
     
     override func viewDidDisappear(_ animated: Bool) {
-        popupView.delegate = nil
+//        popupView.delegate = nil
     }
     
 //    override func viewIsAppearing(_ animated: Bool) {
