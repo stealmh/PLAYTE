@@ -61,7 +61,7 @@ class RecipeDetailViewController: BaseViewController, RecipeDetailErrorDelegate 
     private var mockShopList: [ShopingList] = []
     private var mockStage: [RecipeDetailStages] = []
     var mockData: [DetailIngredient] = []
-    var mock: [RecipeDetailIngredient] = []
+    var mock: [RecipeDetailIngredient] = [RecipeDetailIngredient(ingredient_id: 0, ingredient_name: "토마토", ingredient_type: "ㄴ", ingredient_size: 4, ingredient_unit: "개", coupang_product_image: "", coupang_product_name: "", coupang_product_price: 3, coupang_product_url: "", is_rocket_delivery: false)]
     var recommendationRecipe: [Recommendation] = []
     
     private var dataSource: Datasource!
@@ -144,40 +144,6 @@ class RecipeDetailViewController: BaseViewController, RecipeDetailErrorDelegate 
             }).disposed(by: disposeBag)
     }
     
-//    override func viewIsAppearing(_ animated: Bool) {
-//        super.viewIsAppearing(animated)
-//        viewModel.recipeDetail
-//            .subscribe(onNext: { data in
-//                print("===")
-//                print(data)
-//                print("===")
-//                self.viewModel.recipeID = data.data.recipe_id
-//                print("RecipeDetailVC 의 recipeID는 :: \(self.viewModel.recipeID)")
-//                Task {
-//                    let a: RecipeComment = try await NetworkManager.shared.get(.recipeComment("\(self.viewModel.recipeID)"))
-//                    self.recipeComment = a
-//                }
-//                self.mockData = self.viewModel.combineIngredients(data.data.ingredients)
-//                for i in data.data.ingredients {
-//                    let data: ShopingList = ShopingList(title: i.coupang_product_name, price: i.coupang_product_price, image: i.coupang_product_image, isrocket: i.is_rocket_delivery, link: i.coupang_product_url)
-//                    self.mockShopList.append(data)
-//                }
-//                for i in data.data.stages {
-//                    self.mockStage.append(i)
-//                }
-//                
-//                for i in data.data.recommendation_recipes {
-//                    self.recommendationRecipe.append(i)
-//                }
-//                
-//                self.checkDataAccept.accept(true)
-//                print("==  mockStage ==")
-//                print(self.mockStage)
-//                print("==  mockStage ==")
-//                self.dataSource.apply(self.createSnapshot(), animatingDifferences: true)
-//            }).disposed(by: disposeBag)
-//    }
-    
     override func viewWillDisappear(_ animated: Bool) {
 //        self.tabBarController?.tabBar.isHidden = false
         
@@ -189,7 +155,6 @@ class RecipeDetailViewController: BaseViewController, RecipeDetailErrorDelegate 
         customViewController.modalPresentationStyle = .custom
         customViewController.transitioningDelegate = self
         customViewController.delegate = self
-
         present(customViewController, animated: true, completion: nil)
         
     }

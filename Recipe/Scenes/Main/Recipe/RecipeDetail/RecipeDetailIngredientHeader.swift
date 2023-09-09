@@ -48,7 +48,7 @@ final class RecipeDetailIngredientHeader: UICollectionReusableView {
         
         label2.snp.makeConstraints {
             $0.bottom.equalTo(label)
-            $0.left.equalTo(self.snp.centerX).offset(20)
+            $0.left.equalTo(self.snp.centerX).offset(10)
             $0.right.equalToSuperview()
         }
         

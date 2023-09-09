@@ -81,7 +81,7 @@ final class TagCell: UICollectionViewCell {
     func bind() {
         deleteButton.rx.tap
             .subscribe(onNext: { _ in
-                self.delegate?.deleteButtonTapped(sender: self.deleteButton.tag)
+//                self.delegate?.deleteButtonTapped(sender: self.deleteButton.tag)
             }).disposed(by: disposeBag)
     }
 }

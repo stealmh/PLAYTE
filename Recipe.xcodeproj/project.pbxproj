@@ -324,6 +324,7 @@
 		169FE66D2A78A22E00593041 /* UITabBarController+util.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "UITabBarController+util.swift"; sourceTree = "<group>"; };
 		169FE6702A78A45D00593041 /* ShortFormCoordinator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormCoordinator.swift; sourceTree = "<group>"; };
 		169FE6722A78A50300593041 /* ShortFormViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ShortFormViewController.swift; sourceTree = "<group>"; };
+		16B1FF0E2AA7C51100783E1C /* ko */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = ko; path = ko.lproj/LaunchScreen.strings; sourceTree = "<group>"; };
 		16B400B32A930617005CC788 /* AddIngredientDefaultView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddIngredientDefaultView.swift; sourceTree = "<group>"; };
 		16B400B72A933C47005CC788 /* NetworkHelper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NetworkHelper.swift; sourceTree = "<group>"; };
 		16C19E432A6A1DC6007F5F0C /* CookStepCountCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CookStepCountCell.swift; sourceTree = "<group>"; };
@@ -1148,6 +1149,7 @@
 			knownRegions = (
 				en,
 				Base,
+				ko,
 			);
 			mainGroup = 5A0244822A529AA300AA418E;
 			productRefGroup = 5A02448C2A529AA300AA418E /* Products */;
@@ -1535,6 +1537,7 @@
 			isa = PBXVariantGroup;
 			children = (
 				5A02449D2A529AA400AA418E /* Base */,
+				16B1FF0E2AA7C51100783E1C /* ko */,
 			);
 			name = LaunchScreen.storyboard;
 			sourceTree = "<group>";
@@ -1547,6 +1550,7 @@
 			baseConfigurationReference = 5A805C5A2A5D247700C81D86 /* Key.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1609,6 +1613,7 @@
 			baseConfigurationReference = 5A805C5A2A5D247700C81D86 /* Key.xcconfig */;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_LOCALIZABILITY_NONLOCALIZED = YES;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
@@ -1685,7 +1690,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cmc.recipe;
 				PRODUCT_NAME = PLAYTE;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
@@ -1722,7 +1727,7 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.1;
 				PRODUCT_BUNDLE_IDENTIFIER = com.cmc.recipe;
 				PRODUCT_NAME = PLAYTE;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";

@@ -41,6 +41,7 @@ class CreateReviewController: BaseViewController {
             $0.left.right.bottom.equalToSuperview()
         }
         createReviewView.delegate = self
+        defaultNavigationBackButton(backButtonColor: .grayScale3 ?? .gray)
     }
     
     override func viewWillDisappear(_ animated: Bool) {

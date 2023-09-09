@@ -22,7 +22,7 @@ struct UploadRecipe: Hashable, Encodable {
 }
 
 struct RecipeUploadForStep: Hashable, Encodable {
-    let image_url: String
+    let image_url: String?
     let stage_description: String
 }
 
@@ -34,7 +34,7 @@ struct UploadRecipeIngredient: Hashable, Encodable {
 class CreateRecipeViewModel {
     //    var addIngredientMockData: [String] = []
     var imageRelay = PublishRelay<UIImage>()
-    var imageBehaviorRelay = BehaviorRelay<UIImage>(value: UIImage(named: "popcat")!)
+    var imageBehaviorRelay = BehaviorRelay<UIImage?>(value: nil)
     var thumbnailImage = BehaviorRelay<UIImage?>(value:nil)
     var createRecipeTitle = PublishRelay<String>()
     var createRecipeDescription = PublishRelay<String>()
@@ -87,19 +87,27 @@ class CreateRecipeViewModel {
         getIngredient.accept(currentValues)
     }
     
-    func removeIngredient(_ step: UploadRecipeIngredient) {
+    func removeIngredient(_ idx: Int) {
         var currentValues = getIngredient.value
-        if let index = currentValues.firstIndex(of: step) {
-            currentValues.remove(at: index)
-            getIngredient.accept(currentValues)
+    
+        for (i,item) in currentValues.enumerated() {
+            if item.ingredient_id == idx {
+                currentValues.remove(at: i)
+                getIngredient.accept(currentValues)
+                return
+            }
         }
     }
     
-    func removeString(_ targetString: String) {
+    func removeString(_ name: String) {
         var currentValues = createRecipeIngredient.value
-        if let index = currentValues.firstIndex(of: targetString) {
-            currentValues.remove(at: index)
-            createRecipeIngredient.accept(currentValues)
+        
+        for (i, item) in currentValues.enumerated() {
+            if item == name {
+                currentValues.remove(at: i)
+                createRecipeIngredient.accept(currentValues)
+                return
+            }
         }
     }
     
