@@ -33,10 +33,12 @@ class ImagePickerManager: NSObject, UIImagePickerControllerDelegate, UINavigatio
     }
     
     private func showImagePicker(in viewController: UIViewController) {
-        let imagePicker = UIImagePickerController()
-        imagePicker.sourceType = .photoLibrary
-        imagePicker.delegate = self
-        viewController.present(imagePicker, animated: true, completion: nil)
+        DispatchQueue.main.async {
+            let imagePicker = UIImagePickerController()
+            imagePicker.sourceType = .photoLibrary
+            imagePicker.delegate = self
+            viewController.present(imagePicker, animated: true, completion: nil)
+        }
     }
     
     private func showPermissionDeniedAlert(in viewController: UIViewController) {
