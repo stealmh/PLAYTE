@@ -30,6 +30,7 @@ final class CookStepCell: UICollectionViewListCell {
         let v = UITextView()
 //        v.font = .systemFont(ofSize: 15)
 //        v.textColor = .mainColor
+        v.backgroundColor = .clear
         v.text = "asdas"
         v.sizeToFit()
         v.isScrollEnabled = false
@@ -77,6 +78,7 @@ final class CookStepCell: UICollectionViewListCell {
     override init(frame: CGRect) {
         super.init(frame: frame)
         addViews()
+        configureLayout()
 //        bind()
     }
     
@@ -84,11 +86,11 @@ final class CookStepCell: UICollectionViewListCell {
         super.init(coder: coder)
     }
     
-    override func layoutSubviews() {
-        defaultCheck.subscribe(onNext: { isNewData in
-            self.configureLayout()
-        }).disposed(by: disposeBag)
-    }
+//    override func layoutSubviews() {
+//        defaultCheck.subscribe(onNext: { isNewData in
+//            self.configureLayout()
+//        }).disposed(by: disposeBag)
+//    }
 }
 
 //MARK: - Method(Normal)
@@ -139,7 +141,7 @@ extension CookStepCell {
         stepTextView.text = item.contents
         self.selectImageView.image = item.img
         
-        if item.img == UIImage(named: "popcat") {
+        if item.img == nil {
             addPhotoButton.isHidden = false
             deletePhotoButton.isHidden = true
             selectImageView.isHidden = true
