@@ -186,34 +186,38 @@ final class LoginViewController: BaseViewController {
     }
     
     @objc func labelTapped() {
-        guard let pdfURL = URL(string: "https://github.com/stealmh/TIL/blob/main/term.pdf") else {
-            return
-        }
+        print("tapped")
         
-        URLSession.shared.dataTask(with: pdfURL) { (data, response, error) in
-            guard let data = data, error == nil else {
-                print("Error downloading PDF: \(error?.localizedDescription ?? "")")
-                return
-            }
-            
-            // Get the documents directory URL
-            if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
-                let pdfFileURL = documentsDirectory.appendingPathComponent("downloaded.pdf")
-                
-                // Save the PDF data to the documents directory
-                do {
-                    try data.write(to: pdfFileURL)
-                    print("PDF downloaded and saved to: \(pdfFileURL)")
-                    
-                    // Display an alert to let the user know the download is complete
-                    DispatchQueue.main.async {
-                        self.showToastSuccess(message: "다운로드가 완료되었습니다")
-                    }
-                } catch {
-                    print("Error saving PDF: \(error.localizedDescription)")
-                }
-            }
-        }.resume()
+        let vc = PDFViewController()
+        navigationController?.pushViewController(vc, animated: true)
+//        guard let pdfURL = URL(string: "https://github.com/stealmh/TIL/blob/main/term.pdf") else {
+//            return
+//        }
+//
+//        URLSession.shared.dataTask(with: pdfURL) { (data, response, error) in
+//            guard let data = data, error == nil else {
+//                print("Error downloading PDF: \(error?.localizedDescription ?? "")")
+//                return
+//            }
+//
+//            // Get the documents directory URL
+//            if let documentsDirectory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first {
+//                let pdfFileURL = documentsDirectory.appendingPathComponent("downloaded.pdf")
+//
+//                // Save the PDF data to the documents directory
+//                do {
+//                    try data.write(to: pdfFileURL)
+//                    print("PDF downloaded and saved to: \(pdfFileURL)")
+//
+//                    // Display an alert to let the user know the download is complete
+//                    DispatchQueue.main.async {
+//                        self.showToastSuccess(message: "다운로드가 완료되었습니다")
+//                    }
+//                } catch {
+//                    print("Error saving PDF: \(error.localizedDescription)")
+//                }
+//            }
+//        }.resume()
     }
 }
 

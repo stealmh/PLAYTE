@@ -25,19 +25,10 @@ final class MypageViewController: BaseViewController {
         myPageView.delegate = self
         configureLayout()
         configureNavigationTabBar()
-        
-        
-//        self.fetchAllRecipes { recipes in
-//            if let recipes = recipes {
-//                self.myPageView.recentRecipeForRelay.accept(recipes)
-//            }
-//        }
-//        
-//        self.fetchAllShortforms { shortforms in
-//            if let shortforms = shortforms {
-//                self.myPageView.recentShortFormRelay.accept(shortforms)
-//            }
-//        }
+        myPageView.viewModel = viewModel
+    }
+    
+    override func viewDidAppear(_ animated: Bool) {
         myPageView.viewModel = viewModel
     }
     

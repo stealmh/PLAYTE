@@ -108,8 +108,8 @@ class WriteRecipeSheetViewController: BaseViewController {
                     case .saveRecipe:
                         let data: DeleteRecipeReuslt = try await NetworkManager.shared.fetch(.recipeUnSave("\(self.recipeId)"), parameters: ["recipe-id": self.recipeId])
                         if data.data {
-                            RecipeCoreDataHelper.shared.deleteRecipe(byID: self.idx)
-                            self.delegate?.dismissSheetForUnSaveRecipe(self.idx)
+                            RecipeCoreDataHelper.shared.deleteRecipe(byID: self.recipeId)
+                            self.delegate?.dismissSheetForUnSaveRecipe(self.recipeId)
                             self.dismiss(animated: true)
                         }
                     case .writeRecipe:
