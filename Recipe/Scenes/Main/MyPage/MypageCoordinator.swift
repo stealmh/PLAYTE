@@ -45,7 +45,7 @@ final class MypageCoordinator: MypageCoordinatorProtocol, CoordinatorFinishDeleg
                 return
             case .favoriteReceipeButtonTapped:
                 guard let favoriteRecipeInfo = goVC.favoriteRecipe else { return }
-                let vc = FavoriteRecipeViewController(data1: favoriteRecipeInfo.data)
+                let vc = FavoriteRecipeSegmentViewController(data1: favoriteRecipeInfo.data)
                 self?.navigationController.pushViewController(vc, animated: true)
                 return
             case .writeRecipeButtonTapped:

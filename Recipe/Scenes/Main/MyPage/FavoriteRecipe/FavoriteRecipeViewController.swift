@@ -10,7 +10,6 @@ import RxCocoa
 import RxSwift
 
 class FavoriteRecipeViewController: BaseViewController {
-    
     private var tableView = UITableView()
     private let disposeBag = DisposeBag()
     var data1: [RecipeInfo1]
