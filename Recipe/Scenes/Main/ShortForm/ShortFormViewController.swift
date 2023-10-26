@@ -11,9 +11,10 @@ import RxCocoa
 import SnapKit
 import UPCarouselFlowLayout
 import AVFoundation
+import SideMenu
 
 final class ShortFormViewController: BaseViewController {
-    
+    typealias Observable = RxSwift.Observable
     ///UI Properties
     private let searchTextField: PaddingUITextField = {
         let v = PaddingUITextField()
@@ -35,6 +36,8 @@ final class ShortFormViewController: BaseViewController {
         return v
     }()
     
+    private lazy var sideMenuView = SideMenuView(frame: CGRect(x: 900, y: 0, width: 300, height: view.frame.height))
+    
     var didSendEventClosure: ((ShortFormViewController.Event) -> Void)?
     var disposeBag = DisposeBag()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: aa())
@@ -45,6 +48,8 @@ final class ShortFormViewController: BaseViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.addSubViews(collectionView, searchTextField, searchImageButton)
+        view.addSubview(sideMenuView)
+        
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.dataSource = self
         collectionView.delegate = self
@@ -114,7 +119,23 @@ final class ShortFormViewController: BaseViewController {
         case go
     }
     @objc func moreButtonTapped(sender: UIBarButtonItem) {
-        self.showToastSuccess(message: "준비중입니다 기대해주세요 :)")
+        
+        if #available(iOS 16.0, *) {
+            sender.isHidden = true
+        } else {
+            // Fallback on earlier versions
+            sender.isEnabled = false
+            sender.tintColor = .clear
+        }
+        UIView.animate(withDuration: 0.3) {
+            self.sideMenuView.frame.origin.x = 100
+        }
+    }
+    
+    func makeSetting() -> SideMenuSettings {
+        var settings = SideMenuSettings()
+        settings.presentationStyle = .menuSlideIn
+        return settings
     }
 }
 
