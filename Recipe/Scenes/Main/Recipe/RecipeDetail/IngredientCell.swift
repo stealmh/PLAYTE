@@ -70,7 +70,7 @@ extension IngredientCell {
             $0.top.equalToSuperview().offset(10)
             $0.left.equalToSuperview()
             $0.width.equalToSuperview().multipliedBy(0.3)
-            $0.height.equalTo(14)
+            $0.height.equalTo(16)
         }
         
 //        ingredientCount.backgroundColor = .red
@@ -87,7 +87,7 @@ extension IngredientCell {
             $0.top.equalToSuperview().offset(10)
             $0.left.equalTo(self.snp.centerX).offset(10)
             $0.width.equalToSuperview().multipliedBy(0.3)
-            $0.height.equalTo(14)
+            $0.height.equalTo(16)
         }
 //        seasoningCount.backgroundColor = .blue
         seasoningCount.snp.makeConstraints {
@@ -108,7 +108,7 @@ extension IngredientCell {
     
     func mockConfigure() {
         ingredientLabel.text = "토마토"
-        ingredientCount.text = "2231개"
+        ingredientCount.text = "30g"
         
         seasoningLabel.text = "굴소스"
         seasoningCount.text = "100 ML"
