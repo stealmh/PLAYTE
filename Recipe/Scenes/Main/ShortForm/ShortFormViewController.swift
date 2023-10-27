@@ -11,7 +11,6 @@ import RxCocoa
 import SnapKit
 import UPCarouselFlowLayout
 import AVFoundation
-import SideMenu
 
 final class ShortFormViewController: BaseViewController {
     typealias Observable = RxSwift.Observable
@@ -26,7 +25,6 @@ final class ShortFormViewController: BaseViewController {
         v.isEnabled = false
         return v
     }()
-    
     private let searchImageButton: UIButton = {
         let v = UIButton()
         let img = v.buttonImageSize(imageName: "search_svg", size: 24)
@@ -35,15 +33,14 @@ final class ShortFormViewController: BaseViewController {
         v.tintColor = .mainColor
         return v
     }()
-    
     private lazy var sideMenuView = SideMenuView(frame: CGRect(x: 900, y: 0, width: 300, height: view.frame.height))
-    
     var didSendEventClosure: ((ShortFormViewController.Event) -> Void)?
     var disposeBag = DisposeBag()
     lazy var collectionView = UICollectionView(frame: .zero, collectionViewLayout: aa())
     private var video: [ShortFormInfo] = []
-    
     var viewModel = ShortFormViewModel()
+    var navigationBarSubject = PublishSubject<Bool>()
+    var sender: UIBarButtonItem?
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -53,11 +50,20 @@ final class ShortFormViewController: BaseViewController {
         collectionView.showsHorizontalScrollIndicator = false
         collectionView.dataSource = self
         collectionView.delegate = self
+        sideMenuView.delegate = self
         collectionView.register(ShortFormCell.self, forCellWithReuseIdentifier: ShortFormCell.reuseIdentifier)
         configureLayout()
         configureNavigationTabBar()
         collectionView.reloadData()
         
+        // 알람버튼 눌렀을 때
+        if #available(iOS 16.0, *) {
+            navigationBarSubject.subscribe(onNext: { isHidden in
+                self.sender?.isHidden = isHidden
+            }).disposed(by: disposeBag)
+        } else {
+            // Fallback on earlier versions
+        }
         
         searchImageButton.rx.tap
             .subscribe(onNext: { _ in
@@ -121,7 +127,8 @@ final class ShortFormViewController: BaseViewController {
     @objc func moreButtonTapped(sender: UIBarButtonItem) {
         
         if #available(iOS 16.0, *) {
-            sender.isHidden = true
+            self.sender = sender
+            navigationBarSubject.onNext(true)
         } else {
             // Fallback on earlier versions
             sender.isEnabled = false
@@ -131,12 +138,30 @@ final class ShortFormViewController: BaseViewController {
             self.sideMenuView.frame.origin.x = 100
         }
     }
+}
+
+extension ShortFormViewController: SideMenuDelegate {
     
-    func makeSetting() -> SideMenuSettings {
-        var settings = SideMenuSettings()
-        settings.presentationStyle = .menuSlideIn
-        return settings
+    func didTappedBackButton() {
+        navigationBarSubject.onNext(false)
+        UIView.animate(withDuration: 0.3) {
+            self.sideMenuView.frame.origin.x = 900
+        }
     }
+    
+    func didSlideView() {
+        didTappedBackButton()
+    }
+    
+    func didTappedReadAllButton() {
+        
+    }
+    
+    func didTappedCell() {
+        
+    }
+    
+    
 }
 
 //MARK: - Method(Normal)

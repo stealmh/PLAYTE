@@ -7,9 +7,11 @@
 
 import UIKit
 import SnapKit
+import RxSwift
 
 protocol SideMenuDelegate: AnyObject {
     func didTappedBackButton()
+    func didSlideView()
     func didTappedReadAllButton()
     func didTappedCell()
 }
@@ -54,6 +56,7 @@ final class SideMenuView: UIView {
     private let tableView = UITableView()
     
     weak var delegate: SideMenuDelegate?
+    private let disposeBag = DisposeBag()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -61,6 +64,8 @@ final class SideMenuView: UIView {
         addSubViews(backButton, alertImageView, alertLabel, readAllButton, tableView)
         configureLayout()
         configureTableView()
+        configureGesture()
+        bind()
     }
     
     required init?(coder: NSCoder) {
@@ -75,7 +80,7 @@ final class SideMenuView: UIView {
 extension SideMenuView {
     private func configureLayout() {
         backButton.snp.makeConstraints {
-            $0.top.equalToSuperview().offset(57)
+            $0.top.equalToSuperview().offset(90)
             $0.left.equalToSuperview().offset(14)
             $0.width.height.equalTo(24)
         }
@@ -100,15 +105,44 @@ extension SideMenuView {
         }
         
         tableView.snp.makeConstraints {
-            $0.top.equalTo(backButton.snp.bottom)
+            $0.top.equalTo(backButton.snp.bottom).offset(10)
             $0.left.right.bottom.equalToSuperview()
         }
     }
     
     private func configureTableView() {
         tableView.register(SideMenuCell.self, forCellReuseIdentifier: SideMenuCell.reuseIdentifier)
+
         tableView.delegate = self
         tableView.dataSource = self
+    }
+    
+    private func configureGesture() {
+        let swipeGesture = UISwipeGestureRecognizer(target: self, action: #selector(swipe))
+        swipeGesture.direction = .right
+        self.addGestureRecognizer(swipeGesture)
+    }
+    
+    @objc
+    func swipe(_ gesture: UISwipeGestureRecognizer) {
+        if gesture.direction == .right {
+            print("slide")
+            delegate?.didSlideView()
+        }
+    }
+    
+    private func bind() {
+        backButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("tapped")
+                self.delegate?.didTappedBackButton()
+            }).disposed(by: disposeBag)
+        
+        readAllButton.rx.tap
+            .subscribe(onNext: { _ in
+                print("readAllButton tapped")
+                self.delegate?.didTappedReadAllButton()
+            }).disposed(by: disposeBag)
     }
 }
 
